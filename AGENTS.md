@@ -110,6 +110,7 @@ python tools/cost.py --cwd <папка сессии> --since <начало> --wr
 
 **Не трать ресурсы на лишнее:**
 - запрос пользователя — не источник; он дословно цитируется в брифе, а не регистрируется как SRC и не дробится на CLM;
+- **не перечитывай большие файлы**: реестр — `ledger.py brief` (строка на объект), основания — `trace`, затронутое — `impact`; YAML и документы целиком печатай только когда правишь их; исходники `tools/` не читай — контракт в `--help` и workflow;
 - верификатор (`claim-verifier`) запускается перед C3 и после пересмотра, а не на каждом шаге, и **сначала кодом**: `tools/verify.py`. Модели передаётся только его короткий список, а не весь пакет (замер: проверка всего пакета моделью ≈412K токенов);
 - не перечитывай весь репозиторий: на каждом шаге читай AGENTS.md, нужный навык и состояние проекта;
 - `pytest` и правка `tools/` — работа разработчиков агента, а не часть задачи пользователя; не сохраняй вывод команд в отдельные файлы (`stats.txt` и т. п.), их всегда можно перезапустить.
@@ -139,6 +140,7 @@ python tools/ledger.py impact   projects/<slug> CHG-001 # что затрону�
 python tools/ledger.py trace    projects/<slug> DEC-001 # на чём держится решение
 python tools/verify.py projects/<slug> --files 03 04 05 06 07 --sample 8   # проверка утверждений кодом перед C3
 python tools/ledger.py stats    projects/<slug>
+python tools/ledger.py brief    projects/<slug> [HYP ALT DEC-001 …]   # реестр по строке на объект — вместо чтения YAML
 python tools/ledger.py route    <задача> --env <среда> [--failed T3@high --project projects/<slug>]   # уровень, effort и как включить
 python tools/decide.py --project projects/<slug> --questions knowledge/decisions/<набор>.yaml --items <файл> --step N   # классификация моделью решений
 python tools/models.py check | resolve | specialized

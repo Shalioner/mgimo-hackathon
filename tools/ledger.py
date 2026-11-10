@@ -785,6 +785,41 @@ def cmd_supersede(project: Path, old_id: str, new_id: str, note: Optional[str]) 
     return 0
 
 
+def brief_line(oid: str, o: dict) -> str:
+    """Объект одной строкой: суть, статус, уверенность, вердикт, баллы — без цитат и длинных обоснований."""
+    text = o.get("statement") or o.get("title") or o.get("summary") or o.get("question") or o.get("message") or ""
+    bits = [f"{oid} [{o.get('status', 'active')}{'/' + o['state'] if o.get('state') else ''}]"]
+    conf = o.get("confidence") or {}
+    if conf.get("level"):
+        bits.append(f"увер. {conf['level']}")
+    if o.get("verdict"):
+        bits.append(f"вердикт {o['verdict']}")
+    if o.get("type"):
+        bits.append(str(o["type"]))
+    sc = o.get("scores") or {}
+    if sc:
+        vals = [v.get("value") if isinstance(v, dict) else v for v in sc.values()]
+        nums = [v for v in vals if isinstance(v, (int, float))]
+        bits.append(f"баллы {'/'.join(str(v) for v in vals)}" + (f" = {sum(nums)}" if nums else ""))
+    for k in ("chosen", "recommended", "superseded_by"):
+        if o.get(k):
+            bits.append(f"{k}: {o[k]}")
+    bits.append(re.sub(r"\s+", " ", str(text))[:160])
+    return " | ".join(bits)
+
+
+def cmd_brief(ledger: "Ledger", ids: List[str], include_all: bool) -> int:
+    sel = []
+    for oid, o in sorted(ledger.objects.items()):
+        if ids and not any(oid == i or prefix(oid) == i for i in ids):
+            continue
+        if not include_all and o.get("status", "active") in ("superseded", "retracted"):
+            continue
+        sel.append(brief_line(oid, o))
+    print("\n".join(sel) if sel else "Ничего не найдено.")
+    return 0
+
+
 def cmd_log(project: Path, step: str, action: str, tier: str, model: str, result: str, cost: str,
             now: Optional[str] = None) -> int:
     import datetime
@@ -942,6 +977,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     p = sub.add_parser("trace", help="показать основания объекта")
     p.add_argument("project", type=Path)
     p.add_argument("id")
+    p = sub.add_parser("brief", help="одна строка на объект: вместо чтения YAML целиком")
+    p.add_argument("project", type=Path)
+    p.add_argument("ids", nargs="*", help="ID или префиксы (HYP, ALT…); пусто — все активные")
+    p.add_argument("--all", action="store_true", help="включая superseded/retracted")
     p = sub.add_parser("stats", help="сводка")
     p.add_argument("project", type=Path)
     p = sub.add_parser("init", help="создать проект")
@@ -1017,6 +1056,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return cmd_trace(ledger, args.id)
     if args.cmd == "stats":
         return cmd_stats(ledger)
+    if args.cmd == "brief":
+        return cmd_brief(ledger, args.ids, args.all)
     return 2
 
 

@@ -54,3 +54,16 @@ def test_zcode_and_unpriced(tmp_path, monkeypatch):
     assert s["unpriced"] == ["mystery-1"]
     text = C.render(s, "t", 90.0)
     assert "нет цены" in text and "₽" in text and "glm-5.3-flash" in text
+
+
+def test_delegated_calls_from_run_log(tmp_path):
+    p = tmp_path / "p"
+    (p / "state").mkdir(parents=True)
+    (p / "state/run_log.md").write_text(
+        "| время | шаг | действие | уровень | модель | результат | расход |\n|---|---|---|---|---|---|---|\n"
+        "| 2026-11-10T21:44:33+03:00 | 8 | делегирование revise-lines | T2 | codex:gpt-6.1-terra@medium | ok | 26 с; вход 75998 (кэш 34304), выход 555 ток. |\n"
+        "| 2026-11-10T21:45:00+03:00 | 8 | правка строк | T2 | revise_lines.py | ok | см. выше |\n", encoding="utf-8")
+    recs = list(C.delegated_usage(p, None, None))
+    assert recs == [("delegate", "gpt-6.1-terra", {"input": 41694, "cached": 34304, "output": 555, "calls": 1},
+                     "2026-11-10T21:44:33+03:00")]
+    assert C.summarize(recs, C.load_prices())["total_usd"] == round((41694 * 1 + 34304 * 0.05 + 555 * 5) / 1e6, 4)

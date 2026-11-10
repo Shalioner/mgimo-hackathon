@@ -21,6 +21,7 @@ import fnmatch
 import glob
 import json
 import os
+import re
 import sqlite3
 import sys
 from collections import defaultdict
@@ -150,6 +151,30 @@ def zcode_usage(match: Optional[str], since, until) -> Iterable[Tuple[str, str, 
                     "output": int(u.get("output_tokens", 0) or 0), "calls": 1}, Path(f).stem
 
 
+DELEG = re.compile(r"вход (\d+)(?: \(кэш (\d+)\))?, выход (\d+)")
+
+
+def delegated_usage(project: Path, since, until) -> Iterable[Tuple[str, str, dict, str]]:
+    """Вызовы tools/delegate.py из run_log проекта: они идут в пустой временной папке (--ephemeral),
+    поэтому в журналах сред по cwd проекта их не видно. Токены берём из строки журнала."""
+    log = project / "state" / "run_log.md"
+    if not log.exists():
+        return
+    for line in log.read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) < 7 or not cells[2].startswith("делегирование"):
+            continue
+        ts = parse_time(cells[0]) if re.match(r"\d{4}-\d{2}-\d{2}T", cells[0]) else None
+        if ts and ((since and ts < since) or (until and ts > until)):
+            continue
+        m = DELEG.search(cells[6])
+        if not m:
+            continue
+        model = cells[4].split(":", 1)[-1].split("@")[0]
+        total, cached, out = int(m.group(1)), int(m.group(2) or 0), int(m.group(3))
+        yield "delegate", model, {"input": total - cached, "cached": cached, "output": out, "calls": 1}, cells[0]
+
+
 # ---------- сводка ----------
 def summarize(records: Iterable[Tuple[str, str, dict, str]], prices: List[dict]) -> dict:
     agg: Dict[Tuple[str, str], dict] = defaultdict(lambda: {"input": 0, "cached": 0, "output": 0, "calls": 0})
@@ -195,10 +220,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--until")
     ap.add_argument("--usd-rub", type=float, help="курс для пересчёта в рубли (указывается явно)")
     ap.add_argument("--write", type=Path, help="дописать отчёт в <проект>/state/cost_report.md")
+    ap.add_argument("--project", type=Path, help="учесть вызовы delegate.py из run_log проекта (их нет в журналах сред)")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
-    if not args.cwd and not args.zcode:
-        print("Укажите --cwd и/или --zcode", file=sys.stderr)
+    if not args.cwd and not args.zcode and not args.project:
+        print("Укажите --cwd, --zcode и/или --project", file=sys.stderr)
         return 2
     since, until = parse_time(args.since), parse_time(args.until)
     recs: List = []
@@ -206,6 +232,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         recs += list(codex_usage(args.cwd, since, until)) + list(claude_usage(args.cwd, since, until))
     if args.zcode:
         recs += list(zcode_usage(args.match, since, until))
+    proj = args.project or args.write
+    if proj:
+        recs += list(delegated_usage(proj, since, until))
     s = summarize(recs, load_prices())
     if args.json:
         print(json.dumps(s, ensure_ascii=False, indent=2))

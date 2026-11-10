@@ -299,3 +299,10 @@ def test_supersede_marks_old_and_keeps_record(proj):
     assert led.objects["CLM-003"]["status"] == "superseded" and led.objects["CLM-003"]["superseded_by"] == "CLM-007"
     assert L.validate(led).errors == []
     assert L.main(["supersede", str(proj), "CLM-003", "--by", "HYP-001"]) == 2
+
+
+def test_brief_one_line_per_object(capsys):
+    assert L.main(["brief", str(ROOT / "projects/example"), "HYP", "DEC-001"]) == 0
+    out = capsys.readouterr().out.strip().splitlines()
+    assert out and all(l.startswith(("HYP-", "DEC-001")) for l in out)
+    assert any("увер." in l for l in out if l.startswith("HYP-"))
