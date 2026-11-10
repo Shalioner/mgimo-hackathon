@@ -150,6 +150,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--backend", choices=sorted(BACKEND_FAMILY))
     ap.add_argument("--tier", choices=L.TIER_ORDER[1:], help="переопределить уровень (например, после эскалации)")
     ap.add_argument("--effort", help="глубина рассуждения (low/medium/high/…); по умолчанию — первая ступень лестницы уровня")
+    ap.add_argument("--model", help="конкретная модель уровня (ступень из `ledger.py route`), по умолчанию — стартовая")
+    ap.add_argument("--human-approved", action="store_true", help="человек согласился на effort из effort_policy.ask (max)")
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--dry-run", action="store_true", help="показать команду, ничего не запускать")
     args = ap.parse_args(argv)
@@ -177,9 +179,17 @@ def main(argv: Optional[List[str]] = None) -> int:
               f"«рекомендован {tier}, выполнен на <модель>».", file=sys.stderr)
         return 3
     family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY[backend]
-    model = L.model_for(cfg, family, tier)
-    ladder = L.tier_efforts(cfg, tier, family)
+    model = args.model or L.model_for(cfg, family, tier)
+    ladder = L.tier_efforts(cfg, tier, family, model)
     effort = args.effort or (ladder[0] if ladder else None)
+    pol = cfg.get("effort_policy") or {}
+    if effort in (pol.get("never") or ["ultra"]):
+        print(f"effort {effort} запрещён в routing.yaml → effort_policy.never", file=sys.stderr)
+        return 2
+    if effort in (pol.get("ask") or ["max"]) and not args.human_approved:
+        print(f"effort {effort} — только с согласия человека: спросите и повторите с --human-approved "
+              "(цена задачи растёт в разы, поведение менее предсказуемо)", file=sys.stderr)
+        return 2
     if not model:
         print(f"Для бэкенда {backend} (семейство {family}) не задана модель уровня {tier} в routing.yaml", file=sys.stderr)
         return 3

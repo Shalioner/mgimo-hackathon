@@ -174,6 +174,9 @@ DEFAULT_SPECIALIZED = ["cyber", "security", "rosalind", "bio", "med", "medical",
                        "fin", "finance", "codex", "review", "vision", "vl", "omni", "audio", "realtime", "tts",
                        "image", "embed", "embedding", "exp", "preview", "guard", "safety"]
 EFFORT_ORDER = ["none", "minimal", "low", "medium", "high", "xhigh", "max"]
+# max (и ultra у Codex) не подставляются при переводе лестницы: цена и непредсказуемость действий растут резко,
+# поэтому такие уровни — только если явно указаны и человек согласен (routing.yaml → effort_policy).
+NO_AUTO_EFFORT = {"max", "ultra"}
 
 
 def tokens(model_id: str) -> set:
@@ -240,15 +243,46 @@ def resolve_spec(spec, inventory_ids: List[str], catalog: Optional[List[dict]] =
         return resolve_spec(last, inventory_ids, catalog, family, tier, specialized_tokens) if last is not None else (None, "не задано")
     if spec is None or isinstance(spec, str):
         return spec, "фиксировано"
-    cands = [m for m in inventory_ids if matches(spec, m) and not is_specialized(m, catalog, specialized_tokens)]
-    if family and tier:  # модели из каталога, чьё имя не ложится в шаблон
+    cands = [m for m in inventory_ids if matches(spec, m) and not is_specialized(m, catalog, specialized_tokens)
+             and not _ranked(catalog_entry(m, catalog))]
+    if family and tier:  # модели из каталога, чьё имя не ложится в шаблон и которые сменяют модель уровня
         cands += [m for m in inventory_ids if m not in cands and (e := catalog_entry(m, catalog))
-                  and e.get("family") == family and e.get("tier") == tier and e.get("kind", "general") == "general"]
+                  and e.get("family") == family and e.get("tier") == tier and e.get("kind", "general") == "general"
+                  and not _ranked(e)]
     if cands:
         cands = _drop_replaced(cands, catalog)
         best = max(cands, key=lambda m: (version_key(m), m == spec.get("pin")))
         return best, "новейшая по шаблону/каталогу из инвентаря"
     return spec.get("pin"), "запасной ID (в инвентаре совпадений нет)"
+
+
+def _ranked(e: Optional[dict]) -> bool:
+    """Модель из каталога, поставленная выше/ниже другой (above/below), — отдельная ступень уровня, а не замена."""
+    return bool(e and (e.get("above") or e.get("below")))
+
+
+def tier_models(cfg: dict, family: str, tier: str, inv=False, catalog: Optional[List[dict]] = None) -> List[str]:
+    """Модели уровня от первой (стартовой) к последней (сильнее и дороже). Основа — resolve_for; модели каталога
+    с above/below встают рядом с указанной моделью: below — перед ней (дешевле), above — после (сильнее)."""
+    inv = load_inventory() if inv is False else inv
+    catalog = load_catalog() if catalog is None else catalog
+    base = resolve_for(cfg, family, tier, inv, catalog)[0]
+    out = [base] if base else []
+    ids = family_ids(cfg, family, inv)
+    for m in ids:
+        e = catalog_entry(m, catalog)
+        if not (_ranked(e) and e.get("family") == family and e.get("tier") == tier
+                and e.get("kind", "general") == "general") or m in out:
+            continue
+        anchor = e.get("above") or e.get("below")
+        if anchor in out:
+            i = out.index(anchor)
+            out.insert(i + 1 if e.get("above") else i, m)
+        elif e.get("above"):
+            out.append(m)
+        else:
+            out.insert(0, m)
+    return out
 
 
 def family_ids(cfg: dict, family: str, inv: Optional[dict]) -> List[str]:
@@ -306,7 +340,8 @@ def map_efforts(wanted: List[str], supported: List[str]) -> List[str]:
             pick = w
         elif w in EFFORT_ORDER:
             wi = EFFORT_ORDER.index(w)
-            pick = min(sup, key=lambda s: (abs(EFFORT_ORDER.index(s) - wi), -EFFORT_ORDER.index(s)))
+            pool = [s for s in sup if s not in NO_AUTO_EFFORT] or sup
+            pick = min(pool, key=lambda s: (abs(EFFORT_ORDER.index(s) - wi), -EFFORT_ORDER.index(s)))
         else:
             continue
         if pick not in out:

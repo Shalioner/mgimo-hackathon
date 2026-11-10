@@ -145,25 +145,29 @@ def test_scan_tracks_unreviewed_and_check_reports_new_model(tmp_path, monkeypatc
 
 def test_map_efforts_to_model_levels():
     assert M.map_efforts(["medium", "high"], ["low", "medium", "high", "xhigh", "max"]) == ["medium", "high"]
-    assert M.map_efforts(["medium", "high"], ["low", "max"]) == ["low", "max"]  # GLM
+    assert M.map_efforts(["medium", "high"], ["low", "max"]) == ["low"]  # GLM: max сам не подставляется
+    assert M.map_efforts(["high", "xhigh"], ["low", "medium", "high", "max"]) == ["high"]
+    assert M.map_efforts(["max"], ["low", "max"]) == ["max"]  # только если max указан явно
     assert M.map_efforts(["low"], ["none", "low", "high", "max"]) == ["low"]
     assert M.map_efforts(["medium"], []) == []
 
 
 def test_escalation_effort_first_then_model(capsys):
     cfg = L.load_routing()
-    assert L.resolve_step("alternatives", None, cfg, "claude")[:2] == ("T3", "medium")
-    assert L.resolve_step("alternatives", "T3", cfg, "claude")[:2] == ("T3", "high")
-    assert L.resolve_step("alternatives", "T3@high", cfg, "claude")[:2] == ("T4", "high")
+    assert L.resolve_step("alternatives", None, cfg, "claude")[:2] == ("T3", "high")
+    assert L.resolve_step("alternatives", "T3", cfg, "claude")[:2] == ("T3", "xhigh")
+    assert L.resolve_step("alternatives", "T3@xhigh", cfg, "claude")[:2] == ("T4", "high")
+    assert L.resolve_step("alternatives", "T3@max", cfg, "claude")[:2] == ("T4", "high")  # вне лестницы → выше
     assert L.resolve_step("classify", "T1", cfg, "openai")[:2] == ("T2", "medium")  # у T1 одна ступень
     assert L.resolve_step("alternatives", None, cfg, "glm")[:2] == ("T3", "low")
     assert L.main(["route", "alternatives", "--env", "codex"]) == 0
-    assert "Effort: medium" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "Effort: high" in out and "согласия" in out
 
 
 def test_codex_effort_from_inventory(monkeypatch):
-    monkeypatch.setattr(M, "load_inventory", lambda: dict(inv("gpt-6.1-sol"), efforts={"gpt-6.1-sol": ["low", "max"]}))
-    assert L.tier_efforts(L.load_routing(), "T3", "openai") == ["low", "max"]  # не из гайда (там есть medium)
+    monkeypatch.setattr(M, "load_inventory", lambda: dict(inv("gpt-6.1-sol"), efforts={"gpt-6.1-sol": ["low", "medium", "high"]}))
+    assert L.tier_efforts(L.load_routing(), "T3", "openai") == ["high"]  # не из гайда (там есть xhigh)
 
 
 def test_delegate_passes_effort_to_codex(tmp_path, monkeypatch, capsys):
@@ -175,7 +179,13 @@ def test_delegate_passes_effort_to_codex(tmp_path, monkeypatch, capsys):
     assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "alternatives", "--tier", "T3",
                    "--dry-run"]) == 0
     out = capsys.readouterr().out
-    assert "gpt-6.1-sol@medium" in out and "model_reasoning_effort=medium" in out
+    assert "gpt-6.1-sol@high" in out and "model_reasoning_effort=high" in out
+    assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "alternatives", "--tier", "T3",
+                   "--effort", "max", "--dry-run"]) == 2  # max — только с согласия
+    assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "alternatives", "--tier", "T3",
+                   "--effort", "max", "--human-approved", "--dry-run"]) == 0
+    assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "alternatives", "--tier", "T3",
+                   "--effort", "ultra", "--human-approved", "--dry-run"]) == 2
 
 
 def test_selfhosted_backend_roundtrip(tmp_path, monkeypatch):
@@ -216,3 +226,17 @@ def test_selfhosted_backend_roundtrip(tmp_path, monkeypatch):
     log = (p / "state/run_log.md").read_text(encoding="utf-8")
     assert "selfhosted:my-classifier" in log and "k-test" not in log
     assert list((p / "state/delegated").glob("*_classify.md"))[0].read_text(encoding="utf-8") == "классы: A"
+
+
+def test_stronger_new_model_is_a_step_above_not_a_replacement(monkeypatch):
+    cat = [{"id": "gpt-betelgeuse", "family": "openai", "tier": "T4", "kind": "general", "above": "gpt-6-astra"},
+           {"id": "gpt-pebble", "family": "openai", "tier": "T3", "kind": "general", "below": "gpt-6.1-sol"}]
+    monkeypatch.setattr(M, "load_catalog", lambda path=None: cat)
+    monkeypatch.setattr(M, "load_inventory", lambda: inv("gpt-6-astra", "gpt-betelgeuse", "gpt-6.1-sol", "gpt-pebble"))
+    cfg = L.load_routing()
+    assert M.tier_models(cfg, "openai", "T4") == ["gpt-6-astra", "gpt-betelgeuse"]  # Astra остаётся стартовой
+    assert M.tier_models(cfg, "openai", "T3") == ["gpt-pebble", "gpt-6.1-sol"]  # дешевле — раньше
+    assert L.model_for(cfg, "openai", "T4") == "gpt-6-astra"
+    assert L.resolve_step("alternatives", "T4@xhigh", cfg, "openai")[3] == "gpt-betelgeuse"
+    with pytest.raises(ValueError):  # выше самой сильной модели T4 — только пробел и вопрос человеку
+        L.resolve_step("alternatives", "T4:gpt-betelgeuse@xhigh", cfg, "openai")

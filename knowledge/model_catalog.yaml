@@ -6,11 +6,14 @@
 #   kind          — general | specialized (домен, доступ по программе) | code | vision | experimental
 #   domain        — для specialized: life-sciences, cybersecurity, finance, legal, code-review…
 #   access        — open | restricted (нужна программа доступа / договор организации)
-#   replaces      — ID модели, которую эта сменяет на том же уровне (для новых имён вне шаблона)
+#   место на уровне относительно известной модели (одно из трёх):
+#     replaces: X — вместо X (та же роль, X больше не выбирается, если новая доступна)
+#     above: X    — сильнее и дороже X: отдельная ступень эскалации после X (X остаётся стартовой)
+#     below: X    — дешевле X: станет стартовой ступенью уровня, X — следующей
 #   source, checked, note
 #
-# Пример новой модели с непредсказуемым именем (раскомментировать, когда выйдет):
-#   - {id: gpt-betelgeuse, family: openai, tier: T4, kind: general, replaces: gpt-6-astra,
+# Пример: вышла gpt-betelgeuse, она сильнее Astra — не замена, а последняя ступень T4 (раскомментировать, когда выйдет):
+#   - {id: gpt-betelgeuse, family: openai, tier: T4, kind: general, above: gpt-6-astra,
 #      source: "<официальная страница>", checked: 2026-12-01}
 models:
   - id: "gpt-rosalind*"
