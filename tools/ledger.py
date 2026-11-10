@@ -637,6 +637,36 @@ def _cell(s: str) -> str:
     return re.sub(r"\s+", " ", str(s)).replace("|", "/").strip()
 
 
+# Порядок важен: ZCode ради совместимости выставляет и CLAUDE_* переменные (CLAUDE_SESSION_ID, CLAUDE_PROJECT_DIR),
+# поэтому его признаки проверяются раньше признаков Claude Code. Проверено по коду ZCode 0.17.1 и Claude Code (CLAUDECODE=1).
+ENV_MARKERS = [
+    ("zcode", ("ZCODE_SESSION_ID", "ZCODE_PROJECT_DIR")),
+    ("claude-code", ("CLAUDECODE",)),
+    ("codex", ("CODEX_THREAD_ID", "CODEX_SANDBOX", "CODEX_SANDBOX_NETWORK_DISABLED", "CODEX_CI")),
+    ("opencode", ("OPENCODE", "OPENCODE_SESSION_ID")),
+    ("cursor", ("CURSOR_TRACE_ID", "CURSOR_AGENT")),
+]
+
+
+def detect_env(environ: Optional[dict] = None) -> Tuple[str, str]:
+    """(среда, основание). 'unknown' — признаков нет: агент называет среду сам (по своему названию), не по CLAUDE.md."""
+    env = os.environ if environ is None else environ
+    for name, markers in ENV_MARKERS:
+        hit = [m for m in markers if env.get(m)]
+        if hit:
+            return name, f"переменная {hit[0]}"
+    return "unknown", "нет известных переменных окружения"
+
+
+def cmd_env() -> int:
+    name, why = detect_env()
+    print(f"Среда: {name} ({why})")
+    if name == "unknown":
+        print("Определите среду по своему названию (Codex, Cursor, Copilot, Windsurf, GigaCode, Кодик…). "
+              "Не по наличию CLAUDE.md: его читают многие среды.")
+    return 0
+
+
 def cmd_supersede(project: Path, old_id: str, new_id: str, note: Optional[str]) -> int:
     """Пометить старый объект заменённым новым (запись не удаляется и не переписывается)."""
     import datetime
@@ -843,6 +873,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("old")
     p.add_argument("--by", required=True, help="ID нового объекта")
     p.add_argument("--note")
+    sub.add_parser("env", help="определить среду (claude-code, codex, zcode, …) по переменным окружения")
     p = sub.add_parser("status", help="проекты и текущий шаг")
     p.add_argument("--root", type=Path, default=ROOT / "projects")
     p = sub.add_parser("route", help="какой уровень модели взять для задачи")
@@ -862,6 +893,8 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     if args.cmd == "status":
         return cmd_status(args.root)
+    if args.cmd == "env":
+        return cmd_env()
     if args.cmd == "supersede":
         return cmd_supersede(args.project.resolve(), args.old, args.by, args.note)
     if args.cmd == "route":

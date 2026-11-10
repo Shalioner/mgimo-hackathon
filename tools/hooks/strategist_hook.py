@@ -27,7 +27,9 @@ def session_start() -> int:
     if not PY.exists():
         print("Стратег: окружение не создано — выполните `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt` (AGENTS.md §1).")
         return 0
+    e = run(["env"])
     r = run(["status"])
+    print((e.stdout.strip() + "\n") if e.stdout else "")
     print("Стратег — состояние проектов (ledger.py status):\n" + (r.stdout.strip() or "проектов нет"))
     return 0
 

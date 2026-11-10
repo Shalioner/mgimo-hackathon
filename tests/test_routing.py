@@ -146,3 +146,15 @@ def test_claude_code_proxy_warning(monkeypatch, capsys):
     monkeypatch.setenv("ANTHROPIC_BASE_URL", "http://localhost:1/v1")
     assert L.main(["route", "extract-claims", "--env", "claude-code"]) == 0
     assert "прокси" in capsys.readouterr().out
+
+
+# ---------- определение среды ----------
+@pytest.mark.parametrize("environ,expected", [
+    ({"ZCODE_SESSION_ID": "s", "CLAUDE_SESSION_ID": "s", "CLAUDE_PROJECT_DIR": "/p"}, "zcode"),  # ZCode маскируется под Claude
+    ({"CLAUDECODE": "1", "CLAUDE_CODE_ENTRYPOINT": "cli"}, "claude-code"),
+    ({"CODEX_THREAD_ID": "t"}, "codex"),
+    ({"CLAUDE_SESSION_ID": "s"}, "unknown"),  # одни CLAUDE_* без CLAUDECODE — не доказательство Claude Code
+    ({}, "unknown"),
+])
+def test_detect_env(environ, expected):
+    assert L.detect_env(environ)[0] == expected
