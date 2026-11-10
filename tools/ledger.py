@@ -451,6 +451,95 @@ STEPS = [
 ]
 
 
+RUN_LOG_HEADER = ("| Время | Шаг | Действие | Уровень | Модель / инструмент | Результат | Стоимость |\n"
+                  "|---|---|---|---|---|---|---|\n")
+ROUTING_PATH = ROOT / "knowledge" / "routing.yaml"
+TIER_ORDER = ["T0", "T1", "T2", "T3", "T4"]
+
+
+def load_routing() -> dict:
+    return yaml.safe_load(ROUTING_PATH.read_text(encoding="utf-8"))
+
+
+def count_tier_in_log(project: Path, tier: str) -> int:
+    log = project / "state" / "run_log.md"
+    if not log.exists():
+        return 0
+    n = 0
+    for line in log.read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 4 and cells[3] == tier:
+            n += 1
+    return n
+
+
+def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path]) -> int:
+    cfg = load_routing()
+    tasks, tiers = cfg["tasks"], cfg["tiers"]
+    if task not in tasks:
+        print(f"Неизвестная задача «{task}». Доступны: {', '.join(sorted(tasks))}", file=sys.stderr)
+        return 2
+    tier = tasks[task]["tier"]
+    reason = "стартовый уровень задачи"
+    if failed_tier:
+        if failed_tier not in TIER_ORDER:
+            print(f"Неизвестный уровень {failed_tier}", file=sys.stderr)
+            return 2
+        i = TIER_ORDER.index(failed_tier)
+        if i == len(TIER_ORDER) - 1:
+            print("Выше T4 подниматься некуда: зафиксируйте пробел и спросите человека.")
+            return 1
+        tier = TIER_ORDER[i + 1]
+        reason = f"эскалация после неудачи на {failed_tier} (ровно на одну ступень)"
+    t = tiers[tier]
+    print(f"Задача: {task}")
+    print(f"Уровень: {tier} — {t['name']} ({reason})")
+    if t.get("claude") or t.get("openai"):
+        print(f"Модель: Claude — {t['claude']}; OpenAI/Codex — {t['openai']}")
+    else:
+        print("Модель: не нужна — выполнить кодом")
+    if tasks[task].get("note"):
+        print(f"Заметка: {tasks[task]['note']}")
+    if tier == "T4":
+        budget = cfg.get("budget", {})
+        used = count_tier_in_log(project, "T4") if project else 0
+        limit = budget.get("max_t4_calls", 0)
+        print(f"T4 уже использован в проекте: {used} из {limit}")
+        if budget.get("ask_before_t4", True):
+            print("Перед запуском T4 сообщите человеку причину эскалации и спросите согласия.")
+        if used >= limit:
+            print("Лимит T4 исчерпан — без согласия человека не запускать.")
+            return 1
+    print("Если среда не позволяет выбрать модель — выполните текущей и запишите в журнал "
+          "«рекомендован <уровень>, выполнен на <модель>».")
+    return 0
+
+
+def _cell(s: str) -> str:
+    return re.sub(r"\s+", " ", str(s)).replace("|", "/").strip()
+
+
+def cmd_log(project: Path, step: str, action: str, tier: str, model: str, result: str, cost: str,
+            now: Optional[str] = None) -> int:
+    import datetime
+
+    log = project / "state" / "run_log.md"
+    if not log.exists():
+        print(f"Нет журнала {log}: сначала ledger.py init", file=sys.stderr)
+        return 1
+    if tier not in TIER_ORDER and tier != "-":
+        print(f"Уровень должен быть одним из {', '.join(TIER_ORDER)} или «-»", file=sys.stderr)
+        return 2
+    ts = now or datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    row = "| " + " | ".join(_cell(x) for x in (ts, step, action, tier, model, result, cost)) + " |\n"
+    text = log.read_text(encoding="utf-8")
+    if not text.endswith("\n"):
+        text += "\n"
+    log.write_text(text + row, encoding="utf-8")
+    print(f"Записано в журнал: {ts} · шаг {step} · {tier}")
+    return 0
+
+
 def cmd_init(project: Path, title: str) -> int:
     if project.exists() and any(project.iterdir()):
         print(f"Папка {project} уже существует и не пуста — продолжите работу по её state/progress.md",
@@ -471,8 +560,8 @@ def cmd_init(project: Path, title: str) -> int:
         encoding="utf-8")
     (project / "state/run_log.md").write_text(
         f"# Журнал действий: {title}\n\n"
-        "| Время | Шаг | Действие | Инструмент / модель | Результат | Стоимость |\n"
-        "|---|---|---|---|---|---|\n",
+        "Пишется командой `ledger.py log`, а не вручную.\n\n"
+        f"{RUN_LOG_HEADER}",
         encoding="utf-8")
     print(f"Создан проект {project}. Следующий шаг: workflows/strategy.md, шаг 1.")
     return 0
@@ -605,10 +694,27 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--notes")
     p = sub.add_parser("status", help="проекты и текущий шаг")
     p.add_argument("--root", type=Path, default=ROOT / "projects")
+    p = sub.add_parser("route", help="какой уровень модели взять для задачи")
+    p.add_argument("task")
+    p.add_argument("--failed", metavar="TIER", help="уровень, на котором задача не удалась → эскалация")
+    p.add_argument("--project", type=Path, help="для учёта лимита T4 по журналу")
+    p = sub.add_parser("log", help="добавить строку в state/run_log.md")
+    p.add_argument("project", type=Path)
+    p.add_argument("--step", required=True)
+    p.add_argument("--action", required=True)
+    p.add_argument("--tier", default="-", help="T0–T4 или «-»")
+    p.add_argument("--model", default="-", help="модель или инструмент")
+    p.add_argument("--result", required=True)
+    p.add_argument("--cost", default="-", help="токены / поиски / источники, если известно")
     args = ap.parse_args(argv)
 
     if args.cmd == "status":
         return cmd_status(args.root)
+    if args.cmd == "route":
+        return cmd_route(args.task, args.failed, args.project.resolve() if args.project else None)
+    if args.cmd == "log":
+        return cmd_log(args.project.resolve(), args.step, args.action, args.tier, args.model, args.result,
+                       args.cost)
     if args.cmd == "init":
         return cmd_init(args.project.resolve(), args.title)
     if args.cmd == "add-source":

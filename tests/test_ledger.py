@@ -1,4 +1,5 @@
 """Тесты детерминированных инструментов реестра (tools/ledger.py)."""
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -198,3 +199,46 @@ def test_add_source_refuses_invalid_entry_and_cleans_copy(tmp_path):
     assert L.main(["add-source", str(proj), str(f), "--title", "А", "--kind", "document", "--access", "own"]) == 1
     assert not (proj / "sources/a.md").exists()
     assert L.Ledger(proj).objects == {}
+
+
+# ---------- route / log ----------
+def test_route_starts_cheap_and_escalates_one_step(capsys):
+    assert L.main(["route", "extract-claims"]) == 0
+    assert "T1" in capsys.readouterr().out
+    assert L.main(["route", "alternatives"]) == 0
+    out = capsys.readouterr().out
+    assert "T3" in out and "Opus" in out and "Sol" in out
+    assert L.main(["route", "alternatives", "--failed", "T3"]) == 0
+    out = capsys.readouterr().out
+    assert "T4" in out and "Fable" in out and "Astra" in out and "согласия" in out
+    assert L.main(["route", "validate"]) == 0
+    assert "кодом" in capsys.readouterr().out
+
+
+def test_every_task_maps_to_known_tier():
+    cfg = L.load_routing()
+    for name, t in cfg["tasks"].items():
+        assert t["tier"] in cfg["tiers"], name
+    assert cfg["tiers"]["T4"]["claude"] == "Fable" and cfg["tiers"]["T1"]["openai"] == "Luna"
+
+
+def test_t4_budget_enforced(tmp_path, capsys):
+    proj = tmp_path / "p"
+    L.main(["init", str(proj), "--title", "Т"])
+    for _ in range(2):
+        assert L.main(["log", str(proj), "--step", "5", "--action", "эскалация", "--tier", "T4",
+                       "--model", "Fable", "--result", "ok"]) == 0
+    assert L.main(["route", "alternatives", "--failed", "T3", "--project", str(proj)]) == 1
+    assert "исчерпан" in capsys.readouterr().out
+
+
+def test_log_appends_row_with_timestamp_and_escapes(tmp_path):
+    proj = tmp_path / "p"
+    L.main(["init", str(proj), "--title", "Т"])
+    assert L.main(["log", str(proj), "--step", "3", "--action", "a | b", "--tier", "T1",
+                   "--model", "Haiku", "--result", "5 CLM"]) == 0
+    last = (proj / "state/run_log.md").read_text(encoding="utf-8").strip().splitlines()[-1]
+    cells = [c.strip() for c in last.strip("|").split("|")]
+    assert len(cells) == 7 and cells[2] == "a / b" and cells[3] == "T1"
+    assert re.match(r"\d{4}-\d{2}-\d{2}T", cells[0])
+    assert L.main(["log", str(proj), "--step", "3", "--action", "x", "--tier", "T9", "--result", "-"]) == 2
