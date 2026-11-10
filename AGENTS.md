@@ -140,7 +140,9 @@ python tools/verify.py projects/<slug> --files 03 04 05 06 07 --sample 8   # п�
 python tools/ledger.py stats    projects/<slug>
 python tools/ledger.py route    <задача> --env <среда> [--failed T3@high --project projects/<slug>]   # уровень, effort и как включить
 python tools/decide.py --project projects/<slug> --questions knowledge/decisions/<набор>.yaml --items <файл> --step N   # классификация моделью решений
-python tools/models.py check | resolve | specialized   # новые версии и модели, выбранные ID, специализированные
+python tools/models.py check | resolve | specialized
+python tools/cost.py --cwd <папка сессии> --since <начало> --write projects/<slug>   # стоимость прогона в $ по журналам среды
+# Те же команды доступны как MCP-инструменты strategist_* (tools/mcp_server.py; .mcp.json, .cursor/mcp.json)   # новые версии и модели, выбранные ID, специализированные
 python tools/delegate.py --project projects/<slug> --task <задача> --prompt-file <файл> --input <файл> --step N   # отдать подзадачу дешёвой модели
 python tools/ledger.py log      projects/<slug> --step N --action "…" --tier T1 --model … --result "…" --cost "…"
 ```
