@@ -189,6 +189,21 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip().lower()
 
 
+_AGENT_SECTION = re.compile(r"^#{1,6}\s.*(пересказ|заметк\w* агента|комментари\w* агента)", re.I)
+_HEADING = re.compile(r"^#{1,6}\s")
+
+
+def evidence_text(text: str) -> str:
+    """Текст источника без разделов, написанных агентом (заголовок со словом «пересказ» и т. п.)."""
+    out, skip = [], False
+    for line in text.splitlines():
+        if _HEADING.match(line):
+            skip = bool(_AGENT_SECTION.match(line))
+        if not skip:
+            out.append(line)
+    return "\n".join(out)
+
+
 def validate(ledger: Ledger) -> Report:
     rep = Report()
     for where, msg in ledger.load_problems:
@@ -264,6 +279,9 @@ def validate(ledger: Ledger) -> Report:
                     text = fpath.read_text(encoding="utf-8", errors="replace")
                     if _norm(quote) not in _norm(text):
                         rep.err(oid, f"цитата не найдена в {src['id']} ({rel}): «{quote[:60]}»")
+                    elif _norm(quote) not in _norm(evidence_text(text)):
+                        rep.err(oid, f"цитата взята из пересказа агента в {src['id']}: пересказ не доказательство — "
+                                     "процитируйте оригинал или смените тип на interpretation")
         for c in o.get("contradicted_by") or []:
             if c == oid:
                 rep.err(oid, "утверждение противоречит само себе")
@@ -308,9 +326,10 @@ def validate(ledger: Ledger) -> Report:
         if not o.get("proof"):
             rep.warn(oid, "у обещания нет подтверждения (proof) — чем аудитория убедится, что это правда?")
 
-    # 7. ключевые гипотезы должны проверяться
+    # 7. ключевые гипотезы должны проверяться — актуально, только когда решение уже принято (шаг 7+)
     tested = {t for oid, o in objs.items() if prefix(oid) == "EXP" for t in (o.get("tests") or [])}
-    for oid, o in objs.items():
+    decided = any(prefix(k) == "DEC" and o.get("state") == "decided" for k, o in objs.items())
+    for oid, o in objs.items() if decided else []:
         if prefix(oid) == "HYP" and o.get("would_change_decision") and o.get("verdict", "open") == "open" \
                 and o.get("status", "active") == "active" and oid not in tested:
             rep.warn(oid, "гипотеза может изменить решение, но ни один эксперимент её не проверяет")
@@ -432,9 +451,17 @@ def cmd_stats(ledger: Ledger) -> int:
             by_conf[lvl] = by_conf.get(lvl, 0) + 1
         print(f"\nУтверждения по типу: {by_type}")
         print(f"Утверждения по уверенности: {by_conf}")
-        contradicted = [c["id"] for c in claims if c.get("contradicted_by")]
-        if contradicted:
-            print(f"Есть противоречия: {', '.join(contradicted)}")
+        pairs = sorted({tuple(sorted((c["id"], x))) for c in claims for x in (c.get("contradicted_by") or [])})
+        print(f"Противоречий (пар): {len(pairs)}" + (f" — {', '.join(a + '↔' + b for a, b in pairs)}" if pairs else ""))
+    hyps = [o for k, o in objs.items() if prefix(k) == "HYP" and o.get("status", "active") == "active"]
+    if hyps:
+        n_h = sum(1 for h in hyps if h.get("kind") == "hypothesis")
+        print(f"Гипотез: {n_h}, допущений: {len(hyps) - n_h}, "
+              f"способных изменить решение: {sum(1 for h in hyps if h.get('would_change_decision'))}")
+    sit = ledger.project / "outputs" / "03_situation.md"
+    if sit.exists():
+        gaps = len(re.findall(r"неизвестно\s*:", sit.read_text(encoding="utf-8"), flags=re.I))
+        print(f"Пробелов («Неизвестно:» в 03_situation.md): {gaps}")
     return 0
 
 

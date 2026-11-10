@@ -242,3 +242,31 @@ def test_log_appends_row_with_timestamp_and_escapes(tmp_path):
     assert len(cells) == 7 and cells[2] == "a / b" and cells[3] == "T1"
     assert re.match(r"\d{4}-\d{2}-\d{2}T", cells[0])
     assert L.main(["log", str(proj), "--step", "3", "--action", "x", "--tier", "T9", "--result", "-"]) == 2
+
+
+# ---------- пересказ агента не доказательство; шум до решения ----------
+def test_quote_from_agent_paraphrase_rejected(proj):
+    f = proj / "sources" / "competitor_notes.md"
+    f.write_text(f.read_text(encoding="utf-8") + "\n## Пересказ агента\nКонкурент В бесплатен для семей.\n",
+                 encoding="utf-8")
+    edit(proj, "sources.yaml", "SRC-003", lambda o: o.pop("sha256"))
+    edit(proj, "claims.yaml", "CLM-003", lambda o: o["evidence"][0].update(quote="Конкурент В бесплатен для семей"))
+    assert any("пересказа агента" in e for e in errors(proj))
+
+
+def test_quote_after_paraphrase_section_is_evidence_again():
+    text = "# Шапка\n## Выдержки\nА\n## Пересказ\nБ\n## Оригинал, продолжение\nВ\n"
+    ev = L.evidence_text(text)
+    assert "А" in ev and "В" in ev and "Б" not in ev
+
+
+def test_no_experiment_warnings_before_decision(proj):
+    edit(proj, "decisions.yaml", "DEC-001", lambda o: o.update(state="proposed"))
+    rep = L.validate(L.Ledger(proj))
+    assert not any("ни один эксперимент" in w for w in rep.warnings)
+
+
+def test_stats_reports_contradictions_and_hypothesis_split(capsys):
+    assert L.main(["stats", str(EXAMPLE)]) == 0
+    out = capsys.readouterr().out
+    assert "Противоречий (пар): 1" in out and "Гипотез: 2, допущений: 1" in out
