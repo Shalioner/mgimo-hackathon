@@ -102,7 +102,7 @@
 
 **Не трать ресурсы на лишнее:**
 - запрос пользователя — не источник; он дословно цитируется в брифе, а не регистрируется как SRC и не дробится на CLM;
-- верификатор (`claim-verifier`) запускается перед C3 и после пересмотра, а не на каждом шаге;
+- верификатор (`claim-verifier`) запускается перед C3 и после пересмотра, а не на каждом шаге, и **сначала кодом**: `tools/verify.py`. Модели передаётся только его короткий список, а не весь пакет (замер: проверка всего пакета моделью ≈412K токенов);
 - не перечитывай весь репозиторий: на каждом шаге читай AGENTS.md, нужный навык и состояние проекта;
 - `pytest` и правка `tools/` — работа разработчиков агента, а не часть задачи пользователя; не сохраняй вывод команд в отдельные файлы (`stats.txt` и т. п.), их всегда можно перезапустить.
 
@@ -129,6 +129,7 @@ python tools/ledger.py add-source projects/<slug> <файл> --title "…" --kin
 python tools/ledger.py validate projects/<slug>         # обязательно после записи в реестр
 python tools/ledger.py impact   projects/<slug> CHG-001 # что затронуто новыми сведениями
 python tools/ledger.py trace    projects/<slug> DEC-001 # на чём держится решение
+python tools/verify.py projects/<slug> --files 03 04 05 06 07 --sample 8   # проверка утверждений кодом перед C3
 python tools/ledger.py stats    projects/<slug>
 python tools/ledger.py route    <задача> --env <среда> [--failed T1 --project projects/<slug>]   # уровень и как его включить
 python tools/delegate.py --project projects/<slug> --task <задача> --prompt-file <файл> --input <файл> --step N   # отдать подзадачу дешёвой модели
