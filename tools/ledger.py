@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import json
 import re
 import sys
@@ -522,8 +523,25 @@ ROUTING_PATH = ROOT / "knowledge" / "routing.yaml"
 TIER_ORDER = ["T0", "T1", "T2", "T3", "T4"]
 
 
-def load_routing() -> dict:
-    return yaml.safe_load(ROUTING_PATH.read_text(encoding="utf-8"))
+ROUTING_LOCAL_PATH = ROOT / "knowledge" / "routing.local.yaml"
+
+
+def _deep_merge(base: dict, over: dict) -> dict:
+    out = dict(base)
+    for k, v in (over or {}).items():
+        out[k] = _deep_merge(out[k], v) if isinstance(v, dict) and isinstance(out.get(k), dict) else v
+    return out
+
+
+def load_routing(local: Optional[Path] = None) -> dict:
+    """routing.yaml + необязательные локальные переопределения этой машины (routing.local.yaml, не в git):
+    какие модели реально стоят за уровнями у конкретного пользователя (прокси, бесплатные модели и т. п.)."""
+    cfg = yaml.safe_load(ROUTING_PATH.read_text(encoding="utf-8"))
+    path = local if local is not None else ROUTING_LOCAL_PATH
+    if path.exists():
+        cfg = _deep_merge(cfg, yaml.safe_load(path.read_text(encoding="utf-8")) or {})
+        cfg["_local"] = str(path)
+    return cfg
 
 
 def count_tier_in_log(project: Path, tier: str) -> int:
@@ -582,6 +600,8 @@ def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], en
     print(f"Уровень: {tier} — {cfg['tiers'][tier]['name']} ({reason})")
     if cfg["tasks"][task].get("note"):
         print(f"Заметка: {cfg['tasks'][task]['note']}")
+    if cfg.get("_local"):
+        print(f"Учтены локальные переопределения: {cfg['_local']}")
     if tier == "T0":
         print("Модель: не нужна — выполнить кодом")
     elif env:
@@ -591,6 +611,10 @@ def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], en
         for i, s in enumerate(e.get("switch", []), 1):
             print(f"  {i}. {SWITCH_TEXT[s].format(task=task, tier=tier)}")
         print(f"Как в этой среде: {e.get('how', '')}")
+        if env == "claude-code" and os.environ.get("ANTHROPIC_BASE_URL"):
+            print("ВНИМАНИЕ: задан ANTHROPIC_BASE_URL — алиасы haiku/sonnet/opus разрешает ваш прокси, а не Anthropic. "
+                  "Какая модель реально ответит, решает прокси: пропишите соответствие в knowledge/routing.local.yaml "
+                  "и в настройках прокси (см. knowledge/routing.local.example.yaml).")
     else:
         fams = ", ".join(f"{f} — {v.get(tier)}" for f, v in cfg.get("families", {}).items() if v.get(tier))
         print(f"Модели уровня: {fams}")

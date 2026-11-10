@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import delegate as D  # noqa: E402
 import ledger as L  # noqa: E402
 
-TZ_ENVS = ["claude-code", "codex", "opencode", "cursor", "copilot", "windsurf", "gigacode", "kodik"]
+TZ_ENVS = ["claude-code", "codex", "opencode", "cursor", "copilot", "windsurf", "gigacode", "kodik", "zcode"]
 
 
 def test_all_tz_environments_have_a_switch_route():
@@ -110,3 +110,39 @@ def test_failed_call_is_logged_and_nonzero(proj, monkeypatch):
     assert run(proj, "--task", "extract-claims", "--step", "3") == 1
     last = (proj / "state/run_log.md").read_text(encoding="utf-8").strip().splitlines()[-1]
     assert "ошибка (код 1)" in last and "codex:gpt-6-luna" in last
+
+
+# ---------- локальные переопределения и новые среды ----------
+def test_local_override_merges_over_routing(tmp_path):
+    loc = tmp_path / "routing.local.yaml"
+    loc.write_text("environments:\n  opencode: {family: opencode-free}\ndelegate_families:\n  opencode: opencode-free\n",
+                   encoding="utf-8")
+    cfg = L.load_routing(loc)
+    assert cfg["environments"]["opencode"]["family"] == "opencode-free"
+    assert cfg["environments"]["opencode"]["switch"]  # остальное не потеряно
+    assert L.model_for(cfg, "opencode-free", "T1") == "opencode/deepseek-v4.1-flash-free"
+    assert cfg["_local"] == str(loc)
+
+
+def test_delegate_uses_local_family(tmp_path, monkeypatch, capsys):
+    loc = tmp_path / "routing.local.yaml"
+    loc.write_text("delegate_families:\n  opencode: opencode-free\n", encoding="utf-8")
+    monkeypatch.setattr(L, "ROUTING_LOCAL_PATH", loc)
+    monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b if b == "opencode" else None)
+    p = tmp_path / "p"
+    L.main(["init", str(p), "--title", "Д"])
+    q = tmp_path / "q.md"
+    q.write_text("x", encoding="utf-8")
+    assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "classify", "--dry-run"]) == 0
+    assert "deepseek-v4.1-flash-free" in capsys.readouterr().out
+
+
+def test_zcode_env_uses_glm_ids(capsys):
+    assert L.main(["route", "alternatives", "--env", "zcode"]) == 0
+    assert "GLM-5.3" in capsys.readouterr().out
+
+
+def test_claude_code_proxy_warning(monkeypatch, capsys):
+    monkeypatch.setenv("ANTHROPIC_BASE_URL", "http://localhost:1/v1")
+    assert L.main(["route", "extract-claims", "--env", "claude-code"]) == 0
+    assert "прокси" in capsys.readouterr().out

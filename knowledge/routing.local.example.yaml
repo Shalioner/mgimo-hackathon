@@ -1,0 +1,16 @@
+# Пример локальных переопределений маршрутизации. Скопируйте в knowledge/routing.local.yaml (файл в .gitignore)
+# и оставьте только то, что отличается на вашей машине. Объединяется с routing.yaml поверх него.
+
+# 1) Claude Code через прокси (ANTHROPIC_BASE_URL): алиасы haiku/sonnet/opus разрешает прокси.
+#    Пропишите, какие модели прокси реально отдаёт на каждый уровень (ID — из настроек вашего прокси).
+# families:
+#   claude: {T1: "<дешёвая модель прокси>", T2: "<средняя>", T3: "<сильная>", T4: null}
+
+# 2) OpenCode только на бесплатных моделях (Zen free; квоты по IP, состав меняется — сверяйте `opencode models`):
+# environments:
+#   opencode: {family: opencode-free}
+# delegate_families:
+#   opencode: opencode-free
+
+# 3) Свой лимит эскалаций:
+# budget: {max_t4_calls: 0}

@@ -128,9 +128,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         print("Нет установленного CLI (codex/claude/opencode) — выполните текущей моделью и запишите "
               f"«рекомендован {tier}, выполнен на <модель>».", file=sys.stderr)
         return 3
-    model = L.model_for(cfg, BACKEND_FAMILY[backend], tier)
+    family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY[backend]
+    model = L.model_for(cfg, family, tier)
     if not model:
-        print(f"Для бэкенда {backend} не задана модель уровня {tier} в routing.yaml", file=sys.stderr)
+        print(f"Для бэкенда {backend} (семейство {family}) не задана модель уровня {tier} в routing.yaml", file=sys.stderr)
         return 3
 
     prompt_path = args.prompt_file if args.prompt_file.is_absolute() else Path.cwd() / args.prompt_file

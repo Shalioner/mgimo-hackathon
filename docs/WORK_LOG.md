@@ -96,3 +96,9 @@
 - **Чистый клон по README:** venv, status, 54 passed, validate обоих проектов, секретов нет. Почта автора коммитов — личный gmail: решить до публикации.
 - **Тест на внедрённые команды** (`docs/E2E_INJECTION_TEST.md`, эталон до запуска `cbba811`): пройден 5/5.
 - **Мелочи:** синонимы задач по навыкам в routing.yaml; пояснение о доверии к хукам Codex в README.
+
+## 2026-11-10 (12) — Claude Code через прокси, OpenCode на бесплатных моделях, ZCode
+- **Claude Code:** `ANTHROPIC_BASE_URL=localhost:20128` (OmniRoute), основная модель `huawuu`. Алиасы haiku/sonnet/opus разрешает прокси; по сообщениям в трекере Claude Code, `ANTHROPIC_DEFAULT_*_MODEL` при своём base URL игнорируются, `CLAUDE_CODE_SUBAGENT_MODEL` перекрывает модель всех субагентов. Схема «субагент на haiku = дёшево» на этой машине не гарантирована. Решение: `knowledge/routing.local.yaml` (не в git, пример — `routing.local.example.yaml`), предупреждение в `route --env claude-code` при заданном прокси.
+- **OpenCode бесплатно:** проверены 12 бесплатных моделей Zen (`opencode run -m …`): 11 — «Free usage limit reached», `inkling-2-small-free` — «not available in your country». **Прогон заблокирован квотой**, не репозиторием. Подготовлено семейство `opencode-free` (deepseek-v4.1-flash-free) и `delegate_families`.
+- **ZCode:** установлен (`/Applications/ZCode.app`, `~/.zcode/v2/config.json`). Модели не видны, потому что нет активного провайдера: `builtin:zai` включён, но ключ API пустой; OAuth и coding plan неактивны (`oauth_provider_inactive`, `coding_plan_not_entitled`). Нужен вход в Z.ai или ключ — это действие пользователя. Подготовлена среда `zcode` и семейство `glm` (GLM-5.3-Flash / GLM-5.3, ID из конфига).
+- **Проверка:** 58 passed.
