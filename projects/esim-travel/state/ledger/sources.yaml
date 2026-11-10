@@ -1,0 +1,57 @@
+- id: SRC-001
+  title: 'Juniper Research: travel eSIM +85% в 2025 (пресс-релиз)'
+  kind: website
+  access: open
+  path: sources/juniper_travel_esim_2025.md
+  sha256: 940fb48604b11520c8daef4d716a9cede9d40030a1646d91d921c9776da52545
+  retrieved: '2026-11-10'
+  reliability: high
+- id: SRC-002
+  title: МТС запустила eSIM для зарубежных поездок (пресс-релиз)
+  kind: website
+  access: open
+  path: sources/mts_travel_esim_2024-11-28.md
+  sha256: 5b4b8466805628e5539534f4f90174112cf26800719ed9d3cb3901d8a4305161
+  retrieved: '2026-11-10'
+  reliability: high
+- id: SRC-003
+  title: 'Билайн Travel eSIM: 164 страны (Вокруг света)'
+  kind: website
+  access: open
+  path: sources/beeline_travel_esim_164.md
+  sha256: eb8998e2e9bf57e0e001cb813ecbcc0e0d542fe01144af92be35f953097ac698
+  retrieved: '2026-11-10'
+  reliability: medium
+- id: SRC-004
+  title: 'Content-Review: сводка «Роуминг» (70 млн eSIM за 2024)'
+  kind: website
+  access: open
+  path: sources/content_review_roaming_2024.md
+  sha256: 8d042ca5cbcd89dba03d053f7123360f6dc00696da80c8a49a754f2ff558667d
+  retrieved: '2026-11-10'
+  reliability: medium
+- id: SRC-005
+  title: 'Roami: сравнение с МегаФоном (блог вендора)'
+  kind: website
+  access: open
+  path: sources/roami_megafon_comparison.md
+  sha256: b0fcc24a1c25fa18ce140548bb7a7162cf74528beb0bbb5b94acc8cb8b30c558
+  retrieved: '2026-11-10'
+  reliability: low
+- id: SRC-006
+  title: 'vc.ru: eSIM для путешествий (нативная реклама)'
+  kind: website
+  access: open
+  path: sources/vc_ru_esim_prices.md
+  sha256: 3205e72b759ab716384570a0e32666377fd15627f61c7e134b32dad92b8f5f18
+  retrieved: '2026-11-10'
+  reliability: low
+- id: SRC-007
+  title: 'МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен)'
+  kind: website
+  access: open
+  path: sources/megafon_roaming_official.md
+  sha256: e8fd3c333e7341f88e9784e128b9cac4539b080fc8ee7b3bc027adaf5200ddcd
+  retrieved: '2026-11-10'
+  reliability: high
+  url: https://moscow.megafon.ru/roaming/world/internet_l_na_den.html
