@@ -260,5 +260,15 @@ def main(argv=None) -> int:
     return 1 if hard else 0
 
 
+def _utf8_stdio() -> None:
+    """Windows: консоль и пайпы по умолчанию в cp1251 — кириллица и знаки вроде «↺» роняют вывод."""
+    for s in (sys.stdin, sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 if __name__ == "__main__":
+    _utf8_stdio()
     sys.exit(main())

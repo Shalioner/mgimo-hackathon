@@ -12,7 +12,7 @@
 
 Пользователь пишет коротко и обычными словами: «почему у нас падает удержание?», «продолжи», «вот новый отчёт». Подробных инструкций в сообщении не будет, всё нужное — здесь.
 
-1. **Окружение.** Если нет `.venv/`, выполни `python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt`. Все команды `python tools/ledger.py …` ниже запускай как `.venv/bin/python tools/ledger.py …`.
+1. **Окружение.** Если нет `.venv/`, выполни `python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt`. Все команды `python tools/ledger.py …` ниже запускай как `.venv/bin/python tools/ledger.py …` (в Windows: `python -m venv .venv`, затем `.venv\Scripts\python.exe tools/ledger.py …`).
 2. Выполни `ledger.py env` и `ledger.py status`. Первая команда определит среду по переменным окружения: запиши её в `progress.md` строкой `Среда: …`. **Не определяй среду по наличию `CLAUDE.md`**: его читают многие среды, а ZCode ради совместимости выставляет даже `CLAUDE_*` переменные. Если `env` ответил `unknown`, назови среду сам по своему названию. Вторая команда покажет проекты, текущий шаг каждого и то, что ждёт решения.
 3. **Определи намерение по сообщению:**
    - новая задача → `ledger.py init projects/<slug> --title "<короткое название>"`, затем шаг 1;

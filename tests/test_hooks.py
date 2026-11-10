@@ -10,7 +10,7 @@ HOOK = ROOT / "tools" / "hooks" / "strategist_hook.py"
 
 
 def run(mode, payload=None, timeout=30):
-    return subprocess.run([sys.executable, str(HOOK), mode], input=payload, capture_output=True, text=True,
+    return subprocess.run([sys.executable, str(HOOK), mode], input=payload, capture_output=True, text=True, encoding="utf-8",
                           timeout=timeout, cwd=str(ROOT))
 
 

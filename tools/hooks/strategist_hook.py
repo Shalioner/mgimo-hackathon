@@ -8,31 +8,43 @@
 Хук никогда не ломает работу: при любой собственной ошибке выходит с кодом 0.
 """
 import json
+import os
 import re
 import subprocess
 import sys
+import threading
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PY = ROOT / ".venv" / "bin" / "python"
+WINDOWS = os.name == "nt"
+PY = ROOT / ".venv" / ("Scripts/python.exe" if WINDOWS else "bin/python")
 LEDGER = ROOT / "tools" / "ledger.py"
+VENV_HINT = (r"python -m venv .venv && .venv\Scripts\pip install -r requirements.txt" if WINDOWS
+             else "python3 -m venv .venv && .venv/bin/pip install -r requirements.txt")
+# Путь к реестру в событии: прямые или обратные слэши (Windows), в т. ч. экранированные в JSON.
+LEDGER_PATH = re.compile(r"projects[\\/]+([A-Za-z0-9_.\-]+)[\\/]+state[\\/]+ledger[\\/]")
+
+
+def child(argv, timeout):
+    env = dict(os.environ, PYTHONIOENCODING="utf-8")
+    return subprocess.run(argv, cwd=str(ROOT), capture_output=True, text=True, encoding="utf-8",
+                          errors="replace", timeout=timeout, env=env)
 
 
 def run(args, timeout=60):
     py = str(PY) if PY.exists() else sys.executable
-    return subprocess.run([py, str(LEDGER), *args], cwd=str(ROOT), capture_output=True, text=True, timeout=timeout)
+    return child([py, str(LEDGER), *args], timeout)
 
 
 def session_start() -> int:
     if not PY.exists():
-        print("Стратег: окружение не создано — выполните `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt` (AGENTS.md §1).")
+        print(f"Стратег: окружение не создано — выполните `{VENV_HINT}` (AGENTS.md §1).")
         return 0
     e = run(["env"])
     r = run(["status"])
     py = str(PY) if PY.exists() else sys.executable
     try:
-        m = subprocess.run([py, str(ROOT / "tools" / "models.py"), "check", "--brief"], cwd=str(ROOT),
-                           capture_output=True, text=True, timeout=40)
+        m = child([py, str(ROOT / "tools" / "models.py"), "check", "--brief"], 40)
         if m.stdout.strip():
             print(m.stdout.strip())
     except subprocess.SubprocessError:
@@ -43,7 +55,7 @@ def session_start() -> int:
 
 
 def after_write(payload: str) -> int:
-    projects = sorted(set(re.findall(r"projects/([A-Za-z0-9_.\-]+)/state/ledger/", payload)))
+    projects = sorted(set(LEDGER_PATH.findall(payload)))
     if not projects or not PY.exists():
         return 0
     failed = []
@@ -64,11 +76,16 @@ def after_write(payload: str) -> int:
 
 def read_stdin(timeout: float = 2.0) -> str:
     """Читает JSON события, но не дольше timeout: незакрытый stdin не должен вешать сессию."""
-    import os
-    import select
     try:
         if sys.stdin.isatty():
             return ""
+        if WINDOWS:  # select() на Windows не работает с пайпами — читаем в фоновом потоке
+            box = []
+            t = threading.Thread(target=lambda: box.append(sys.stdin.buffer.read()), daemon=True)
+            t.start()
+            t.join(timeout)
+            return box[0].decode("utf-8", errors="replace") if box else ""
+        import select
         fd = sys.stdin.fileno()
         chunks = []
         while True:
@@ -102,4 +119,12 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+    code = main()
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(code)  # не ждать фоновый поток чтения stdin (Windows)
