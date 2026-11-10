@@ -96,6 +96,13 @@ tasks:
   alternatives:      {tier: T3}
   product-strategy:  {tier: T3}
   impact-revision:   {tier: T3, note: "переписывание затронутых выводов; если ранжирование не меняется — T2"}
+  # Синонимы: названия навыков из skills/ (агенты часто спрашивают маршрут по навыку)
+  source-intake:     {tier: T1, note: "= extract-claims"}
+  claim-verifier:    {tier: T1, note: "= verify-claims"}
+  interviews:        {tier: T2, note: "гайд и анализ — T2; модельные респонденты — synthetic-interview (T1)"}
+  strategy:          {tier: T3, note: "продуктовая — T3, коммуникационная — comms-strategy (T2)"}
+  impact-analysis:   {tier: T0, note: "поиск затронутого — ledger.py impact; переписывание — impact-revision (T3)"}
+  decision-support:  {tier: T2}
 
 # Сигналы, по которым уровень поднимается на одну ступень (и только на одну).
 escalate_when:
