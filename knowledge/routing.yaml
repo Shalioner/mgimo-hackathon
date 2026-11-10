@@ -66,7 +66,7 @@ environments:
   zcode:
     family: glm
     switch: [picker, cli, current]
-    how: "ZCode (Z.ai): модель выбирается в приложении; Orca запускает zcode с моделью из его собственного конфига. Модели видны только при активном провайдере (вход в Z.ai или ключ API в ZCode). T4 в линейке нет — эскалация к человеку или в другую среду."
+    how: "ZCode (Z.ai): модель выбирается в приложении. Модели видны только при активном провайдере: Coding Plan или ключ API Z.ai (GLM-5.3-Flash платный). Проверено 2026-11-10: ZCode.app 0.17.1 содержит только безынтерфейсный CLI (glm/zcode.cjs: -p, app-server) без пакета @zcode/tui — Orca (терминальный агент) его не запустит; CLI вне приложения требует ELECTRON_RUN_AS_NODE=1 и ZCODE_BUILTIN_PROVIDER_CONFIG_FILE. T4 в линейке нет."
   gigacode:
     family: gigachat
     switch: [picker, current]

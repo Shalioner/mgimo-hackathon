@@ -103,3 +103,12 @@
 - **ZCode:** установлен (`/Applications/ZCode.app`, `~/.zcode/v2/config.json`). Модели не видны, потому что нет активного провайдера: `builtin:zai` включён, но ключ API пустой; OAuth и coding plan неактивны (`oauth_provider_inactive`, `coding_plan_not_entitled`). Нужен вход в Z.ai или ключ — это действие пользователя. Подготовлена среда `zcode` и семейство `glm` (GLM-5.3-Flash / GLM-5.3, ID из конфига).
 - **Проверка:** 58 passed.
 - **Решение пользователя:** прогон в OpenCode не проводить (бесплатные квоты исчерпаны); ZCode — пользователь сам входит в Z.ai, после этого прогон через Orca (`--agent zcode`).
+
+## 2026-11-10 (13) — ZCode через Orca
+- **Симптом:** `orca worktree create --agent zcode` → в терминале `zsh: command not found: zcode`.
+- **Диагностика:**
+  - ZCode.app не кладёт команду в PATH. CLI — `Resources/glm/zcode.cjs` (0.17.1), рантайм electron-node.
+  - Создана обёртка `~/.local/bin/zcode` (вне репозитория): `ELECTRON_RUN_AS_NODE=1` + `ZCODE_BUILTIN_PROVIDER_CONFIG_FILE=…/Resources/config/provider/zcode-builtin.json`. Без второй переменной — «无法定位 CLI ZCode Built-in Provider Config»; с ней `zcode -p` доходит до «Select a model before sending a message».
+  - TUI не запускается: `Cannot find package '@zcode/tui'` — в приложении его нет (подтверждается сторонними сообщениями). Orca запускает zcode как интерактивного агента → без TUI невозможно.
+  - Доступ: после входа пользователя провайдеры `zai-coding-plan` / `zai-start-plan` получили токены, но `coding_plan_not_entitled`; ключ `builtin:zai` пустой. По открытым источникам GLM-5.3-Flash не бесплатен (акция закончилась; Coding Plan от $18/мес).
+- **Итог:** прогон в ZCode заблокирован средой (нет TUI + нет доступа к моделям), не репозиторием. Маршрутизация для zcode описана с этими фактами.
