@@ -37,7 +37,7 @@
 | 7 | Составляешь план проверки | `skills/validation-plan` | `outputs/07_validation_plan.md`, EXP | T2 (+T1 верификатор) | **C3: утверждает пакет** |
 | 8 | Сопровождаешь решение | `skills/decision-support`, `skills/impact-analysis` | `outputs/08_decision_log.md`, CHG | T0 → T3 | по триггерам |
 
-Новые сведения после решения обрабатывай по [workflows/update-decision.md](workflows/update-decision.md).
+Новые сведения после решения обрабатывай по [workflows/update-decision.md](workflows/update-decision.md). Интервью и модельные респонденты — навык `skills/interviews`.
 
 **Checkpoints C1–C3 обязательны.** На них ты останавливаешься и ждёшь ответа. Между ними работай самостоятельно, не спрашивая разрешения на каждое действие. Пользователь в любой момент может остановить работу, уточнить задачу или исправить результат: сохрани состояние, внеси правку и продолжи.
 

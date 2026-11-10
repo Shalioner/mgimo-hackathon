@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/tools/hooks/strategist_hook.py\" session-start", "timeout": 30}]}
+    ],
+    "PostToolUse": [
+      {"matcher": "Write|Edit|MultiEdit|Bash",
+       "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/tools/hooks/strategist_hook.py\" after-write", "timeout": 60}]}
+    ]
+  }
+}
