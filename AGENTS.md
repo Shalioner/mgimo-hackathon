@@ -85,7 +85,9 @@
 
 Модели OpenCode и других сред — в `routing.yaml`. Для GigaChat линейка не проверена: при первом запуске в GigaCode запиши её туда.
 
-**Версии обновляются сами.** В `routing.yaml` уровни заданы шаблонами (`gpt-*-sol`), и берётся самая новая доступная версия (`python tools/models.py resolve`). Особенности моделей (effort, запреты параметров, как их промптить) — в [knowledge/model_guides/](knowledge/model_guides/README.md), по официальным руководствам вендоров. Модели с новым именем вне шаблона (`gpt-betelgeuse`) встают на уровень через [knowledge/model_catalog.yaml](knowledge/model_catalog.yaml). Свою модель (Ollama, vLLM, LM Studio, корпоративный шлюз) можно подключить как бэкенд `selfhosted` — см. `knowledge/routing.local.example.yaml`. Если при старте `models.py check` пишет «НОВАЯ ВЕРСИЯ», «НОВАЯ МОДЕЛЬ», «НЕТ ГАЙДА» или «ГАЙД УСТАРЕЛ» — скажи человеку одной строкой и, если он согласен, выполни навык `skills/model-refresh`. Продуктовую работу это не блокирует.
+**Версии обновляются сами.** В `routing.yaml` уровни заданы шаблонами (`gpt-*-sol`), и берётся самая новая доступная версия (`python tools/models.py resolve`). Особенности моделей (effort, запреты параметров, как их промптить) — в [knowledge/model_guides/](knowledge/model_guides/README.md), по официальным руководствам вендоров. **Классификация — модели решений, а не LLM.** Выбор из вариантов, шкала, да/нет (тип утверждения, поддерживает ли источник строку, уровень подзадачи) — сначала `tools/decide.py`. Это модель вроде Jev или её открытый аналог, протокол System One, ответ — вероятности. Уверенные ответы принимай, а LLM уровня T1 отдавай только список «На проверку T1». Если провайдер не настроен (код 3), выполняй задачу на T1, как обычно. Наборы вопросов — `knowledge/decisions/`.
+
+Модели с новым именем вне шаблона (`gpt-betelgeuse`) встают на уровень через [knowledge/model_catalog.yaml](knowledge/model_catalog.yaml). Свою модель (Ollama, vLLM, LM Studio, корпоративный шлюз) можно подключить как бэкенд `selfhosted` — см. `knowledge/routing.local.example.yaml`. Если при старте `models.py check` пишет «НОВАЯ ВЕРСИЯ», «НОВАЯ МОДЕЛЬ», «НЕТ ГАЙДА» или «ГАЙД УСТАРЕЛ» — скажи человеку одной строкой и, если он согласен, выполни навык `skills/model-refresh`. Продуктовую работу это не блокирует.
 
 **Как включить нужный уровень** — спроси у команды: `ledger.py route <задача> --env <среда>`. Свою среду ты знаешь. Запиши её в `progress.md` строкой `Среда: codex` (или `claude-code`, `cursor`…), чтобы следующая сессия не гадала. Способы, от лучшего к запасному:
 1. **Субагент с моделью** (Claude Code: `.claude/agents/source-extractor.md`, `claim-verifier.md` на haiku).
@@ -135,6 +137,7 @@ python tools/ledger.py trace    projects/<slug> DEC-001 # на чём держи
 python tools/verify.py projects/<slug> --files 03 04 05 06 07 --sample 8   # проверка утверждений кодом перед C3
 python tools/ledger.py stats    projects/<slug>
 python tools/ledger.py route    <задача> --env <среда> [--failed T3@high --project projects/<slug>]   # уровень, effort и как включить
+python tools/decide.py --project projects/<slug> --questions knowledge/decisions/<набор>.yaml --items <файл> --step N   # классификация моделью решений
 python tools/models.py check | resolve | specialized   # новые версии и модели, выбранные ID, специализированные
 python tools/delegate.py --project projects/<slug> --task <задача> --prompt-file <файл> --input <файл> --step N   # отдать подзадачу дешёвой модели
 python tools/ledger.py log      projects/<slug> --step N --action "…" --tier T1 --model … --result "…" --cost "…"

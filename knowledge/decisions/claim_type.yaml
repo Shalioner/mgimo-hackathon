@@ -1,0 +1,14 @@
+# Тип утверждения и уверенность — для пачки утверждений (--items: [{id: CLM-001, text: "…"}]).
+# Протокол System One: type noul | choice | score; criteria у choice — {вариант: описание}, у score — список от низшего к высшему.
+questions:
+  type:
+    type: choice
+    instructions: "Утверждение: «{text}». Какого оно типа?"
+    criteria:
+      fact: "проверяемый факт, есть в источнике"
+      hypothesis: "предположение о причине или поведении, требует проверки"
+      forecast: "утверждение о будущем"
+      recommendation: "что следует сделать"
+  quantified:
+    type: noul
+    instructions: "Утверждение: «{text}». Содержит ли оно число, долю или сумму?"

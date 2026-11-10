@@ -131,6 +131,21 @@ environments:
     switch: [cli, current]
     how: "Как codex; дополнительно — воркер Orca: orca orchestration worker-start --agent codex --model <id> (оркестратор, необязателен)."
 
+# Модель решений (decision model): выбор из вариантов, шкала, да/нет с вероятностями, без генерации текста.
+# Протокол System One (POST {base_url}/systemone). Берётся первый провайдер с адресом и ключом в окружении;
+# ни одного — tools/decide.py вернёт код 3, и задача идёт на T1, как раньше. Ключи — только в переменных окружения.
+# Свой сервер с открытой моделью (Kev, Clef…) — в routing.local.yaml (см. пример). Ответы ниже min_confidence
+# и отказы уходят на проверку T1 — экономия получается на уверенных ответах, а не на всех.
+decision:
+  min_confidence: 0.75
+  providers:
+    - {name: openrouter, base_url: "https://openrouter.ai/api/v1", model: typesafe/jev-1.13, api_key_env: OPENROUTER_API_KEY}
+    - {name: requesty,   base_url: "https://router.requesty.ai/v1", model: typesafe/jev-1.13.0, api_key_env: REQUESTY_API_KEY}
+  questions:   # готовые наборы вопросов → knowledge/decisions/*.yaml
+    classify: claim_type
+    verify-claims: source_supports
+    route: route_tier
+
 # Порядок, в котором tools/delegate.py ищет установленный CLI, если --backend не указан.
 delegate_backends: [codex, claude, opencode]
 
@@ -141,8 +156,8 @@ tasks:
   stats:             {tier: T0}
   table-calc:        {tier: T0, note: "расчёты по таблицам — Python, а не модель"}
   extract-claims:    {tier: T1, note: "по одному источнику; субагент source-extractor или delegate.py"}
-  verify-claims:     {tier: T1, note: "сначала tools/verify.py (T0), модель — только по его списку; субагент claim-verifier или delegate.py"}
-  classify:          {tier: T1}
+  verify-claims:     {tier: T1, note: "сначала tools/verify.py (T0), затем строки check — tools/decide.py (source_supports), модель T1 — только сомнительные"}
+  classify:          {tier: T1, note: "сначала tools/decide.py (модель решений), на T1 — только сомнительные ответы"}
   synthetic-interview: {tier: T1, note: "модельный респондент — дёшево, результат только гипотезы"}
   problem-framing:   {tier: T2}
   research-plan:     {tier: T2}

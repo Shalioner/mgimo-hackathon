@@ -26,3 +26,10 @@
 # families:
 #   selfhosted: {inventory: selfhosted, T1: "qwen3:8b", T2: null, T3: null, T4: null}
 # delegate_backends: [selfhosted, codex, claude, opencode]   # сначала своя модель
+
+# 5) Модель решений на своём сервере (открытые аналоги Jev с тем же протоколом System One, например Kev):
+#    поставьте свой провайдер первым. Ключ не нужен, если сервер локальный.
+# decision:
+#   providers:
+#     - {name: kev-local, base_url: "http://localhost:8080/v1", model: kev-4b}
+#     - {name: openrouter, base_url: "https://openrouter.ai/api/v1", model: typesafe/jev-1.13, api_key_env: OPENROUTER_API_KEY}

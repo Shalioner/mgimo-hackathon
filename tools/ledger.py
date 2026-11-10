@@ -683,6 +683,13 @@ def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], en
               f"{', '.join(pol.get('never', ['ultra']))} — не используется (см. effort_policy в routing.yaml).")
     if cfg["tasks"][task].get("note"):
         print(f"Заметка: {cfg['tasks'][task]['note']}")
+    dq = ((cfg.get("decision") or {}).get("questions") or {}).get(task)
+    if dq:
+        import decide as DM
+        prov = DM.pick_provider(cfg)
+        print(f"Модель решений: tools/decide.py --questions knowledge/decisions/{dq}.yaml — "
+              + (f"доступна ({prov['name']}: {prov['model']})" if prov else
+                 "не настроена (нет ключа в окружении) — выполнять на уровне задачи"))
     if cfg.get("_local"):
         print(f"Учтены локальные переопределения: {cfg['_local']}")
     if tier == "T0":
