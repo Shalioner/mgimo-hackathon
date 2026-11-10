@@ -138,6 +138,10 @@ environments:
 # и отказы уходят на проверку T1 — экономия получается на уверенных ответах, а не на всех.
 decision:
   min_confidence: 0.75
+  # Нет ни одного провайдера (нет ключа/денег) — тот же протокол на дешёвой LLM (T1 через delegate.py, effort low).
+  # Её «вероятности» — самооценка, поэтому порог строже. llm | none.
+  fallback: llm
+  emulation_min_confidence: 0.85
   providers:
     - {name: openrouter, base_url: "https://openrouter.ai/api/v1", model: typesafe/jev-1.13, api_key_env: OPENROUTER_API_KEY}
     - {name: requesty,   base_url: "https://router.requesty.ai/v1", model: typesafe/jev-1.13.0, api_key_env: REQUESTY_API_KEY}
@@ -145,6 +149,8 @@ decision:
     classify: claim_type
     verify-claims: source_supports
     route: route_tier
+    intent: intent
+    source-intake: suspicious_command
 
 # Порядок, в котором tools/delegate.py ищет установленный CLI, если --backend не указан.
 delegate_backends: [codex, claude, opencode]
@@ -184,6 +190,7 @@ escalate_when:
   - человек на checkpoint отклонил результат по существу (не по стилю) второй раз
   - варианты получились несодержательно разными (вариации одного действия)
   - делегированный результат T1/T2 не прошёл проверку основной моделью
+  - проверка готовности (decide.py --gate) не пройдена после 2 исправлений
 
 deescalate_when:
   - задача следующего шага имеет более низкий стартовый уровень — вернуться к нему

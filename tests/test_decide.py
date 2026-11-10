@@ -87,7 +87,7 @@ def test_no_provider_means_fallback_to_t1(tmp_path, monkeypatch):
     p = tmp_path / "p"
     L.main(["init", str(p), "--title", "Д"])
     q = ROOT / "knowledge/decisions/route_tier.yaml"
-    assert DC.main(["--project", str(p), "--questions", str(q), "--state", "сравнить 4 варианта"]) == 3
+    assert DC.main(["--project", str(p), "--questions", str(q), "--state", "сравнить 4 варианта", "--no-emulate"]) == 3
 
 
 def test_provider_with_key_in_env_is_picked(monkeypatch):
@@ -105,8 +105,72 @@ def test_doubtful(ans, doubt):
 
 
 def test_question_files_are_valid():
-    for f in (ROOT / "knowledge/decisions").glob("*.yaml"):
+    files = list((ROOT / "knowledge/decisions").rglob("*.yaml"))
+    assert len(files) >= 10
+    for f in files:
         assert DC.load_questions(f), f
+
+
+@pytest.fixture
+def no_provider(tmp_path, monkeypatch):
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.delenv("REQUESTY_API_KEY", raising=False)
+    monkeypatch.setattr(L, "ROUTING_LOCAL_PATH", tmp_path / "none.yaml")
+    p = tmp_path / "p"
+    L.main(["init", str(p), "--title", "Д"])
+    return p
+
+
+def fake_delegate(reply, seen):
+    def run(argv):
+        args = dict(zip(argv[::2], argv[1::2]))
+        seen["prompt"] = Path(args["--prompt-file"]).read_text(encoding="utf-8")
+        seen["task"] = args["--task"]
+        out = Path(args["--project"]) / "state/delegated/20990101-000000_classify.md"
+        out.write_text(reply, encoding="utf-8")
+        return 0
+    return run
+
+
+def test_emulation_on_cheap_llm_when_no_jev(no_provider, monkeypatch, capsys):
+    import delegate as D
+    seen = {}
+    monkeypatch.setattr(D, "main", fake_delegate(
+        '```json\n{"answers": {"q": {"type": "choice", "choice": "T3", "confidence": 0.8, '
+        '"probabilities": {"T1": 0.05, "T2": 0.15, "T3": 0.8}}}}\n```', seen))
+    assert DC.main(["--project", str(no_provider), "--ask", "Какой уровень нужен?", "--options", "T1,T2,T3",
+                    "--state", "сравнить 4 варианта стратегии", "--step", "2"]) == 0
+    assert seen["task"] == "classify" and "System One" in seen["prompt"] and "сравнить 4 варианта" in seen["prompt"]
+    out = capsys.readouterr().out
+    assert "T3" in out and "0.80 < 0.85" in out  # у эмуляции порог строже
+    assert not list((no_provider / "state/delegated").glob("_decide_prompt_*"))  # временное задание убрано
+
+
+def test_emulation_bad_json_is_error(no_provider, monkeypatch):
+    import delegate as D
+    monkeypatch.setattr(D, "main", fake_delegate("не знаю", {}))
+    assert DC.main(["--project", str(no_provider), "--ask", "Готово?", "--state", "x"]) == 1
+
+
+def test_gate_reports_fixes_and_exit_4(no_provider, monkeypatch, capsys):
+    import delegate as D
+    art = no_provider / "outputs" / "04_options.md"
+    art.parent.mkdir(exist_ok=True)
+    art.write_text("# Варианты\n| | ALT-001 | ALT-002 |\n", encoding="utf-8")
+    reply = {"answers": {"main_block": {"type": "noul", "noul": 0.05}, "three_distinct": {"type": "noul", "noul": 0.1},
+                         "status_quo_kill": {"type": "noul", "noul": 0.02}, "real_objection": {"type": "noul", "noul": 0.9},
+                         "same_criteria": {"type": "noul", "noul": 0.95}, "human_decides": {"type": "noul", "noul": 0.97}}}
+    import json as J
+    monkeypatch.setattr(D, "main", fake_delegate(J.dumps(reply), {}))
+    assert DC.main(["--project", str(no_provider), "--gate", str(art)]) == 4
+    out = capsys.readouterr().out
+    assert "НЕ ГОТОВО" in out and "Оставить как есть" in out and "real_objection" not in out.split("Исправить:")[1]
+
+
+def test_ask_builds_typed_questions():
+    assert DC.ask_question("Готово?", None, None) == {"type": "noul", "instructions": "Готово?"}
+    assert DC.ask_question("Кто?", "a, b", None)["criteria"] == {"a": "a", "b": "b"}
+    assert DC.ask_question("Насколько?", None, "низко,высоко")["criteria"] == ["низко", "высоко"]
 
 
 def test_bad_questions_rejected(tmp_path):
