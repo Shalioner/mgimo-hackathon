@@ -1,0 +1,112 @@
+"""Тесты маршрутизации по средам и делегирования (без реальных вызовов моделей)."""
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "tools"))
+import delegate as D  # noqa: E402
+import ledger as L  # noqa: E402
+
+TZ_ENVS = ["claude-code", "codex", "opencode", "cursor", "copilot", "windsurf", "gigacode", "kodik"]
+
+
+def test_all_tz_environments_have_a_switch_route():
+    cfg = L.load_routing()
+    for env in TZ_ENVS:
+        e = cfg["environments"][env]
+        assert e["switch"] and e["switch"][-1] == "current", env  # всегда есть запасной путь
+        assert set(e["switch"]) <= set(L.SWITCH_TEXT), env
+
+
+def test_families_cover_tiers_and_real_codex_ids():
+    cfg = L.load_routing()
+    assert cfg["families"]["openai"] == {"T1": "gpt-6-luna", "T2": "gpt-6.1-terra",
+                                         "T3": "gpt-6.1-sol", "T4": "gpt-6-astra"}
+    assert cfg["families"]["claude"]["T1"] == "haiku" and cfg["families"]["claude"]["T4"] == "fable"
+
+
+@pytest.mark.parametrize("env,expected", [("codex", "gpt-6-luna"), ("claude-code", "haiku"),
+                                          ("opencode", "opencode/claude-haiku-5-5")])
+def test_route_env_gives_concrete_model(env, expected, capsys):
+    assert L.main(["route", "extract-claims", "--env", env]) == 0
+    assert expected in capsys.readouterr().out
+
+
+def test_route_unknown_env(capsys):
+    assert L.main(["route", "extract-claims", "--env", "notepad"]) == 2
+
+
+def test_route_gigacode_honest_about_unknown_models(capsys):
+    assert L.main(["route", "alternatives", "--env", "gigacode"]) == 0
+    assert "не задана" in capsys.readouterr().out
+
+
+# ---------- delegate ----------
+@pytest.fixture
+def proj(tmp_path):
+    p = tmp_path / "p"
+    L.main(["init", str(p), "--title", "Д"])
+    (tmp_path / "q.md").write_text("Выпиши проценты.", encoding="utf-8")
+    (tmp_path / "data.md").write_text("Синхронизация: 34% обращений.", encoding="utf-8")
+    return p
+
+
+def run(proj, *extra):
+    q = proj.parent / "q.md"
+    return D.main(["--project", str(proj), "--prompt-file", str(q), *extra])
+
+
+def test_dry_run_builds_isolated_read_only_codex_call(proj, capsys, monkeypatch):
+    monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b if b == "codex" else None)
+    assert run(proj, "--task", "extract-claims", "--input", str(proj.parent / "data.md"), "--dry-run") == 0
+    out = capsys.readouterr().out
+    assert "T1 · codex · gpt-6-luna" in out and "read-only" in out
+    assert str(ROOT) not in out.split("-C ")[1].split()[0]  # делегат не запускается в репозитории
+
+
+def test_backend_falls_back_in_configured_order(proj, capsys, monkeypatch):
+    monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b if b == "opencode" else None)
+    assert run(proj, "--task", "classify", "--dry-run") == 0
+    assert "opencode/claude-haiku-5-5" in capsys.readouterr().out
+
+
+def test_t0_and_t4_are_not_delegated(proj, monkeypatch):
+    monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b)
+    assert run(proj, "--task", "validate", "--dry-run") == 2
+    assert run(proj, "--task", "alternatives", "--tier", "T4", "--dry-run") == 2
+
+
+def test_no_cli_means_current_model(proj, monkeypatch):
+    monkeypatch.setattr(D.shutil, "which", lambda b: None)
+    assert run(proj, "--task", "extract-claims", "--dry-run") == 3
+
+
+def test_escalated_tier_picks_bigger_model(proj, capsys, monkeypatch):
+    monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b if b == "codex" else None)
+    assert run(proj, "--task", "extract-claims", "--tier", "T2", "--dry-run") == 0
+    assert "gpt-6.1-terra" in capsys.readouterr().out
+
+
+def test_parse_codex_usage(tmp_path):
+    out = tmp_path / "o.md"
+    out.write_text("ответ", encoding="utf-8")
+    events = "\n".join([json.dumps({"type": "item.completed", "item": {"type": "error"}}),
+                        json.dumps({"type": "turn.completed",
+                                    "usage": {"input_tokens": 25170, "cached_input_tokens": 7168,
+                                              "output_tokens": 72}})])
+    text, usage = D.parse_output("codex", events, out)
+    assert text == "ответ" and "25170" in usage and "72" in usage
+
+
+def test_failed_call_is_logged_and_nonzero(proj, monkeypatch):
+    monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b if b == "codex" else None)
+
+    class R:
+        returncode, stdout, stderr = 1, "", "boom"
+    monkeypatch.setattr(D.subprocess, "run", lambda *a, **k: R())
+    assert run(proj, "--task", "extract-claims", "--step", "3") == 1
+    last = (proj / "state/run_log.md").read_text(encoding="utf-8").strip().splitlines()[-1]
+    assert "ошибка (код 1)" in last and "codex:gpt-6-luna" in last

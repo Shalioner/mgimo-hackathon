@@ -189,6 +189,21 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip().lower()
 
 
+_AGENT_SECTION = re.compile(r"^#{1,6}\s.*(пересказ|заметк\w* агента|комментари\w* агента)", re.I)
+_HEADING = re.compile(r"^#{1,6}\s")
+
+
+def evidence_text(text: str) -> str:
+    """Текст источника без разделов, написанных агентом (заголовок со словом «пересказ» и т. п.)."""
+    out, skip = [], False
+    for line in text.splitlines():
+        if _HEADING.match(line):
+            skip = bool(_AGENT_SECTION.match(line))
+        if not skip:
+            out.append(line)
+    return "\n".join(out)
+
+
 def validate(ledger: Ledger) -> Report:
     rep = Report()
     for where, msg in ledger.load_problems:
@@ -264,6 +279,9 @@ def validate(ledger: Ledger) -> Report:
                     text = fpath.read_text(encoding="utf-8", errors="replace")
                     if _norm(quote) not in _norm(text):
                         rep.err(oid, f"цитата не найдена в {src['id']} ({rel}): «{quote[:60]}»")
+                    elif _norm(quote) not in _norm(evidence_text(text)):
+                        rep.err(oid, f"цитата взята из пересказа агента в {src['id']}: пересказ не доказательство — "
+                                     "процитируйте оригинал или смените тип на interpretation")
         for c in o.get("contradicted_by") or []:
             if c == oid:
                 rep.err(oid, "утверждение противоречит само себе")
@@ -308,9 +326,10 @@ def validate(ledger: Ledger) -> Report:
         if not o.get("proof"):
             rep.warn(oid, "у обещания нет подтверждения (proof) — чем аудитория убедится, что это правда?")
 
-    # 7. ключевые гипотезы должны проверяться
+    # 7. ключевые гипотезы должны проверяться — актуально, только когда решение уже принято (шаг 7+)
     tested = {t for oid, o in objs.items() if prefix(oid) == "EXP" for t in (o.get("tests") or [])}
-    for oid, o in objs.items():
+    decided = any(prefix(k) == "DEC" and o.get("state") == "decided" for k, o in objs.items())
+    for oid, o in objs.items() if decided else []:
         if prefix(oid) == "HYP" and o.get("would_change_decision") and o.get("verdict", "open") == "open" \
                 and o.get("status", "active") == "active" and oid not in tested:
             rep.warn(oid, "гипотеза может изменить решение, но ни один эксперимент её не проверяет")
@@ -432,9 +451,17 @@ def cmd_stats(ledger: Ledger) -> int:
             by_conf[lvl] = by_conf.get(lvl, 0) + 1
         print(f"\nУтверждения по типу: {by_type}")
         print(f"Утверждения по уверенности: {by_conf}")
-        contradicted = [c["id"] for c in claims if c.get("contradicted_by")]
-        if contradicted:
-            print(f"Есть противоречия: {', '.join(contradicted)}")
+        pairs = sorted({tuple(sorted((c["id"], x))) for c in claims for x in (c.get("contradicted_by") or [])})
+        print(f"Противоречий (пар): {len(pairs)}" + (f" — {', '.join(a + '↔' + b for a, b in pairs)}" if pairs else ""))
+    hyps = [o for k, o in objs.items() if prefix(k) == "HYP" and o.get("status", "active") == "active"]
+    if hyps:
+        n_h = sum(1 for h in hyps if h.get("kind") == "hypothesis")
+        print(f"Гипотез: {n_h}, допущений: {len(hyps) - n_h}, "
+              f"способных изменить решение: {sum(1 for h in hyps if h.get('would_change_decision'))}")
+    sit = ledger.project / "outputs" / "03_situation.md"
+    if sit.exists():
+        gaps = len(re.findall(r"неизвестно\s*:", sit.read_text(encoding="utf-8"), flags=re.I))
+        print(f"Пробелов («Неизвестно:» в 03_situation.md): {gaps}")
     return 0
 
 
@@ -451,6 +478,124 @@ STEPS = [
 ]
 
 
+RUN_LOG_HEADER = ("| Время | Шаг | Действие | Уровень | Модель / инструмент | Результат | Стоимость |\n"
+                  "|---|---|---|---|---|---|---|\n")
+ROUTING_PATH = ROOT / "knowledge" / "routing.yaml"
+TIER_ORDER = ["T0", "T1", "T2", "T3", "T4"]
+
+
+def load_routing() -> dict:
+    return yaml.safe_load(ROUTING_PATH.read_text(encoding="utf-8"))
+
+
+def count_tier_in_log(project: Path, tier: str) -> int:
+    log = project / "state" / "run_log.md"
+    if not log.exists():
+        return 0
+    n = 0
+    for line in log.read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 4 and cells[3] == tier:
+            n += 1
+    return n
+
+
+SWITCH_TEXT = {
+    "subagent": "встроенный субагент с моделью уровня",
+    "cli": "делегировать подзадачу: python tools/delegate.py --project … --task {task} --prompt-file …",
+    "picker": "попросить человека выбрать модель в интерфейсе в начале шага",
+    "current": "выполнить текущей моделью и записать в журнал «рекомендован {tier}, выполнен на <модель>»",
+}
+
+
+def resolve_tier(task: str, failed_tier: Optional[str], cfg: dict) -> Tuple[str, str]:
+    """Стартовый уровень задачи или следующая ступень после неудачи. ValueError — если некуда/неизвестно."""
+    if task not in cfg["tasks"]:
+        raise ValueError(f"Неизвестная задача «{task}». Доступны: {', '.join(sorted(cfg['tasks']))}")
+    tier = cfg["tasks"][task]["tier"]
+    if not failed_tier:
+        return tier, "стартовый уровень задачи"
+    if failed_tier not in TIER_ORDER:
+        raise ValueError(f"Неизвестный уровень {failed_tier}")
+    i = TIER_ORDER.index(failed_tier)
+    if i == len(TIER_ORDER) - 1:
+        raise ValueError("Выше T4 подниматься некуда: зафиксируйте пробел и спросите человека.")
+    return TIER_ORDER[i + 1], f"эскалация после неудачи на {failed_tier} (ровно на одну ступень)"
+
+
+def model_for(cfg: dict, family: Optional[str], tier: str) -> Optional[str]:
+    if tier == "T0" or not family:
+        return None
+    return (cfg.get("families", {}).get(family) or {}).get(tier)
+
+
+def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], env: Optional[str] = None) -> int:
+    cfg = load_routing()
+    try:
+        tier, reason = resolve_tier(task, failed_tier, cfg)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr if "Неизвестн" in str(exc) else sys.stdout)
+        return 2 if "Неизвестн" in str(exc) else 1
+    envs = cfg.get("environments", {})
+    if env and env not in envs:
+        print(f"Неизвестная среда «{env}». Доступны: {', '.join(envs)}", file=sys.stderr)
+        return 2
+    print(f"Задача: {task}")
+    print(f"Уровень: {tier} — {cfg['tiers'][tier]['name']} ({reason})")
+    if cfg["tasks"][task].get("note"):
+        print(f"Заметка: {cfg['tasks'][task]['note']}")
+    if tier == "T0":
+        print("Модель: не нужна — выполнить кодом")
+    elif env:
+        e = envs[env]
+        m = model_for(cfg, e.get("family"), tier)
+        print(f"Среда: {env}; модель: {m or 'не задана для этой среды — см. how'}")
+        for i, s in enumerate(e.get("switch", []), 1):
+            print(f"  {i}. {SWITCH_TEXT[s].format(task=task, tier=tier)}")
+        print(f"Как в этой среде: {e.get('how', '')}")
+    else:
+        fams = ", ".join(f"{f} — {v.get(tier)}" for f, v in cfg.get("families", {}).items() if v.get(tier))
+        print(f"Модели уровня: {fams}")
+        print("Укажите --env <среда>, чтобы получить способ переключения "
+              f"({', '.join(envs)}).")
+    if tier == "T4":
+        budget = cfg.get("budget", {})
+        used = count_tier_in_log(project, "T4") if project else 0
+        limit = budget.get("max_t4_calls", 0)
+        print(f"T4 уже использован в проекте: {used} из {limit}")
+        if budget.get("ask_before_t4", True):
+            print("Перед запуском T4 сообщите человеку причину эскалации и спросите согласия.")
+        if used >= limit:
+            print("Лимит T4 исчерпан — без согласия человека не запускать.")
+            return 1
+    return 0
+
+
+def _cell(s: str) -> str:
+    return re.sub(r"\s+", " ", str(s)).replace("|", "/").strip()
+
+
+def cmd_log(project: Path, step: str, action: str, tier: str, model: str, result: str, cost: str,
+            now: Optional[str] = None) -> int:
+    import datetime
+
+    log = project / "state" / "run_log.md"
+    if not log.exists():
+        print(f"Нет журнала {log}: сначала ledger.py init", file=sys.stderr)
+        return 1
+    if tier not in TIER_ORDER and tier != "-":
+        print(f"Уровень должен быть одним из {', '.join(TIER_ORDER)} или «-»", file=sys.stderr)
+        return 2
+    ts = now or datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    row = "| " + " | ".join(_cell(x) for x in (ts, step, action, tier, model, result, cost)) + " |\n"
+    text = log.read_text(encoding="utf-8")
+    if not text.endswith("\n"):
+        text += "\n"
+    log.write_text(text + row, encoding="utf-8")
+    print(f"Записано в журнал: {ts} · шаг {step} · {tier}")
+    return 0
+
+
 def cmd_init(project: Path, title: str) -> int:
     if project.exists() and any(project.iterdir()):
         print(f"Папка {project} уже существует и не пуста — продолжите работу по её state/progress.md",
@@ -463,7 +608,8 @@ def cmd_init(project: Path, title: str) -> int:
     steps = "\n".join(f"- [ ] {s}" for s in STEPS)
     (project / "state/progress.md").write_text(
         f"# Прогресс: {title}\n\n"
-        f"Текущий шаг: 1\n\n"
+        f"Текущий шаг: 1\n"
+        f"Среда: (агент записывает свою среду: claude-code, codex, cursor, …)\n\n"
         f"## Шаги\n{steps}\n\n"
         f"## Что сделано в текущем шаге\n- (пока ничего)\n\n"
         f"## Что дальше\n- Прочитать запрос пользователя и составить бриф (skills/problem-framing)\n\n"
@@ -471,8 +617,8 @@ def cmd_init(project: Path, title: str) -> int:
         encoding="utf-8")
     (project / "state/run_log.md").write_text(
         f"# Журнал действий: {title}\n\n"
-        "| Время | Шаг | Действие | Инструмент / модель | Результат | Стоимость |\n"
-        "|---|---|---|---|---|---|\n",
+        "Пишется командой `ledger.py log`, а не вручную.\n\n"
+        f"{RUN_LOG_HEADER}",
         encoding="utf-8")
     print(f"Создан проект {project}. Следующий шаг: workflows/strategy.md, шаг 1.")
     return 0
@@ -605,10 +751,28 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--notes")
     p = sub.add_parser("status", help="проекты и текущий шаг")
     p.add_argument("--root", type=Path, default=ROOT / "projects")
+    p = sub.add_parser("route", help="какой уровень модели взять для задачи")
+    p.add_argument("task")
+    p.add_argument("--failed", metavar="TIER", help="уровень, на котором задача не удалась → эскалация")
+    p.add_argument("--project", type=Path, help="для учёта лимита T4 по журналу")
+    p.add_argument("--env", help="среда: claude-code, codex, opencode, cursor, copilot, windsurf, gigacode, kodik, orca")
+    p = sub.add_parser("log", help="добавить строку в state/run_log.md")
+    p.add_argument("project", type=Path)
+    p.add_argument("--step", required=True)
+    p.add_argument("--action", required=True)
+    p.add_argument("--tier", default="-", help="T0–T4 или «-»")
+    p.add_argument("--model", default="-", help="модель или инструмент")
+    p.add_argument("--result", required=True)
+    p.add_argument("--cost", default="-", help="токены / поиски / источники, если известно")
     args = ap.parse_args(argv)
 
     if args.cmd == "status":
         return cmd_status(args.root)
+    if args.cmd == "route":
+        return cmd_route(args.task, args.failed, args.project.resolve() if args.project else None, args.env)
+    if args.cmd == "log":
+        return cmd_log(args.project.resolve(), args.step, args.action, args.tier, args.model, args.result,
+                       args.cost)
     if args.cmd == "init":
         return cmd_init(args.project.resolve(), args.title)
     if args.cmd == "add-source":

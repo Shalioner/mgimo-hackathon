@@ -1,0 +1,115 @@
+# Маршрутизация: какой уровень модели берётся для какой задачи и как его включить в конкретной среде.
+# Принцип: начинать с самого дешёвого уровня, который справляется, и подниматься только по сигналу неудачи.
+# Уровни T0–T4 общие для всех сред; модели и способ переключения — в разделе environments.
+# Читают tools/ledger.py route и tools/delegate.py. Калибруется по журналам прогонов (run_log.md).
+
+tiers:
+  T0:
+    name: Код без LLM
+    when: Проверки, подсчёты, поиск затронутых выводов, хэши, таблицы — всё, что можно сделать детерминированно.
+  T1:
+    name: Лёгкий
+    when: Извлечение фактов и цитат из одного источника, классификация, разметка, сверка ссылок, форматирование.
+  T2:
+    name: Средний
+    when: План исследования, сводка по нескольким источникам, черновики артефактов, тексты сообщений.
+  T3:
+    name: Сильный
+    when: Сравнение вариантов, стратегия, разрешение противоречий, пересмотр, если меняется ранжирование.
+  T4:
+    name: Предельный (только эскалация)
+    when: >-
+      Только если T3 не справился по сигналам эскалации ИЛИ человек явно просит максимальную глубину
+      для дорогого решения. Никогда не уровень по умолчанию.
+
+# Семейства моделей по уровням. null — уровень не задан для семейства: используйте соседний или текущую модель.
+# ID проверены на машине разработчика 2026-11-10 (codex: ~/.codex/models_cache.json; opencode: `opencode models`).
+# Названия GigaChat не проверены — уточнить в GigaCode при первом запуске и записать сюда.
+families:
+  claude:   {T1: haiku, T2: sonnet, T3: opus, T4: fable}               # Claude Code: алиасы --model / model:
+  openai:   {T1: gpt-6-luna, T2: gpt-6.1-terra, T3: gpt-6.1-sol, T4: gpt-6-astra}   # Codex
+  opencode: {T1: opencode/claude-haiku-5-5, T2: opencode/claude-sonnet-5-5, T3: opencode/claude-opus-5-5, T4: opencode/claude-fable-5-2}
+  gigachat: {T1: null, T2: null, T3: null, T4: null}                   # GigaCode: уточнить линейку
+
+# Среды из ТЗ. switch — как включить модель нужного уровня, от лучшего способа к запасному:
+#   subagent — встроенный субагент с моделью (лучше всего: дёшево, без участия человека);
+#   cli      — делегирование подзадачи через tools/delegate.py (любая среда с терминалом);
+#   picker   — агент в начале шага просит человека выбрать модель в интерфейсе;
+#   current  — выполнить текущей моделью и записать «рекомендован Tx, выполнен на <модель>».
+environments:
+  claude-code:
+    family: claude
+    switch: [subagent, cli, current]
+    how: "Субагенты .claude/agents/*.md с полем model (source-extractor, claim-verifier — haiku). Основной чат — модель, выбранная пользователем (/model)."
+  codex:
+    family: openai
+    switch: [cli, current]
+    how: "Подзадачи T1/T2 — tools/delegate.py --backend codex (codex exec -m <id> -s read-only). Основной чат — модель из ~/.codex/config.toml или /model."
+  opencode:
+    family: opencode
+    switch: [cli, current]
+    how: "tools/delegate.py --backend opencode (opencode run -m <provider/model>); можно описать агентов с моделью в конфиге OpenCode."
+  cursor:
+    family: claude
+    switch: [picker, cli, current]
+    how: "Модель выбирается в интерфейсе чата Cursor; агент в начале шага подсказывает уровень. Если в терминале есть codex/claude/opencode — подзадачи через tools/delegate.py."
+  copilot:
+    family: openai
+    switch: [picker, cli, current]
+    how: "Выбор модели в чате GitHub Copilot; подзадачи — через tools/delegate.py, если доступен CLI."
+  windsurf:
+    family: claude
+    switch: [picker, cli, current]
+    how: "Выбор модели в интерфейсе Windsurf; подзадачи — через tools/delegate.py, если доступен CLI."
+  gigacode:
+    family: gigachat
+    switch: [picker, current]
+    how: "Выбор модели GigaChat в интерфейсе GigaCode. Линейка по уровням не проверена — при первом запуске записать в families.gigachat."
+  kodik:
+    family: null
+    switch: [picker, current]
+    how: "Возможности выбора модели не проверены — работать текущей моделью и записывать рекомендованный уровень в журнал."
+  orca:
+    family: openai
+    switch: [cli, current]
+    how: "Как codex; дополнительно — воркер Orca: orca orchestration worker-start --agent codex --model <id> (оркестратор, необязателен)."
+
+# Порядок, в котором tools/delegate.py ищет установленный CLI, если --backend не указан.
+delegate_backends: [codex, claude, opencode]
+
+# Задача → стартовый уровень.
+tasks:
+  validate:          {tier: T0, note: "ledger.py validate"}
+  impact:            {tier: T0, note: "ledger.py impact — какие выводы затронуты, решает граф"}
+  stats:             {tier: T0}
+  table-calc:        {tier: T0, note: "расчёты по таблицам — Python, а не модель"}
+  extract-claims:    {tier: T1, note: "по одному источнику; субагент source-extractor или delegate.py"}
+  verify-claims:     {tier: T1, note: "субагент claim-verifier или delegate.py"}
+  classify:          {tier: T1}
+  synthetic-interview: {tier: T1, note: "модельный респондент — дёшево, результат только гипотезы"}
+  problem-framing:   {tier: T2}
+  research-plan:     {tier: T2}
+  situation-map:     {tier: T2}
+  interview-analysis: {tier: T2}
+  comms-strategy:    {tier: T2, note: "T3, если барьер не очевиден из данных"}
+  validation-plan:   {tier: T2}
+  alternatives:      {tier: T3}
+  product-strategy:  {tier: T3}
+  impact-revision:   {tier: T3, note: "переписывание затронутых выводов; если ранжирование не меняется — T2"}
+
+# Сигналы, по которым уровень поднимается на одну ступень (и только на одну).
+escalate_when:
+  - validate выдаёт ошибки после 2 попыток исправления на текущем уровне
+  - claim-verifier — claim support rate ниже 80% или есть overstated-утверждения после исправления
+  - противоречие между источниками не разрешено и влияет на выбор варианта
+  - человек на checkpoint отклонил результат по существу (не по стилю) второй раз
+  - варианты получились несодержательно разными (вариации одного действия)
+  - делегированный результат T1/T2 не прошёл проверку основной моделью
+
+deescalate_when:
+  - задача следующего шага имеет более низкий стартовый уровень — вернуться к нему
+  - эскалация разовая — не оставлять дорогую модель «на всякий случай»
+
+budget:
+  max_t4_calls: 2         # больше — только с согласия человека
+  ask_before_t4: true     # перед T4 сообщить человеку причину и спросить
