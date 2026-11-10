@@ -1,0 +1,63 @@
+{
+  "chat": {
+    "chars": 12542,
+    "numbers": {
+      "numbers": 25,
+      "not_in_sources": 3,
+      "share_unsupported": 0.12,
+      "examples": [
+        "110",
+        "14",
+        "95"
+      ]
+    },
+    "traceability": {
+      "lines_with_numbers": 18,
+      "traced": 2,
+      "share": 0.111
+    }
+  },
+  "chat_no_materials": {
+    "chars": 12451,
+    "numbers": {
+      "numbers": 15,
+      "not_in_sources": 9,
+      "share_unsupported": 0.6,
+      "examples": [
+        "04.08",
+        "1013",
+        "105104",
+        "14",
+        "14.09",
+        "15934834",
+        "2024",
+        "71",
+        "95"
+      ]
+    },
+    "traceability": {
+      "lines_with_numbers": 8,
+      "traced": 4,
+      "share": 0.5
+    }
+  },
+  "agent": {
+    "chars": 74847,
+    "numbers": {
+      "numbers": 103,
+      "not_in_sources": 26,
+      "share_unsupported": 0.252,
+      "examples": [
+        "18",
+        "19",
+        "24",
+        "40"
+      ]
+    },
+    "traceability": {
+      "lines_with_numbers": 70,
+      "traced": 70,
+      "share": 1.0
+    }
+  }
+}
