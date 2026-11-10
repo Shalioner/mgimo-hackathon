@@ -1,0 +1,46 @@
+- id: CLM-001
+  type: fact
+  statement: Удержание D30 упало с 31% в июне до 24% в сентябре 2026.
+  evidence:
+    - source: SRC-001
+      locator: строки 2026-06 и 2026-09, столбец d30_retention_pct
+  as_of: 2026-09-30
+  confidence: {level: high, rationale: "Продуктовая аналитика, полный период"}
+- id: CLM-002
+  type: fact
+  statement: 34% обращений в поддержку касаются медленной или несработавшей синхронизации.
+  evidence:
+    - source: SRC-002
+      quote: "Синхронизация между устройствами медленная или не срабатывает: 34% обращений."
+  as_of: 2026-09-30
+  confidence: {level: medium, rationale: "Точная цифра, но выборка смещена к платным пользователям"}
+  limitations: Доля обращений ≠ доля пользователей.
+- id: CLM-003
+  type: fact
+  statement: Конкурент А с августа 2026 года даёт 15 ГБ бесплатного хранилища.
+  evidence:
+    - source: SRC-003
+      quote: Конкурент А с августа 2026 года даёт 15 ГБ бесплатного хранилища
+  confidence: {level: medium, rationale: "Внутренние заметки, нужна проверка по сайту конкурента"}
+- id: CLM-004
+  type: interpretation
+  statement: Падение удержания в основном вызвано проблемами синхронизации.
+  derived_from: [CLM-001, CLM-002]
+  contradicted_by: [CLM-006]
+  confidence: {level: medium, rationale: Совпадение по времени и частые жалобы; причинность не доказана}
+- id: CLM-005
+  type: interpretation
+  statement: Часть пользователей не понимает, чем сервис лучше бесплатных альтернатив.
+  evidence:
+    - source: SRC-004
+      quote: не поняла, чем оно лучше бесплатных заметок в телефоне
+  derived_from: [CLM-003]
+  confidence: {level: low, rationale: Основано на синтетическом интервью — только как гипотеза}
+- id: CLM-006
+  type: fact
+  statement: Только 8% активных пользователей сталкивались с проблемами синхронизации за последний месяц.
+  evidence:
+    - source: SRC-005
+      quote: Только 8% активных пользователей сталкивались с проблемами синхронизации за последний месяц.
+  as_of: 2026-10-20
+  confidence: {level: high, rationale: Случайная выборка 2 000 пользователей}

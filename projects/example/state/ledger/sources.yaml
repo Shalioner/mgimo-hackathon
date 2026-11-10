@@ -1,0 +1,43 @@
+# Учебный пример: вымышленный сервис «Заметки+». Все данные учебные (собственные материалы).
+- id: SRC-001
+  title: Удержание D30 по месяцам, июнь–сентябрь 2026
+  kind: table
+  access: own
+  path: sources/retention_2026.csv
+  sha256: a999e341df7eb97c818cf6508ef894da41d478e331101c4834a880d91aaa952e
+  retrieved: 2026-10-01
+  reliability: high
+- id: SRC-002
+  title: Сводка обращений в поддержку, июль–сентябрь 2026
+  kind: document
+  access: own
+  path: sources/support_tickets_summary.md
+  sha256: 6ea2c9e29ef964761c61bddbd747f1d6494f91ae4ca61b4c67659da3c22b2773
+  retrieved: 2026-10-01
+  reliability: medium
+  notes: Смещённая выборка — пишут в основном платные пользователи.
+- id: SRC-003
+  title: Заметки о конкурентах
+  kind: document
+  access: own
+  path: sources/competitor_notes.md
+  sha256: 77133ff4f322cc2d66a884502ec38b37db915f4e23e0fb290cc60dc52b85301d
+  retrieved: 2026-10-01
+  reliability: medium
+- id: SRC-004
+  title: Синтетическое интервью №1 (модельный респондент)
+  kind: synthetic_interview
+  access: own
+  path: sources/synthetic_interview_01.md
+  sha256: 80b4d79ebf19f3de6b7d240958b5358971db81058e5a5618d210bea8be042144
+  retrieved: 2026-10-02
+  reliability: low
+  notes: Только для поиска гипотез.
+- id: SRC-005
+  title: Опрос активной аудитории, октябрь 2026
+  kind: document
+  access: own
+  path: sources/survey_sync_2026-10.md
+  sha256: 5a2c045c0093ee47092fa7ffadc869285075177542b8e5f29c7fa7a32bab76af
+  retrieved: 2026-10-20
+  reliability: high

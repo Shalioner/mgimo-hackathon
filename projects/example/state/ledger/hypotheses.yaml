@@ -1,0 +1,16 @@
+- id: HYP-001
+  kind: hypothesis
+  statement: Если ускорить синхронизацию, удержание D30 вырастет минимум на 3 п.п. за квартал.
+  based_on: [CLM-004]
+  confidence: {level: medium, rationale: Опирается на интерпретацию CLM-004}
+  would_change_decision: true
+- id: HYP-002
+  kind: hypothesis
+  statement: Пользователи уходят, потому что не видят ценности на фоне бесплатных альтернатив.
+  based_on: [CLM-003, CLM-005]
+  confidence: {level: low, rationale: Есть только синтетический сигнал и факт о конкуренте}
+  would_change_decision: true
+- id: HYP-003
+  kind: assumption
+  statement: Команда может переписать синхронизацию за один квартал.
+  confidence: {level: medium, rationale: "Оценка техлида, не проверялась"}

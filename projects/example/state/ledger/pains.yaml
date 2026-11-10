@@ -1,0 +1,9 @@
+- id: PAIN-001
+  segment: Пользователи с несколькими устройствами
+  statement: Заметки появляются на другом устройстве с задержкой или теряются.
+  criteria:
+    frequency: {level: medium, basis: [CLM-002], note: "Частая тема обращений, но доля пользователей неизвестна"}
+    cost: {level: unknown, basis: []}
+    workarounds: {level: unknown, basis: []}
+    gap: {level: medium, basis: [CLM-004]}
+    measurability: {level: high, basis: [CLM-001], note: Удержание и число жалоб измеримы}
