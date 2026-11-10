@@ -10,6 +10,11 @@
   - числа строки не встречаются в тексте объектов, на которые она
     ссылается (формулировка, цитаты, обоснования, и на шаг глубже)    → check   (нужен взгляд модели)
   - иначе                                                             → ok
+Ещё две проверки целого пакета:
+  - блок «Главное» совпадает с «Главное» другого документа            → dup-main (код выхода 1)
+  - с --change CHG-NNN: строка ссылается на объект, пересмотренный по CHG
+    (затронут impact и в его записи упомянут CHG), но сама не обновлена
+    и не помечена «пересмотрено/проверено по CHG-NNN»                   → stale? (переписать на месте или пометить)
 
 Модель-верификатор (T1) потом смотрит ТОЛЬКО строки check/unsupported, а не весь пакет:
 так проверка стоит единицы тысяч токенов вместо сотен тысяч.
@@ -95,10 +100,78 @@ def norm_numbers_in(text: str) -> Set[str]:
     return numbers(text.replace("\\u00a0", " "))
 
 
-def verify(project: Path, file_filter: List[str]) -> dict:
+MAIN_HEAD = re.compile(r"^\s*(#{1,4}\s*|\*\*)Главное", re.I)
+HEAD = re.compile(r"^\s*#{1,4}\s")
+
+
+def main_block(text: str) -> str:
+    """Текст блока «Главное» (до следующего заголовка), нормализованный для сравнения."""
+    lines, on = [], False
+    for ln in text.splitlines():
+        if MAIN_HEAD.match(ln):
+            on = True
+            continue
+        if on and HEAD.match(ln):
+            break
+        if on:
+            lines.append(ln)
+    return re.sub(r"\s+", " ", " ".join(lines)).strip().lower()
+
+
+def duplicate_mains(files: List[Path]) -> List[dict]:
+    """Одинаковый «Главное» в разных документах: вывод каждого документа должен быть своим."""
+    import difflib
+    blocks = {f.name: main_block(f.read_text(encoding="utf-8")) for f in files}
+    names = [n for n, b in blocks.items() if len(b) > 40]
+    out = []
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            r = difflib.SequenceMatcher(None, blocks[a], blocks[b]).ratio()
+            if r >= 0.8:
+                out.append({"file": b, "line": 0, "verdict": "dup-main", "refs": [],
+                            "note": f"«Главное» совпадает с {a} на {r:.0%} — напиши вывод именно этого документа",
+                            "text": blocks[b][:300]})
+    return out
+
+
+UNCHANGED = re.compile(r"без изменени|не изменил|проверено", re.I)
+
+
+def revised_objects(ledger: L.Ledger, change: str, max_depth: int = 3) -> Set[str]:
+    """Объекты, изменённые по событию по существу: затронуты impact не дальше max_depth (обычно CLM → HYP → ALT),
+    в записи упомянут CHG, и это упоминание — не «проверено, без изменений». Решение (DEC) и дальние слои
+    не входят: их новый статус показывает блок пересмотра вверху документа, а не каждая строка."""
+    res = L.impact(ledger, [change])
+    out = set()
+    for oid, (depth, _) in res.items():
+        if oid == change or depth > max_depth or L.prefix(oid) in ("DEC", "EXP", "PRM"):
+            continue
+        o = ledger.objects.get(oid, {})
+        notes = [str(v) for v in _walk(o) if change in str(v)]
+        if notes and not all(UNCHANGED.search(n) for n in notes):
+            out.add(oid)
+    return out
+
+
+def _walk(x):
+    if isinstance(x, dict):
+        for v in x.values():
+            yield from _walk(v)
+    elif isinstance(x, list):
+        for v in x:
+            yield from _walk(v)
+    else:
+        yield x
+
+
+REVISION_MARK = re.compile(r"пересмотрен|проверено по|без изменени", re.I)
+
+
+def verify(project: Path, file_filter: List[str], change: str = "") -> dict:
     ledger = L.Ledger(project)
     out_dir = project / "outputs"
     items = []
+    revised = revised_objects(ledger, change) if change else set()
     for f in sorted(out_dir.glob("*.md")):
         if file_filter and not any(f.name.startswith(p) for p in file_filter):
             continue
@@ -113,6 +186,12 @@ def verify(project: Path, file_filter: List[str]) -> dict:
             if not refs and not nums:
                 continue
             verdict, note = "ok", ""
+            touched = [r for r in refs if r in revised]
+            if touched and change not in line and not REVISION_MARK.search(line):
+                items.append({"file": f.name, "line": ln, "verdict": "stale?", "refs": touched,
+                              "note": f"ссылается на пересмотренные по {change}: {', '.join(touched)} — "
+                                      f"перепиши на месте или пометь «проверено по {change}»", "text": line[:300]})
+                continue
             missing = [r for r in refs if r not in ledger.objects]
             stale = [r for r in refs if r in ledger.objects
                      and ledger.objects[r].get("status", "active") != "active"]
@@ -130,6 +209,9 @@ def verify(project: Path, file_filter: List[str]) -> dict:
                     verdict, note = "check", "числа не найдены в ссылках: " + ", ".join(lost)
             items.append({"file": f.name, "line": ln, "verdict": verdict, "note": note,
                           "refs": refs, "text": line[:300]})
+    files = [f for f in sorted(out_dir.glob("*.md"))
+             if not file_filter or any(f.name.startswith(p) for p in file_filter)]
+    items += duplicate_mains(files)
     counts: Dict[str, int] = {}
     for it in items:
         counts[it["verdict"]] = counts.get(it["verdict"], 0) + 1
@@ -144,6 +226,7 @@ def main(argv=None) -> int:
     ap.add_argument("project", type=Path)
     ap.add_argument("--files", nargs="*", default=[], help="префиксы файлов, например 03 04 05")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--change", default="", help="CHG-NNN: найти строки, не обновлённые после пересмотра")
     ap.add_argument("--all", action="store_true", help="показать и строки ok")
     ap.add_argument("--sample", type=int, default=0,
                     help="добавить N случайных строк ok для выборочной смысловой проверки моделью (seed 42)")
@@ -152,7 +235,10 @@ def main(argv=None) -> int:
     if not (proj / "outputs").is_dir():
         print(f"Нет папки outputs в {proj}", file=sys.stderr)
         return 2
-    res = verify(proj, args.files)
+    if args.change and args.change not in L.Ledger(proj).objects:
+        print(f"Нет события {args.change} в реестре", file=sys.stderr)
+        return 2
+    res = verify(proj, args.files, args.change)
     if args.json:
         print(json.dumps(res, ensure_ascii=False, indent=2))
     else:
@@ -170,7 +256,7 @@ def main(argv=None) -> int:
             print("\nНа проверку модели (только эти строки, не весь пакет):")
             for i in todo:
                 print(f"- [{i['verdict']}] {i['file']}:{i['line']} — {i['note']}\n    {i['text'][:220]}")
-    hard = res["counts"].get("wrong-ref", 0) + res["counts"].get("stale-ref", 0)
+    hard = sum(res["counts"].get(k, 0) for k in ("wrong-ref", "stale-ref", "dup-main", "stale?"))
     return 1 if hard else 0
 
 

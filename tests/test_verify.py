@@ -79,3 +79,43 @@ def test_cli_exit_code_and_sample(proj, capsys):
     (proj / "outputs" / "03_situation.md").write_text("Синхронизация — 34% [CLM-002].\n", encoding="utf-8")
     assert V.main([str(proj), "--sample", "1"]) == 0
     assert "[sample]" in capsys.readouterr().out
+
+
+# ---------- целый пакет: одинаковый «Главное» и строки, не обновлённые после пересмотра ----------
+def test_duplicate_main_block_is_error(proj):
+    main = "# Главное\nРуководитель выбрал ALT-001; бюджет до 24 часов, разбор 24 ноября, команда прежняя [DEC-001].\n\n## Дальше\n"
+    for f in ("03_situation.md", "04_options.md"):
+        (proj / "outputs" / f).write_text(main + "текст", encoding="utf-8")
+    (proj / "outputs" / "05_product_strategy.md").write_text(
+        "## Главное\n- Направление: онбординг для новых пользователей, отказ от новых функций в этом квартале.\n", encoding="utf-8")
+    res = V.verify(proj, [])
+    dups = [i for i in res["items"] if i["verdict"] == "dup-main"]
+    assert len(dups) == 1 and dups[0]["file"] == "04_options.md" and "03_situation.md" in dups[0]["note"]
+    assert V.main([str(proj)]) == 1
+
+
+def _mark(proj, oid, field_text):
+    import yaml
+    for f in (proj / "state/ledger").glob("*.yaml"):
+        data = yaml.safe_load(f.read_text(encoding="utf-8")) or []
+        for o in data:
+            if o.get("id") == oid:
+                o["status_note"] = field_text
+                f.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
+                return
+
+
+def test_lines_not_updated_after_change_are_listed(proj):
+    _mark(proj, "HYP-001", "Пересмотрено по CHG-001: ослаблена — синхронизация у 8%.")      # изменена по существу
+    _mark(proj, "ALT-001", "Пересмотрено по CHG-001: проверено, без изменений.")              # только проверена
+    (proj / "outputs" / "03_situation.md").write_text(
+        "Синхронизация — главная причина ухода [HYP-001].\n"
+        "Синхронизация — уже не главная причина (пересмотрено по CHG-001) [HYP-001].\n"
+        "Вариант про синхронизацию остаётся [ALT-001].\n"
+        "Решение пока прежнее [DEC-001].\n", encoding="utf-8")
+    assert V.revised_objects(V.L.Ledger(proj), "CHG-001") == {"HYP-001"}
+    res = V.verify(proj, [], change="CHG-001")
+    stale = [i for i in res["items"] if i["verdict"] == "stale?"]
+    assert [i["line"] for i in stale] == [1] and stale[0]["refs"] == ["HYP-001"]
+    assert V.main([str(proj), "--change", "CHG-001"]) == 1
+    assert V.main([str(proj), "--change", "CHG-999"]) == 2

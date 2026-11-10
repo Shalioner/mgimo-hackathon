@@ -1,4 +1,9 @@
 questions:
+  main_block:
+    type: noul
+    check: {all: ['^\s*(#{1,4}\s*|\*\*)Главное'], mode: decide}
+    instructions: "Начинается ли документ с блока «Главное» (что проверяем первым, когда и по какому порогу решаем)?"
+    fix: "Добавь в начало блок «Главное»: что проверяем первым и почему, порог stop / go и срок, главный риск проверки."
   stop_go:
     type: noul
     check: {all: ['stop\s*/\s*go'], mode: require}
