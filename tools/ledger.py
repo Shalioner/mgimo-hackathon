@@ -204,6 +204,34 @@ def evidence_text(text: str) -> str:
     return "\n".join(out)
 
 
+def _head_objects(ledger: Ledger) -> Dict[str, dict]:
+    """Объекты CLM/HYP из последнего коммита git (если проект в git). Без git — пусто."""
+    import subprocess
+    out: Dict[str, dict] = {}
+    for fname in ("claims.yaml", "hypotheses.yaml"):
+        path = ledger.dir / fname
+        try:
+            top = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=str(ledger.dir),
+                                 capture_output=True, text=True, timeout=10)
+            if top.returncode != 0:
+                return {}
+            rel = path.resolve().relative_to(Path(top.stdout.strip()).resolve())
+            show = subprocess.run(["git", "show", f"HEAD:{rel.as_posix()}"], cwd=str(ledger.dir),
+                                  capture_output=True, text=True, timeout=10)
+        except (OSError, ValueError, subprocess.SubprocessError):
+            return {}
+        if show.returncode != 0:
+            continue
+        try:
+            data = yaml.load(show.stdout, Loader=_Loader) or []
+        except yaml.YAMLError:
+            continue
+        for o in data if isinstance(data, list) else []:
+            if isinstance(o, dict) and "id" in o:
+                out[str(o["id"])] = o
+    return out
+
+
 def validate(ledger: Ledger) -> Report:
     rep = Report()
     for where, msg in ledger.load_problems:
@@ -334,7 +362,17 @@ def validate(ledger: Ledger) -> Report:
                 and o.get("status", "active") == "active" and oid not in tested:
             rep.warn(oid, "гипотеза может изменить решение, но ни один эксперимент её не проверяет")
 
-    # 8. необработанные новые сведения
+    # 8. формулировки нельзя переписывать на месте: только новый объект + superseded
+    head = _head_objects(ledger)
+    for oid, o in objs.items():
+        old = head.get(oid)
+        if not old or prefix(oid) not in ("CLM", "HYP") or o.get("status", "active") != "active":
+            continue
+        if _norm(str(old.get("statement", ""))) != _norm(str(o.get("statement", ""))):
+            rep.warn(oid, "формулировка изменена на месте относительно последнего коммита — история решения теряется. "
+                          f"Создайте новый объект и пометьте старый: ledger.py supersede {ledger.project} {oid} --by <новый ID>")
+
+    # 9. необработанные новые сведения
     for oid, o in objs.items():
         if prefix(oid) == "CHG" and not o.get("processed"):
             rep.warn(oid, f"новые сведения не обработаны — запустите: ledger.py impact {ledger.project} {oid}")
@@ -575,6 +613,33 @@ def _cell(s: str) -> str:
     return re.sub(r"\s+", " ", str(s)).replace("|", "/").strip()
 
 
+def cmd_supersede(project: Path, old_id: str, new_id: str, note: Optional[str]) -> int:
+    """Пометить старый объект заменённым новым (запись не удаляется и не переписывается)."""
+    import datetime
+    ledger = Ledger(project)
+    for x in (old_id, new_id):
+        if x not in ledger.objects:
+            print(f"Не найден {x}", file=sys.stderr)
+            return 2
+    if prefix(old_id) != prefix(new_id) or old_id == new_id:
+        print("Заменять можно только объектом того же типа и с другим ID", file=sys.stderr)
+        return 2
+    fname = TYPES[prefix(old_id)][0]
+    path = ledger.dir / fname
+    text = path.read_text(encoding="utf-8")
+    data = yaml.load(text, Loader=_Loader) or []
+    for o in data:
+        if o.get("id") == old_id:
+            o["status"] = "superseded"
+            o["superseded_by"] = new_id
+            o["updated"] = datetime.date.today().isoformat()
+            if note:
+                o["status_note"] = note
+    path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    print(f"{old_id} → superseded, заменён {new_id}. Запустите validate: всё, что опирается на {old_id}, получит предупреждение.")
+    return 0
+
+
 def cmd_log(project: Path, step: str, action: str, tier: str, model: str, result: str, cost: str,
             now: Optional[str] = None) -> int:
     import datetime
@@ -749,6 +814,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--reliability", default="medium", choices=["high", "medium", "low"])
     p.add_argument("--published")
     p.add_argument("--notes")
+    p = sub.add_parser("supersede", help="пометить объект заменённым новым")
+    p.add_argument("project", type=Path)
+    p.add_argument("old")
+    p.add_argument("--by", required=True, help="ID нового объекта")
+    p.add_argument("--note")
     p = sub.add_parser("status", help="проекты и текущий шаг")
     p.add_argument("--root", type=Path, default=ROOT / "projects")
     p = sub.add_parser("route", help="какой уровень модели взять для задачи")
@@ -768,6 +838,8 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     if args.cmd == "status":
         return cmd_status(args.root)
+    if args.cmd == "supersede":
+        return cmd_supersede(args.project.resolve(), args.old, args.by, args.note)
     if args.cmd == "route":
         return cmd_route(args.task, args.failed, args.project.resolve() if args.project else None, args.env)
     if args.cmd == "log":

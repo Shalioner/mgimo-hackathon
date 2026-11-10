@@ -270,3 +270,29 @@ def test_stats_reports_contradictions_and_hypothesis_split(capsys):
     assert L.main(["stats", str(EXAMPLE)]) == 0
     out = capsys.readouterr().out
     assert "Противоречий (пар): 1" in out and "Гипотез: 2, допущений: 1" in out
+
+
+# ---------- supersede и правка на месте ----------
+def _git(cwd, *a):
+    import subprocess
+    subprocess.run(["git", *a], cwd=cwd, check=True, capture_output=True)
+
+
+def test_in_place_statement_edit_warns_against_git_head(proj):
+    _git(proj, "init", "-q")
+    _git(proj, "-c", "user.name=t", "-c", "user.email=t@t", "add", "-A")
+    _git(proj, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
+    edit(proj, "claims.yaml", "CLM-003", lambda o: o.update(statement="Конкурент А даёт 20 ГБ бесплатно."))
+    rep = L.validate(L.Ledger(proj))
+    assert any("CLM-003" in w and "изменена на месте" in w for w in rep.warnings)
+
+
+def test_supersede_marks_old_and_keeps_record(proj):
+    data = load(proj, "claims.yaml")
+    new = dict(data[2], id="CLM-007", statement="Конкурент А даёт 15 ГБ бесплатно (уточнено).")
+    dump(proj, "claims.yaml", data + [new])
+    assert L.main(["supersede", str(proj), "CLM-003", "--by", "CLM-007", "--note", "уточнено"]) == 0
+    led = L.Ledger(proj)
+    assert led.objects["CLM-003"]["status"] == "superseded" and led.objects["CLM-003"]["superseded_by"] == "CLM-007"
+    assert L.validate(led).errors == []
+    assert L.main(["supersede", str(proj), "CLM-003", "--by", "HYP-001"]) == 2
