@@ -173,7 +173,7 @@ tasks:
   validation-plan:   {tier: T2}
   alternatives:      {tier: T3}
   product-strategy:  {tier: T3}
-  impact-revision:   {tier: T3, note: "пересчёт объектов реестра и ранжирования; правка строк документов — revise-lines"}
+  impact-revision:   {tier: T2, note: "пересмотр при новых данных: замер — T2 (Terra) $0,30 против $0,81–1,02 на T3 (Sol) при том же эталоне 6/6; T3 — если T2 не прошёл verify --change/validate или человек отклонил пересмотр; смену выбора всё равно решает человек на C2"}
   revise-lines:      {tier: T2, note: "tools/revise_lines.py: устаревшие строки после пересмотра — дешёвой моделью по короткому заданию"}
   # Синонимы: названия навыков из skills/ (агенты часто спрашивают маршрут по навыку)
   source-intake:     {tier: T1, note: "= extract-claims"}
