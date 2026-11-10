@@ -1,0 +1,91 @@
+{
+  "name": "agent",
+  "chars": 82596,
+  "kept": {
+    "S1 установки 3 100": true,
+    "S1 подключили 2 650": false,
+    "S1 позиция 2 540": true,
+    "S1 D7 31%": true,
+    "S1 D7 6%": true,
+    "S2 цена 299 ₽": true,
+    "S2 trial 7 дней": true,
+    "S3 октябрь 37%": true
+  },
+  "new_numbers": {
+    "ноябрь 11,8%": false,
+    "ноябрь 12,2%": false,
+    "ноябрь 46%": true,
+    "ноябрь 35%": true
+  },
+  "stability": {
+    "files": {
+      "03_situation.md": {
+        "lines_before": 131,
+        "lines_after": 131,
+        "unchanged": 131,
+        "changed": false
+      },
+      "04_options.md": {
+        "lines_before": 153,
+        "lines_after": 161,
+        "unchanged": 153,
+        "changed": true
+      },
+      "05_product_strategy.md": {
+        "lines_before": 123,
+        "lines_after": 131,
+        "unchanged": 123,
+        "changed": true
+      },
+      "06_comms_strategy.md": {
+        "lines_before": 101,
+        "lines_after": 111,
+        "unchanged": 101,
+        "changed": true
+      },
+      "07_validation_plan.md": {
+        "lines_before": 184,
+        "lines_after": 194,
+        "unchanged": 184,
+        "changed": true
+      }
+    },
+    "unchanged_share": 1.0
+  },
+  "rubric": {
+    "rc": 0,
+    "answers": {
+      "e1_value_weakened": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "e2_device_barrier": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "e3_choice_questioned": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "e4_plan_updated": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "e5_change_explained": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "s4_options_kept": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      }
+    },
+    "needs_review": {}
+  }
+}

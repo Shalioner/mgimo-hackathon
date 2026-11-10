@@ -1,0 +1,58 @@
+{
+  "name": "chat",
+  "chars": 6081,
+  "kept": {
+    "S1 установки 3 100": true,
+    "S1 подключили 2 650": true,
+    "S1 позиция 2 540": true,
+    "S1 D7 31%": true,
+    "S1 D7 6%": true,
+    "S2 цена 299 ₽": true,
+    "S2 trial 7 дней": false,
+    "S3 октябрь 37%": true
+  },
+  "new_numbers": {
+    "ноябрь 11,8%": false,
+    "ноябрь 12,2%": false,
+    "ноябрь 46%": true,
+    "ноябрь 35%": true
+  },
+  "rubric": {
+    "rc": 0,
+    "answers": {
+      "e1_value_weakened": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "e2_device_barrier": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "e3_choice_questioned": {
+        "type": "noul",
+        "noul": 0.6,
+        "quote_ok": false
+      },
+      "e4_plan_updated": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "e5_change_explained": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      },
+      "s4_options_kept": {
+        "type": "noul",
+        "noul": 0.95,
+        "quote_ok": true
+      }
+    },
+    "needs_review": {
+      "e3_choice_questioned": "да/нет неуверенно (p=0.60)"
+    }
+  }
+}
