@@ -102,3 +102,4 @@
 - **OpenCode бесплатно:** проверены 12 бесплатных моделей Zen (`opencode run -m …`): 11 — «Free usage limit reached», `inkling-2-small-free` — «not available in your country». **Прогон заблокирован квотой**, не репозиторием. Подготовлено семейство `opencode-free` (deepseek-v4.1-flash-free) и `delegate_families`.
 - **ZCode:** установлен (`/Applications/ZCode.app`, `~/.zcode/v2/config.json`). Модели не видны, потому что нет активного провайдера: `builtin:zai` включён, но ключ API пустой; OAuth и coding plan неактивны (`oauth_provider_inactive`, `coding_plan_not_entitled`). Нужен вход в Z.ai или ключ — это действие пользователя. Подготовлена среда `zcode` и семейство `glm` (GLM-5.3-Flash / GLM-5.3, ID из конфига).
 - **Проверка:** 58 passed.
+- **Решение пользователя:** прогон в OpenCode не проводить (бесплатные квоты исчерпаны); ZCode — пользователь сам входит в Z.ai, после этого прогон через Orca (`--agent zcode`).
