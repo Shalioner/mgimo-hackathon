@@ -1,0 +1,94 @@
+- id: SRC-001
+  title: Постановка учебного кейса руководителем
+  kind: document
+  access: own
+  path: sources/00_case_request.md
+  sha256: 33ef1d40e53876c464eb1a5514020d1a248f4f16b20e389ce4c21300a42a6e5e
+  retrieved: '2026-11-10'
+  reliability: high
+  notes: Только условия кейса; не доказательство оттока, спроса или причин. Внешнее
+    исследование — только access open.
+- id: SRC-002
+  title: Подтверждение C1 руководителем
+  kind: document
+  access: own
+  path: sources/01_c1_confirmation.md
+  sha256: b7c4ae4c1dc0e5b65897e69f219367a2321f27a18817fe15c10b2ff782962262
+  retrieved: '2026-11-10'
+  reliability: high
+- id: SRC-003
+  title: 'Google Family Link: геолокация и уведомления'
+  kind: website
+  access: open
+  path: sources/02_google_location.md
+  sha256: 35e1e4f37dd9417b65a6fa18a54b17efc23ccd24cb889f63db9d26b038b90bc1
+  retrieved: '2026-11-10'
+  reliability: high
+  url: https://support.google.com/families/answer/7103413?hl=ru
+  notes: Локальная выборочная текстовая копия с отделённым пересказом; применимость
+    и ограничения указаны в файле.
+- id: SRC-004
+  title: 'Findmykids: местоположение и семейный сценарий'
+  kind: website
+  access: open
+  path: sources/03_findmykids_location.md
+  sha256: 34c4ca9528a4ff2c233bb382dc2491c15c42c8e789b9c4852b3ae81a7ab963bc
+  retrieved: '2026-11-10'
+  reliability: medium
+  url: https://findmykids.org/ru/features/real-time-location
+  notes: Локальная выборочная текстовая копия с отделённым пересказом; применимость
+    и ограничения указаны в файле.
+- id: SRC-005
+  title: 'Kaspersky Safe Kids: геолокация и периметр'
+  kind: website
+  access: open
+  path: sources/04_kaspersky_features.md
+  sha256: 990cd43367bfb0af3259462c297e30111ab43785f9e7fbe8f76b78d3cc2c8a8b
+  retrieved: '2026-11-10'
+  reliability: medium
+  url: https://www.kaspersky.ru/safe-kids/how-it-works
+  notes: Локальная выборочная текстовая копия с отделённым пересказом; применимость
+    и ограничения указаны в файле.
+- id: SRC-006
+  title: 'Google Play: Findmykids, описание и отзывы'
+  kind: website
+  access: open
+  path: sources/05_google_play_reviews.md
+  sha256: 5caff44fdcf990485a553946d0e1dbd8677985e6b0e8aaf3f42fb543761b05f4
+  retrieved: '2026-11-10'
+  reliability: low
+  url: https://play.google.com/store/apps/details?hl=ru&id=org.findmykids.app
+  notes: Локальная выборочная текстовая копия с отделённым пересказом; применимость
+    и ограничения указаны в файле.
+- id: SRC-007
+  title: 'Исследование приватности: семьи с детьми 6–11 лет'
+  kind: website
+  access: open
+  path: sources/06_privacy_families.md
+  sha256: 4019fa32b75c3044bb2ad7adb8065e0cb295ba56bb2b5afbb3d68a8f5039d5b1
+  retrieved: '2026-11-10'
+  reliability: high
+  url: https://arxiv.org/abs/1809.10944
+  notes: Локальная выборочная текстовая копия с отделённым пересказом; применимость
+    и ограничения указаны в файле.
+- id: SRC-008
+  title: 'Исследование датских семей: забота и контроль'
+  kind: website
+  access: open
+  path: sources/07_danish_tracking_study.md
+  sha256: 318ec95954c09c74b0574a769469c08eb45c0f860390371cbd0a72e02d192f05
+  retrieved: '2026-11-10'
+  reliability: high
+  url: https://sciendo.com/2/v2/download/article/10.2478/nor-2021-0042.pdf
+  notes: Локальная выборочная текстовая копия с отделённым пересказом; применимость
+    и ограничения указаны в файле.
+- id: SRC-009
+  title: Учебная аналитика Рядом за октябрь 2026
+  kind: dataset
+  access: own
+  path: sources/08_analytics_2026-10.md
+  sha256: b8aa00fd19a2bcfe898205456dc1d6f9fc713ecd74eab7e4b34fae33c82a9fe0
+  retrieved: '2026-11-10'
+  reliability: medium
+  notes: Собственный учебный материал; один месяц, добровольный самоотчёт; возрастной
+    и географический срез не указан. Не закрытая аналитика компании.
