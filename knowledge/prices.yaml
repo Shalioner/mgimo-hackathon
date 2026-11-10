@@ -1,0 +1,26 @@
+# Цены моделей, USD за 1M токенов (стандартный тариф, короткий контекст). Читает tools/cost.py.
+# Только официальные страницы вендоров; дата проверки — checked. Обновлять вместе с гайдами (skills/model-refresh).
+# Семантика: input — некэшированный вход; cached — чтение из кэша; output — выход (у рассуждающих моделей
+# рассуждение тарифицируется как выход — на страницах это не сказано явно, считаем по общему правилу API).
+# match — glob по ID модели без префикса провайдера (opencode/, openai/, anthropic/).
+checked: 2026-11-10
+sources:
+  openai: https://developers.openai.com/api/docs/pricing
+  anthropic: https://platform.claude.com/docs/en/about-claude/pricing
+  zai: https://docs.z.ai/guides/overview/pricing
+models:
+  - {match: "gpt-6.1-sol*",   input: 2.00,  cached: 0.10, output: 10.00, source: openai}
+  - {match: "gpt-6-sol*",     input: 2.00,  cached: 0.20, output: 10.00, source: openai}
+  - {match: "gpt-6.1-terra*", input: 1.00,  cached: 0.05, output: 5.00,  source: openai}
+  - {match: "gpt-6-luna*",    input: 0.10,  cached: 0.01, output: 0.50,  source: openai}
+  - {match: "gpt-6-astra*",   input: 10.00, cached: 1.00, output: 50.00, source: openai}
+  - {match: "gpt-5.6-sol*",   input: 4.00,  cached: 0.40, output: 20.00, source: openai, note: "промо-цена до 2026-11-30"}
+  - {match: "gpt-5.6-terra*", input: 2.00,  cached: 0.20, output: 12.00, source: openai}
+  - {match: "gpt-5.6-luna*",  input: 0.20,  cached: 0.02, output: 1.20,  source: openai}
+  - {match: "claude-fable-5*", input: 8.00, cached: 0.20, output: 40.00, source: anthropic}
+  - {match: "claude-mythos-5*", input: 8.00, cached: 0.20, output: 40.00, source: anthropic}
+  - {match: "claude-opus-5*",  input: 4.00, cached: 0.20, output: 20.00, source: anthropic}
+  - {match: "claude-sonnet-5*", input: 2.00, cached: 0.10, output: 10.00, source: anthropic}
+  - {match: "claude-haiku-5*", input: 0.10, cached: 0.01, output: 0.50, source: anthropic, note: "до 100K токенов в запросе; дольше — 0.50/0.05/2.50"}
+  - {match: "glm-5.3-flash*", input: 0.15, cached: 0.03, output: 0.50, source: zai}
+  - {match: "glm-5.3",        input: 1.40, cached: 0.26, output: 4.40, source: zai}
