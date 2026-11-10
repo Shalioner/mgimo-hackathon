@@ -10,42 +10,65 @@ tiers:
   T1:
     name: Лёгкий
     when: Извлечение фактов и цитат из одного источника, классификация, разметка, сверка ссылок, форматирование.
+    effort: [low]
   T2:
     name: Средний
     when: План исследования, сводка по нескольким источникам, черновики артефактов, тексты сообщений.
+    effort: [medium, high]
   T3:
     name: Сильный
     when: Сравнение вариантов, стратегия, разрешение противоречий, пересмотр, если меняется ранжирование.
+    effort: [medium, high]
   T4:
     name: Предельный (только эскалация)
     when: >-
       Только если T3 не справился по сигналам эскалации ИЛИ человек явно просит максимальную глубину
       для дорогого решения. Никогда не уровень по умолчанию.
+    effort: [high, max]
+
+# effort у уровня — лестница: модель уровня стартует с первого значения; при неудаче (`route --failed T3@medium`)
+# сначала следующий effort на той же модели (так советуют Anthropic и OpenAI), и только после последнего — уровень выше.
+# Значения переводятся на уровни конкретной модели: Codex сообщает их сам (models.py scan), иначе — effort_levels
+# из гайда вендора (knowledge/model_guides). Например, у GLM есть только low и max: T2 [medium, high] → [low, max].
+
+# Какие модели НЕ выбираются общими шаблонами: специализированные (домен, ограниченный доступ, превью).
+# Слова ищутся в ID целиком (gpt-5.5-cyber → cyber). Явная классификация — knowledge/model_catalog.yaml.
+model_selection:
+  specialized_tokens: [cyber, security, rosalind, bio, med, medical, health, law, legal, fin, finance, codex, review,
+                       vision, vl, omni, audio, realtime, tts, image, embed, embedding, exp, preview, guard, safety]
 
 # Семейства моделей по уровням. Значение уровня:
 #   строка — фиксированный ID или алиас (алиасы Claude haiku/sonnet/opus/fable сами указывают на последнюю версию);
+#   [вариант, вариант…] — первый доступный в инвентаре (Mythos при доступе, иначе Fable); последний — запасной;
 #   {pattern: glob | regex: …, pin: ID} — берётся НОВЕЙШАЯ версия из инвентаря машины (tools/models.py scan),
 #   подходящая под шаблон; без инвентаря или совпадений — pin. Так новые версии (Fable 5.2 → 5.3, gpt-6.1 → 6.2)
 #   подхватываются без правки файла, а `tools/models.py check` сообщает о них; `models.py apply` обновляет pin.
+#   Модели с другим именем (gpt-betelgeuse) попадают в уровень через knowledge/model_catalog.yaml (family, tier, replaces).
+# inventory — из какого источника инвентаря брать модели семейства (модель из ZCode недоступна в Codex).
 # null — уровень не задан: соседний уровень или текущая модель. Правила промптинга по вендорам — knowledge/model_guides/.
 families:
-  claude:   {T1: haiku, T2: sonnet, T3: opus, T4: fable}   # Claude Code: алиасы --model / model: (за прокси — см. routing.local)
+  claude:   # Claude Code: алиасы --model / model: (за прокси — см. routing.local); Mythos — только при доступе организации
+    {T1: haiku, T2: sonnet, T3: opus, T4: [{pattern: "claude-mythos-*"}, fable]}
   openai:   # Codex; ID из ~/.codex/models_cache.json
+    inventory: codex
     T1: {pattern: "gpt-*-luna",  pin: gpt-6-luna}
     T2: {pattern: "gpt-*-terra", pin: gpt-6.1-terra}
     T3: {pattern: "gpt-*-sol",   pin: gpt-6.1-sol}
     T4: {pattern: "gpt-*-astra", pin: gpt-6-astra}
   opencode: # OpenCode Zen (платные); ID из `opencode models`
+    inventory: opencode
     T1: {pattern: "opencode/claude-haiku-*",  pin: opencode/claude-haiku-5-5}
     T2: {pattern: "opencode/claude-sonnet-*", pin: opencode/claude-sonnet-5-5}
     T3: {pattern: "opencode/claude-opus-*",   pin: opencode/claude-opus-5-5}
     T4: {pattern: "opencode/claude-fable-*",  pin: opencode/claude-fable-5-2}
   glm:      # ZCode (Z.ai); ID из ~/.zcode/v2/config.json и встроенного конфига ZCode; T4 нет
+    inventory: zcode
     T1: {regex: "^GLM-\\d+(\\.\\d+)?-Flash$", pin: GLM-5.3-Flash}
     T2: {regex: "^GLM-\\d+(\\.\\d+)?-Flash$", pin: GLM-5.3-Flash}
     T3: {regex: "^GLM-\\d+(\\.\\d+)?$",       pin: GLM-5.3}
     T4: null
   opencode-free: # бесплатные Zen: квоты по IP, состав меняется
+    inventory: opencode
     T1: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
     T2: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
     T3: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}

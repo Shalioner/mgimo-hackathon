@@ -2,6 +2,7 @@
 vendor: Anthropic
 families: [claude, opencode]
 checked: 2026-11-10
+effort_levels: [low, medium, high, xhigh, max]
 refresh_after_days: 45
 covers: ["claude-fable-*", "claude-mythos-*", "claude-opus-*", "claude-sonnet-*", "claude-haiku-*", "fable", "opus", "sonnet", "haiku"]
 sources:

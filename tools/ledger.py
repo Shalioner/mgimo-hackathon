@@ -585,16 +585,58 @@ def model_for(cfg: dict, family: Optional[str], tier: str) -> Optional[str]:
     if tier == "T0" or not family:
         return None
     spec = (cfg.get("families", {}).get(family) or {}).get(tier)
-    if isinstance(spec, dict):
+    if isinstance(spec, (dict, list)):
         import models as M  # tools/models.py
-        return M.resolve_spec(spec, M.all_ids(M.load_inventory()))[0]
+        return M.resolve_for(cfg, family, tier)[0]
     return spec
+
+
+def parse_failed(failed: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    """«T3» или «T3@high» → (уровень, effort)."""
+    if not failed:
+        return None, None
+    tier, _, effort = failed.partition("@")
+    return tier, (effort or None)
+
+
+def tier_efforts(cfg: dict, tier: str, family: Optional[str]) -> List[str]:
+    """Лестница effort уровня (tiers.Tn.effort), переведённая на уровни, которые поддерживает модель семейства."""
+    wanted = (cfg.get("tiers", {}).get(tier) or {}).get("effort") or []
+    if not wanted or tier == "T0":
+        return []
+    if not family:
+        return list(wanted)
+    import models as M
+    supported = M.effort_levels(cfg, family, model_for(cfg, family, tier))
+    return M.map_efforts(wanted, supported) if supported else []
+
+
+def resolve_step(task: str, failed: Optional[str], cfg: dict, family: Optional[str] = None) -> Tuple[str, Optional[str], str]:
+    """(уровень, effort, причина). Эскалация: сначала больше effort на той же модели, потом следующий уровень."""
+    failed_tier, failed_effort = parse_failed(failed)
+    if not failed_tier:
+        tier, reason = resolve_tier(task, None, cfg)
+        ladder = tier_efforts(cfg, tier, family)
+        return tier, (ladder[0] if ladder else None), reason
+    if failed_tier not in TIER_ORDER:
+        raise ValueError(f"Неизвестный уровень {failed_tier}")
+    ladder = tier_efforts(cfg, failed_tier, family)
+    cur = failed_effort or (ladder[0] if ladder else None)
+    if cur in ladder and ladder.index(cur) + 1 < len(ladder):
+        nxt = ladder[ladder.index(cur) + 1]
+        return failed_tier, nxt, (f"эскалация после неудачи на {failed_tier}@{cur}: сначала глубже рассуждение "
+                                  f"на той же модели ({cur} → {nxt}), модель старше — только если и это не поможет")
+    tier, reason = resolve_tier(task, failed_tier, cfg)
+    ladder = tier_efforts(cfg, tier, family)
+    return tier, (ladder[0] if ladder else None), reason
 
 
 def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], env: Optional[str] = None) -> int:
     cfg = load_routing()
+    envs_ = cfg.get("environments", {})
+    family = (envs_.get(env) or {}).get("family") if env else None
     try:
-        tier, reason = resolve_tier(task, failed_tier, cfg)
+        tier, effort, reason = resolve_step(task, failed_tier, cfg, family)
     except ValueError as exc:
         print(str(exc), file=sys.stderr if "Неизвестн" in str(exc) else sys.stdout)
         return 2 if "Неизвестн" in str(exc) else 1
@@ -604,6 +646,9 @@ def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], en
         return 2
     print(f"Задача: {task}")
     print(f"Уровень: {tier} — {cfg['tiers'][tier]['name']} ({reason})")
+    if effort:
+        print(f"Effort: {effort} (лестница уровня: {' → '.join(tier_efforts(cfg, tier, family))}; "
+              f"не справился — `--failed {tier}@{effort}`)")
     if cfg["tasks"][task].get("note"):
         print(f"Заметка: {cfg['tasks'][task]['note']}")
     if cfg.get("_local"):
@@ -622,7 +667,8 @@ def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], en
                   "Какая модель реально ответит, решает прокси: пропишите соответствие в knowledge/routing.local.yaml "
                   "и в настройках прокси (см. knowledge/routing.local.example.yaml).")
     else:
-        fams = ", ".join(f"{f} — {v.get(tier)}" for f, v in cfg.get("families", {}).items() if v.get(tier))
+        fams = ", ".join(f"{f} — {model_for(cfg, f, tier)}" for f, v in cfg.get("families", {}).items()
+                         if v and v.get(tier))
         print(f"Модели уровня: {fams}")
         print("Укажите --env <среда>, чтобы получить способ переключения "
               f"({', '.join(envs)}).")
@@ -884,7 +930,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--root", type=Path, default=ROOT / "projects")
     p = sub.add_parser("route", help="какой уровень модели взять для задачи")
     p.add_argument("task")
-    p.add_argument("--failed", metavar="TIER", help="уровень, на котором задача не удалась → эскалация")
+    p.add_argument("--failed", metavar="TIER[@EFFORT]", help="уровень (и effort) неудачи: T3 или T3@high → сначала больше effort, потом уровень выше")
     p.add_argument("--project", type=Path, help="для учёта лимита T4 по журналу")
     p.add_argument("--env", help="среда: claude-code, codex, opencode, cursor, copilot, windsurf, gigacode, kodik, orca")
     p = sub.add_parser("log", help="добавить строку в state/run_log.md")

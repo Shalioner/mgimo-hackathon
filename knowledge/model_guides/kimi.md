@@ -2,6 +2,7 @@
 vendor: Moonshot Kimi
 families: []
 checked: 2026-11-10
+effort_levels: [low, high, max]
 refresh_after_days: 60
 covers: ["kimi-*", "Kimi*"]
 sources:

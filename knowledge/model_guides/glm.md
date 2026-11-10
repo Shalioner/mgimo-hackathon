@@ -2,6 +2,7 @@
 vendor: Z.ai (Zhipu GLM)
 families: [glm]
 checked: 2026-11-10
+effort_levels: [low, max]
 refresh_after_days: 45
 covers: ["GLM-*", "glm-*"]
 sources:

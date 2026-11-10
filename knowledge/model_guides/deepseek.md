@@ -2,6 +2,7 @@
 vendor: DeepSeek
 families: [opencode-free]
 checked: 2026-11-10
+effort_levels: [none, low, high, max]
 refresh_after_days: 45
 covers: ["deepseek-*"]
 sources:

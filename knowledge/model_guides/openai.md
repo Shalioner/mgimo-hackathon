@@ -2,8 +2,9 @@
 vendor: OpenAI
 families: [openai]
 checked: 2026-11-10
+effort_levels: [low, medium, high, xhigh, max]
 refresh_after_days: 45
-covers: ["gpt-*-sol", "gpt-*-terra", "gpt-*-luna", "gpt-*-astra", "o3*", "o4*", "gpt-5*", "gpt-4*"]
+covers: ["gpt-*", "o3*", "o4*", "codex-*", "openai/*"]
 sources:
   - https://developers.openai.com/api/docs/guides/reasoning-best-practices
   - https://developers.openai.com/cookbook/examples/gpt-5/gpt-5_prompting_guide

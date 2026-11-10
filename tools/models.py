@@ -6,10 +6,18 @@
     python tools/models.py check [--brief] # новые версии, устаревшие гайды, модели без гайда; при старом инвентаре — пересканировать
     python tools/models.py apply           # обновить запасные ID (pin) в routing.yaml на найденные новейшие версии
     python tools/models.py hints <семейство>  # подсказки из гайдов вендора для промптов делегата
+    python tools/models.py specialized     # специализированные модели (домен, ограниченный доступ) — не для общего роутинга
+    python tools/models.py ack <id> [...]  # отметить новые модели просмотренными (например, чужой вендор)
 
 Принцип: в routing.yaml семейство может задавать уровень шаблоном {pattern|regex, pin}. Модель выбирается как
 самая новая версия из инвентаря, подходящая под шаблон; если инвентаря или совпадений нет — используется pin.
 Вышла новая версия (например, Fable 5.2 → 5.3) — она подхватится без правки файлов, а check об этом сообщит.
+
+Имя может и не лечь в шаблон (не «gpt-6.2-astra», а «gpt-betelgeuse»). Такие модели scan запоминает как новые,
+check показывает «НОВАЯ МОДЕЛЬ», а агент по навыку model-refresh вносит её в knowledge/model_catalog.yaml:
+семейство, уровень, вид (general / specialized), домен, доступ и replaces — какую модель она сменяет.
+Специализированные модели (кибербезопасность, биология, право, финансы, ревью кода, зрение, превью…) в общий
+роутинг не попадают, даже если имя совпало с шаблоном: их предлагают человеку только под задачу своего домена.
 """
 from __future__ import annotations
 
@@ -36,16 +44,49 @@ TIERS = ["T1", "T2", "T3", "T4"]
 
 
 # ---------- инвентарь ----------
-def scan_codex() -> List[str]:
+def _codex_items() -> List[dict]:
     f = HOME / ".codex" / "models_cache.json"
     if not f.exists():
         return []
     try:
         d = json.loads(f.read_text(encoding="utf-8"))
         items = d.get("models", d) if isinstance(d, dict) else d
-        return [m.get("slug") or m.get("id") for m in items if isinstance(m, dict) and (m.get("slug") or m.get("id"))]
+        return [m for m in items if isinstance(m, dict) and (m.get("slug") or m.get("id"))]
     except (ValueError, OSError):
         return []
+
+
+def scan_codex() -> List[str]:
+    return [m.get("slug") or m.get("id") for m in _codex_items()]
+
+
+def scan_codex_efforts() -> Dict[str, List[str]]:
+    """Уровни effort, которые Codex сам сообщает для каждой модели (supported_reasoning_levels)."""
+    out = {}
+    for m in _codex_items():
+        lv = [x.get("effort") for x in m.get("supported_reasoning_levels") or [] if isinstance(x, dict)]
+        if lv:
+            out[m.get("slug") or m.get("id")] = [x for x in lv if x]
+    return out
+
+
+def scan_selfhosted(cfg: Optional[dict]) -> List[str]:
+    """Модели своего OpenAI-совместимого сервера (Ollama, vLLM, LM Studio, корпоративный шлюз): GET {base_url}/models."""
+    sh = (cfg or {}).get("selfhosted") or {}
+    if not sh.get("base_url"):
+        return []
+    import os
+    import urllib.request
+    req = urllib.request.Request(sh["base_url"].rstrip("/") + "/models")
+    key = os.environ.get(sh.get("api_key_env") or "", "")
+    if key:
+        req.add_header("Authorization", f"Bearer {key}")
+    try:
+        with urllib.request.urlopen(req, timeout=5) as r:
+            data = json.loads(r.read().decode("utf-8"))
+    except (OSError, ValueError):
+        return []
+    return [m.get("id") for m in data.get("data", []) if isinstance(m, dict) and m.get("id")]
 
 
 def scan_opencode() -> List[str]:
@@ -78,12 +119,27 @@ def scan_zcode() -> List[str]:
     return list(dict.fromkeys(ids))
 
 
-def scan() -> dict:
-    inv = {"scanned_at": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
-           "sources": {"codex": scan_codex(), "opencode": scan_opencode(), "zcode": scan_zcode()}}
+def scan(cfg: Optional[dict] = None) -> dict:
+    old = load_inventory()
+    sources = {"codex": scan_codex(), "opencode": scan_opencode(), "zcode": scan_zcode()}
+    sh = scan_selfhosted(cfg)
+    if sh:
+        sources["selfhosted"] = sh
+    inv = {"scanned_at": dt.datetime.now().astimezone().isoformat(timespec="seconds"), "sources": sources,
+           "efforts": scan_codex_efforts()}
+    new_ids = set(all_ids(inv))
+    if old:  # первый скан — точка отсчёта; дальше копятся модели, которых раньше не было
+        added = new_ids - set(all_ids(old))
+        inv["unreviewed"] = sorted((set(old.get("unreviewed") or []) | added) & new_ids)
+    else:
+        inv["unreviewed"] = []
+    save_inventory(inv)
+    return inv
+
+
+def save_inventory(inv: dict) -> None:
     INVENTORY.write_text("# Инвентарь моделей этой машины (генерируется tools/models.py scan, не в git)\n"
                          + yaml.safe_dump(inv, allow_unicode=True, sort_keys=False), encoding="utf-8")
-    return inv
 
 
 def load_inventory() -> Optional[dict]:
@@ -111,6 +167,44 @@ def version_key(model_id: str) -> Tuple[int, ...]:
     return tuple(int(x) for x in re.split(r"[.\-]", m.group(1))) if m else ()
 
 
+CATALOG = KNOW / "model_catalog.yaml"
+# Слова в ID, по которым модель считается специализированной, если её нет в каталоге (переопределяется в
+# routing.yaml → model_selection.specialized_tokens). Такие модели не выбираются общими шаблонами.
+DEFAULT_SPECIALIZED = ["cyber", "security", "rosalind", "bio", "med", "medical", "health", "law", "legal",
+                       "fin", "finance", "codex", "review", "vision", "vl", "omni", "audio", "realtime", "tts",
+                       "image", "embed", "embedding", "exp", "preview", "guard", "safety"]
+EFFORT_ORDER = ["none", "minimal", "low", "medium", "high", "xhigh", "max"]
+
+
+def tokens(model_id: str) -> set:
+    return set(t for t in re.split(r"[-_./:\s]+", model_id.lower()) if t)
+
+
+def load_catalog(path: Optional[Path] = None) -> List[dict]:
+    f = path or CATALOG
+    if not f.exists():
+        return []
+    try:
+        return [e for e in (yaml.safe_load(f.read_text(encoding="utf-8")) or {}).get("models") or [] if e.get("id")]
+    except yaml.YAMLError:
+        return []
+
+
+def catalog_entry(model_id: str, catalog: List[dict]) -> Optional[dict]:
+    names = {model_id.lower(), model_id.split("/")[-1].lower()}
+    for e in catalog:
+        if any(fnmatch.fnmatch(n, str(e["id"]).lower()) for n in names):
+            return e
+    return None
+
+
+def is_specialized(model_id: str, catalog: List[dict], specialized_tokens: Optional[List[str]] = None) -> bool:
+    e = catalog_entry(model_id, catalog)
+    if e:
+        return e.get("kind", "general") != "general"
+    return bool(tokens(model_id) & set(specialized_tokens or DEFAULT_SPECIALIZED))
+
+
 def matches(spec: dict, model_id: str) -> bool:
     if spec.get("regex"):
         return re.search(spec["regex"], model_id) is not None
@@ -119,21 +213,105 @@ def matches(spec: dict, model_id: str) -> bool:
     return False
 
 
-def resolve_spec(spec, inventory_ids: List[str]) -> Tuple[Optional[str], str]:
-    """(модель, как выбрана). spec — строка (фиксированный ID/алиас) или {pattern|regex, pin}."""
+def _drop_replaced(cands: List[str], catalog: List[dict]) -> List[str]:
+    """Убрать модели, которые сменила другая доступная модель (replaces в каталоге, по цепочке)."""
+    replaced = set()
+    for c in cands:
+        seen, e = set(), catalog_entry(c, catalog)
+        while e and e.get("replaces") and e["replaces"] not in seen:
+            seen.add(e["replaces"])
+            replaced.add(e["replaces"])
+            e = catalog_entry(e["replaces"], catalog)
+    return [c for c in cands if c not in replaced] or cands
+
+
+def resolve_spec(spec, inventory_ids: List[str], catalog: Optional[List[dict]] = None,
+                 family: Optional[str] = None, tier: Optional[str] = None,
+                 specialized_tokens: Optional[List[str]] = None) -> Tuple[Optional[str], str]:
+    """(модель, как выбрана). spec — строка (фиксированный ID/алиас), {pattern|regex, pin} или список вариантов
+    по предпочтению (первый доступный; например, Mythos при доступе, иначе Fable)."""
+    catalog = catalog or []
+    if isinstance(spec, list):
+        for opt in spec:
+            m, how = resolve_spec(opt, inventory_ids, catalog, family, tier, specialized_tokens)
+            if m and (m in inventory_ids or (isinstance(opt, str) and opt == spec[-1])):
+                return m, how
+        last = spec[-1] if spec else None
+        return resolve_spec(last, inventory_ids, catalog, family, tier, specialized_tokens) if last is not None else (None, "не задано")
     if spec is None or isinstance(spec, str):
         return spec, "фиксировано"
-    cands = [m for m in inventory_ids if matches(spec, m)]
+    cands = [m for m in inventory_ids if matches(spec, m) and not is_specialized(m, catalog, specialized_tokens)]
+    if family and tier:  # модели из каталога, чьё имя не ложится в шаблон
+        cands += [m for m in inventory_ids if m not in cands and (e := catalog_entry(m, catalog))
+                  and e.get("family") == family and e.get("tier") == tier and e.get("kind", "general") == "general"]
     if cands:
+        cands = _drop_replaced(cands, catalog)
         best = max(cands, key=lambda m: (version_key(m), m == spec.get("pin")))
-        return best, "новейшая по шаблону из инвентаря"
+        return best, "новейшая по шаблону/каталогу из инвентаря"
     return spec.get("pin"), "запасной ID (в инвентаре совпадений нет)"
 
 
+def family_ids(cfg: dict, family: str, inv: Optional[dict]) -> List[str]:
+    """ID моделей, доступных семейству: из своего источника инвентаря (inventory: codex), иначе из всех."""
+    src = ((cfg.get("families") or {}).get(family) or {}).get("inventory")
+    if src and inv:
+        srcs = [src] if isinstance(src, str) else src
+        out: List[str] = []
+        for s in srcs:
+            out += (inv.get("sources") or {}).get(s) or []
+        return out
+    return all_ids(inv)
+
+
+def _tokens_cfg(cfg: dict) -> Optional[List[str]]:
+    return (cfg.get("model_selection") or {}).get("specialized_tokens")
+
+
+def resolve_for(cfg: dict, family: str, tier: str, inv=False, catalog: Optional[List[dict]] = None):
+    inv = load_inventory() if inv is False else inv
+    catalog = load_catalog() if catalog is None else catalog
+    spec = ((cfg.get("families") or {}).get(family) or {}).get(tier)
+    return resolve_spec(spec, family_ids(cfg, family, inv), catalog, family, tier, _tokens_cfg(cfg))
+
+
 def resolve_all(cfg: dict, inv: Optional[dict]) -> Dict[str, Dict[str, Tuple[Optional[str], str]]]:
-    ids = all_ids(inv)
-    return {fam: {t: resolve_spec(tiers.get(t), ids) for t in TIERS}
-            for fam, tiers in (cfg.get("families") or {}).items()}
+    catalog = load_catalog()
+    return {fam: {t: resolve_for(cfg, fam, t, inv, catalog) for t in TIERS}
+            for fam in (cfg.get("families") or {})}
+
+
+# ---------- effort ----------
+def effort_levels(cfg: dict, family: Optional[str], model: Optional[str], inv=False) -> List[str]:
+    """Какие уровни effort поддерживает модель: сначала из инвентаря (Codex сообщает сам), затем из гайда вендора."""
+    inv = load_inventory() if inv is False else inv
+    if model and inv and (inv.get("efforts") or {}).get(model):
+        return list(inv["efforts"][model])
+    for g in load_guides():
+        if (family and family in (g.get("families") or [])) or (model and guide_for(model, [g])):
+            if g.get("effort_levels"):
+                return list(g["effort_levels"])
+    return []
+
+
+def map_efforts(wanted: List[str], supported: List[str]) -> List[str]:
+    """Перевести желаемую лестницу effort на уровни модели: ближайший поддерживаемый (при равенстве — выше)."""
+    if not supported:
+        return []
+    sup = [s for s in supported if s in EFFORT_ORDER]
+    if not sup:
+        return []
+    out: List[str] = []
+    for w in wanted:
+        if w in sup:
+            pick = w
+        elif w in EFFORT_ORDER:
+            wi = EFFORT_ORDER.index(w)
+            pick = min(sup, key=lambda s: (abs(EFFORT_ORDER.index(s) - wi), -EFFORT_ORDER.index(s)))
+        else:
+            continue
+        if pick not in out:
+            out.append(pick)
+    return out
 
 
 # ---------- гайды ----------
@@ -194,7 +372,33 @@ def check(cfg: dict, inv: Optional[dict], today: Optional[dt.date] = None) -> Li
                 elif is_stale(g, today):
                     msgs.append(f"ГАЙД УСТАРЕЛ: {g['_file']} (проверен {g.get('checked')}, срок {g.get('refresh_after_days')} дн.) "
                                 f"— перечитать источники (skills/model-refresh)")
+    catalog = load_catalog()
+    for mid in (inv or {}).get("unreviewed") or []:
+        if catalog_entry(mid, catalog) or any(
+                isinstance(s, dict) and matches(s, mid)
+                for tiers in (cfg.get("families") or {}).values() if isinstance(tiers, dict)
+                for t, s in tiers.items() if t in TIERS):
+            continue
+        g = guide_for(mid, guides)
+        kind = "похожа на специализированную" if is_specialized(mid, catalog, _tokens_cfg(cfg)) else "не попадает в шаблоны"
+        msgs.append(f"НОВАЯ МОДЕЛЬ: {mid} ({'вендор ' + g['vendor'] if g else 'вендор неизвестен'}; {kind}) — "
+                    f"классифицировать в knowledge/model_catalog.yaml или `models.py ack` (skills/model-refresh)")
     return list(dict.fromkeys(msgs))
+
+
+def specialized(cfg: dict, inv: Optional[dict]) -> List[str]:
+    catalog = load_catalog()
+    out = []
+    ids = all_ids(inv)
+    for e in catalog:
+        if e.get("kind", "general") != "general":
+            here = [m for m in ids if catalog_entry(m, [e])]
+            out.append(f"{e['id']}: {e.get('kind')}, домен {e.get('domain', '—')}, доступ {e.get('access', 'открытый')}"
+                       f"{'; на машине: ' + ', '.join(here) if here else '; на машине нет'} — {e.get('note', '')}".rstrip(" —"))
+    for m in ids:
+        if not catalog_entry(m, catalog) and is_specialized(m, catalog, _tokens_cfg(cfg)):
+            out.append(f"{m}: по имени похожа на специализированную (не в каталоге)")
+    return out
 
 
 def apply_pins(cfg: dict, inv: Optional[dict]) -> List[str]:
@@ -236,11 +440,14 @@ def main(argv=None) -> int:
     sub.add_parser("apply")
     p = sub.add_parser("hints")
     p.add_argument("family")
+    sub.add_parser("specialized")
+    p = sub.add_parser("ack")
+    p.add_argument("ids", nargs="+")
     args = ap.parse_args(argv)
     cfg = L.load_routing()
 
     if args.cmd == "scan":
-        inv = scan()
+        inv = scan(cfg)
         for k, v in inv["sources"].items():
             print(f"{k}: {len(v)} моделей")
         print(f"Записано: {INVENTORY.relative_to(ROOT)}")
@@ -256,7 +463,7 @@ def main(argv=None) -> int:
     if args.cmd == "check":
         age = inventory_age_hours(inv)
         if args.brief and (age is None or age > 24):
-            inv = scan()
+            inv = scan(cfg)
         msgs = check(cfg, inv)
         if args.brief:
             if msgs:
@@ -267,6 +474,17 @@ def main(argv=None) -> int:
     if args.cmd == "apply":
         ch = apply_pins(cfg, inv)
         print("Обновлены запасные ID:\n" + "\n".join(f"  {c}" for c in ch) if ch else "Обновлять нечего.")
+        return 0
+    if args.cmd == "specialized":
+        print("\n".join(specialized(cfg, inv)) or "Специализированных моделей не найдено.")
+        return 0
+    if args.cmd == "ack":
+        if not inv:
+            print("Инвентаря нет — сначала scan")
+            return 2
+        inv["unreviewed"] = [m for m in inv.get("unreviewed") or [] if m not in set(args.ids)]
+        save_inventory(inv)
+        print(f"Отмечено просмотренными: {', '.join(args.ids)}")
         return 0
     if args.cmd == "hints":
         print("\n".join(hints(args.family)) or "(нет подсказок)")

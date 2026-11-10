@@ -1,0 +1,57 @@
+# Каталог моделей: то, что нельзя вывести из шаблона имени. Ведёт агент по навыку skills/model-refresh,
+# источник — официальная страница модели. Читает tools/models.py (resolve, check, specialized).
+#
+# Поля: id (точный ID или glob; префикс провайдера вроде opencode/ отбрасывается при сопоставлении)
+#   family, tier  — куда модель встаёт в общем роутинге (только для kind: general)
+#   kind          — general | specialized (домен, доступ по программе) | code | vision | experimental
+#   domain        — для specialized: life-sciences, cybersecurity, finance, legal, code-review…
+#   access        — open | restricted (нужна программа доступа / договор организации)
+#   replaces      — ID модели, которую эта сменяет на том же уровне (для новых имён вне шаблона)
+#   source, checked, note
+#
+# Пример новой модели с непредсказуемым именем (раскомментировать, когда выйдет):
+#   - {id: gpt-betelgeuse, family: openai, tier: T4, kind: general, replaces: gpt-6-astra,
+#      source: "<официальная страница>", checked: 2026-12-01}
+models:
+  - id: "gpt-rosalind*"
+    kind: specialized
+    domain: life-sciences
+    access: restricted
+    source: https://openai.com/index/introducing-gpt-rosalind/
+    checked: 2026-11-10
+    note: "биология, разработка лекарств; доступ через trusted-access программу OpenAI"
+  - id: "gpt-*-cyber*"
+    kind: specialized
+    domain: cybersecurity
+    access: restricted
+    source: https://openai.com/index/scaling-trusted-access-for-cyber-defense/
+    checked: 2026-11-10
+    note: "защитная кибербезопасность; Trusted Access for Cyber, проверка личности или организации"
+  - id: "claude-mythos-*"
+    kind: general
+    family: claude
+    tier: T4
+    access: restricted
+    source: https://platform.claude.com/docs/en/about-claude/models/choosing-a-model
+    checked: 2026-11-10
+    note: "как Fable, только для проверенных организаций; в роутинге T4 стоит первым вариантом, если доступна"
+  - id: codex-auto-review
+    kind: specialized
+    domain: code-review
+    access: open
+    source: "~/.codex/models_cache.json"
+    checked: 2026-11-10
+    note: "служебная модель Codex для ревью кода — не для продуктовых шагов"
+  - id: gpt-reserve
+    kind: experimental
+    access: open
+    source: "~/.codex/models_cache.json"
+    checked: 2026-11-10
+    note: "назначение не описано официально — не использовать в роутинге, пока не проверено"
+  - id: "ling-*-fin*"
+    kind: specialized
+    domain: finance
+    access: open
+    source: "инвентарь ZCode"
+    checked: 2026-11-10
+    note: "финансовая модель; в «Стратеге» — только если кейс финансовый и человек согласен"

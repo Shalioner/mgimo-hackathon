@@ -210,6 +210,9 @@ def test_route_starts_cheap_and_escalates_one_step(capsys):
     assert "T3" in out and "opus" in out and "gpt-6.1-sol" in out
     assert L.main(["route", "alternatives", "--failed", "T3"]) == 0
     out = capsys.readouterr().out
+    assert "Уровень: T3" in out and "Effort: high" in out  # сначала effort на той же модели
+    assert L.main(["route", "alternatives", "--failed", "T3@high"]) == 0
+    out = capsys.readouterr().out
     assert "T4" in out and "fable" in out and "gpt-6-astra" in out and "согласия" in out
     assert L.main(["route", "validate"]) == 0
     assert "кодом" in capsys.readouterr().out
@@ -228,7 +231,7 @@ def test_t4_budget_enforced(tmp_path, capsys):
     for _ in range(2):
         assert L.main(["log", str(proj), "--step", "5", "--action", "эскалация", "--tier", "T4",
                        "--model", "Fable", "--result", "ok"]) == 0
-    assert L.main(["route", "alternatives", "--failed", "T3", "--project", str(proj)]) == 1
+    assert L.main(["route", "alternatives", "--failed", "T3@high", "--project", str(proj)]) == 1
     assert "исчерпан" in capsys.readouterr().out
 
 

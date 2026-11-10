@@ -14,3 +14,15 @@
 
 # 3) Свой лимит эскалаций:
 # budget: {max_t4_calls: 0}
+
+# 4) Своя (self-hosted) модель: любой OpenAI-совместимый сервер — Ollama, vLLM, LM Studio, корпоративный шлюз.
+#    Удобно для массовых T1-задач (классификация, оценка по признакам) и когда данные нельзя отдавать в облако.
+#    Ключ — только в переменной окружения (имя в api_key_env), не в файле. Модели сервера попадут в инвентарь
+#    при `tools/models.py scan` (GET {base_url}/models). Effort передаётся как reasoning_effort (send_effort: false — не передавать).
+# selfhosted:
+#   base_url: http://localhost:11434/v1      # Ollama; vLLM обычно http://localhost:8000/v1
+#   api_key_env: SELFHOSTED_API_KEY          # необязательно
+#   send_effort: false
+# families:
+#   selfhosted: {inventory: selfhosted, T1: "qwen3:8b", T2: null, T3: null, T4: null}
+# delegate_backends: [selfhosted, codex, claude, opencode]   # сначала своя модель
