@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 .DS_Store
 knowledge/routing.local.yaml
+knowledge/models.inventory.yaml

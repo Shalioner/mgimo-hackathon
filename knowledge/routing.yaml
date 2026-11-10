@@ -22,16 +22,35 @@ tiers:
       Только если T3 не справился по сигналам эскалации ИЛИ человек явно просит максимальную глубину
       для дорогого решения. Никогда не уровень по умолчанию.
 
-# Семейства моделей по уровням. null — уровень не задан для семейства: используйте соседний или текущую модель.
-# ID проверены на машине разработчика 2026-11-10 (codex: ~/.codex/models_cache.json; opencode: `opencode models`).
-# Названия GigaChat не проверены — уточнить в GigaCode при первом запуске и записать сюда.
+# Семейства моделей по уровням. Значение уровня:
+#   строка — фиксированный ID или алиас (алиасы Claude haiku/sonnet/opus/fable сами указывают на последнюю версию);
+#   {pattern: glob | regex: …, pin: ID} — берётся НОВЕЙШАЯ версия из инвентаря машины (tools/models.py scan),
+#   подходящая под шаблон; без инвентаря или совпадений — pin. Так новые версии (Fable 5.2 → 5.3, gpt-6.1 → 6.2)
+#   подхватываются без правки файла, а `tools/models.py check` сообщает о них; `models.py apply` обновляет pin.
+# null — уровень не задан: соседний уровень или текущая модель. Правила промптинга по вендорам — knowledge/model_guides/.
 families:
-  claude:   {T1: haiku, T2: sonnet, T3: opus, T4: fable}               # Claude Code: алиасы --model / model:
-  openai:   {T1: gpt-6-luna, T2: gpt-6.1-terra, T3: gpt-6.1-sol, T4: gpt-6-astra}   # Codex
-  opencode: {T1: opencode/claude-haiku-5-5, T2: opencode/claude-sonnet-5-5, T3: opencode/claude-opus-5-5, T4: opencode/claude-fable-5-2}
-  glm:      {T1: GLM-5.3-Flash, T2: GLM-5.3-Flash, T3: GLM-5.3, T4: null}   # ZCode (Z.ai): ID из ~/.zcode/v2/config.json; T4 нет
-  opencode-free: {T1: opencode/deepseek-v4.1-flash-free, T2: opencode/deepseek-v4.1-flash-free, T3: opencode/deepseek-v4.1-flash-free, T4: null}  # бесплатные Zen: квоты по IP, состав меняется
-  gigachat: {T1: null, T2: null, T3: null, T4: null}                   # GigaCode: уточнить линейку
+  claude:   {T1: haiku, T2: sonnet, T3: opus, T4: fable}   # Claude Code: алиасы --model / model: (за прокси — см. routing.local)
+  openai:   # Codex; ID из ~/.codex/models_cache.json
+    T1: {pattern: "gpt-*-luna",  pin: gpt-6-luna}
+    T2: {pattern: "gpt-*-terra", pin: gpt-6.1-terra}
+    T3: {pattern: "gpt-*-sol",   pin: gpt-6.1-sol}
+    T4: {pattern: "gpt-*-astra", pin: gpt-6-astra}
+  opencode: # OpenCode Zen (платные); ID из `opencode models`
+    T1: {pattern: "opencode/claude-haiku-*",  pin: opencode/claude-haiku-5-5}
+    T2: {pattern: "opencode/claude-sonnet-*", pin: opencode/claude-sonnet-5-5}
+    T3: {pattern: "opencode/claude-opus-*",   pin: opencode/claude-opus-5-5}
+    T4: {pattern: "opencode/claude-fable-*",  pin: opencode/claude-fable-5-2}
+  glm:      # ZCode (Z.ai); ID из ~/.zcode/v2/config.json и встроенного конфига ZCode; T4 нет
+    T1: {regex: "^GLM-\\d+(\\.\\d+)?-Flash$", pin: GLM-5.3-Flash}
+    T2: {regex: "^GLM-\\d+(\\.\\d+)?-Flash$", pin: GLM-5.3-Flash}
+    T3: {regex: "^GLM-\\d+(\\.\\d+)?$",       pin: GLM-5.3}
+    T4: null
+  opencode-free: # бесплатные Zen: квоты по IP, состав меняется
+    T1: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
+    T2: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
+    T3: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
+    T4: null
+  gigachat: {T1: null, T2: null, T3: null, T4: null}       # GigaCode: уточнить линейку
 
 # Среды из ТЗ. switch — как включить модель нужного уровня, от лучшего способа к запасному:
 #   subagent — встроенный субагент с моделью (лучше всего: дёшево, без участия человека);

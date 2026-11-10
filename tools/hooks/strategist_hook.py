@@ -29,6 +29,14 @@ def session_start() -> int:
         return 0
     e = run(["env"])
     r = run(["status"])
+    py = str(PY) if PY.exists() else sys.executable
+    try:
+        m = subprocess.run([py, str(ROOT / "tools" / "models.py"), "check", "--brief"], cwd=str(ROOT),
+                           capture_output=True, text=True, timeout=40)
+        if m.stdout.strip():
+            print(m.stdout.strip())
+    except subprocess.SubprocessError:
+        pass
     print((e.stdout.strip() + "\n") if e.stdout else "")
     print("Стратег — состояние проектов (ledger.py status):\n" + (r.stdout.strip() or "проектов нет"))
     return 0

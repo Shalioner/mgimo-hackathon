@@ -138,7 +138,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     if not prompt_path.exists():
         print(f"Нет файла задания {prompt_path}", file=sys.stderr)
         return 2
-    prompt = GUARD + prompt_path.read_text(encoding="utf-8")
+    import models as M
+    family_hints = M.hints(family)
+    prompt = GUARD + ("Особенности модели (из knowledge/model_guides):\n" + "\n".join(f"- {h}" for h in family_hints) + "\n\n"
+                      if family_hints else "") + prompt_path.read_text(encoding="utf-8")
     for inp in args.input:
         ip = inp if inp.is_absolute() else Path.cwd() / inp
         if not ip.exists():

@@ -31,6 +31,7 @@ import yaml
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 SCHEMA_PATH = ROOT / "schemas" / "ledger.schema.json"
 
 # префикс ID -> (файл в state/ledger, определение в схеме, человекочитаемое имя)
@@ -580,9 +581,14 @@ def resolve_tier(task: str, failed_tier: Optional[str], cfg: dict) -> Tuple[str,
 
 
 def model_for(cfg: dict, family: Optional[str], tier: str) -> Optional[str]:
+    """Модель семейства для уровня: фиксированный ID/алиас или новейшая версия по шаблону из инвентаря машины."""
     if tier == "T0" or not family:
         return None
-    return (cfg.get("families", {}).get(family) or {}).get(tier)
+    spec = (cfg.get("families", {}).get(family) or {}).get(tier)
+    if isinstance(spec, dict):
+        import models as M  # tools/models.py
+        return M.resolve_spec(spec, M.all_ids(M.load_inventory()))[0]
+    return spec
 
 
 def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], env: Optional[str] = None) -> int:

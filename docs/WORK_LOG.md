@@ -133,3 +133,8 @@
 ## 2026-11-10 (17) — AGENTS.md как единый стандарт
 - По замечанию пользователя пересмотрены файлы-переходники. AGENTS.md нативно читают Codex, Cursor, Copilot, Windsurf, OpenCode и др.; Claude Code — с 2.1.277 как запасной вариант (если нет CLAUDE.md).
 - **Решение пользователя:** удалить `.cursor/rules/strategist.mdc` (Cursor читал бы AGENTS.md дважды); `CLAUDE.md` = `@AGENTS.md` оставить как страховку для Claude Code — дублирования не даёт. README обновлён.
+
+## 2026-11-10 (18) — гайды вендоров и самообновление моделей
+- **Запрос пользователя:** брать правила «когда какая модель эффективна» из официальных руководств Anthropic, OpenAI, Kimi, Cursor, Gemini, Meta, GLM, Qwen и DeepSeek. Правила должны обновляться сами: вышла Fable 5.3 вместо 5.2 — модель и промпт подхватываются без ручной работы.
+- **Сделано:** `knowledge/model_guides/*.md` — 9 гайдов (шапка: дата проверки, срок, источники, `covers`, `delegate_hints`) и README с общими правилами вендоров. Уровни в `routing.yaml` заданы шаблонами `{pattern|regex, pin}`. `tools/models.py` умеет `scan` (кэш Codex, `opencode models`, конфиг ZCode → инвентарь, не в git), `resolve` (выбор новейшей версии), `check` («НОВАЯ ВЕРСИЯ», «НЕТ ГАЙДА», «ГАЙД УСТАРЕЛ»), `apply` (обновить pin) и `hints`. `ledger.model_for` берёт новейшую версию. `delegate.py` добавляет подсказки вендора в задание. Хук SessionStart запускает `check --brief`. Навык `skills/model-refresh` нужен для обновления гайдов. Добавлено в AGENTS.md §6 и README.
+- **Проверка:** реальный инвентарь — codex 10, opencode 46, zcode 202 моделей. `check` → «Новых версий нет, гайды актуальны». 85 passed (сценарий gpt-6.2-sol / claude-fable-5-3 покрыт тестами; тесты изолированы от инвентаря машины через `conftest.py`).

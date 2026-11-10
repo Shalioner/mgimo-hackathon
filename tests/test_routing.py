@@ -23,8 +23,8 @@ def test_all_tz_environments_have_a_switch_route():
 
 def test_families_cover_tiers_and_real_codex_ids():
     cfg = L.load_routing()
-    assert cfg["families"]["openai"] == {"T1": "gpt-6-luna", "T2": "gpt-6.1-terra",
-                                         "T3": "gpt-6.1-sol", "T4": "gpt-6-astra"}
+    got = {t: L.model_for(cfg, "openai", t) for t in ("T1", "T2", "T3", "T4")}
+    assert got == {"T1": "gpt-6-luna", "T2": "gpt-6.1-terra", "T3": "gpt-6.1-sol", "T4": "gpt-6-astra"}
     assert cfg["families"]["claude"]["T1"] == "haiku" and cfg["families"]["claude"]["T4"] == "fable"
 
 

@@ -219,7 +219,7 @@ def test_every_task_maps_to_known_tier():
     cfg = L.load_routing()
     for name, t in cfg["tasks"].items():
         assert t["tier"] in cfg["tiers"], name
-    assert cfg["families"]["claude"]["T4"] == "fable" and cfg["families"]["openai"]["T1"] == "gpt-6-luna"
+    assert L.model_for(cfg, "claude", "T4") == "fable" and L.model_for(cfg, "openai", "T1") == "gpt-6-luna"
 
 
 def test_t4_budget_enforced(tmp_path, capsys):
