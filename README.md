@@ -22,6 +22,8 @@ python3 -m venv .venv && source .venv/bin/activate && pip install -r requirement
 python tools/ledger.py status
 ```
 
+**Windows (PowerShell).** Окружение — `python -m venv .venv; .venv\Scripts\pip install -r requirements.txt`, интерпретатор — `.venv\Scripts\python.exe`. Ограничения: хуки в `.claude/settings.json` и `.codex/hooks.json` вызывают `python3`, а в Windows это часто заглушка Microsoft Store — тогда хуки молча не работают (отключите псевдоним в «Параметры → Приложения → Псевдонимы выполнения приложений» или поставьте Python так, чтобы `python3` был в PATH). В `.mcp.json` указан `.venv/bin/python`; в Windows локально замените его на `.venv\Scripts\python.exe`. Агент работает и без хуков — проверки он запускает сам.
+
 Затем откройте папку в своей среде и напишите агенту задачу обычными словами, например:
 
 > Почему у нашего сервиса X падает удержание и что с этим делать? Вот материалы: …

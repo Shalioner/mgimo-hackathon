@@ -93,7 +93,7 @@ def scan_opencode() -> List[str]:
     if not shutil.which("opencode"):
         return []
     try:
-        r = subprocess.run(["opencode", "models"], capture_output=True, text=True, timeout=30)
+        r = subprocess.run(["opencode", "models"], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30)
     except (OSError, subprocess.SubprocessError):
         return []
     return [l.strip() for l in r.stdout.splitlines() if re.match(r"^[\w.\-]+/[\w.\-:#]+$", l.strip())]
@@ -527,5 +527,15 @@ def main(argv=None) -> int:
     return 2
 
 
+def _utf8_stdio() -> None:
+    """Windows: консоль и пайпы по умолчанию в cp1251 — кириллица и знаки вроде «↺» роняют вывод."""
+    for s in (sys.stdin, sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 if __name__ == "__main__":
+    _utf8_stdio()
     sys.exit(main())

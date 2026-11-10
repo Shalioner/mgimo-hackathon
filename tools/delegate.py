@@ -230,7 +230,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout)
     else:
         try:
-            proc = subprocess.run(cmd, cwd=str(workdir), capture_output=True, text=True, timeout=args.timeout,
+            proc = subprocess.run(cmd, cwd=str(workdir), capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=args.timeout,
                                   stdin=subprocess.DEVNULL)
             code, stdout, stderr = proc.returncode, proc.stdout, proc.stderr
         except subprocess.TimeoutExpired:
@@ -253,5 +253,15 @@ def main(argv: Optional[List[str]] = None) -> int:
     return 0
 
 
+def _utf8_stdio() -> None:
+    """Windows: консоль и пайпы по умолчанию в cp1251 — кириллица и знаки вроде «↺» роняют вывод."""
+    for s in (sys.stdin, sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 if __name__ == "__main__":
+    _utf8_stdio()
     sys.exit(main())
