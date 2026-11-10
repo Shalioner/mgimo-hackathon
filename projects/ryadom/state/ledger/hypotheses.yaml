@@ -1,0 +1,81 @@
+- id: HYP-001
+  kind: hypothesis
+  statement: Часть семей «Рядом» уходит до получения первой корректной и актуальной
+    геопозиции из-за незавершённой настройки или недоступности детского устройства.
+  based_on:
+  - CLM-005
+  - CLM-009
+  - CLM-010
+  - CLM-015
+  confidence:
+    level: low
+    rationale: Нет наблюдений поведения российских семей «Рядом»; внешние материалы
+      дают только мотив проверки.
+  verdict: open
+  would_change_decision: true
+  status: active
+- id: HYP-002
+  kind: hypothesis
+  statement: Для родителей детей 6–11 лет обещание конкретного результата «понять,
+    дошёл ли ребёнок в школу» понятнее общей карты и может улучшить получение первой
+    ценности и удержание.
+  based_on:
+  - CLM-004
+  - CLM-006
+  - CLM-007
+  - CLM-016
+  confidence:
+    level: low
+    rationale: Нет наблюдений поведения российских семей «Рядом»; внешние материалы
+      дают только мотив проверки.
+  verdict: open
+  would_change_decision: true
+  status: active
+- id: HYP-003
+  kind: hypothesis
+  statement: Если у «Рядом» есть переход от пробного доступа к оплате, непонимание
+    условий и состава подписки может объяснять часть раннего ухода.
+  based_on:
+  - CLM-003
+  - CLM-010
+  - CLM-012
+  confidence:
+    level: low
+    rationale: Нет наблюдений поведения российских семей «Рядом»; внешние материалы
+      дают только мотив проверки.
+  verdict: open
+  would_change_decision: true
+  status: active
+- id: HYP-004
+  kind: hypothesis
+  statement: Ясные и согласованные в семье границы геолокации и объяснение обращения
+    с данными могут улучшить принятие продукта родителями и детьми согласованного
+    сегмента.
+  based_on:
+  - CLM-004
+  - CLM-013
+  - CLM-014
+  - CLM-017
+  confidence:
+    level: low
+    rationale: Нет наблюдений поведения российских семей «Рядом»; внешние материалы
+      дают только мотив проверки.
+  verdict: open
+  would_change_decision: true
+  status: active
+- id: HYP-005
+  kind: assumption
+  statement: Рабочая модель сценария предполагает, что у ребёнка есть поддерживаемое
+    устройство, которое он обычно носит с собой; распространённость этого условия
+    в сегменте неизвестна.
+  based_on:
+  - CLM-001
+  - CLM-005
+  - CLM-009
+  confidence:
+    level: low
+    rationale: Нет наблюдений поведения российских семей «Рядом»; внешние материалы
+      дают только мотив проверки.
+  verdict: open
+  would_change_decision: true
+  status: active
