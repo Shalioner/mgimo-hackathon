@@ -207,10 +207,10 @@ def test_route_starts_cheap_and_escalates_one_step(capsys):
     assert "T1" in capsys.readouterr().out
     assert L.main(["route", "alternatives"]) == 0
     out = capsys.readouterr().out
-    assert "T3" in out and "Opus" in out and "Sol" in out
+    assert "T3" in out and "opus" in out and "gpt-6.1-sol" in out
     assert L.main(["route", "alternatives", "--failed", "T3"]) == 0
     out = capsys.readouterr().out
-    assert "T4" in out and "Fable" in out and "Astra" in out and "согласия" in out
+    assert "T4" in out and "fable" in out and "gpt-6-astra" in out and "согласия" in out
     assert L.main(["route", "validate"]) == 0
     assert "кодом" in capsys.readouterr().out
 
@@ -219,7 +219,7 @@ def test_every_task_maps_to_known_tier():
     cfg = L.load_routing()
     for name, t in cfg["tasks"].items():
         assert t["tier"] in cfg["tiers"], name
-    assert cfg["tiers"]["T4"]["claude"] == "Fable" and cfg["tiers"]["T1"]["openai"] == "Luna"
+    assert cfg["families"]["claude"]["T4"] == "fable" and cfg["families"]["openai"]["T1"] == "gpt-6-luna"
 
 
 def test_t4_budget_enforced(tmp_path, capsys):

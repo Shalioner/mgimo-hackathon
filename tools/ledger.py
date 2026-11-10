@@ -500,33 +500,64 @@ def count_tier_in_log(project: Path, tier: str) -> int:
     return n
 
 
-def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path]) -> int:
+SWITCH_TEXT = {
+    "subagent": "встроенный субагент с моделью уровня",
+    "cli": "делегировать подзадачу: python tools/delegate.py --project … --task {task} --prompt-file …",
+    "picker": "попросить человека выбрать модель в интерфейсе в начале шага",
+    "current": "выполнить текущей моделью и записать в журнал «рекомендован {tier}, выполнен на <модель>»",
+}
+
+
+def resolve_tier(task: str, failed_tier: Optional[str], cfg: dict) -> Tuple[str, str]:
+    """Стартовый уровень задачи или следующая ступень после неудачи. ValueError — если некуда/неизвестно."""
+    if task not in cfg["tasks"]:
+        raise ValueError(f"Неизвестная задача «{task}». Доступны: {', '.join(sorted(cfg['tasks']))}")
+    tier = cfg["tasks"][task]["tier"]
+    if not failed_tier:
+        return tier, "стартовый уровень задачи"
+    if failed_tier not in TIER_ORDER:
+        raise ValueError(f"Неизвестный уровень {failed_tier}")
+    i = TIER_ORDER.index(failed_tier)
+    if i == len(TIER_ORDER) - 1:
+        raise ValueError("Выше T4 подниматься некуда: зафиксируйте пробел и спросите человека.")
+    return TIER_ORDER[i + 1], f"эскалация после неудачи на {failed_tier} (ровно на одну ступень)"
+
+
+def model_for(cfg: dict, family: Optional[str], tier: str) -> Optional[str]:
+    if tier == "T0" or not family:
+        return None
+    return (cfg.get("families", {}).get(family) or {}).get(tier)
+
+
+def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path], env: Optional[str] = None) -> int:
     cfg = load_routing()
-    tasks, tiers = cfg["tasks"], cfg["tiers"]
-    if task not in tasks:
-        print(f"Неизвестная задача «{task}». Доступны: {', '.join(sorted(tasks))}", file=sys.stderr)
+    try:
+        tier, reason = resolve_tier(task, failed_tier, cfg)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr if "Неизвестн" in str(exc) else sys.stdout)
+        return 2 if "Неизвестн" in str(exc) else 1
+    envs = cfg.get("environments", {})
+    if env and env not in envs:
+        print(f"Неизвестная среда «{env}». Доступны: {', '.join(envs)}", file=sys.stderr)
         return 2
-    tier = tasks[task]["tier"]
-    reason = "стартовый уровень задачи"
-    if failed_tier:
-        if failed_tier not in TIER_ORDER:
-            print(f"Неизвестный уровень {failed_tier}", file=sys.stderr)
-            return 2
-        i = TIER_ORDER.index(failed_tier)
-        if i == len(TIER_ORDER) - 1:
-            print("Выше T4 подниматься некуда: зафиксируйте пробел и спросите человека.")
-            return 1
-        tier = TIER_ORDER[i + 1]
-        reason = f"эскалация после неудачи на {failed_tier} (ровно на одну ступень)"
-    t = tiers[tier]
     print(f"Задача: {task}")
-    print(f"Уровень: {tier} — {t['name']} ({reason})")
-    if t.get("claude") or t.get("openai"):
-        print(f"Модель: Claude — {t['claude']}; OpenAI/Codex — {t['openai']}")
-    else:
+    print(f"Уровень: {tier} — {cfg['tiers'][tier]['name']} ({reason})")
+    if cfg["tasks"][task].get("note"):
+        print(f"Заметка: {cfg['tasks'][task]['note']}")
+    if tier == "T0":
         print("Модель: не нужна — выполнить кодом")
-    if tasks[task].get("note"):
-        print(f"Заметка: {tasks[task]['note']}")
+    elif env:
+        e = envs[env]
+        m = model_for(cfg, e.get("family"), tier)
+        print(f"Среда: {env}; модель: {m or 'не задана для этой среды — см. how'}")
+        for i, s in enumerate(e.get("switch", []), 1):
+            print(f"  {i}. {SWITCH_TEXT[s].format(task=task, tier=tier)}")
+        print(f"Как в этой среде: {e.get('how', '')}")
+    else:
+        fams = ", ".join(f"{f} — {v.get(tier)}" for f, v in cfg.get("families", {}).items() if v.get(tier))
+        print(f"Модели уровня: {fams}")
+        print("Укажите --env <среда>, чтобы получить способ переключения "
+              f"({', '.join(envs)}).")
     if tier == "T4":
         budget = cfg.get("budget", {})
         used = count_tier_in_log(project, "T4") if project else 0
@@ -537,8 +568,6 @@ def cmd_route(task: str, failed_tier: Optional[str], project: Optional[Path]) ->
         if used >= limit:
             print("Лимит T4 исчерпан — без согласия человека не запускать.")
             return 1
-    print("Если среда не позволяет выбрать модель — выполните текущей и запишите в журнал "
-          "«рекомендован <уровень>, выполнен на <модель>».")
     return 0
 
 
@@ -579,7 +608,8 @@ def cmd_init(project: Path, title: str) -> int:
     steps = "\n".join(f"- [ ] {s}" for s in STEPS)
     (project / "state/progress.md").write_text(
         f"# Прогресс: {title}\n\n"
-        f"Текущий шаг: 1\n\n"
+        f"Текущий шаг: 1\n"
+        f"Среда: (агент записывает свою среду: claude-code, codex, cursor, …)\n\n"
         f"## Шаги\n{steps}\n\n"
         f"## Что сделано в текущем шаге\n- (пока ничего)\n\n"
         f"## Что дальше\n- Прочитать запрос пользователя и составить бриф (skills/problem-framing)\n\n"
@@ -725,6 +755,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("task")
     p.add_argument("--failed", metavar="TIER", help="уровень, на котором задача не удалась → эскалация")
     p.add_argument("--project", type=Path, help="для учёта лимита T4 по журналу")
+    p.add_argument("--env", help="среда: claude-code, codex, opencode, cursor, copilot, windsurf, gigacode, kodik, orca")
     p = sub.add_parser("log", help="добавить строку в state/run_log.md")
     p.add_argument("project", type=Path)
     p.add_argument("--step", required=True)
@@ -738,7 +769,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     if args.cmd == "status":
         return cmd_status(args.root)
     if args.cmd == "route":
-        return cmd_route(args.task, args.failed, args.project.resolve() if args.project else None)
+        return cmd_route(args.task, args.failed, args.project.resolve() if args.project else None, args.env)
     if args.cmd == "log":
         return cmd_log(args.project.resolve(), args.step, args.action, args.tier, args.model, args.result,
                        args.cost)
