@@ -26,11 +26,13 @@ python tools/ledger.py status
 
 > Почему у нашего сервиса X падает удержание и что с этим делать? Вот материалы: …
 
-| Среда | Что агент читает автоматически |
+Инструкции агента — один файл **`AGENTS.md`**, открытый стандарт (Agentic AI Foundation / Linux Foundation). Его нативно читают Codex, Cursor, GitHub Copilot, Windsurf, OpenCode, Gemini CLI и другие.
+
+| Среда | Что подхватывается |
 |---|---|
-| Claude Code | `CLAUDE.md` → `AGENTS.md`, навыки `.claude/skills/`, субагент `.claude/agents/claim-verifier.md` |
-| Cursor | `.cursor/rules/strategist.mdc` → `AGENTS.md` |
-| Codex, OpenCode и др. | `AGENTS.md` |
+| Codex, Cursor, Copilot, Windsurf, OpenCode и др. | `AGENTS.md` |
+| Claude Code | `CLAUDE.md` из одной строки `@AGENTS.md` (Claude Code читает AGENTS.md сам только при отсутствии CLAUDE.md и не во всех версиях — строка-импорт работает везде и не дублирует контекст), навыки `.claude/skills/`, субагенты `.claude/agents/` |
+| ZCode | `AGENTS.md` / `CLAUDE.md` (только в приложении ZCode; среду агент определяет командой `ledger.py env`) |
 
 **Хуки.** При старте сессии агент сразу видит состояние проектов, а после каждой записи в реестр автоматически запускается проверка (`.claude/settings.json`, `.codex/hooks.json`). Codex при первом запуске спросит, доверять ли хукам проекта, — это решение человека. Выберите «Trust» или «Continue without trusting»: без хуков агент тоже работает, он просто запускает проверку сам.
 
