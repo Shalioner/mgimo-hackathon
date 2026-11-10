@@ -43,8 +43,8 @@ environments:
     how: "Субагенты .claude/agents/*.md с полем model (source-extractor, claim-verifier — haiku). Основной чат — модель, выбранная пользователем (/model)."
   codex:
     family: openai
-    switch: [cli, current]
-    how: "Подзадачи T1/T2 — tools/delegate.py --backend codex (codex exec -m <id> -s read-only). Основной чат — модель из ~/.codex/config.toml или /model."
+    switch: [subagent, cli, current]
+    how: "Субагент Codex с моделью уровня (проверено 2026-11-10: claim-verifier запущен на gpt-6-luna). Запасной путь — tools/delegate.py --backend codex. Основной чат — модель из ~/.codex/config.toml или /model."
   opencode:
     family: opencode
     switch: [cli, current]
