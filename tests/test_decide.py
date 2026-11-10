@@ -136,14 +136,54 @@ def test_emulation_on_cheap_llm_when_no_jev(no_provider, monkeypatch, capsys):
     import delegate as D
     seen = {}
     monkeypatch.setattr(D, "main", fake_delegate(
-        '```json\n{"answers": {"q": {"type": "choice", "choice": "T3", "confidence": 0.8, '
-        '"probabilities": {"T1": 0.05, "T2": 0.15, "T3": 0.8}}}}\n```', seen))
+        '```json\n{"answers": {"q": {"choice": "T3", "sure": true, "quote": "сравнить 4 варианта"}}}\n```', seen))
     assert DC.main(["--project", str(no_provider), "--ask", "Какой уровень нужен?", "--options", "T1,T2,T3",
                     "--state", "сравнить 4 варианта стратегии", "--step", "2"]) == 0
-    assert seen["task"] == "classify" and "System One" in seen["prompt"] and "сравнить 4 варианта" in seen["prompt"]
+    assert seen["task"] == "classify" and "дословная цитата" in seen["prompt"] and "сравнить 4 варианта" in seen["prompt"]
     out = capsys.readouterr().out
-    assert "T3" in out and "0.80 < 0.85" in out  # у эмуляции порог строже
+    assert "T3 (0.90)" in out and "на проверку" not in out.split("Сохранено")[0]  # уверен + цитата найдена
     assert not list((no_provider / "state/delegated").glob("_decide_prompt_*"))  # временное задание убрано
+
+
+def test_labels_confidence_comes_from_verified_quote():
+    qs = {"a": {"type": "noul"}, "b": {"type": "noul"}, "c": {"type": "noul"},
+          "d": {"type": "choice", "criteria": {"x": "", "y": ""}}, "e": {"type": "score", "criteria": ["н", "с", "в"]}}
+    state = "## Главное\nВывод: **оставить как есть** нельзя — удержание 24% [CLM-001]."
+    raw = {"a": {"verdict": "yes", "quote": "Оставить как есть нельзя"},  # разметка и регистр не мешают
+           "b": {"verdict": "yes", "quote": "выдуманная цитата, которой нет"},
+           "c": {"verdict": "no"},
+           "d": {"choice": "z", "sure": True, "quote": "Главное"},
+           "e": {"level": 2, "sure": True, "quote": "удержание 24% [CLM-001]"}}
+    out = DC.from_labels(raw, qs, state)
+    assert out["a"]["noul"] == 0.95 and out["b"]["noul"] == 0.6 and out["c"]["noul"] == 0.08
+    assert out["d"] == {"type": "refusal"}  # вариант не из criteria
+    assert out["e"]["score"] == 2.0 and out["e"]["confidence"] == 0.9
+    assert DC.doubtful(out["b"], 0.85) and not DC.doubtful(out["a"], 0.85) and not DC.doubtful(out["c"], 0.85)
+
+
+def test_code_check():
+    text = "## Главное\nALT-001, ALT-002, ALT-002, ALT-003\nОставить как есть"
+    assert DC.code_check({"all": [r"^##\s*Главное"]}, text) is True
+    assert DC.code_check({"min_count": {r"ALT-\d{3}": 4}}, text) is False  # уникальных три
+    assert DC.code_check({"any": ["закрыть", "оставить как есть"]}, text) is True
+    assert DC.code_check({"none": ["TODO"]}, text) is True
+
+
+def test_multi_gate_code_first_skips_model_for_decided(no_provider, monkeypatch, capsys):
+    import delegate as D
+    out_dir = no_provider / "outputs"
+    out_dir.mkdir(exist_ok=True)
+    (out_dir / "03_situation.md").write_text("# Ситуация\nНеизвестно: доля.\n", encoding="utf-8")  # нет «Главное»
+    (out_dir / "07_validation_plan.md").write_text("# План\n| EXP |\n", encoding="utf-8")  # нет Stop / Go
+    seen = {}
+    monkeypatch.setattr(D, "main", fake_delegate('{"answers": {}}', seen))
+    rc = DC.main(["--project", str(no_provider), "--gate", str(out_dir / "03_situation.md"),
+                  str(out_dir / "07_validation_plan.md")])
+    out = capsys.readouterr().out
+    assert rc == 4 and "03.main_block" in out and "07.stop_go" in out and "07.baseline" in out
+    assert "03.main_block" not in seen["prompt"] and "07.stop_go" not in seen["prompt"]  # решено кодом
+    assert "03.types_marked" in seen["prompt"]  # по существу — модели
+    assert "=== 03_situation.md ===" in seen["prompt"] and "=== 07_validation_plan.md ===" in seen["prompt"]
 
 
 def test_emulation_bad_json_is_error(no_provider, monkeypatch):
@@ -162,7 +202,7 @@ def test_gate_reports_fixes_and_exit_4(no_provider, monkeypatch, capsys):
                          "same_criteria": {"type": "noul", "noul": 0.95}, "human_decides": {"type": "noul", "noul": 0.97}}}
     import json as J
     monkeypatch.setattr(D, "main", fake_delegate(J.dumps(reply), {}))
-    assert DC.main(["--project", str(no_provider), "--gate", str(art)]) == 4
+    assert DC.main(["--project", str(no_provider), "--gate", str(art)]) == 4  # нет «Главное» и ALT — решено кодом
     out = capsys.readouterr().out
     assert "НЕ ГОТОВО" in out and "Оставить как есть" in out and "real_objection" not in out.split("Исправить:")[1]
 

@@ -1,14 +1,17 @@
 questions:
   main_block:
     type: noul
+    check: {all: ['^\s*(#{1,4}\s*|\*\*)Главное'], mode: decide}
     instructions: "Начинается ли документ с блока «Главное» (вывод с уверенностью)?"
     fix: "Добавь в начало блок «Главное»."
   decision_linked:
     type: noul
+    check: {all: ['DEC-\d{3}'], mode: require}
     instructions: "Указано ли решение (DEC) и кто его принял?"
     fix: "Добавь строку «Решение: DEC-… → выбран ALT-… (решил: роль, дата)»."
   refusals:
     type: noul
+    check: {all: ['^\s*(#{1,4}\s*|\*\*)Осознанные отказы'], mode: require}
     instructions: "Есть ли осознанные отказы — чего продукт не делает и почему?"
     fix: "Заполни раздел «Осознанные отказы»: 2–4 пункта «не делаем …, потому что …»."
   economics_typed:
