@@ -145,3 +145,56 @@ def test_cli_exit_codes(proj, capsys):
     assert L.main(["validate", str(EXAMPLE), "--strict"]) == 1  # в примере есть ожидаемые предупреждения
     edit(proj, "claims.yaml", "CLM-001", lambda o: o.pop("evidence"))
     assert L.main(["validate", str(proj)]) == 1
+
+
+# ---------- init / add-source / status ----------
+def test_init_creates_valid_empty_project(tmp_path):
+    proj = tmp_path / "p"
+    assert L.main(["init", str(proj), "--title", "Тест"]) == 0
+    assert (proj / "state/progress.md").exists() and (proj / "state/run_log.md").exists()
+    assert L.validate(L.Ledger(proj)).errors == []
+    assert L.main(["init", str(proj), "--title", "Тест"]) == 1  # повторно не затирает
+
+
+def test_add_source_registers_copies_and_rejects_duplicates(tmp_path):
+    proj = tmp_path / "p"
+    L.main(["init", str(proj), "--title", "Тест"])
+    f = tmp_path / "note.md"
+    f.write_text("Рынок вырос на 12%.", encoding="utf-8")
+    args = ["add-source", str(proj), str(f), "--title", "Заметка", "--kind", "document", "--access", "own"]
+    assert L.main(args) == 0
+    assert (proj / "sources/note.md").exists()
+    led = L.Ledger(proj)
+    assert led.objects["SRC-001"]["path"] == "sources/note.md"
+    assert L.validate(led).errors == []
+    assert L.main(args) == 3  # тот же sha256 — дубликат
+    f2 = tmp_path / "other.md"
+    f2.write_text("Другое.", encoding="utf-8")
+    assert L.main(["add-source", str(proj), str(f2), "--title", "Другая", "--kind", "document",
+                   "--access", "open", "--url", "https://example.org"]) == 0
+    assert "SRC-002" in L.Ledger(proj).objects
+
+
+def test_add_source_rejects_closed_access(tmp_path):
+    proj = tmp_path / "p"
+    L.main(["init", str(proj), "--title", "Тест"])
+    f = tmp_path / "x.md"
+    f.write_text("x", encoding="utf-8")
+    with pytest.raises(SystemExit):
+        L.main(["add-source", str(proj), str(f), "--title", "X", "--kind", "document", "--access", "confidential"])
+
+
+def test_status_reports_pending_change(capsys):
+    assert L.main(["status", "--root", str(ROOT / "projects")]) == 0
+    out = capsys.readouterr().out
+    assert "example" in out and "CHG-001" in out
+
+
+def test_add_source_refuses_invalid_entry_and_cleans_copy(tmp_path):
+    proj = tmp_path / "p"
+    L.main(["init", str(proj), "--title", "Тест"])
+    f = tmp_path / "a.md"
+    f.write_text("x", encoding="utf-8")
+    assert L.main(["add-source", str(proj), str(f), "--title", "А", "--kind", "document", "--access", "own"]) == 1
+    assert not (proj / "sources/a.md").exists()
+    assert L.Ledger(proj).objects == {}

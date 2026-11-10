@@ -7,6 +7,9 @@
     python tools/ledger.py impact   projects/<case> SRC-004 CLM-002
     python tools/ledger.py trace    projects/<case> DEC-001   # на чём держится объект, вплоть до источников
     python tools/ledger.py stats    projects/<case>     # сводка для отчёта
+    python tools/ledger.py status                       # проекты, текущий шаг, что ждёт решения
+    python tools/ledger.py init     projects/<case> --title "…"
+    python tools/ledger.py add-source projects/<case> <файл> --title "…" --kind document --access open
 
 Код намеренно не вызывает LLM: проверка и поиск затронутых выводов должны быть
 воспроизводимыми. LLM-агент читает вывод и обновляет формулировки сам.
@@ -435,6 +438,141 @@ def cmd_stats(ledger: Ledger) -> int:
     return 0
 
 
+# ---------- init / add-source / status ----------
+STEPS = [
+    "1. Постановка задачи → C1 (outputs/01_brief.md)",
+    "2. План исследования (outputs/02_research_plan.md)",
+    "3. Сбор материалов и утверждений (sources/, SRC/CLM)",
+    "4. Картина ситуации (outputs/03_situation.md, HYP/PAIN)",
+    "5. Варианты → C2 (outputs/04_options.md, ALT/DEC)",
+    "6. Продуктовая и коммуникационная стратегии (outputs/05, 06, PRM)",
+    "7. План проверки → C3 (outputs/07_validation_plan.md, EXP)",
+    "8. Сопровождение решения (outputs/08_decision_log.md, 09_run_report.md)",
+]
+
+
+def cmd_init(project: Path, title: str) -> int:
+    if project.exists() and any(project.iterdir()):
+        print(f"Папка {project} уже существует и не пуста — продолжите работу по её state/progress.md",
+              file=sys.stderr)
+        return 1
+    for sub in ("sources", "outputs", "state/ledger"):
+        (project / sub).mkdir(parents=True, exist_ok=True)
+    for fname, _, _ in TYPES.values():
+        (project / "state/ledger" / fname).write_text("[]\n", encoding="utf-8")
+    steps = "\n".join(f"- [ ] {s}" for s in STEPS)
+    (project / "state/progress.md").write_text(
+        f"# Прогресс: {title}\n\n"
+        f"Текущий шаг: 1\n\n"
+        f"## Шаги\n{steps}\n\n"
+        f"## Что сделано в текущем шаге\n- (пока ничего)\n\n"
+        f"## Что дальше\n- Прочитать запрос пользователя и составить бриф (skills/problem-framing)\n\n"
+        f"## Открытые вопросы к человеку\n- (нет)\n",
+        encoding="utf-8")
+    (project / "state/run_log.md").write_text(
+        f"# Журнал действий: {title}\n\n"
+        "| Время | Шаг | Действие | Инструмент / модель | Результат | Стоимость |\n"
+        "|---|---|---|---|---|---|\n",
+        encoding="utf-8")
+    print(f"Создан проект {project}. Следующий шаг: workflows/strategy.md, шаг 1.")
+    return 0
+
+
+def _next_id(ledger: Ledger, pfx: str) -> str:
+    nums = [int(k.split("-")[1]) for k in ledger.objects if prefix(k) == pfx]
+    return f"{pfx}-{(max(nums) + 1 if nums else 1):03d}"
+
+
+def cmd_add_source(project: Path, file: Path, title: str, kind: str, access: str,
+                   url: Optional[str], reliability: str, published: Optional[str], notes: Optional[str],
+                   today: Optional[str] = None) -> int:
+    import datetime
+    import shutil
+
+    if access not in ("open", "own"):
+        print("access должен быть open или own: закрытые данные не используются", file=sys.stderr)
+        return 1
+    # путь может быть абсолютным, относительным от текущей папки или от папки проекта
+    candidates = [file] if file.is_absolute() else [Path.cwd() / file, project / file]
+    file = next((c for c in candidates if c.exists()), candidates[0])
+    if not file.exists():
+        print(f"Файл не найден: {file}", file=sys.stderr)
+        return 1
+    ledger = Ledger(project)
+    digest = hashlib.sha256(file.read_bytes()).hexdigest()
+    for oid, o in ledger.objects.items():
+        if prefix(oid) == "SRC" and o.get("sha256") == digest:
+            print(f"Уже зарегистрирован как {oid} — повторно не добавляю", file=sys.stderr)
+            return 3
+    sources_dir = (project / "sources").resolve()
+    target = file.resolve()
+    if sources_dir not in target.parents:
+        target = sources_dir / file.name
+        if target.exists():
+            print(f"В sources/ уже есть другой файл {file.name} — переименуйте", file=sys.stderr)
+            return 1
+        shutil.copy2(file, target)
+    new_id = _next_id(ledger, "SRC")
+    entry = {
+        "id": new_id, "title": title, "kind": kind, "access": access,
+        "path": str(target.relative_to(project.resolve())), "sha256": digest,
+        "retrieved": today or datetime.date.today().isoformat(), "reliability": reliability,
+    }
+    if url:
+        entry["url"] = url
+    if published:
+        entry["published"] = published
+    if notes:
+        entry["notes"] = notes
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    problems = [e.message for e in Draft202012Validator(
+        {"$schema": schema["$schema"], "$defs": schema["$defs"], "$ref": "#/$defs/source"}).iter_errors(entry)]
+    if problems:
+        if target != file.resolve():
+            target.unlink()  # убрать только что скопированную копию
+        print("Источник не зарегистрирован: " + "; ".join(problems), file=sys.stderr)
+        return 1
+    path = project / "state/ledger/sources.yaml"
+    existing = path.read_text(encoding="utf-8") if path.exists() else ""
+    if existing.strip() in ("", "[]"):
+        existing = ""
+    block = yaml.safe_dump([entry], allow_unicode=True, sort_keys=False)
+    sep = "" if existing.endswith("\n") or not existing else "\n"
+    path.write_text(existing + sep + block, encoding="utf-8")
+    print(f"{new_id} зарегистрирован: {entry['path']} (sha256 {digest[:12]}…)")
+    return 0
+
+
+def cmd_status(projects_root: Path) -> int:
+    if not projects_root.is_dir():
+        print("Проектов пока нет. Начните: python tools/ledger.py init projects/<slug> --title \"…\"")
+        return 0
+    found = False
+    for proj in sorted(p for p in projects_root.iterdir() if p.is_dir()):
+        prog = proj / "state" / "progress.md"
+        if not prog.exists():
+            continue
+        found = True
+        text = prog.read_text(encoding="utf-8")
+        title = text.splitlines()[0].replace("# Прогресс:", "").strip() if text else proj.name
+        m = re.search(r"Текущий шаг:\s*(.+)", text)
+        done = len(re.findall(r"- \[x\]", text, flags=re.I))
+        ledger = Ledger(proj)
+        todo = []
+        for oid, o in ledger.objects.items():
+            if prefix(oid) == "CHG" and not o.get("processed"):
+                todo.append(f"необработанные сведения {oid}")
+            if prefix(oid) == "DEC" and o.get("state") == "needs_review":
+                todo.append(f"{oid} ждёт пересмотра")
+        print(f"- {proj.name}: «{title}» — текущий шаг {m.group(1).strip() if m else '?'}, "
+              f"выполнено шагов {done}/{len(STEPS)}, объектов в реестре {len(ledger.objects)}")
+        for t in todo:
+            print(f"    ! {t}")
+    if not found:
+        print("Проектов пока нет. Начните: python tools/ledger.py init projects/<slug> --title \"…\"")
+    return 0
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="Операции над реестром решения")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -450,8 +588,36 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("id")
     p = sub.add_parser("stats", help="сводка")
     p.add_argument("project", type=Path)
+    p = sub.add_parser("init", help="создать проект")
+    p.add_argument("project", type=Path)
+    p.add_argument("--title", required=True)
+    p = sub.add_parser("add-source", help="зарегистрировать источник")
+    p.add_argument("project", type=Path)
+    p.add_argument("file", type=Path)
+    p.add_argument("--title", required=True)
+    p.add_argument("--kind", required=True, choices=["document", "table", "website", "interview",
+                                                     "synthetic_interview", "dataset", "image", "audio",
+                                                     "video", "other"])
+    p.add_argument("--access", required=True, choices=["open", "own"])
+    p.add_argument("--url")
+    p.add_argument("--reliability", default="medium", choices=["high", "medium", "low"])
+    p.add_argument("--published")
+    p.add_argument("--notes")
+    p = sub.add_parser("status", help="проекты и текущий шаг")
+    p.add_argument("--root", type=Path, default=ROOT / "projects")
     args = ap.parse_args(argv)
 
+    if args.cmd == "status":
+        return cmd_status(args.root)
+    if args.cmd == "init":
+        return cmd_init(args.project.resolve(), args.title)
+    if args.cmd == "add-source":
+        return cmd_add_source(args.project.resolve(), args.file, args.title, args.kind, args.access,
+                              args.url, args.reliability, args.published, args.notes)
+
+    if not args.project.resolve().is_dir():
+        print(f"Нет папки проекта: {args.project}", file=sys.stderr)
+        return 2
     ledger = Ledger(args.project.resolve())
     if args.cmd == "validate":
         rep = validate(ledger)
