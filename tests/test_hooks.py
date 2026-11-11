@@ -80,3 +80,100 @@ def test_user_prompt_silent_on_ordinary_messages():
 def test_user_prompt_never_fails_on_garbage():
     assert run("user-prompt", "не json").returncode == 0
     assert run("user-prompt", "").returncode == 0
+
+
+# --- словарь возражений (tools/hooks/objection_lexicon.py): языки, маскировка, двузначные слова ---
+sys.path.insert(0, str(ROOT / "tools" / "hooks"))
+import objection_lexicon as LEX  # noqa: E402
+
+SWEARS = [
+    "нахуя ты это сделал", "охуел совсем", "заебал уже", "распиздяй", "долбоёб", "съебись", "проебут",
+    "сука, опять", "бляяяя",                          # повтор букв
+    "х*й знает что", "бл*ть", "f**k this",            # звёздочки
+    "х.у.й", "xyйня какая-то", "пи3дец", "6ля",       # точки, латиница, цифры
+    "fuсk",                                           # кириллическая «с» в латинском слове
+    "nahuy", "pizdec", "blyat",                       # транслит
+    "курва", "kurwa", "chuj", "this is bullshit", "wtf", "scheiße", "putain", "merde",
+    "joder", "mierda", "porra", "caralho", "cazzo", "vaffanculo", "siktir", "amk",
+    "你他妈的", "傻逼", "卧槽", "くそ", "씨발",
+]
+PHRASES = [
+    "это не так", "ты меня не понял", "це не так", "to nie tak", "not what I asked", "das ist falsch",
+    "c'est faux", "está mal", "isso está errado", "non hai capito", "yanlış", "不对", "わかってない", "틀렸어",
+]
+LOOKALIKES = [
+    "сукно на столе", "хуже не стало", "небо и себе", "ебитда выросла на 6%", "putin", "computadora",
+    "shift+tab", "**Главное** в отчёте", "2*3=6 и N*price", "360x640 и 45s", "Scheibe", "употреблять",
+    "оскорблять", "хлеба", "требую отчёт", "скребок", "хулиган", "хутор", "страхуй", "сравнение",
+    "assistant", "passport", "cocktail", "Dickens", "скипидар", "дебетовая карта", "подъезд", "учебник",
+    "гребля", "shiitake", "Sussex", "z.a.e.b.a.l — название навыка", "z a e b a l",
+]
+
+
+def test_lexicon_catches_swearing_in_many_languages_and_masks():
+    for text in SWEARS:
+        assert "мат" in LEX.detect(text), text
+
+
+def test_lexicon_catches_objection_phrases_in_many_languages():
+    for text in PHRASES:
+        assert LEX.detect(text), text
+
+
+def test_lexicon_ignores_lookalike_words():
+    for text in LOOKALIKES:
+        assert LEX.detect(text) == [], text
+
+
+def test_lexicon_praise_is_not_objection_unless_complaint():
+    assert LEX.detect("заебись, работает!") == [] and LEX.detect("fucking awesome") == []
+    assert "мат" in LEX.detect("охуенно, но опять не то")
+
+
+# Деловые возражения: так пишут в компании, где переписку с ИИ могут читать коллеги.
+BUSINESS_OBJECTIONS = [
+    "Здесь пониженное качество, хотя должно быть выше",
+    "Сильно завышены показатели, требуется перерасчёт",
+    "Не очень реалистично, надо провести дополнительные исследования по цифрам",
+    "Ты не так сделал, перечитай сессию",
+    "Цифры по ARPU выглядят завышенными",
+    "Прогноз выручки слишком оптимистичный",
+    "Откуда эта цифра 46%?",
+    "Это противоречит данным из брифа",
+    "Не учтены расходы на поддержку",
+    "Раздел про конкурентов проработан поверхностно",
+    "Расчёт некорректный, цифры не сходятся",
+    "Мне кажется, здесь занижен CAC",
+    "Складывается впечатление, что данные взяты с потолка",
+    "Выборка маленькая, нерепрезентативно",
+    "Мы это уже обсуждали на прошлой неделе",
+    "Сомневаюсь, что абоненты заплатят 299 ₽",
+    "The numbers don't add up",
+    "Where does this number come from?",
+]
+BUSINESS_NEUTRAL = [
+    "Посчитай ARPU и EBITDA по РТС",
+    "Сравни ЕБИТДА и ебида у РТТ и РТС",
+    "Посчитай OIBDA, ОИБДА, ЕБИТ и EBIT",
+    "ЕБС и ЕБРР в источниках",
+    "ПИД-регулятор и ВОЛС",
+    "CAPEX, OPEX, LTV, CAC, NPS, CSI, MAU, DAU",
+    "ФАС, РКН, СОРМ, ЦОД, МСП, B2B, B2C",
+    "Какие показатели у МегаФона за 2025?",
+    "Проведи исследование рынка eSIM",
+    "Добавь раздел про качество связи",
+    "Качество сети 5G у нас выше рынка",
+    "Подготовь план эксперимента со stop/go",
+    "Выручка выросла на 12%",
+    "Почему ты выбрал вариант A?",
+]
+
+
+def test_lexicon_catches_polite_business_objections():
+    for text in BUSINESS_OBJECTIONS:
+        assert LEX.detect(text), text
+
+
+def test_lexicon_ignores_business_terms_and_neutral_tasks():
+    for text in BUSINESS_NEUTRAL:
+        assert LEX.detect(text) == [], text
