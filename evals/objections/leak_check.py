@@ -18,7 +18,8 @@ import cost as C  # noqa: E402
 FORBIDDEN = ("tools/hooks", "objection_lexicon", "strategist_hook", "tests/", "test_hooks", "WORK_LOG",
              "DESCRIPTION", "evals/objections/PROTOCOL", "evals/objections/score", "self-audit",
              "objections/sets/", "RESULTS", "round2/", "round3/", "round4/PROTOCOL", "round4/lenses", "stage2/PROTOCOL", "results_",
-             "escalation/sets/polite.json", "escalation/PROTOCOL", "escalation/runs", "polite2/PROTOCOL", "polite2/runs")
+             "escalation/sets/polite.json", "escalation/PROTOCOL", "escalation/runs", "polite2/PROTOCOL", "polite2/runs",
+             "polite2/sets", "polite2/RESULTS", "polite3/PROTOCOL", "polite3/runs")
 
 
 def rollouts(name: str):
