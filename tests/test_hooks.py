@@ -229,3 +229,44 @@ def test_no_after_intro_sentence():
     assert LEX.detect("Работаем по кейсу X. Нет, твой вывод о цене слишком сильный.")
     assert LEX.detect("Посмотрел отчёт. Мимо. Нужна маржа, а не доля.")
     assert not LEX.detect("Посмотрел отчёт. Нетрудно будет поправить заголовки?")
+
+
+def _say(text, sid="s-1"):
+    return run("user-prompt", json.dumps({"session_id": sid, "prompt": text}, ensure_ascii=False)).stdout
+
+
+def test_repeat_objections_escalate(monkeypatch, tmp_path):
+    """Повторные возражения в одной сессии: 1-е — обычная подсказка, 2-е — проверить прошлый аудит, 3-е — стоп."""
+    monkeypatch.setenv("STRATEGIST_HOOK_STATE", str(tmp_path))
+    first = _say("Нет, вывод о цене неверный.")
+    assert "skills/self-audit" in first and "повторное" not in first
+    assert "повторное возражение" in _say("Опять не то, ты не учёл отток.")
+    third = _say("Ты снова ошибся в расчёте.")
+    assert "3-е возражение" in third and "AGENTS §6" in third
+    assert "skills/self-audit" in _say("Нет, это неверно.", sid="другая-сессия") \
+        and "повторное" not in _say("Спасибо", sid="третья")
+
+
+def test_repeat_streak_resets_on_thanks_and_ignores_ordinary(monkeypatch, tmp_path):
+    monkeypatch.setenv("STRATEGIST_HOOK_STATE", str(tmp_path))
+    _say("Нет, вывод о цене неверный.")
+    assert _say("Добавь раздел про риски") == ""  # обычное сообщение молчит и серию не сбрасывает
+    assert "повторное возражение" in _say("Опять не то, перепроверь отток.")
+    _say("Спасибо, теперь верно.")
+    assert "повторное" not in _say("Нет, тут ошибка в марже.")
+
+
+def test_profanity_only_counts_half(monkeypatch, tmp_path):
+    monkeypatch.setenv("STRATEGIST_HOOK_STATE", str(tmp_path))
+    _say("бля, ну и день")  # только мат без спора — вес 0,5
+    assert "повторное" not in _say("Нет, вывод о цене неверный.")  # 1,5 < 2
+
+
+def test_repeat_window_is_30_minutes(monkeypatch, tmp_path):
+    monkeypatch.setenv("STRATEGIST_HOOK_STATE", str(tmp_path))
+    sys.path.insert(0, str(HOOK.parent))
+    import strategist_hook as H
+    assert H.streak("w", 1.0, now=1000.0) == 1.0
+    assert H.streak("w", 1.0, now=1000.0 + 29 * 60) == 2.0
+    assert H.streak("w", 1.0, now=1000.0 + 61 * 60) == 1.0  # старые возражения вышли из окна
+    assert H.streak("", 1.0) == 1.0  # без session_id истории нет

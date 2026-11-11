@@ -7,6 +7,8 @@
   user-prompt    → если сообщение человека похоже на возражение по существу («это не так», «ты не понял»,
                    «перечитай», раздражение, мат на 13 языках), добавляет агенту одну строку: начать с skills/self-audit.
                    Только регулярные выражения, без модели и без сети; решает по-прежнему агент.
+                   Повторное возражение за 30 минут в той же сессии — подсказка жёстче: 2-е — проверить прошлый
+                   самоаудит, 3-е — остановить правки до подтверждения человека и предложить эскалацию (AGENTS §6).
 
 Хук никогда не ломает работу: при любой собственной ошибке выходит с кодом 0.
 """
@@ -106,10 +108,80 @@ def detect_objection(text: str):
     return LEX.detect(QUOTED.sub(" ", (text or "")[:4000]))
 
 
+# --- повторные возражения: нарастание подсказки (идея лестницы уровней Z.A.E.B.A.L., код свой) -------------
+# Счёт — по session_id события, в окне 30 минут, во временной папке системы (не в репозитории).
+# Вес: возражение по существу — 1, только мат без других признаков — 0,5. Благодарность/согласие сбрасывает счёт.
+WINDOW_SEC = 30 * 60
+ACK = re.compile(r"^\W*(?:ок|окей|ok|okay|спасибо|благодарю|отлично|супер|принято|да,?\s+(?:верно|так|теперь\s+так)"
+                 r"|теперь\s+(?:верно|правильно)|thanks|thank\s+you|great|perfect)\b", re.IGNORECASE)
+REPEAT_HINT = (" Это повторное возражение за последние 30 минут: сначала найди в `run_log.md` прошлый самоаудит "
+               "и проверь, что он на деле изменил; не повторяй прежний вывод другими словами. Если аудит уже был, "
+               "а человек снова отклоняет результат, — эскалация по AGENTS §6 (`ledger.py route … --failed`).")
+STOP_HINT = ("Стратег: уже {n}-е возражение за 30 минут ({labels}). Если это спор по существу — остановись: не правь "
+             "файлы, пока человек явно не подтвердит продолжение. Покажи 3–5 строк: что уже пробовал, какая опора "
+             "сломана, что не проверено, — и предложи эскалацию по AGENTS §6 (`ledger.py route … --failed`). "
+             "Если это не спор — просто ответь.")
+
+
+def state_file(session_id: str) -> Path:
+    import hashlib
+    import tempfile
+    base = Path(os.environ.get("STRATEGIST_HOOK_STATE") or Path(tempfile.gettempdir()) / "strategist-hook")
+    return base / (hashlib.sha256(session_id.encode("utf-8")).hexdigest()[:24] + ".json")
+
+
+def session_id(payload: str) -> str:
+    try:
+        data = json.loads(payload)
+    except ValueError:
+        return ""
+    sid = data.get("session_id") or data.get("sessionId") if isinstance(data, dict) else ""
+    return sid if isinstance(sid, str) else ""
+
+
+def streak(sid: str, weight: float, reset: bool = False, now: float = None) -> float:
+    """Сумма весов возражений сессии в окне (вместе с текущим). Любая ошибка — как будто истории нет."""
+    import time
+    now = time.time() if now is None else now
+    if not sid:
+        return weight
+    f = state_file(sid)
+    try:
+        hist = json.loads(f.read_text(encoding="utf-8")) if f.exists() else []
+        hist = [h for h in hist if isinstance(h, list) and len(h) == 2 and now - float(h[0]) < WINDOW_SEC]
+    except (OSError, ValueError, TypeError):
+        hist = []
+    if reset:
+        hist = []
+    if weight:
+        hist.append([now, weight])
+    try:
+        f.parent.mkdir(parents=True, exist_ok=True)
+        tmp = f.with_suffix(".tmp")
+        tmp.write_text(json.dumps(hist), encoding="utf-8")
+        os.replace(tmp, f)
+    except OSError:
+        pass
+    return sum(float(h[1]) for h in hist)
+
+
 def user_prompt(payload: str) -> int:
-    labels = detect_objection(prompt_text(payload))
-    if labels:
-        print(SELF_AUDIT_HINT.format(labels=", ".join(dict.fromkeys(labels))))
+    text = prompt_text(payload)
+    labels = detect_objection(text)
+    sid = session_id(payload)
+    if not labels:
+        if sid and ACK.search(text or ""):
+            streak(sid, 0, reset=True)  # «спасибо, теперь верно» — серия закончилась
+        return 0
+    weight = 0.5 if set(labels) == {"мат"} else 1.0
+    total = streak(sid, weight)
+    shown = ", ".join(dict.fromkeys(labels))
+    if total >= 3:
+        print(STOP_HINT.format(n=int(total) if total == int(total) else total, labels=shown))
+    elif total >= 2:
+        print(SELF_AUDIT_HINT.format(labels=shown) + REPEAT_HINT)
+    else:
+        print(SELF_AUDIT_HINT.format(labels=shown))
     return 0
 
 
