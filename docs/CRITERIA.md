@@ -24,7 +24,7 @@
 | Рабочий процесс | `workflows/strategy.md`, 8 шагов, C1–C3 | 2 E2E-прогона (Codex, ZCode) 8/8 | ✅ |
 | Работа с контекстом и знаниями | AGENTS / skills / knowledge / projects раздельно; progress.md; реестр с supersede | restart-тест пройден | ✅ |
 | Навыки | 13 навыков `skills/` (вкл. `self-audit` — поиск сломанного основания после возражения человека) | используются в E2E | ✅ |
-| Хуки | SessionStart (env, status, models check), PostToolUse (validate) | тесты хуков; E2E | ✅ |
+| Хуки | SessionStart (env, status, models check), UserPromptSubmit (возражение → self-audit), PostToolUse (validate) | тесты хуков; E2E (без UserPromptSubmit) | ✅ |
 | Субагенты | `source-extractor`, `claim-verifier` (T1) | проверено в Codex на Luna | ✅ |
 | Маршрутизация (+ «специализированные модели, например Jev») | T0–T4, лестница effort, каталог моделей, `delegate.py`, **модель решений `decide.py`** | verify: ≈412K → короткий список; gate: 5 артефактов за 1 вызов (≈47K вместо ≈165K) | 🟡 нет замера «агент vs без маршрутизации» на полном прогоне |
 | Интервью и модельные респонденты | навык `interviews`, шаблоны, synthetic ≠ fact | шаблоны есть, в E2E не прогонялось | 🟡 |

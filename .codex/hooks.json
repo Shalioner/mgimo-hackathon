@@ -3,6 +3,9 @@
     "SessionStart": [
       {"hooks": [{"type": "command", "command": "python3 tools/hooks/strategist_hook.py session-start", "timeout": 30, "additionalContextLimit": 4000}]}
     ],
+    "UserPromptSubmit": [
+      {"hooks": [{"type": "command", "command": "python3 tools/hooks/strategist_hook.py user-prompt", "timeout": 10}]}
+    ],
     "PostToolUse": [
       {"hooks": [{"type": "command", "command": "python3 tools/hooks/strategist_hook.py after-write", "timeout": 60}]}
     ]

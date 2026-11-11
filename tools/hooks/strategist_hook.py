@@ -4,6 +4,9 @@
   session-start  → печатает `ledger.py status`: агент сразу видит проекты, текущий шаг и то, что ждёт решения.
   after-write    → если инструмент записал файл в projects/<case>/state/ledger/, запускает validate для этого проекта.
                    Есть ошибки → код 2 и текст в stderr: среда возвращает его агенту как обратную связь.
+  user-prompt    → если сообщение человека похоже на возражение по существу («это не так», «ты не понял»,
+                   «перечитай», раздражение, мат), добавляет агенту одну строку: начать с skills/self-audit.
+                   Только регулярные выражения, без модели и без сети; решает по-прежнему агент.
 
 Хук никогда не ломает работу: при любой собственной ошибке выходит с кодом 0.
 """
@@ -74,6 +77,59 @@ def after_write(payload: str) -> int:
     return 0
 
 
+# --- возражение человека → skills/self-audit -------------------------------------------------------
+# Словарь намеренно короткий: ложное срабатывание стоит одну строку контекста, решение — за агентом.
+OBJECTION = [
+    (r"\bэто\s+(?:вс[её]\s+)?(?:не\s+так(?!\s+(?:уж|плохо|страшно|важно|сложно|много|давно|просто|быстро|часто))"
+     r"|неверно|неправильно|ошибка|бред|чушь|ерунда|не\s+то)\b", "это не так"),
+    (r"\bты\s+(?:меня\s+|вообще\s+|опять\s+|снова\s+|ничего\s+)*не\s+(?:понял|понимаешь|услышал|слышишь|прочитал|читаешь|то)",
+     "ты не понял"),
+    (r"\b(?:опять|снова|вс[её]\s+ещ[её])\s+(?:не\s+то|не\s+так|неверно|неправильно|ошибка|то\s+же\s+самое)\b", "опять не то"),
+    (r"\b(?:пере)?читай\s+(?:чат|переписку|бриф|выше|ещ[её]\s+раз|внимательн)|\bперечитай\b", "перечитай"),
+    (r"\bя\s+же\s+(?:говорил|писал|сказал|просил|объяснял)|\bсколько\s+(?:раз|можно)\b", "я же говорил"),
+    (r"\b(?:ты\s+)?(?:ошибаешься|не\s+прав)\b|\bне\s+согласен\b|\bнеправда\b", "не согласен"),
+    (r"\b(?:бесишь|бесит|достал|задолбал|надоел|раздражает)", "раздражение"),
+    (r"(?:\b|за|до|на|вы)(?:ху[йеёияю]|пизд|[её]ба[нлт]|[её]б[уи]|бля)", "мат"),
+    (r"\b(?:that'?s|this\s+is|it'?s)\s+(?:not\s+(?:right|true|correct|what)|wrong)\b|\byou\s+(?:didn'?t|did\s+not|don'?t)\s+"
+     r"(?:understand|get\s+it|listen|read)|\bre-?read\b|\bwtf\b", "it's wrong"),
+]
+OBJECTION_RE = [(re.compile(p, re.IGNORECASE), label) for p, label in OBJECTION]
+PRAISE = re.compile(r"\b(?:заебись|охуенн|пиздат|ахуенн|збс)", re.IGNORECASE)
+QUOTED = re.compile(r"```.*?```|`[^`\n]*`|«[^»]*»|\"[^\"\n]*\"|^\s*>.*$", re.DOTALL | re.MULTILINE)
+SELF_AUDIT_HINT = ("Стратег: похоже на возражение по существу ({labels}). Если человек оспаривает вывод — сначала "
+                   "`skills/self-audit`: найди в реестре сломанное основание (`ledger.py trace`), не переписывай текст "
+                   "и не поднимай уровень модели. Если это правка стиля, вопрос или шутка — просто ответь.")
+
+
+def prompt_text(payload: str) -> str:
+    """Текст сообщения человека из события UserPromptSubmit (Claude Code и Codex: поле prompt)."""
+    try:
+        data = json.loads(payload)
+    except ValueError:
+        return payload
+    if isinstance(data, dict):
+        for key in ("prompt", "user_prompt", "message", "text"):
+            if isinstance(data.get(key), str):
+                return data[key]
+    return ""
+
+
+def detect_objection(text: str):
+    """Метки найденных признаков возражения; цитаты, код и вставки (>…) не считаются словами человека."""
+    own = QUOTED.sub(" ", (text or "")[:4000]).replace("ё", "е").replace("Ё", "Е")
+    labels = [label for rx, label in OBJECTION_RE if rx.search(own)]
+    if labels == ["мат"] and PRAISE.search(own):
+        return []  # «заебись, работает» — похвала, не возражение
+    return labels
+
+
+def user_prompt(payload: str) -> int:
+    labels = detect_objection(prompt_text(payload))
+    if labels:
+        print(SELF_AUDIT_HINT.format(labels=", ".join(dict.fromkeys(labels))))
+    return 0
+
+
 def read_stdin(timeout: float = 2.0) -> str:
     """Читает JSON события, но не дольше timeout: незакрытый stdin не должен вешать сессию."""
     try:
@@ -113,6 +169,8 @@ def main() -> int:
             except ValueError:
                 pass
             return after_write(payload)
+        if mode == "user-prompt":
+            return user_prompt(read_stdin())
     except Exception as exc:  # хук не должен ронять сессию
         print(f"Стратег-хук: внутренняя ошибка {exc!r} — пропускаю", file=sys.stderr)
     return 0

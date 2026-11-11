@@ -55,5 +55,28 @@ def test_hook_configs_point_to_same_script():
     claude = json.loads((ROOT / ".claude/settings.json").read_text(encoding="utf-8"))
     codex = json.loads((ROOT / ".codex/hooks.json").read_text(encoding="utf-8"))
     for cfg in (claude, codex):
-        cmds = [h["command"] for ev in ("SessionStart", "PostToolUse") for blk in cfg["hooks"][ev] for h in blk["hooks"]]
-        assert all("strategist_hook.py" in c for c in cmds) and len(cmds) == 2
+        cmds = [h["command"] for ev in ("SessionStart", "UserPromptSubmit", "PostToolUse") for blk in cfg["hooks"][ev] for h in blk["hooks"]]
+        assert all("strategist_hook.py" in c for c in cmds) and len(cmds) == 3
+
+
+OBJECTIONS = ["это не так, перечитай чат", "как же ты меня бесишь", "ты меня не понял", "опять не то",
+              "я же говорил про 299", "что за хуйня", "That's wrong", "Ты вообще не понимаешь задачу"]
+NOT_OBJECTIONS = ["это не так уж плохо, продолжай", "продолжай", "сделай короче", "заебись, работает!",
+                  "почему здесь 31%?", "проверь «это не так» в цитате", "> это неверно\nпосмотри", "корабля, рубля"]
+
+
+def test_user_prompt_hints_self_audit_on_objection():
+    for text in OBJECTIONS:
+        r = run("user-prompt", json.dumps({"hook_event_name": "UserPromptSubmit", "prompt": text}, ensure_ascii=False))
+        assert r.returncode == 0 and "skills/self-audit" in r.stdout, text
+
+
+def test_user_prompt_silent_on_ordinary_messages():
+    for text in NOT_OBJECTIONS:
+        r = run("user-prompt", json.dumps({"prompt": text}, ensure_ascii=False))
+        assert r.returncode == 0 and r.stdout.strip() == "", text
+
+
+def test_user_prompt_never_fails_on_garbage():
+    assert run("user-prompt", "не json").returncode == 0
+    assert run("user-prompt", "").returncode == 0
