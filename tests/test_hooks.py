@@ -177,3 +177,18 @@ def test_lexicon_catches_polite_business_objections():
 def test_lexicon_ignores_business_terms_and_neutral_tasks():
     for text in BUSINESS_NEUTRAL:
         assert LEX.detect(text) == [], text
+
+
+# Категории, добавленные по dev-части отложенного набора (свои формулировки, не из наборов).
+DEV_CATEGORIES = [
+    "Вывод, по-моему, неверный", "Ты ошибся в базе для процентов", "Я просил про розницу, а ты опять про B2B",
+    "Нет, так эффект не считают", "Прошу скорректировать прогноз выручки", "Здесь смешаны разные когорты",
+    "Мы же договаривались без органики", "Это точно данные за третий квартал?", "I don't think this holds up",
+]
+
+
+def test_lexicon_dev_categories():
+    for text in DEV_CATEGORIES:
+        assert LEX.detect(text), text
+    for text in ("Да, продолжай по плану, всё ок", "Нетипичный сегмент добавь в обзор", "Прошу собрать обзор"):
+        assert LEX.detect(text) == [], text

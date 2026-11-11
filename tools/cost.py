@@ -23,6 +23,7 @@ import json
 import os
 import re
 import sqlite3
+from urllib.parse import quote
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -71,11 +72,15 @@ def codex_homes() -> List[Path]:
 def codex_usage(cwd_sub: str, since, until) -> Iterable[Tuple[str, str, dict, str]]:
     """(среда, модель, usage, id) по потокам Codex, чей cwd содержит cwd_sub и чьё время попадает в окно."""
     for home in codex_homes():
-        con = sqlite3.connect(f"file:{home / 'state_5.sqlite'}?mode=ro", uri=True)
         try:
-            rows = con.execute("select id, rollout_path, model, created_at, updated_at, cwd from threads").fetchall()
-        finally:
-            con.close()
+            con = sqlite3.connect(f"file:{quote(str(home / 'state_5.sqlite'))}?mode=ro", uri=True)
+            try:
+                rows = con.execute("select id, rollout_path, model, created_at, updated_at, cwd from threads").fetchall()
+            finally:
+                con.close()
+        except sqlite3.Error as exc:  # база занята или недоступна — не роняем весь отчёт
+            print(f"cost.py: пропущен {home}: {exc}", file=sys.stderr)
+            continue
         for tid, path, model, c, u, cwd in rows:
             if cwd_sub not in (cwd or ""):
                 continue

@@ -1,0 +1,405 @@
+{
+  "generator": "sol_r1",
+  "items": [
+    {
+      "text": "Нет, вывод неверный. Из снижения подключений не следует, что рынок насытился.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Ты опять посчитал выручку как прибыль. Это разные вещи, переделай расчёт.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Что за хрень с выборкой? Мы обсуждаем действующих абонентов, а у тебя только новые.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Меня не устраивает этот результат: ты просто проигнорировал данные по регионам.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Блин, я просил снизить отток, а ты принёс план привлечения. Задачу потерял.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Цифры не бьются. При таком CAC окупаемости за три месяца тут нет.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Это слабая рекомендация. Скидка всем подряд съест маржу, а ты этот риск даже не посчитал.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Нет, ты не так понял отчет. Там рост в рублях, а не в абонентах, читай внимательней.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "This conclusion is wrong. You compared monthly churn with an annual figure.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "I am not happy with this analysis. You dropped the prepaid segment and still called it a market view.",
+      "objection": true,
+      "level": "direct"
+    },
+    {
+      "text": "Коллеги, в расчёте эффекта дважды учтена одна и та же экономия. Прошу скорректировать итог.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Прошу пересмотреть рекомендацию: она не учитывает ограничение по стоимости субсидирования устройств.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Спасибо за материал. Однако приведённые данные подтверждают интерес к услуге, а не готовность за неё платить.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "С выводом о приоритетности молодёжного сегмента согласиться не могу: сравнение доходности сегментов отсутствует.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Обратите внимание: в исходной таблице указана выручка с НДС. Текущая оценка маржи поэтому завышена.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Предлагаю вернуться к постановке задачи. Требовалась стратегия действующего продукта, а в документе рассматривается запуск нового.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "В текущем виде прогноз не обоснован: темп роста одного квартала перенесён на весь горизонт без поправки на сезонность.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Просьба уточнить основание для отказа от пилота. Результаты исследования, на которые вы ссылаетесь, такого решения не поддерживают.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Не могу подтвердить указанную оценку рынка. В неё включены корпоративные подключения, хотя рассматриваем только розницу.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Варианты пока нельзя считать равноценно проработанными: затраты на интеграцию учтены только для одного из них.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Прошу учесть ранее переданный отчёт по оттоку. Его результаты противоречат тезису о цене как основной причине ухода.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Есть существенное замечание к методике: ответы модельных респондентов использованы как доказательство спроса.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "План проверки требует пересмотра. Рост кликов сам по себе не подтвердит гипотезу об увеличении платящей базы.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Please revisit the baseline. The control group already had the discount, so the uplift estimate is overstated.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "Thank you for the draft. I disagree with the proposed ranking: implementation costs are missing for the preferred option.",
+      "objection": true,
+      "level": "business"
+    },
+    {
+      "text": "А мы точно всё ещё решаем задачу удержания? По последним страницам ощущение, что уже продаём рекламу.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Интересно, как из «не пробовали» получилось «не нужно».",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Помню, договаривались не брать пандемийный год за норму. Тут он снова база?",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "У нас, кажется, очень удачно исчезли расходы на поддержку из финальной экономики.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "То есть трое участников интервью теперь представляют весь сегмент?",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Если убрать самый оптимистичный сценарий, рекомендация вообще останется той же?",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Может, я пропустил: где в этих данных видно, что абоненты уходят именно из-за цены?",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Хорошо бы понять, почему вчера этот же показатель был аргументом против запуска, а сегодня — за.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Красиво растём. Особенно если не вычитать отключения.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Тут точно проценты, а не процентные пункты? Разница для решения довольно заметная.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Мы ведь хотели сравнить тарифы с одинаковым наполнением. Или безлимит теперь считаем бесплатной мелочью?",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Смущает, что эффект появляется ровно там, где начинается допущение о нулевом оттоке.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Я бы пока не называл это подтверждённой гипотезой. Единственный источник, похоже, наш же прошлый слайд.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Are we assuming every trial user converts now? That would explain the lovely payback period.",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "I thought we agreed to exclude handset sales. Has that changed, or is the revenue comparison still mixing them in?",
+      "objection": true,
+      "level": "subtle"
+    },
+    {
+      "text": "Собери карту конкурентов по семейным подпискам.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "На завтра нужен черновик плана исследования, начни с открытых источников.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Давай отдельно проработаем гипотезы для малого бизнеса.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Подготовь три сценария запуска и вариант ничего не менять.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Посчитай чувствительность окупаемости к стоимости привлечения.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Нужен список данных, которые запросим у аналитиков для проверки гипотезы.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Возьми следующий этап — план пилота по двум регионам.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "сделай пжл краткую записку для продуктового комитета к пятнице",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Добавь в план исследования интервью с теми, кто недавно сменил оператора.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Сформулируй критерии остановки эксперимента до запуска.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Draft a research brief for the family plan opportunity.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "Build a simple scenario model for the pilot, including a no-launch option.",
+      "objection": false,
+      "kind": "task"
+    },
+    {
+      "text": "На какой странице отчёта описана методика?",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "Объясни, пожалуйста, как работает когортный анализ.",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "Покажи формулу расчёта срока окупаемости.",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "Что у нас идёт следующим шагом после выбора варианта?",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "Какие поля нужны для расчёта оттока?",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "можешь раскрыть сокращение NPS при первом упоминании?",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "Где лежит итоговая версия брифа?",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "Could you walk me through the difference between gross adds and net adds?",
+      "objection": false,
+      "kind": "question"
+    },
+    {
+      "text": "Да, этот вариант берём в пилот.",
+      "objection": false,
+      "kind": "ack"
+    },
+    {
+      "text": "Ок, продолжай по плану.",
+      "objection": false,
+      "kind": "ack"
+    },
+    {
+      "text": "Бриф подтверждаю, можно переходить к исследованию.",
+      "objection": false,
+      "kind": "ack"
+    },
+    {
+      "text": "Принято. Допущения оставляем такими до получения данных.",
+      "objection": false,
+      "kind": "ack"
+    },
+    {
+      "text": "всё ок, иди дальше",
+      "objection": false,
+      "kind": "ack"
+    },
+    {
+      "text": "Agreed. Keep going with option B.",
+      "objection": false,
+      "kind": "ack"
+    },
+    {
+      "text": "Сократи до одной страницы, выводы сохрани.",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "Убери канцелярит, по смыслу всё устраивает.",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "Сделай тон спокойнее, это пойдёт коллегам.",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "Только заголовок перепиши попроще.",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "Можно без эмодзи и восклицательных знаков?",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "Разбей длинный абзац на пункты, содержание не трогай.",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "текст норм, убери только повторы во вступлении",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "Make this more concise and keep the numbers and recommendation as they are.",
+      "objection": false,
+      "kind": "style"
+    },
+    {
+      "text": "Для сценарной таблицы возьми ARPU 480 ₽ и churn 2,1% в месяц как допущения.",
+      "objection": false,
+      "kind": "terms"
+    },
+    {
+      "text": "Добавь столбцы CAPEX, OPEX и EBITDA за 2025 и 2026 годы, значения пока оставь пустыми.",
+      "objection": false,
+      "kind": "terms"
+    },
+    {
+      "text": "Нужен шаблон сравнения тарифов: 30 ГБ, 600 минут и абонплата 650 ₽/мес.",
+      "objection": false,
+      "kind": "terms"
+    },
+    {
+      "text": "Вынеси LTE и 5G на отдельный слайд, по 2 строки на каждую технологию.",
+      "objection": false,
+      "kind": "terms"
+    },
+    {
+      "text": "В план мониторинга включи ФАС, РКН и IMOEX; проверка раз в 2 недели.",
+      "objection": false,
+      "kind": "terms"
+    },
+    {
+      "text": "Add an MNP section with 3 fields: port-ins, port-outs and net balance.",
+      "objection": false,
+      "kind": "terms"
+    }
+  ]
+}
