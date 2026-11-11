@@ -270,3 +270,9 @@ def test_repeat_window_is_30_minutes(monkeypatch, tmp_path):
     assert H.streak("w", 1.0, now=1000.0 + 29 * 60) == 2.0
     assert H.streak("w", 1.0, now=1000.0 + 61 * 60) == 1.0  # старые возражения вышли из окна
     assert H.streak("", 1.0) == 1.0  # без session_id истории нет
+
+
+def test_polite_corporate_disagreement():
+    for text in ("Коллеги, благодарю за проработку, однако позволю себе не согласиться с выводом.",
+                 "С вашим выводом сложно согласиться.", "I respectfully disagree with the conclusion."):
+        assert LEX.detect(text), text
