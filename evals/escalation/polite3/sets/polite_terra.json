@@ -1,0 +1,245 @@
+{
+  "generator": "polite_terra",
+  "items": [
+    {
+      "text": "Коллеги, позволю себе не согласиться с предложением сократить поддержку: для корпоративных клиентов это критичная часть сервиса.",
+      "class": "objection"
+    },
+    {
+      "text": "Как руководитель продукта, я не согласен с выводом о готовности рынка; данных по действующим клиентам пока недостаточно.",
+      "class": "objection"
+    },
+    {
+      "text": "Просил бы не согласиться с оценкой финансового эффекта до уточнения состава расходов.",
+      "class": "objection"
+    },
+    {
+      "text": "На мой взгляд, сложно согласиться с прогнозом роста без учёта сезонности подключений.",
+      "class": "objection"
+    },
+    {
+      "text": "Коллеги, не могу согласиться с приоритетом нового тарифа: существующая база нуждается в доработке условий.",
+      "class": "objection"
+    },
+    {
+      "text": "Как юрист, я не согласен с выводом об отсутствии регуляторных ограничений в предлагаемой схеме.",
+      "class": "objection"
+    },
+    {
+      "text": "Позволю себе не согласиться с тем, что снижение цены само по себе обеспечит удержание.",
+      "class": "objection"
+    },
+    {
+      "text": "I disagree with the recommendation to discontinue assisted onboarding; our enterprise customers still rely on it.",
+      "class": "objection"
+    },
+    {
+      "text": "I do not agree that the projected margin includes all relevant support costs.",
+      "class": "objection"
+    },
+    {
+      "text": "With respect, I disagree with treating the pilot results as representative of the entire customer base.",
+      "class": "objection"
+    },
+    {
+      "text": "Коллеги, полагаю, что предложенный горизонт запуска излишне оптимистичен с учётом интеграций.",
+      "class": "objection"
+    },
+    {
+      "text": "Со стороны финансов просил бы пересмотреть расчёт: расходы на сопровождение в модели отсутствуют.",
+      "class": "objection"
+    },
+    {
+      "text": "На мой взгляд, вывод о причинах оттока преждевременен: корреляция не подтверждает причинную связь.",
+      "class": "objection"
+    },
+    {
+      "text": "Позволю себе обратить внимание, что сегмент B2B нельзя оценивать по общей динамике рынка.",
+      "class": "objection"
+    },
+    {
+      "text": "Как руководитель продукта, предлагаю сохранить текущий канал продаж: его вклад в подключение клиентов недооценён.",
+      "class": "objection"
+    },
+    {
+      "text": "Коллеги, юридическая оценка пока не позволяет рекомендовать запуск в обозначенной конфигурации.",
+      "class": "objection"
+    },
+    {
+      "text": "Не могу не отметить, что рекомендация увеличить рекламный бюджет опережает проверку конверсии.",
+      "class": "objection"
+    },
+    {
+      "text": "The marketing team would question the proposed positioning: it does not address the main customer barrier.",
+      "class": "objection"
+    },
+    {
+      "text": "From a finance perspective, the payback estimate omits acquisition costs and needs revision.",
+      "class": "objection"
+    },
+    {
+      "text": "Our B2B team sees a material risk in replacing dedicated support with a fully automated channel.",
+      "class": "objection"
+    },
+    {
+      "text": "Коллеги, согласен с предложением начать с пилота на ограниченном сегменте.",
+      "class": "agreement"
+    },
+    {
+      "text": "Позволю себе согласиться: проверка удержания до масштабирования выглядит обоснованной.",
+      "class": "agreement"
+    },
+    {
+      "text": "Как руководитель продукта, не могу не согласиться с приоритетом упрощения подключения.",
+      "class": "agreement"
+    },
+    {
+      "text": "На мой взгляд, сложно не согласиться с выводом о необходимости уточнить экономику тарифа.",
+      "class": "agreement"
+    },
+    {
+      "text": "Со стороны финансов согласен с предложенным порядком проверки затрат.",
+      "class": "agreement"
+    },
+    {
+      "text": "Коллеги, я согласна с рекомендацией отдельно рассмотреть потребности корпоративных клиентов.",
+      "class": "agreement"
+    },
+    {
+      "text": "Как юрист, могу согласиться с необходимостью заранее оценить договорные ограничения.",
+      "class": "agreement"
+    },
+    {
+      "text": "Не могу не согласиться: для принятия решения нам действительно нужен контрольный сегмент.",
+      "class": "agreement"
+    },
+    {
+      "text": "Согласен с выводом, что текущих данных недостаточно для надёжного прогноза.",
+      "class": "agreement"
+    },
+    {
+      "text": "Коллеги, позволю себе согласиться с предложением связать коммуникацию с доступными функциями продукта.",
+      "class": "agreement"
+    },
+    {
+      "text": "От лица B2B согласен с тем, что условия поддержки следует проверить до запуска.",
+      "class": "agreement"
+    },
+    {
+      "text": "Сложно не согласиться с необходимостью выделить отдельный бюджет на сопровождение.",
+      "class": "agreement"
+    },
+    {
+      "text": "Как представитель маркетинга, согласна с предложенной последовательностью тестирования сообщений.",
+      "class": "agreement"
+    },
+    {
+      "text": "Коллеги, согласен: обозначенные критерии помогут вовремя пересмотреть решение.",
+      "class": "agreement"
+    },
+    {
+      "text": "Не могу не согласиться с тем, что исследование причин оттока должно предшествовать изменению цены.",
+      "class": "agreement"
+    },
+    {
+      "text": "На мой взгляд, с такой оценкой рисков можно согласиться; ключевые зависимости отражены корректно.",
+      "class": "agreement"
+    },
+    {
+      "text": "I agree that the pilot should include a clear success threshold.",
+      "class": "agreement"
+    },
+    {
+      "text": "I cannot disagree with the recommendation to validate the cost assumptions first.",
+      "class": "agreement"
+    },
+    {
+      "text": "From the legal team, I agree with reviewing the proposed terms before launch.",
+      "class": "agreement"
+    },
+    {
+      "text": "The marketing team agrees that the message should reflect capabilities available at launch.",
+      "class": "agreement"
+    },
+    {
+      "text": "Коллеги, просил бы согласовать время встречи с командой продукта.",
+      "class": "neutral"
+    },
+    {
+      "text": "Подскажите, пожалуйста, кто отвечает за согласование бюджета на следующий квартал?",
+      "class": "neutral"
+    },
+    {
+      "text": "Позволю себе попросить согласовать список участников рабочей группы.",
+      "class": "neutral"
+    },
+    {
+      "text": "Юридическая служба просит направить договор на согласование до встречи.",
+      "class": "neutral"
+    },
+    {
+      "text": "Коллеги, требуется ли согласие владельца процесса для изменения формы заявки?",
+      "class": "neutral"
+    },
+    {
+      "text": "Со стороны B2B прошу согласовать дату обсуждения клиентских сценариев.",
+      "class": "neutral"
+    },
+    {
+      "text": "Просил бы уточнить порядок согласования материалов с финансовой дирекцией.",
+      "class": "neutral"
+    },
+    {
+      "text": "Можно ли получить согласие ответственного руководителя на проведение встречи?",
+      "class": "neutral"
+    },
+    {
+      "text": "Коллеги, согласуйте, пожалуйста, состав повестки к пятнице.",
+      "class": "neutral"
+    },
+    {
+      "text": "Маркетинг просит вынести согласование названия тарифа на отдельную встречу.",
+      "class": "neutral"
+    },
+    {
+      "text": "На мой взгляд, согласование календаря удобно провести через общий документ; прошу назначить ответственного.",
+      "class": "neutral"
+    },
+    {
+      "text": "Финансовая дирекция просит согласовать формат передачи расчётов.",
+      "class": "neutral"
+    },
+    {
+      "text": "Подскажите, на каком этапе потребуется согласие юридической службы?",
+      "class": "neutral"
+    },
+    {
+      "text": "Коллеги, прошу включить согласование сроков в повестку совещания.",
+      "class": "neutral"
+    },
+    {
+      "text": "Позволю себе уточнить, кому направить материалы для согласования?",
+      "class": "neutral"
+    },
+    {
+      "text": "Руководитель продукта просит согласовать доступ команды к рабочей папке.",
+      "class": "neutral"
+    },
+    {
+      "text": "Could the B2B team arrange agreement on the meeting agenda?",
+      "class": "neutral"
+    },
+    {
+      "text": "Please approve the proposed time for the finance review meeting.",
+      "class": "neutral"
+    },
+    {
+      "text": "Could legal confirm whose agreement is needed for the revised contract template?",
+      "class": "neutral"
+    },
+    {
+      "text": "Colleagues, please approve the distribution list for the project update.",
+      "class": "neutral"
+    }
+  ]
+}

@@ -295,3 +295,14 @@ def test_polite_disagreement_round2():
     for text in ("I can’t disagree with that, great job.", "I can't agree more, thank you.",
                  "Согласиться с этим не сложно, вывод точный."):
         assert LEX.detect(text) == [], text
+
+
+def test_polite_disagreement_round3():
+    """Раунд 3: оценочные слова без «согласен», явное «не согласен» не снимается подавителями; согласие — без подсказки."""
+    for text in ("Такой перенос сроков представляется неоправданным.", "Оценка охвата, по-моему, слишком оптимистична.",
+                 "I would question the churn assumption here.", "The cost model appears incomplete.",
+                 "Вынужден не согласиться: подрядчик тут ни при чём, ошибка в расчёте."):
+        assert LEX.detect(text), text
+    for text in ("Согласен: без пилота запуск был бы преждевременным.", "I can hardly disagree, great work.",
+                 "Подрядчик прислал завышенные цифры, пересчитай."):
+        assert LEX.detect(text) == [], text

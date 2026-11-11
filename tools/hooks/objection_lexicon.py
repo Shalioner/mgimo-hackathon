@@ -274,7 +274,7 @@ R4 = [
     # двойное отрицание — согласие: «не могу / нельзя / сложно / трудно не согласиться», can't disagree
     (r"(?<!не могу )(?<!нельзя )(?<!сложно )(?<!трудно )(?<!тяжело )(?<!невозможно )(?<!причин )(?<!повода )"
      r"\bне\s+согласиться\b|\b(?:сложно|трудно|тяжело|не\s+готов\w*)\s+(?:с\s+\w+\s+){0,2}согласиться"
-     r"|(?<!n't )(?<!not )(?<!hard to )\bdisagree\b|\bnot\s+(?:convinced|sure\s+i\s+agree)\b", "не согласен"),
+     r"|(?<!n't )(?<!not )(?<!hard to )(?<!hardly )\bdisagree\b|\bnot\s+(?:convinced|sure\s+i\s+agree)\b", "не согласен"),
 ]
 # --- вежливое несогласие, раунд 2 (evals/escalation/polite2, только dev = ../sets/polite.json) -------------
 # Обратный порядок («согласиться с этим сложно»), cannot / do not agree, «вывод … преждевременен» через несколько
@@ -292,6 +292,25 @@ R5 = [
     (r"\bneeds?\s+(?:\w+\s+)?(?:revision|rework|reworking|another\s+look)|\b(?:material|significant|major)\s+gap"
      r"|\bi\s+(?:see|have)\s+(?:a\s+|some\s+)?(?:concern|risk|issue)s?\b", "needs revision"),
 ]
+# --- вежливое несогласие, раунд 3 (evals/escalation/polite3, только dev — 180 сообщений раундов 1–2) ---------
+# Оценочные слова без «согласен»: «представляется неоправданным», «чрезмерно оптимистична», «не даёт оснований»,
+# «я бы не связывала», I would question, appears incomplete, respectfully.
+R6 = [
+    (r"\bнеоправданн|\bизбыточн\w*(?!\s+(?:вниман|деталь))|\b(?:чрезмерно|слишком|излишне)\s+оптимист"
+     r"|\bпреждевремен|\bне\s+да[её]т\s+(?:\w+\s+)?оснований|\bне\s+заменяет|\b(?:выше|ниже)\s+заявленн"
+     r"|\bвряд\s+ли\s+(?:объясня|подтвержда|оправдан|отража|сработа|окупит)", "оценка спорна"),
+    (r"\bя\s+бы\s+не\s+(?:\w+\s+)?(?:связывал|спешил|торопил|опирал|делал\w*\s+вывод|стал\w*\s+(?:переносить|закрывать|менять))",
+     "я бы не стал"),
+    (r"\bi\s+would\s+(?:question|challenge|push\s+back|not\s+(?:rely|assume|conclude))|\brespectfully\b(?!\s*,?\s*i\s+agree)"
+     r"|\bi\s+suggest\s+(?:revising|reconsidering|rethinking)|\b(?:appears?|seems?|looks?)\s+(?:\w+\s+)?(?:incomplete|premature|"
+     r"optimistic|unjustified|unrealistic)|\bis\s+not\s+(?:modell?ed|accounted|factored)|\bnot\s+(?:accounted|factored)\s+(?:for|in)",
+     "it's questionable"),
+]
+EXPLICIT = {"не согласен", "не соглашусь"}  # явное «не согласен» подавители (подрядчик, «предлагаю пересчитать») не снимают
+AGREE_LEAD = (r"^\W*(?:\w+,?\s+){0,2}(?:полностью\s+)?(?:согласен|согласна|согласны|поддерживаю|поддерживаем"
+              r"|i\s+(?:fully\s+)?agree|agreed)\b")  # «Коллеги, согласен: без критерия решение будет преждевременным»
+SOFT = {"оценка спорна", "it's questionable"}
+OPINION = r"\bна\s+мой\s+взгляд\b|\bпо-?\s?моему\b|\bполагаю\b|\bсчитаю\b|\bпредставляется\b"
 AGENT_EXT = (r"\bв\s+(?:стратеги|прогноз|оценк|исследовани|финансов\w*\s+модел|модел|расчет\w*\s+агент)\w*"
              r"|\bрекомендаци\w*|\bвывод\w*|\bагент\w*")
 PROBLEM4 = (r"\bне\s+годит|\bникуда\s+не|\bотсутству|\bпроигнорир|\bне\s+тех\b|\bне\s+содерж|\bна\s+каком\s+основани"
@@ -362,11 +381,13 @@ def normalize(text: str) -> str:
 def _compile():
     prof = [re.compile(p, re.IGNORECASE) for roots in PROFANITY.values() for p in roots]
     masks = [w.replace("ё", "е") for w in MASKABLE]
-    obj = [(re.compile(p, re.IGNORECASE), label) for p, label in OBJECTION + BUSINESS + DEV + R2 + R3 + R4 + R5]
+    obj = [(re.compile(p, re.IGNORECASE), label) for p, label in OBJECTION + BUSINESS + DEV + R2 + R3 + R4 + R5 + R6]
     return prof, masks, obj, re.compile(PRAISE, re.IGNORECASE)
 
 
 NEUTRAL_CTX_RE = re.compile(NEUTRAL_CTX, re.IGNORECASE)
+OPINION_RE = re.compile(OPINION, re.IGNORECASE)
+AGREE_LEAD_RE = re.compile(AGREE_LEAD, re.IGNORECASE)
 AGENT_RE = re.compile(AGENT, re.IGNORECASE)
 OTHERS_RE = re.compile(OTHERS + '|' + OTHERS4, re.IGNORECASE)
 SELF_RE = re.compile(SELF, re.IGNORECASE)
@@ -409,12 +430,14 @@ def detect(text: str):
     to_agent = bool(AGENT_RE.search(norm))
     if to_agent_ext(norm, to_agent) and not labels and PROBLEM_RE.search(norm):
         labels = ["к результату агента"]  # «у тебя поддержка ничего не стоит?», «в вашем отчёте отличается»
-    elif labels and not to_agent and (OTHERS_RE.search(norm) or SELF_RE.search(norm) or THANKS_RE.search(norm)
-                                      or INPUTS_RE.search(norm)):
+    elif labels and not to_agent and not EXPLICIT & set(labels) \
+            and (OTHERS_RE.search(norm) or SELF_RE.search(norm) or THANKS_RE.search(norm) or INPUTS_RE.search(norm)):
         labels = []  # ошибка подрядчика / своя / «спасибо, сходится» / новые вводные — не спор с агентом
-    if labels and not FRAME_LABELS & set(labels) and STRONG_NEUTRAL_RE.search(norm) \
-            and not CONTRAST_RE.search(norm):
+    if labels and not FRAME_LABELS & set(labels) and not EXPLICIT & set(labels) and STRONG_NEUTRAL_RE.search(norm) \
+            and not CONTRAST_RE.search(norm) and not OPINION_RE.search(norm):
         labels = []  # «ошибка моя, пересчитай», «спасибо за пересчёт», «в будущем тесте сверить» — не спор
+    if labels and set(labels) <= SOFT and AGREE_LEAD_RE.search(norm) and not CONTRAST_RE.search(norm):
+        labels = []  # начинается с согласия, а оценочное слово — про гипотетический случай
     swear = any(rx.search(norm) for rx in PROFANITY_RE) or masked_profanity(norm)
     if swear and not (not labels and PRAISE_RE.search(norm)):
         labels.append("мат")
