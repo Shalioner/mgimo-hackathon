@@ -1,0 +1,485 @@
+{
+  "generator": "r3_luna_r2",
+  "items": [
+    {
+      "text": "Обновили прогноз подключений на Q1: теперь 18 тыс. вместо 15. Пересчитай базовый сценарий с этой вводной.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Финансы прислали свежую ставку фондирования. Учти 17,5% в модели окупаемости, пожалуйста.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Условия по пилоту поменялись: старт сдвинулся на месяц, а регионов будет три. Обнови сроки и расчёт охвата.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Новые вводные от сети: стоимость порта выросла до 4 800 ₽, ещё вчера в таблице было 4 300. Пересчитай CAPEX.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "The addressable base was refreshed to 42k sites. Please use this figure in the market sizing and update the estimate.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "B2B Director"
+    },
+    {
+      "text": "В презентации подрядчика CAC указан 1 900 ₽, а в приложенной модели — 2 350. Сверь источники и отметь оба значения.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "У партнёра в письме срок 6 недель, в подписанном приложении — 8. Проверь расхождение перед встречей.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "В отчёте региональной команды перепутаны гигабайты и терабайты в одном графике. Разберись по исходной выгрузке.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "Аналитик"
+    },
+    {
+      "text": "Подрядчик обновил прайс, но в сводном файле осталась старая цена на CPE. Учти актуальную из письма.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "Закупки"
+    },
+    {
+      "text": "The vendor deck says 99.95% availability, while its technical appendix lists 99.9%. Flag the discrepancy for our review.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Я сам отправил прошлогоднюю выгрузку по оттоку, моя ошибка. Возьми файл за сентябрь и пересобери выводы.",
+      "objection": false,
+      "kind": "own",
+      "author": "Аналитик"
+    },
+    {
+      "text": "По срокам запуска я, кажется, был слишком оптимистичен. Пока заложи квартал, завтра уточню у команды.",
+      "objection": false,
+      "kind": "own",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Не уверен, что правильно оценил нагрузку на поддержку. Добавь это как допущение, без точной цифры.",
+      "objection": false,
+      "kind": "own",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Я мог не так понять договорённость с продажами про конверсию. Не фиксируй пока 12%, оставь диапазон до уточнения.",
+      "objection": false,
+      "kind": "own",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "I may have mixed up the monthly and annual churn figures in my note. I’ll confirm; please leave that input provisional.",
+      "objection": false,
+      "kind": "own",
+      "author": "Аналитик"
+    },
+    {
+      "text": "На следующем этапе проверь ARPU по двум независимым источникам и запиши, какой период покрывает каждый.",
+      "objection": false,
+      "kind": "future",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Перед комитетом надо будет сверить карту покрытия с сетью, особенно по малым городам. Добавь это в план проверки.",
+      "objection": false,
+      "kind": "future",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Когда получим выгрузку CRM, уточни конверсию по сегментам SMB и Enterprise; сейчас не экстраполируй.",
+      "objection": false,
+      "kind": "future",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Поставь контрольный шаг: юристы подтверждают срок хранения данных до запуска пилота.",
+      "objection": false,
+      "kind": "future",
+      "author": "Юрист"
+    },
+    {
+      "text": "Please add a follow-up to verify the wholesale rate with procurement before we lock the business case.",
+      "objection": false,
+      "kind": "future",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "На комитете, вероятно, спросят, почему выбрали именно 5G FWA, а не оптику. Подготовь короткий ответ и источники.",
+      "objection": false,
+      "kind": "relay",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Юристы могут поднять вопрос о согласии абонента на аналитику. Включи ожидаемый вопрос в список для подготовки.",
+      "objection": false,
+      "kind": "relay",
+      "author": "Юрист"
+    },
+    {
+      "text": "Продажи говорят, что клиентам важнее SLA, чем скидка. Передай это как мнение команды, не как подтверждённый факт.",
+      "objection": false,
+      "kind": "relay",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Финдир на предварительном созвоне спросил, что будет с NPV при задержке запуска на полгода. Посчитай такой вариант к встрече.",
+      "objection": false,
+      "kind": "relay",
+      "author": "Аналитик"
+    },
+    {
+      "text": "The steering group may ask whether the forecast includes device subsidies. Please prepare a note with the assumption clearly stated.",
+      "objection": false,
+      "kind": "relay",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Спасибо, прошлые правки по сегментам учтены. Я сверил суммы с финмоделью — сходятся, можно двигаться к следующему шагу.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Ок, договорённость про отдельный сценарий для Enterprise вижу. Проверил формулы в таблице, всё сходится.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Спасибо! Обновления по срокам внесены, с юристами отдельно проверю формулировку на следующем круге.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "Юрист"
+    },
+    {
+      "text": "Принято, комментарии сети учтены. Сверил итоговую оценку с их письмом — расхождений больше нет.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Thanks, the agreed edits are in. I checked the source links and they all open; let’s move on to validation planning.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "Собери краткий обзор рынка облачных АТС для российского SMB.",
+      "objection": false,
+      "kind": "task",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Набросай план интервью с клиентами, которые отказались от подключения.",
+      "objection": false,
+      "kind": "task",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "Посчитай сценарий выхода в два новых региона с текущей командой продаж.",
+      "objection": false,
+      "kind": "task",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Map the main alternatives for managed Wi-Fi in mid-sized businesses.",
+      "objection": false,
+      "kind": "task",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Какие сегменты дают наибольшую долю выручки в этом направлении?",
+      "objection": false,
+      "kind": "question",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Что должно войти в минимальный пилот, чтобы проверить спрос?",
+      "objection": false,
+      "kind": "question",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Есть ли открытые оценки числа офисов с потребностью в резервном канале?",
+      "objection": false,
+      "kind": "question",
+      "author": "Аналитик"
+    },
+    {
+      "text": "Which assumptions drive the payback period the most?",
+      "objection": false,
+      "kind": "question",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Да, такой порядок работы подходит, начинайте с сегментации.",
+      "objection": false,
+      "kind": "ack",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Согласен с предложенным набором метрик для пилота.",
+      "objection": false,
+      "kind": "ack",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "Ок, приоритет — крупные клиенты, малый бизнес пока оставим второй волной.",
+      "objection": false,
+      "kind": "ack",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Approved. Keep the three-region scope for the first phase.",
+      "objection": false,
+      "kind": "ack",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Сократи вводную до одного абзаца, а детали методики перенеси в приложение.",
+      "objection": false,
+      "kind": "style",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Тон нейтральнее и без рекламных формулировок. Содержание пока не меняй.",
+      "objection": false,
+      "kind": "style",
+      "author": "Юрист"
+    },
+    {
+      "text": "Можно без длинного резюме в начале? Оставь ключевые выводы и таблицу.",
+      "objection": false,
+      "kind": "style",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Please make the executive summary shorter and use plain language throughout.",
+      "objection": false,
+      "kind": "style",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "Для сравнения используй ARPU 1 250 ₽/мес., churn 2,1% и CAPEX 84 млн ₽.",
+      "objection": false,
+      "kind": "terms",
+      "author": "Аналитик"
+    },
+    {
+      "text": "В расчёте B2B учти 120 тыс. адресов, take rate 7% и CAC 16 тыс. ₽.",
+      "objection": false,
+      "kind": "terms",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Проверь сценарий при SLA 99,95%, канале 1 Гбит/с и тарифе 3 900 ₽ без НДС.",
+      "objection": false,
+      "kind": "terms",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Use 12% attach rate, 24-month LTV and a 6-month rollout window for this scenario.",
+      "objection": false,
+      "kind": "terms",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Нет, этот вывод неверный: ты сравнил выручку с маржой. Пересчитай на одинаковой базе.",
+      "objection": true,
+      "level": "direct",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Ты проигнорировал свежие данные по оттоку. Цифра 2,1% уже не актуальна, переделай расчёт.",
+      "objection": true,
+      "level": "direct",
+      "author": "Аналитик"
+    },
+    {
+      "text": "Источник вообще не подтверждает такой размер рынка. Не выдавай свою экстраполяцию за факт.",
+      "objection": true,
+      "level": "direct",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Это не то, что я просил: речь о корпоративных клиентах, а ты описал розницу. Переделай задачу.",
+      "objection": true,
+      "level": "direct",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Блин, в модели опять двойной учёт подключений. Откуда взялись 40 тысяч? Исправь формулу.",
+      "objection": true,
+      "level": "direct",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Мы же договорились исключить субсидии из базового сценария. Почему они снова внутри расчёта?",
+      "objection": true,
+      "level": "direct",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Сеть передала ограничения по портам, а ты их не учёл. Этот план запуска нереализуем.",
+      "objection": true,
+      "level": "direct",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Твои сроки взяты с потолка: в источнике речь про тест, не про промышленный запуск.",
+      "objection": true,
+      "level": "direct",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Вывод о положительном NPV ошибочный: формула дисконтирует месяцы как годы. Проверь весь расчёт.",
+      "objection": true,
+      "level": "direct",
+      "author": "Аналитик"
+    },
+    {
+      "text": "Не надо придумывать договорённости, которых не было. Я просил сравнить два тарифа, а не рекомендовать третий.",
+      "objection": true,
+      "level": "direct",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "Похоже, в расчёте использован прежний тариф. Просьба сверить базу с последней версией и обновить вывод.",
+      "objection": true,
+      "level": "business",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "В выводе не отражён файл с данными за октябрь, который я направлял. Прошу пересчитать оценку с его учётом.",
+      "objection": true,
+      "level": "business",
+      "author": "Аналитик"
+    },
+    {
+      "text": "Указанный источник описывает потребительский сегмент, тогда как вопрос был про B2B. Пожалуйста, уточните обоснование.",
+      "objection": true,
+      "level": "business",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Кажется, произошла подмена периода: в таблице годовые значения сопоставлены с квартальными. Нужна корректировка.",
+      "objection": true,
+      "level": "business",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "В документе зафиксировано решение о запуске, хотя мы обсуждали только проверку гипотезы. Прошу вернуть статус к открытому.",
+      "objection": true,
+      "level": "business",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Расчёт охвата не учитывает ограничения по доступности оборудования в регионах. Прошу пересмотреть достижимый объём.",
+      "objection": true,
+      "level": "business",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Предложенная интерпретация письма юристов расходится с их формулировкой о согласии абонента. Проверьте, пожалуйста.",
+      "objection": true,
+      "level": "business",
+      "author": "Юрист"
+    },
+    {
+      "text": "В сравнении альтернатив отсутствует текущий процесс, хотя я просил взять его за базу. Добавьте status quo и обновите рекомендацию.",
+      "objection": true,
+      "level": "business",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Приведённая доля конверсии не воспроизводится по указанной выгрузке. Нужны источник цифры и корректный пересчёт.",
+      "objection": true,
+      "level": "business",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "The recommendation appears to rely on the pilot sample as if it were representative of all regions. Please revisit that inference.",
+      "objection": true,
+      "level": "business",
+      "author": "Аналитик"
+    },
+    {
+      "text": "Интересно, откуда в выводе взялись 18 месяцев: в материалах, которые я вижу, такого срока вроде нет.",
+      "objection": true,
+      "level": "subtle",
+      "author": "Руководитель продукта"
+    },
+    {
+      "text": "Если считать только тех клиентов, которые реально доступны сети, рынок всё ещё получается таким большим?",
+      "objection": true,
+      "level": "subtle",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Забавно, что рекомендация совпала с вариантом, который мы просили проверить как рискованный. Это точно результат сравнения?",
+      "objection": true,
+      "level": "subtle",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "А цифра 7% случайно не из старой версии? Спрашиваю, потому что у меня в последнем файле уже 5,8.",
+      "objection": true,
+      "level": "subtle",
+      "author": "Аналитик"
+    },
+    {
+      "text": "Правильно понимаю, что отсутствие данных по регионам трактуется как одинаковый спрос везде?",
+      "objection": true,
+      "level": "subtle",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "В протоколе вроде просили отдельно показать Enterprise. Возможно, я не туда смотрю — где этот сценарий?",
+      "objection": true,
+      "level": "subtle",
+      "author": "Руководитель B2B"
+    },
+    {
+      "text": "Любопытно, а если взять источник целиком, без выбранного там оптимистичного кейса, вывод сильно изменится?",
+      "objection": true,
+      "level": "subtle",
+      "author": "Финансовый директор"
+    },
+    {
+      "text": "Тогда рекомендация основана на покрытии, которого пока нет? Хочу убедиться, что верно прочитал таблицу.",
+      "objection": true,
+      "level": "subtle",
+      "author": "Руководитель сети"
+    },
+    {
+      "text": "Well, that is a confident forecast. Does the source actually support the 30% uplift, or is that an assumption? ",
+      "objection": true,
+      "level": "subtle",
+      "author": "Маркетолог"
+    },
+    {
+      "text": "Мы ведь вроде решили пока не обещать запуск к июню. Или в плане уже появилась новая договорённость?",
+      "objection": true,
+      "level": "subtle",
+      "author": "Юрист"
+    }
+  ]
+}

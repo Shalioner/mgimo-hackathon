@@ -1,0 +1,187 @@
+{
+ "split": "test",
+ "lexicon_sha256": "3866c1166cf27198",
+ "sets": {
+  "luna_r2": {
+   "recall": 0.4,
+   "fpr": 0.056,
+   "n_obj": 40,
+   "n_neu": 36,
+   "excluded": 0,
+   "recall_by_level": {
+    "business": 0.333,
+    "direct": 0.6,
+    "subtle": 0.333
+   },
+   "fpr_by_kind": {
+    "ack": 0.0,
+    "question": 0.0,
+    "style": 0.0,
+    "task": 0.0,
+    "terms": 0.0,
+    "tricky": 0.333
+   }
+  },
+  "luna_r3": {
+   "recall": 0.4,
+   "fpr": 0.0,
+   "n_obj": 40,
+   "n_neu": 40,
+   "excluded": 0,
+   "recall_by_level": {
+    "business": 0.533,
+    "direct": 0.5,
+    "subtle": 0.2
+   },
+   "fpr_by_kind": {
+    "ack": 0.0,
+    "question": 0.0,
+    "style": 0.0,
+    "task": 0.0,
+    "terms": 0.0,
+    "tricky": 0.0
+   }
+  },
+  "sol_r2": {
+   "recall": 0.5,
+   "fpr": 0.05,
+   "n_obj": 40,
+   "n_neu": 40,
+   "excluded": 0,
+   "recall_by_level": {
+    "business": 0.6,
+    "direct": 0.8,
+    "subtle": 0.2
+   },
+   "fpr_by_kind": {
+    "ack": 0.0,
+    "question": 0.0,
+    "style": 0.0,
+    "task": 0.0,
+    "terms": 0.0,
+    "tricky": 0.333
+   }
+  },
+  "sol_r3": {
+   "recall": 0.425,
+   "fpr": 0.05,
+   "n_obj": 40,
+   "n_neu": 40,
+   "excluded": 0,
+   "recall_by_level": {
+    "business": 0.733,
+    "direct": 0.5,
+    "subtle": 0.067
+   },
+   "fpr_by_kind": {
+    "ack": 0.0,
+    "question": 0.0,
+    "style": 0.0,
+    "task": 0.0,
+    "terms": 0.0,
+    "tricky": 0.333
+   }
+  },
+  "terra_r2": {
+   "recall": 0.5,
+   "fpr": 0.053,
+   "n_obj": 40,
+   "n_neu": 38,
+   "excluded": 2,
+   "recall_by_level": {
+    "business": 0.6,
+    "direct": 0.6,
+    "subtle": 0.333
+   },
+   "fpr_by_kind": {
+    "ack": 0.0,
+    "question": 0.0,
+    "style": 0.0,
+    "task": 0.0,
+    "terms": 0.0,
+    "tricky": 0.333
+   }
+  },
+  "terra_r3": {
+   "recall": 0.35,
+   "fpr": 0.05,
+   "n_obj": 40,
+   "n_neu": 40,
+   "excluded": 0,
+   "recall_by_level": {
+    "business": 0.4,
+    "direct": 0.5,
+    "subtle": 0.2
+   },
+   "fpr_by_kind": {
+    "ack": 0.0,
+    "question": 0.0,
+    "style": 0.0,
+    "task": 0.0,
+    "terms": 0.0,
+    "tricky": 0.333
+   }
+  }
+ },
+ "models": {
+  "luna": {
+   "runs": 2,
+   "recall_mean": 0.4,
+   "recall_range": [
+    0.4,
+    0.4
+   ],
+   "fpr_mean": 0.028,
+   "fpr_range": [
+    0.0,
+    0.056
+   ]
+  },
+  "sol": {
+   "runs": 2,
+   "recall_mean": 0.463,
+   "recall_range": [
+    0.425,
+    0.5
+   ],
+   "fpr_mean": 0.05,
+   "fpr_range": [
+    0.05,
+    0.05
+   ]
+  },
+  "terra": {
+   "runs": 2,
+   "recall_mean": 0.425,
+   "recall_range": [
+    0.35,
+    0.5
+   ],
+   "fpr_mean": 0.052,
+   "fpr_range": [
+    0.05,
+    0.053
+   ]
+  }
+ },
+ "pooled_unique": {
+  "recall": 0.429,
+  "fpr": 0.043,
+  "n_obj": 240,
+  "n_neu": 231,
+  "excluded": 2,
+  "recall_by_level": {
+   "business": 0.533,
+   "direct": 0.583,
+   "subtle": 0.222
+  },
+  "fpr_by_kind": {
+   "ack": 0.0,
+   "question": 0.0,
+   "style": 0.0,
+   "task": 0.0,
+   "terms": 0.0,
+   "tricky": 0.278
+  }
+ }
+}

@@ -1,17 +1,17 @@
 {
  "split": "test",
- "lexicon_sha256": "3866c1166cf27198",
+ "lexicon_sha256": "d7cffde0f0a5e04f",
  "sets": {
   "luna_r2": {
-   "recall": 0.375,
+   "recall": 0.5,
    "fpr": 0.0,
    "n_obj": 40,
    "n_neu": 40,
    "excluded": 0,
    "recall_by_level": {
-    "business": 0.267,
-    "direct": 0.6,
-    "subtle": 0.333
+    "business": 0.4,
+    "direct": 0.7,
+    "subtle": 0.467
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -22,15 +22,15 @@
    }
   },
   "luna_r3": {
-   "recall": 0.35,
+   "recall": 0.475,
    "fpr": 0.0,
    "n_obj": 40,
    "n_neu": 40,
    "excluded": 0,
    "recall_by_level": {
-    "business": 0.2,
-    "direct": 0.8,
-    "subtle": 0.2
+    "business": 0.333,
+    "direct": 0.9,
+    "subtle": 0.333
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -41,15 +41,15 @@
    }
   },
   "sol_r2": {
-   "recall": 0.525,
+   "recall": 0.625,
    "fpr": 0.0,
    "n_obj": 40,
    "n_neu": 40,
    "excluded": 0,
    "recall_by_level": {
-    "business": 0.667,
+    "business": 0.733,
     "direct": 0.9,
-    "subtle": 0.133
+    "subtle": 0.333
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -60,7 +60,7 @@
    }
   },
   "sol_r3": {
-   "recall": 0.55,
+   "recall": 0.6,
    "fpr": 0.0,
    "n_obj": 40,
    "n_neu": 40,
@@ -68,7 +68,7 @@
    "recall_by_level": {
     "business": 0.667,
     "direct": 0.8,
-    "subtle": 0.267
+    "subtle": 0.4
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -79,7 +79,7 @@
    }
   },
   "terra_r2": {
-   "recall": 0.55,
+   "recall": 0.575,
    "fpr": 0.0,
    "n_obj": 40,
    "n_neu": 40,
@@ -87,7 +87,7 @@
    "recall_by_level": {
     "business": 0.6,
     "direct": 1.0,
-    "subtle": 0.2
+    "subtle": 0.267
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -98,15 +98,15 @@
    }
   },
   "terra_r3": {
-   "recall": 0.425,
+   "recall": 0.5,
    "fpr": 0.0,
    "n_obj": 40,
    "n_neu": 40,
    "excluded": 0,
    "recall_by_level": {
-    "business": 0.467,
-    "direct": 0.7,
-    "subtle": 0.2
+    "business": 0.533,
+    "direct": 0.8,
+    "subtle": 0.267
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -120,10 +120,10 @@
  "models": {
   "luna": {
    "runs": 2,
-   "recall_mean": 0.362,
+   "recall_mean": 0.487,
    "recall_range": [
-    0.35,
-    0.375
+    0.475,
+    0.5
    ],
    "fpr_mean": 0.0,
    "fpr_range": [
@@ -133,10 +133,10 @@
   },
   "sol": {
    "runs": 2,
-   "recall_mean": 0.538,
+   "recall_mean": 0.613,
    "recall_range": [
-    0.525,
-    0.55
+    0.6,
+    0.625
    ],
    "fpr_mean": 0.0,
    "fpr_range": [
@@ -146,10 +146,10 @@
   },
   "terra": {
    "runs": 2,
-   "recall_mean": 0.488,
+   "recall_mean": 0.537,
    "recall_range": [
-    0.425,
-    0.55
+    0.5,
+    0.575
    ],
    "fpr_mean": 0.0,
    "fpr_range": [
@@ -159,15 +159,15 @@
   }
  },
  "pooled_unique": {
-  "recall": 0.46,
+  "recall": 0.544,
   "fpr": 0.0,
   "n_obj": 239,
   "n_neu": 238,
   "excluded": 0,
   "recall_by_level": {
-   "business": 0.478,
-   "direct": 0.797,
-   "subtle": 0.222
+   "business": 0.544,
+   "direct": 0.847,
+   "subtle": 0.344
   },
   "fpr_by_kind": {
    "ack": 0.0,
