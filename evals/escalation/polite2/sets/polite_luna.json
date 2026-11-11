@@ -1,0 +1,245 @@
+{
+  "generator": "polite_luna",
+  "items": [
+    {
+      "text": "Руководитель продукта: Коллеги, позволю себе не согласиться с выводом о росте удержания: в представленной модели эффект выглядит скорее сезонным, и я бы просил не закладывать его в базовый сценарий.",
+      "class": "objection"
+    },
+    {
+      "text": "Финдиректор: На мой взгляд, прогноз выручки на второй год завышен: конверсия пилота в контракт пока не подтверждена, поэтому предлагаю пересчитать экономику с более осторожным допущением.",
+      "class": "objection"
+    },
+    {
+      "text": "Юрист: Коллеги, рекомендованный срок хранения данных не учитывает заявленную цель обработки; просил бы скорректировать вывод с учётом принципа минимизации.",
+      "class": "objection"
+    },
+    {
+      "text": "B2B-директор: Не могу согласиться с приоритетом малого бизнеса: крупные клиенты уже обозначили интеграцию с биллингом как обязательное условие закупки.",
+      "class": "objection"
+    },
+    {
+      "text": "Маркетинг: Полагаю, оценка узнаваемости в сегменте чрезмерно оптимистична; используемая выборка состоит преимущественно из действующих клиентов.",
+      "class": "objection"
+    },
+    {
+      "text": "Product lead: With respect, I disagree with the recommendation to launch nationally first; the regional pilot has not yet demonstrated repeat usage.",
+      "class": "objection"
+    },
+    {
+      "text": "Finance: Коллеги, расчёт окупаемости не включает поддержку интеграций, поэтому предложенный срок возврата инвестиций представляется мне заниженным.",
+      "class": "objection"
+    },
+    {
+      "text": "Legal: I would respectfully disagree with treating consent as the sole legal basis here; the processing purpose and retention period also need to be assessed.",
+      "class": "objection"
+    },
+    {
+      "text": "B2B: На мой взгляд, вывод о готовности клиентов к self-service не подтверждается интервью: несколько аккаунтов отдельно запросили персональное сопровождение.",
+      "class": "objection"
+    },
+    {
+      "text": "Маркетинг: Коллеги, сегментация по возрасту вряд ли объясняет разницу в отклике; предлагаю проверить каналы и контекст использования.",
+      "class": "objection"
+    },
+    {
+      "text": "Product: The proposed success metric counts registrations, while the decision concerns sustained use; I suggest revising the recommendation around active accounts.",
+      "class": "objection"
+    },
+    {
+      "text": "Финдиректор: Не могу поддержать оценку экономии в текущем виде: в модели не отражены затраты на миграцию и обучение контактного центра.",
+      "class": "objection"
+    },
+    {
+      "text": "Юрист: Коллеги, риск здесь, по-моему, выше заявленного: договорная оговорка не заменяет проверку фактических потоков данных.",
+      "class": "objection"
+    },
+    {
+      "text": "B2B lead: Respectfully, the forecast assumes a uniform sales cycle, although enterprise procurement has materially longer approval stages.",
+      "class": "objection"
+    },
+    {
+      "text": "Маркетинг: Я бы не связывала рост обращений исключительно с новой кампанией: одновременно изменились тарифное предложение и медиамикс.",
+      "class": "objection"
+    },
+    {
+      "text": "Руководитель продукта: Коллеги, рекомендация отложить запуск на квартал кажется избыточной; открытые вопросы можно закрыть ограниченным запуском с контрольными метриками.",
+      "class": "objection"
+    },
+    {
+      "text": "Finance: The downside case appears incomplete because churn among migrated customers is not modeled; please include that sensitivity before we compare options.",
+      "class": "objection"
+    },
+    {
+      "text": "Юрист: Позволю себе обратить внимание, что формулировка «анонимизированные данные» не подтверждена описанием процедуры; вывод о допустимости пока преждевременен.",
+      "class": "objection"
+    },
+    {
+      "text": "B2B-директор: В предлагаемой приоритизации недооценена стоимость подключения крупных заказчиков; прошу пересмотреть порядок сегментов.",
+      "class": "objection"
+    },
+    {
+      "text": "Marketing: I would question the conclusion that price is the primary barrier; the cited feedback points more consistently to onboarding complexity.",
+      "class": "objection"
+    },
+    {
+      "text": "Руководитель продукта: Коллеги, не могу не согласиться с логикой поэтапного запуска; особенно убедительно, что контрольные метрики заданы до масштабирования.",
+      "class": "agreement"
+    },
+    {
+      "text": "Финдиректор: Согласен с консервативным сценарием: он прозрачно показывает чувствительность результата к стоимости привлечения.",
+      "class": "agreement"
+    },
+    {
+      "text": "Юрист: Позволю себе согласиться с рекомендацией ограничить сбор данных заявленной целью; это снижает и правовой, и операционный риск.",
+      "class": "agreement"
+    },
+    {
+      "text": "B2B-директор: Коллеги, сложно не согласиться с приоритетом интеграций: для корпоративных заказчиков это действительно критический путь.",
+      "class": "agreement"
+    },
+    {
+      "text": "Маркетинг: Согласна с тем, что сначала стоит проверить сообщение на узком сегменте; так мы получим более чистый сигнал по отклику.",
+      "class": "agreement"
+    },
+    {
+      "text": "Product lead: I agree with the staged rollout recommendation; the proposed guardrails make the decision reversible and measurable.",
+      "class": "agreement"
+    },
+    {
+      "text": "Finance: I can't disagree with separating confirmed savings from the broader efficiency opportunity; that distinction makes the business case clearer.",
+      "class": "agreement"
+    },
+    {
+      "text": "Юрист: Не могу не согласиться с тем, что согласие пользователя должно быть оформлено отдельно от общих условий, если оно требуется для этой цели.",
+      "class": "agreement"
+    },
+    {
+      "text": "B2B: I agree that named account validation should precede a broad launch; the plan gives sales teams a concrete role.",
+      "class": "agreement"
+    },
+    {
+      "text": "Маркетинг: На мой взгляд, агент верно связал выбор канала с задачей клиента; с этой рекомендацией согласна.",
+      "class": "agreement"
+    },
+    {
+      "text": "Руководитель продукта: Согласен, что удержание следует оценивать по когортам, а не только по общей динамике; такой подход позволит увидеть различия сценариев.",
+      "class": "agreement"
+    },
+    {
+      "text": "Finance: I agree with keeping the low case visible in the executive summary; it supports a more disciplined funding discussion.",
+      "class": "agreement"
+    },
+    {
+      "text": "Юрист: Коллеги, трудно не согласиться с предложением провести оценку воздействия до подключения нового набора данных.",
+      "class": "agreement"
+    },
+    {
+      "text": "B2B-директор: Согласен с выводом о необходимости совместного пилота с клиентами: без проверки реального процесса интеграции оценка останется теоретической.",
+      "class": "agreement"
+    },
+    {
+      "text": "Marketing: I can't disagree with the recommendation to test the wording before committing the full media budget; the rationale is sound.",
+      "class": "agreement"
+    },
+    {
+      "text": "Руководитель продукта: Не могу не согласиться с приоритетом надёжности в первой версии; для такого сервиса это основа доверия.",
+      "class": "agreement"
+    },
+    {
+      "text": "Финдиректор: Согласен с предложенным порогом остановки эксперимента: он ограничивает расходы и заранее задаёт понятный критерий.",
+      "class": "agreement"
+    },
+    {
+      "text": "Legal: I agree with documenting the purpose, access roles, and retention schedule together; this is a practical recommendation.",
+      "class": "agreement"
+    },
+    {
+      "text": "Маркетинг: Сложно не согласиться с тем, что обещание должно соответствовать доступной функции продукта; иначе мы создадим лишние ожидания.",
+      "class": "agreement"
+    },
+    {
+      "text": "B2B lead: I agree that renewal intent should be reviewed alongside usage data; the combined view is more decision-useful.",
+      "class": "agreement"
+    },
+    {
+      "text": "Коллеги, просил бы согласовать состав участников рабочей встречи и предложить два удобных временных окна.",
+      "class": "neutral"
+    },
+    {
+      "text": "Финдиректор: Подготовьте, пожалуйста, форму для согласования обновлённого лимита расходов на следующий месяц.",
+      "class": "neutral"
+    },
+    {
+      "text": "Юрист: Коллеги, направьте на согласование новую редакцию приложения к договору до конца недели.",
+      "class": "neutral"
+    },
+    {
+      "text": "B2B-директор: Просьба уточнить, требуется ли согласие клиента на подключение дополнительных пользователей в кабинете.",
+      "class": "neutral"
+    },
+    {
+      "text": "Маркетинг: Согласуйте, пожалуйста, дату передачи медиаплана и формат итоговой таблицы.",
+      "class": "neutral"
+    },
+    {
+      "text": "Product: Please confirm who will approve the revised onboarding checklist and when it can be circulated.",
+      "class": "neutral"
+    },
+    {
+      "text": "Коллеги, прошу направить перечень тарифов, которые необходимо включить в следующий этап согласования.",
+      "class": "neutral"
+    },
+    {
+      "text": "Finance: Could you share the approval route for vendor invoices and the current submission deadline?",
+      "class": "neutral"
+    },
+    {
+      "text": "Юрист: Уточните, пожалуйста, чьё согласие требуется для передачи материалов подрядчику.",
+      "class": "neutral"
+    },
+    {
+      "text": "B2B: Please arrange an agreement review with the account team and include the implementation owner.",
+      "class": "neutral"
+    },
+    {
+      "text": "Руководитель продукта: Коллеги, согласуйте список участников пилота и пришлите подтверждение в общий канал.",
+      "class": "neutral"
+    },
+    {
+      "text": "Маркетинг: Подскажите, кто должен approve финальную версию письма клиентам?",
+      "class": "neutral"
+    },
+    {
+      "text": "Юрист: Просил бы зафиксировать порядок согласования изменений в политике обработки обращений.",
+      "class": "neutral"
+    },
+    {
+      "text": "Finance: Please provide the cost center and approval reference for the planned research purchase.",
+      "class": "neutral"
+    },
+    {
+      "text": "Коллеги, нужно ли получить письменное согласие руководителя направления перед бронированием переговорной?",
+      "class": "neutral"
+    },
+    {
+      "text": "B2B-директор: Согласуйте, пожалуйста, контактное лицо со стороны клиента для обмена техническими вопросами.",
+      "class": "neutral"
+    },
+    {
+      "text": "Product: Could you confirm whether the pilot terms require a separate agreement with each participant?",
+      "class": "neutral"
+    },
+    {
+      "text": "Финдиректор: Прошу сообщить статус согласования квартального прогноза и указать ответственного за следующий шаг.",
+      "class": "neutral"
+    },
+    {
+      "text": "Marketing: Please approve the proposed meeting slot or suggest another time that works for the regional team.",
+      "class": "neutral"
+    },
+    {
+      "text": "Юрист: Коллеги, направьте документ на согласование уполномоченному представителю и сообщите, когда получено согласие.",
+      "class": "neutral"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+ "lexicon_sha256": "b36c8373a409235e",
+ "sets": {
+  "polite": {
+   "by_class": {
+    "objection": [
+     7,
+     20
+    ],
+    "agreement": [
+     1,
+     20
+    ],
+    "neutral": [
+     0,
+     20
+    ]
+   },
+   "excluded": 0
+  }
+ },
+ "total": {
+  "objection": [
+   7,
+   20
+  ],
+  "agreement": [
+   1,
+   20
+  ],
+  "neutral": [
+   0,
+   20
+  ]
+ }
+}

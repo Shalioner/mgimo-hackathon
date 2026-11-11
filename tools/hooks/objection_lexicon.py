@@ -276,6 +276,22 @@ R4 = [
      r"\bне\s+согласиться\b|\b(?:сложно|трудно|тяжело|не\s+готов\w*)\s+(?:с\s+\w+\s+){0,2}согласиться"
      r"|(?<!n't )(?<!not )(?<!hard to )\bdisagree\b|\bnot\s+(?:convinced|sure\s+i\s+agree)\b", "не согласен"),
 ]
+# --- вежливое несогласие, раунд 2 (evals/escalation/polite2, только dev = ../sets/polite.json) -------------
+# Обратный порядок («согласиться с этим сложно»), cannot / do not agree, «вывод … преждевременен» через несколько
+# слов, «просил бы пересмотреть», «вижу риск», «обещает больше, чем умеет», needs revision / gap.
+R5 = [
+    (r"\bсогласиться\s+(?:с\s+)?(?:\w+\s+){0,4}(?<!\bне )(?:сложно|трудно|тяжело|не\s+могу|не\s+готов\w*)\b(?!\s+не\b)"
+     r"|\b(?:i|we)\s+(?:cannot|can\s+not|can't|do\s+not|don't)\s+(?:fully\s+)?agree\b(?!\s+more)"
+     r"|\b(?:i'm|i\s+am|we're|we\s+are)\s+not\s+(?:fully\s+)?(?:in\s+agreement|aligned|on\s+board)\b", "не согласен"),
+    (rf"\b{OUTPUT}\w*,?\s+(?:[\w-]+,?\s+){{0,4}}(?:{VERDICT}|преждевремен|неверен|ошибочен|сомнителен)", "вывод неверный"),
+    (r"\bпросил(?:а|и)?\s+бы\s+(?:\w+\s+){0,2}(?:пересмотр|скорректир|исправ|учесть|перепровер|доработ)"
+     r"|\bхотел(?:а|и)?\s+бы\s+попросить\s+(?:\w+\s+){0,2}(?:пересмотр|скорректир|исправ|учесть)", "прошу пересмотреть"),
+    (r"\bвижу\s+(?:\w+\s+)?(?:риск|проблем|пробел|противореч|разрыв)|\bобеща\w*\s+больше,?\s+чем"
+     r"|\bне\s+(?:включа|покрыва)\w*|\bпотребу\w*\s+(?:\w+\s+)?(?:дополнительн\w*\s+)?(?:провер|доработ|пересмотр)",
+     "есть риск/пробел"),
+    (r"\bneeds?\s+(?:\w+\s+)?(?:revision|rework|reworking|another\s+look)|\b(?:material|significant|major)\s+gap"
+     r"|\bi\s+(?:see|have)\s+(?:a\s+|some\s+)?(?:concern|risk|issue)s?\b", "needs revision"),
+]
 AGENT_EXT = (r"\bв\s+(?:стратеги|прогноз|оценк|исследовани|финансов\w*\s+модел|модел|расчет\w*\s+агент)\w*"
              r"|\bрекомендаци\w*|\bвывод\w*|\bагент\w*")
 PROBLEM4 = (r"\bне\s+годит|\bникуда\s+не|\bотсутству|\bпроигнорир|\bне\s+тех\b|\bне\s+содерж|\bна\s+каком\s+основани"
@@ -330,8 +346,12 @@ def _fix_token(tok: str) -> str:
 NAMES = re.compile(r"\bz[. ]?a[. ]?e[. ]?b[. ]?a[. ]?l\b\.?", re.IGNORECASE)  # название чужого навыка — не ругань
 
 
+APOSTROPHES = str.maketrans({"’": "'", "‘": "'", "ʼ": "'", "`": "'"})
+
+
 def normalize(text: str) -> str:
     t = NAMES.sub(" ", unicodedata.normalize("NFKC", text)).lower().replace("ё", "е")
+    t = t.translate(APOSTROPHES)  # «can’t» с типографским апострофом → «can't»
     t = MARKDOWN.sub(lambda m: m.group(1) or m.group(2), t)
     t = NUMBERS.sub(" ", t)  # «45s», «360x640», «31%» не должны стать буквами через 3→з, 0→о
     t = SPACED.sub(lambda m: re.sub(r"[.\-_ ]", "", m.group(0)), t)
@@ -342,7 +362,7 @@ def normalize(text: str) -> str:
 def _compile():
     prof = [re.compile(p, re.IGNORECASE) for roots in PROFANITY.values() for p in roots]
     masks = [w.replace("ё", "е") for w in MASKABLE]
-    obj = [(re.compile(p, re.IGNORECASE), label) for p, label in OBJECTION + BUSINESS + DEV + R2 + R3 + R4]
+    obj = [(re.compile(p, re.IGNORECASE), label) for p, label in OBJECTION + BUSINESS + DEV + R2 + R3 + R4 + R5]
     return prof, masks, obj, re.compile(PRAISE, re.IGNORECASE)
 
 

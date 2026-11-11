@@ -1,0 +1,53 @@
+{
+ "lexicon_sha256": "b36c8373a409235e",
+ "sets": {
+  "polite_sol": {
+   "by_class": {
+    "objection": [
+     12,
+     20
+    ],
+    "agreement": [
+     1,
+     20
+    ],
+    "neutral": [
+     0,
+     20
+    ]
+   },
+   "excluded": 0
+  },
+  "polite_luna": {
+   "by_class": {
+    "objection": [
+     10,
+     20
+    ],
+    "agreement": [
+     0,
+     20
+    ],
+    "neutral": [
+     0,
+     20
+    ]
+   },
+   "excluded": 0
+  }
+ },
+ "total": {
+  "objection": [
+   22,
+   40
+  ],
+  "agreement": [
+   1,
+   40
+  ],
+  "neutral": [
+   0,
+   40
+  ]
+ }
+}

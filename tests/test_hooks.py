@@ -284,3 +284,14 @@ def test_double_negation_is_agreement():
                  "Здесь нельзя не согласиться: вывод точный.", "I can't disagree with that, great job.",
                  "Не вижу причин не согласиться."):
         assert LEX.detect(text) == [], text
+
+
+def test_polite_disagreement_round2():
+    """Вежливое несогласие, раунд 2: обратный порядок, cannot agree, «просил бы», риск; «can’t disagree» — согласие."""
+    for text in ("Согласиться с этой оценкой мне трудно: нет данных по регионам.",
+                 "We do not agree with the churn estimate.", "Просил бы скорректировать прогноз выручки.",
+                 "Вижу пробел в расчёте окупаемости.", "Прогноз по выручке, по-моему, преждевременен."):
+        assert LEX.detect(text), text
+    for text in ("I can’t disagree with that, great job.", "I can't agree more, thank you.",
+                 "Согласиться с этим не сложно, вывод точный."):
+        assert LEX.detect(text) == [], text
