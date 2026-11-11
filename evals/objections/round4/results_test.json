@@ -1,6 +1,6 @@
 {
  "split": "test",
- "lexicon_sha256": "c5d2a9b1e44eae16",
+ "lexicon_sha256": "49f2086d64f5f6f3",
  "sets": {
   "astra-high_r2": {
    "recall": 0.767,
