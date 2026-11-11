@@ -276,3 +276,11 @@ def test_polite_corporate_disagreement():
     for text in ("Коллеги, благодарю за проработку, однако позволю себе не согласиться с выводом.",
                  "С вашим выводом сложно согласиться.", "I respectfully disagree with the conclusion."):
         assert LEX.detect(text), text
+
+
+def test_double_negation_is_agreement():
+    """«Не могу не согласиться», «сложно не согласиться», can't disagree — это согласие, подсказки нет."""
+    for text in ("Не могу не согласиться с вашим выводом, отличная работа.", "Сложно не согласиться — всё сходится.",
+                 "Здесь нельзя не согласиться: вывод точный.", "I can't disagree with that, great job.",
+                 "Не вижу причин не согласиться."):
+        assert LEX.detect(text) == [], text
