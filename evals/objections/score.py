@@ -4,6 +4,7 @@
     python evals/objections/score.py                 # все наборы sets/*.json → results.json + сводка
     python evals/objections/score.py --split dev     # только прогоны 1 (для доработки словаря)
     python evals/objections/score.py --show-misses   # показать пропуски и ложные срабатывания (только dev!)
+    python evals/objections/score.py --dir evals/objections/round2 --exclude evals/objections/sets   # раунд 2
 
 Имя набора: <модель>_r<N>.json, например sol_r1.json. Хук вызывается так же, как в среде:
 strategist_hook.detect_objection (вырезает цитаты и код, затем словарь).
@@ -28,19 +29,23 @@ LEVELS = ("direct", "business", "subtle")
 KINDS = ("task", "question", "ack", "style", "terms")
 
 
-def tuned_phrases() -> set:
-    """Фразы из tests/test_hooks.py — на них словарь подгонялся, из замера их исключаем."""
+def tuned_phrases(exclude_dirs=()) -> set:
+    """Фразы из tests/test_hooks.py и из наборов прошлых раундов — их из замера исключаем."""
     src = (ROOT / "tests" / "test_hooks.py").read_text(encoding="utf-8")
-    return {norm(m) for m in re.findall(r'"([^"\n]{3,})"', src)}
+    out = {norm(m) for m in re.findall(r'"([^"\n]{3,})"', src)}
+    for d in exclude_dirs:
+        for f in Path(d).glob("*_r*.json"):
+            out |= {norm(it.get("text", "")) for it in json.loads(f.read_text(encoding="utf-8"))["items"]}
+    return out
 
 
 def norm(t: str) -> str:
     return re.sub(r"\s+", " ", t.strip().lower().replace("ё", "е"))
 
 
-def load(split: str):
+def load(split: str, base: Path = HERE):
     sets = {}
-    for f in sorted((HERE / "sets").glob("*_r*.json")):
+    for f in sorted((base / "sets").glob("*_r*.json")):
         run = int(re.search(r"_r(\d+)", f.stem).group(1))
         if split == "dev" and run != 1 or split == "test" and run == 1:
             continue
@@ -88,12 +93,15 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", choices=("all", "dev", "test"), default="all")
     ap.add_argument("--show-misses", action="store_true")
+    ap.add_argument("--dir", type=Path, default=HERE, help="папка раунда (в ней sets/)")
+    ap.add_argument("--exclude", nargs="*", default=[], help="папки наборов прошлых раундов: их фразы исключаются")
     args = ap.parse_args(argv)
-    sets = load(args.split)
+    base = args.dir.resolve()
+    sets = load(args.split, base)
     if not sets:
         print("Нет наборов в evals/objections/sets/", file=sys.stderr)
         return 2
-    tuned = tuned_phrases()
+    tuned = tuned_phrases(args.exclude)
     per_set = {name: score_items(items, tuned) for name, items in sets.items()}
     by_model = {}
     for name, s in per_set.items():
@@ -116,7 +124,7 @@ def main(argv=None) -> int:
                           "fpr_range": [min(x["fpr"] for x in v), max(x["fpr"] for x in v)]}
                       for m, v in sorted(by_model.items())},
            "pooled_unique": pooled}
-    (HERE / f"results_{args.split}.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
+    (base / f"results_{args.split}.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Словарь sha256 {res['lexicon_sha256']}, наборов: {len(sets)} ({args.split})")
     for m, v in res["models"].items():
         print(f"  {m:6} полнота {v['recall_mean']:.0%} ({v['recall_range'][0]:.0%}–{v['recall_range'][1]:.0%}), "

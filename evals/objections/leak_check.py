@@ -16,7 +16,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 import cost as C  # noqa: E402
 
 FORBIDDEN = ("tools/hooks", "objection_lexicon", "strategist_hook", "tests/", "test_hooks", "WORK_LOG",
-             "DESCRIPTION", "evals/objections/PROTOCOL", "evals/objections/score", "self-audit")
+             "DESCRIPTION", "evals/objections/PROTOCOL", "evals/objections/score", "self-audit",
+             "objections/sets/", "RESULTS", "round2/PROTOCOL", "results_")
 
 
 def rollouts(name: str):
