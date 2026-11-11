@@ -1,0 +1,53 @@
+{
+ "lexicon_sha256": "61b7214568a028c2",
+ "sets": {
+  "polite_terra": {
+   "by_class": {
+    "objection": [
+     15,
+     20
+    ],
+    "agreement": [
+     0,
+     20
+    ],
+    "neutral": [
+     0,
+     20
+    ]
+   },
+   "excluded": 0
+  },
+  "polite_astra": {
+   "by_class": {
+    "objection": [
+     14,
+     20
+    ],
+    "agreement": [
+     1,
+     20
+    ],
+    "neutral": [
+     0,
+     20
+    ]
+   },
+   "excluded": 0
+  }
+ },
+ "total": {
+  "objection": [
+   29,
+   40
+  ],
+  "agreement": [
+   1,
+   40
+  ],
+  "neutral": [
+   0,
+   40
+  ]
+ }
+}
