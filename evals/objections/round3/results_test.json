@@ -1,17 +1,17 @@
 {
  "split": "test",
- "lexicon_sha256": "d7cffde0f0a5e04f",
+ "lexicon_sha256": "c5d2a9b1e44eae16",
  "sets": {
   "luna_r2": {
-   "recall": 0.667,
+   "recall": 0.767,
    "fpr": 0.08,
    "n_obj": 30,
    "n_neu": 50,
    "excluded": 0,
    "recall_by_level": {
-    "business": 0.6,
+    "business": 0.8,
     "direct": 1.0,
-    "subtle": 0.4
+    "subtle": 0.5
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -40,9 +40,9 @@
    },
    "fpr_by_kind": {
     "ack": 0.0,
-    "foreign": 0.4,
+    "foreign": 0.2,
     "future": 0.0,
-    "inputs": 0.0,
+    "inputs": 0.2,
     "own": 0.4,
     "question": 0.0,
     "relay": 0.0,
@@ -53,14 +53,14 @@
    }
   },
   "sol_r2": {
-   "recall": 0.7,
+   "recall": 0.733,
    "fpr": 0.1,
    "n_obj": 30,
    "n_neu": 50,
    "excluded": 0,
    "recall_by_level": {
     "business": 0.7,
-    "direct": 0.8,
+    "direct": 0.9,
     "subtle": 0.6
    },
    "fpr_by_kind": {
@@ -78,15 +78,15 @@
    }
   },
   "sol_r3": {
-   "recall": 0.733,
+   "recall": 0.8,
    "fpr": 0.06,
    "n_obj": 30,
    "n_neu": 50,
    "excluded": 0,
    "recall_by_level": {
     "business": 0.6,
-    "direct": 0.9,
-    "subtle": 0.7
+    "direct": 1.0,
+    "subtle": 0.8
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -103,15 +103,15 @@
    }
   },
   "terra_r2": {
-   "recall": 0.6,
+   "recall": 0.7,
    "fpr": 0.041,
    "n_obj": 30,
    "n_neu": 49,
    "excluded": 1,
    "recall_by_level": {
     "business": 0.5,
-    "direct": 0.9,
-    "subtle": 0.4
+    "direct": 1.0,
+    "subtle": 0.6
    },
    "fpr_by_kind": {
     "ack": 0.0,
@@ -128,22 +128,22 @@
    }
   },
   "terra_r3": {
-   "recall": 0.567,
-   "fpr": 0.102,
+   "recall": 0.667,
+   "fpr": 0.082,
    "n_obj": 30,
    "n_neu": 49,
    "excluded": 1,
    "recall_by_level": {
     "business": 0.6,
-    "direct": 0.8,
-    "subtle": 0.3
+    "direct": 0.9,
+    "subtle": 0.5
    },
    "fpr_by_kind": {
     "ack": 0.0,
     "foreign": 0.4,
     "future": 0.2,
     "inputs": 0.2,
-    "own": 0.2,
+    "own": 0.0,
     "question": 0.0,
     "relay": 0.0,
     "style": 0.0,
@@ -156,10 +156,10 @@
  "models": {
   "luna": {
    "runs": 2,
-   "recall_mean": 0.584,
+   "recall_mean": 0.633,
    "recall_range": [
     0.5,
-    0.667
+    0.767
    ],
    "fpr_mean": 0.1,
    "fpr_range": [
@@ -169,10 +169,10 @@
   },
   "sol": {
    "runs": 2,
-   "recall_mean": 0.716,
+   "recall_mean": 0.766,
    "recall_range": [
-    0.7,
-    0.733
+    0.733,
+    0.8
    ],
    "fpr_mean": 0.08,
    "fpr_range": [
@@ -182,35 +182,35 @@
   },
   "terra": {
    "runs": 2,
-   "recall_mean": 0.583,
+   "recall_mean": 0.683,
    "recall_range": [
-    0.567,
-    0.6
+    0.667,
+    0.7
    ],
-   "fpr_mean": 0.071,
+   "fpr_mean": 0.061,
    "fpr_range": [
     0.041,
-    0.102
+    0.082
    ]
   }
  },
  "pooled_unique": {
-  "recall": 0.628,
-  "fpr": 0.084,
+  "recall": 0.694,
+  "fpr": 0.081,
   "n_obj": 180,
   "n_neu": 298,
   "excluded": 2,
   "recall_by_level": {
-   "business": 0.533,
-   "direct": 0.883,
-   "subtle": 0.467
+   "business": 0.567,
+   "direct": 0.95,
+   "subtle": 0.567
   },
   "fpr_by_kind": {
    "ack": 0.0,
-   "foreign": 0.2,
+   "foreign": 0.167,
    "future": 0.067,
-   "inputs": 0.1,
-   "own": 0.267,
+   "inputs": 0.133,
+   "own": 0.233,
    "question": 0.0,
    "relay": 0.033,
    "style": 0.0,

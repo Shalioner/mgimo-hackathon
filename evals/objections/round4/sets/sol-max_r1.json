@@ -1,0 +1,485 @@
+{
+  "generator": "sol-max_r1",
+  "items": [
+    {
+      "text": "Новая вводная от меня: бюджет −20%. Пересчитай сценарии.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "CEO"
+    },
+    {
+      "text": "Обновление: запуск перенесли на март. Проверь экономику на новых сроках.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "CEO"
+    },
+    {
+      "text": "Ориентир теперь — FCF. Прежнюю договорённость по росту снимаю. Учти.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "CEO"
+    },
+    {
+      "text": "Вводные меняю: выходим только в B2B. Перепроверь сценарий.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "CEO"
+    },
+    {
+      "text": "New input from me: no price increase. Recalculate.",
+      "objection": false,
+      "kind": "inputs",
+      "author": "CEO"
+    },
+    {
+      "text": "У подрядчика ошибка в базе абонентов. Сверь их файл с биллингом.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "CEO"
+    },
+    {
+      "text": "Продажи и финансы дали разные планы. Сведи расхождения.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "CEO"
+    },
+    {
+      "text": "У партнёра в презентации старые тарифы. Запроси актуальные.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "CEO"
+    },
+    {
+      "text": "В справке юристов перепутаны сроки. Подними первоисточник.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "CEO"
+    },
+    {
+      "text": "The vendor's totals don't add up. Check their spreadsheet.",
+      "objection": false,
+      "kind": "foreign",
+      "author": "CEO"
+    },
+    {
+      "text": "Я перепутал выручку и маржу. Пересчитай с маржой.",
+      "objection": false,
+      "kind": "own",
+      "author": "CEO"
+    },
+    {
+      "text": "Мои 8% — ошибка. Бери 6%.",
+      "objection": false,
+      "kind": "own",
+      "author": "CEO"
+    },
+    {
+      "text": "Сомневаюсь в своей оценке оттока. Проверь её.",
+      "objection": false,
+      "kind": "own",
+      "author": "CEO"
+    },
+    {
+      "text": "Неверно назвал сегмент: крупный бизнес. Поправь вводные.",
+      "objection": false,
+      "kind": "own",
+      "author": "CEO"
+    },
+    {
+      "text": "I gave you last year's baseline. Use this year's.",
+      "objection": false,
+      "kind": "own",
+      "author": "CEO"
+    },
+    {
+      "text": "Перед пилотом проверь выборку. Это отдельный шаг.",
+      "objection": false,
+      "kind": "future",
+      "author": "CEO"
+    },
+    {
+      "text": "На следующий квартал заложи пересчёт NPV.",
+      "objection": false,
+      "kind": "future",
+      "author": "CEO"
+    },
+    {
+      "text": "В плане нужен контроль ошибок биллинга после запуска.",
+      "objection": false,
+      "kind": "future",
+      "author": "CEO"
+    },
+    {
+      "text": "В план — сверка источников перед бюджетным комитетом.",
+      "objection": false,
+      "kind": "future",
+      "author": "CEO"
+    },
+    {
+      "text": "Before rollout, validate the churn model. Put it in the plan.",
+      "objection": false,
+      "kind": "future",
+      "author": "CEO"
+    },
+    {
+      "text": "CFO спрашивает, кто проверит расчёт. Подготовь ответ.",
+      "objection": false,
+      "kind": "relay",
+      "author": "CEO"
+    },
+    {
+      "text": "Совет завтра спросит, как проверяем источники. Подготовь ответ.",
+      "objection": false,
+      "kind": "relay",
+      "author": "CEO"
+    },
+    {
+      "text": "Коммерческий сомневается в росте рынка. Собери аргументы к встрече.",
+      "objection": false,
+      "kind": "relay",
+      "author": "CEO"
+    },
+    {
+      "text": "Партнёр сообщил о расхождении прогнозов. Подготовь вопросы к нему.",
+      "objection": false,
+      "kind": "relay",
+      "author": "CEO"
+    },
+    {
+      "text": "CFO doubts the market forecast. Prepare questions for him.",
+      "objection": false,
+      "kind": "relay",
+      "author": "CEO"
+    },
+    {
+      "text": "Спасибо. После правок выношу на совет.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "CEO"
+    },
+    {
+      "text": "Проверку принял. Идём дальше.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "CEO"
+    },
+    {
+      "text": "Да, договорённости учтены. Утверждаю.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "CEO"
+    },
+    {
+      "text": "Спасибо за сверку источников. Материал готов.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "CEO"
+    },
+    {
+      "text": "Thanks. The revised numbers are approved.",
+      "objection": false,
+      "kind": "thanks",
+      "author": "CEO"
+    },
+    {
+      "text": "Дай три сценария роста B2B.",
+      "objection": false,
+      "kind": "task",
+      "author": "CEO"
+    },
+    {
+      "text": "Собери стратегию на год.",
+      "objection": false,
+      "kind": "task",
+      "author": "CEO"
+    },
+    {
+      "text": "Посчитай экономику пилота.",
+      "objection": false,
+      "kind": "task",
+      "author": "CEO"
+    },
+    {
+      "text": "Подготовь решение для совета.",
+      "objection": false,
+      "kind": "task",
+      "author": "CEO"
+    },
+    {
+      "text": "Когда пилот даст первый денежный эффект?",
+      "objection": false,
+      "kind": "question",
+      "author": "CEO"
+    },
+    {
+      "text": "Кто владелец результата?",
+      "objection": false,
+      "kind": "question",
+      "author": "CEO"
+    },
+    {
+      "text": "Какой сегмент растёт быстрее?",
+      "objection": false,
+      "kind": "question",
+      "author": "CEO"
+    },
+    {
+      "text": "What is the payback period?",
+      "objection": false,
+      "kind": "question",
+      "author": "CEO"
+    },
+    {
+      "text": "Утверждаю.",
+      "objection": false,
+      "kind": "ack",
+      "author": "CEO"
+    },
+    {
+      "text": "Принято.",
+      "objection": false,
+      "kind": "ack",
+      "author": "CEO"
+    },
+    {
+      "text": "Действуем.",
+      "objection": false,
+      "kind": "ack",
+      "author": "CEO"
+    },
+    {
+      "text": "Беру второй вариант.",
+      "objection": false,
+      "kind": "ack",
+      "author": "CEO"
+    },
+    {
+      "text": "На один слайд.",
+      "objection": false,
+      "kind": "style",
+      "author": "CEO"
+    },
+    {
+      "text": "Тезисами. Без вводной.",
+      "objection": false,
+      "kind": "style",
+      "author": "CEO"
+    },
+    {
+      "text": "Вывод поставь первым.",
+      "objection": false,
+      "kind": "style",
+      "author": "CEO"
+    },
+    {
+      "text": "Меньше прилагательных.",
+      "objection": false,
+      "kind": "style",
+      "author": "CEO"
+    },
+    {
+      "text": "ARPU 420 ₽, churn 1,8% в месяц. База для модели.",
+      "objection": false,
+      "kind": "terms",
+      "author": "CEO"
+    },
+    {
+      "text": "CAPEX — 2 млрд ₽. OPEX считай отдельно.",
+      "objection": false,
+      "kind": "terms",
+      "author": "CEO"
+    },
+    {
+      "text": "Цель: EBITDA margin 42%, FCF положительный.",
+      "objection": false,
+      "kind": "terms",
+      "author": "CEO"
+    },
+    {
+      "text": "WACC 18%. Show NPV and IRR.",
+      "objection": false,
+      "kind": "terms",
+      "author": "CEO"
+    },
+    {
+      "text": "Не та задача. Просил удержание, получил привлечение.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Стоп. Мы выбираем, куда вложить деньги. Ты описал рынок.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Я спрашивал, закрывать ли продукт. Ты предложил рекламу.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Это не стратегия. Нужен выбор одного сегмента, а у тебя все.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Мимо. Нужен денежный эффект, не число подключений.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Какого чёрта здесь новый бизнес? Задача — спасти текущий.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Пересчитывай. Я заказывал FCF, ты оптимизировал EBITDA.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Ты решал задачу маркетинга. Моя — рентабельность продукта.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Совет просил выбор: строить или купить. Ты оценил только стройку.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Wrong brief. I asked where to cut, not where to expand.",
+      "objection": true,
+      "level": "direct",
+      "author": "CEO"
+    },
+    {
+      "text": "Прошу вернуться к задаче: сравнить покупку с разработкой. Покупки в выводе нет.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Спасибо, но вывод про рост. Мы решаем вопрос доходности.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Уточню рамку: нужен выбор региона. Рейтинг каналов её не закрывает.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Пожалуйста, пересмотрите рекомендацию. Задача была сохранить маржу, не долю.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Мы договаривались оценить действующую базу. Ваш расчёт сделан для новых клиентов.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Решение нужно о масштабировании. Просьба пересобрать: вы обосновали только пилот.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Принял материал. Однако вопрос был о закрытии тарифа, не о ребрендинге.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Считаем эффект для группы. У вас — только филиал. Прошу исправить рамку.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Вернёмся к исходному вопросу. Нужна приоритизация продуктов; у вас — каналов.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "Please revisit the scope. We asked about retention, not tariff migration.",
+      "objection": true,
+      "level": "business",
+      "author": "CEO"
+    },
+    {
+      "text": "А на вопрос, закрываем ли продукт, ответ где?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Если убрать обзор рынка, останется ответ, куда инвестировать?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Красиво. А мы всё ещё решаем, в какой сегмент идти?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Подключения растут. Мы разве за ними пришли, а не за прибылью?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Мне кажется, вы ответили продажам. Я спрашивал, где заморозить CAPEX.",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "План рекламы вижу. Решение по самому продукту ещё будет?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Тогда зачем мы обсуждали сокращение портфеля, если у вас запуск ещё трёх продуктов?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Это ответ про следующий год. А вопрос был: переживём этот квартал?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Nice launch plan. Weren't we deciding what to shut down?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    },
+    {
+      "text": "Did we ask for a feature roadmap or a build-versus-buy decision?",
+      "objection": true,
+      "level": "subtle",
+      "author": "CEO"
+    }
+  ]
+}

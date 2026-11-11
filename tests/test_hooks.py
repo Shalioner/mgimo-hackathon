@@ -211,3 +211,14 @@ def test_lexicon_attribution_whose_mistake():
         assert LEX.detect(text) == [], text
     for text in ("У тебя в модели монтаж ничего не стоит?", "В вашей оценке пропущены затраты на лицензии"):
         assert LEX.detect(text), text
+
+
+def test_round4_frame_and_own_error():
+    """Раунд 4: спор о рамке задачи ловится, явная своя ошибка и благодарность за правку — нет."""
+    for text in ("Я спрашивал про удержание, а ты расписал запуск нового тарифа.",
+                 "Вопрос был о ценах для B2B, не о рекламе.",
+                 "Wrong brief: I asked which tariffs to retire."):
+        assert LEX.detect(text), text
+    for text in ("Ошибка моя: отправил тебе не тот квартал, пересчитай по новому файлу.",
+                 "Спасибо за правки по марже, вопросов больше нет."):
+        assert not LEX.detect(text), text

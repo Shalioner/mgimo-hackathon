@@ -261,6 +261,41 @@ R3 = [
      r"|\bперестройте|\bпересоберите", "прошу переделать"),
 ]
 
+# --- раунд 4 (evals/objections/round4, только dev): рамка задачи, пересказ, «моя ошибка» ---------------------
+# Возражение о рамке: «я спрашивал X, ты принёс Y», «вопрос был о…», «вернись к исходному запросу», wrong brief.
+R4 = [
+    (r"\b(?:я|мы|совет|комитет)\s+(?:же\s+)?(?:спрашивал|просил|заказывал|решаем|решали|пришли)\w*\b.{0,80}?"
+     r"[,.;—-]\s*(?:а\s+)?(?:ты|вы|у\s+(?:тебя|вас))\b", "не та задача"),
+    (r"\bвопрос\s+был\b|\bзадача\s+была\b|\bисходн\w+\s+(?:вопрос|запрос|задач)|\bдруг\w+\s+задач"
+     r"|\bэто\s+не\s+стратеги|^\W*мимо\b|\bрешал\w*\s+задачу|\bответ\s+где\b|\bмы\s+разве\b"
+     r"|\bwrong\s+brief|\bi\s+asked\s+\w+|\bweren'?t\s+we\b|\bdid\s+we\s+ask\b", "не та задача"),
+    (r"\bкакого\s+(?:черта|хрена|лешего)\b", "резкое несогласие"),
+]
+AGENT_EXT = (r"\bв\s+(?:стратеги|прогноз|оценк|исследовани|финансов\w*\s+модел|модел|расчет\w*\s+агент)\w*"
+             r"|\bрекомендаци\w*|\bвывод\w*|\bагент\w*")
+PROBLEM4 = (r"\bне\s+годит|\bникуда\s+не|\bотсутству|\bпроигнорир|\bне\s+тех\b|\bне\s+содерж|\bна\s+каком\s+основани"
+            r"|\bгде\s+в\s+данных|\bкуда\s+(?:\w+\s+){0,3}дел|\bоткуда\s+(?:\w+\s+){0,3}(?:взял|появил)|\bрастворил"
+            r"|\bразмазал|\bне\s+вычел|\bошибка\s+в\s+единиц|\bдолжно\s+быть\b|\bисправ(?:ь|ьте)\b|\bне\s+видно"
+            r"|\bне\s+заметил|\bбез\s+обосновани|\bбез\s+интервал|\bспрятан|\bисчез|\bопирается\s+на|\bна\s+одном\b"
+            r"|\bпревратил|\bбессрочн|\bотрицательн|\bрасхожусь|\bразделяю\s+это|\bоспарива|\bотклоняем"
+            r"|\bне\s+слишком\s+ли|\bправильно\s+понимаю|\bесли\s+убрать|\bесли\s+верить|\bвс[её]\s+ещ[её]\b"
+            r"|\bсохранится\?|\bостанется\?|\bза\s+скобками|\bвыглядит\s+приятно|\bсмел\w+\s+обобщ|\bделишь"
+            r"|\bдважды|\bне\s+окупаемост|\bне\s+supported|\bnot\s+supported|\bleft\s+out|\byou\s+used|\bexcluded"
+            r"|\bignored|\bdestroys|\bleakage|\bselection|\bsurvive|\bcame\s+from|\bassum|\bnot\s+\d+")
+# Явная своя ошибка, благодарность без «но», задача на будущее — не спор, даже если обращено к агенту.
+STRONG_NEUTRAL = (r"\bошибка\s+моя|\bмоя\s+ошибка|\bмой\s+пробел|\bэто\s+мой\b|\bв\s+сво(?:ей|ем|их)\s+\w+"
+                  r"|\bсомневаюсь\s+в\s+сво|\bя\s+(?:,\s*)?(?:кажется,?\s+|мог\s+)(?:неверно|перепута|забыт)"
+                  r"|\bя\s+понял,?\s+что\s+(?:отправил|дал)|\bк\s+тво\w+\s+анализу\s+замечаний\s+нет"
+                  r"|\b(?:спасибо|благодарю|благодарим)\s+за\s+(?:\w+\s+)?(?:пересчет|обновлени|правк|расчет)"
+                  r"|\bвопросов\s+(?:\w+\s+){0,3}нет\b|\bвс[её]\s+совпало|\bучтены\.\s*утверждаю"
+                  r"|\bв\s+будущ\w+|\bкогда\s+появится|\bпредлагаю\s+(?:пересчитать|проверить)"
+                  r"|\bсобери\s+(?:возможные\s+)?(?:основания|аргументы)|\bпонять\s+его\s+аргумент")
+CONTRAST = r"\bно\b|\bоднако\b|\bbut\b|\bтолько\s+как\b|\bа\s+(?:ты|вы|у\s+вас|у\s+тебя)\b"
+OTHERS4 = (r"\bконсультант|\bагентств|\bсправк\w*\s+юрист|\bу\s+продаж|\bу\s+биллинга|\bпродажи\s+и\s+финансы"
+           r"|\bих\s+документ|\bпожелани\w*\s+аудит")
+INPUTS4 = (r"\bвводные\s+меня|\bориентир\s+теперь|\bснимаю\b|\bуточнили\b|\bпоявил\w*\s+(?:новый\s+)?справочник"
+           r"|\bс\s+(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\b")
+
 # --- нормализация -----------------------------------------------------------------------------------------
 LAT_TO_CYR = str.maketrans({"a": "а", "b": "б", "c": "с", "e": "е", "k": "к", "m": "м", "o": "о", "p": "р",
                             "x": "х", "y": "у", "u": "у", "3": "з", "0": "о", "6": "б", "4": "ч", "@": "а"})
@@ -302,17 +337,21 @@ def normalize(text: str) -> str:
 def _compile():
     prof = [re.compile(p, re.IGNORECASE) for roots in PROFANITY.values() for p in roots]
     masks = [w.replace("ё", "е") for w in MASKABLE]
-    obj = [(re.compile(p, re.IGNORECASE), label) for p, label in OBJECTION + BUSINESS + DEV + R2 + R3]
+    obj = [(re.compile(p, re.IGNORECASE), label) for p, label in OBJECTION + BUSINESS + DEV + R2 + R3 + R4]
     return prof, masks, obj, re.compile(PRAISE, re.IGNORECASE)
 
 
 NEUTRAL_CTX_RE = re.compile(NEUTRAL_CTX, re.IGNORECASE)
 AGENT_RE = re.compile(AGENT, re.IGNORECASE)
-OTHERS_RE = re.compile(OTHERS, re.IGNORECASE)
+OTHERS_RE = re.compile(OTHERS + '|' + OTHERS4, re.IGNORECASE)
 SELF_RE = re.compile(SELF, re.IGNORECASE)
 THANKS_RE = re.compile(THANKS, re.IGNORECASE)
-INPUTS_RE = re.compile(INPUTS, re.IGNORECASE)
-PROBLEM_RE = re.compile(PROBLEM, re.IGNORECASE)
+INPUTS_RE = re.compile(INPUTS + '|' + INPUTS4, re.IGNORECASE)
+PROBLEM_RE = re.compile(PROBLEM + '|' + PROBLEM4, re.IGNORECASE)
+AGENT_EXT_RE = re.compile(AGENT_EXT, re.IGNORECASE)
+STRONG_NEUTRAL_RE = re.compile(STRONG_NEUTRAL, re.IGNORECASE)
+CONTRAST_RE = re.compile(CONTRAST, re.IGNORECASE)
+FRAME_LABELS = {'не та задача'}
 
 
 PROFANITY_RE, MASK_WORDS, OBJECTION_RE, PRAISE_RE = _compile()
@@ -331,6 +370,11 @@ def masked_profanity(text: str) -> bool:
     return False
 
 
+def to_agent_ext(norm: str, to_agent: bool) -> bool:
+    """Обращение к агенту или к его результату («в стратегии», «рекомендация», «вывод», «агент»)."""
+    return to_agent or bool(AGENT_EXT_RE.search(norm))
+
+
 def detect(text: str):
     """Метки признаков возражения в тексте человека (цитаты и код уже вырезаны вызывающим)."""
     norm = normalize(text)
@@ -338,11 +382,14 @@ def detect(text: str):
     if labels and set(labels) <= WEAK and NEUTRAL_CTX_RE.search(norm):
         labels = []  # «пришла новая выгрузка — пересчитай»: поручение, а не спор
     to_agent = bool(AGENT_RE.search(norm))
-    if to_agent and not labels and PROBLEM_RE.search(norm):
+    if to_agent_ext(norm, to_agent) and not labels and PROBLEM_RE.search(norm):
         labels = ["к результату агента"]  # «у тебя поддержка ничего не стоит?», «в вашем отчёте отличается»
     elif labels and not to_agent and (OTHERS_RE.search(norm) or SELF_RE.search(norm) or THANKS_RE.search(norm)
                                       or INPUTS_RE.search(norm)):
         labels = []  # ошибка подрядчика / своя / «спасибо, сходится» / новые вводные — не спор с агентом
+    if labels and not FRAME_LABELS & set(labels) and STRONG_NEUTRAL_RE.search(norm) \
+            and not CONTRAST_RE.search(norm):
+        labels = []  # «ошибка моя, пересчитай», «спасибо за пересчёт», «в будущем тесте сверить» — не спор
     swear = any(rx.search(norm) for rx in PROFANITY_RE) or masked_profanity(norm)
     if swear and not (not labels and PRAISE_RE.search(norm)):
         labels.append("мат")
