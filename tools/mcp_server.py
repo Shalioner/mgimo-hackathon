@@ -111,8 +111,22 @@ def t_models(args):
     return run(M.main, [args.get("command", "check")])
 
 
+def t_datacheck(args):
+    import datacheck as D
+    a = [args["file"]]
+    for key in ("sheet", "sep"):
+        if args.get(key):
+            a += [f"--{key}", args[key]]
+    if args.get("json"):
+        a.append("--json")
+    return run(D.main, a)
+
+
 S = {"type": "string"}
 TOOLS: Dict[str, dict] = {
+    "strategist_datacheck": {"fn": t_datacheck, "description": "Проверить CSV/XLSX перед CLM: пропуски, повторы, единицы, периоды, выбросы и типы (T0). Код 1 — найдены проблемы; XLSX требует установленный openpyxl.",
+                             "schema": {"type": "object", "properties": {"file": S, "sheet": S, "sep": S,
+                                                                         "json": {"type": "boolean"}}, "required": ["file"]}},
     "strategist_status": {"fn": t_status, "description": "Проекты, текущий шаг каждого и что ждёт решения человека.",
                           "schema": {"type": "object", "properties": {}}},
     "strategist_trace": {"fn": t_trace, "description": "На чём держится объект реестра (например, DEC-001): цепочка до источников.",
