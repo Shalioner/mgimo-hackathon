@@ -132,3 +132,5 @@ B	query	hackathon IA agentes Portugal 2025 vencedores decisao github	New country
 B	query	AI agent hackathon Australia 2024 winner evaluation github	New country research	orchestrator;issued:R-B-27
 B	query	Canadian agentic AI hackathon 2026 winners market research github	New country research	orchestrator;issued:R-B-27
 B	query	hackathon agenti AI Italia 2025 vincitori ricerca github	New country research	orchestrator;issued:R-B-27
+B	url	https://car-bench.github.io/car-bench/leaderboard.html	отдельная Cerebras track и опубликованные организаторами метрики надёжности; искать конкретные работы участников и их подтверждённые корни репозиториев.	R-B-26
+B	url	https://www.linkedin.com/posts/claude_built-with-claude-winners-activity-7384664597137387520-t0RL	первичный список победителей конкурса Claude 2025; можно проверить ссылки победителей и наличие исходного кода, если нужен следующий поиск по конкурсам Anthropic.	R-B-26
