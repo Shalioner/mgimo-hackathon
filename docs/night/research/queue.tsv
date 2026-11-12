@@ -138,6 +138,11 @@ B	url	https://www.covasant.com/events/ai-hackathon-2025	проверить, оп
 B	url	https://novaims.unl.pt/en/here-now/news/nova-ims-students-win-both-challenges-at-portugal-s-largest-ai-hackathon/	проверить участников Homodeus/Vora и связанные с ними публичные репозитории; результат — второе место.	R-B-27;issued:R-B-29
 B	url	https://genai-genesis-2026.devpost.com/project-gallery	изучить остальные призовые заявки и проверить первичные ссылки на исходники; OmenAI — победитель отдельной спонсорской категории.	R-B-27;issued:R-B-29
 B	url	https://www.linkedin.com/posts/dan-palmer_last-week-we-ran-a-relevance-ai-agents-hackathon-activity-7150292660069605376-90os	проверить, доступен ли проект Team Scoop / SCOOP (Sydney, 2024) в публичном репозитории; текущая находка — только публикация организатора в LinkedIn.	R-B-27;issued:R-B-29
-B	url	https://hackitaly.ai/n8n-hackathon	проверить публикацию итогов и репозиториев AI Automation Hackathon; текущая страница сообщает о событии, но не подтверждает победителей.	R-B-27
-B	url	https://devpost.com/software/omenai	если появится GitHub URL от создателей, проверить код победителя TD и его объяснение risk score.	R-B-29
-B	url	https://devpost.com/software/callio-labs	проверить через авторов/публичный профиль команды точное исходное хранилище и JSON-гейты с цитатами.	R-B-29
+B	url	https://hackitaly.ai/n8n-hackathon	проверить публикацию итогов и репозиториев AI Automation Hackathon; текущая страница сообщает о событии, но не подтверждает победителей.	R-B-27;issued:R-B-30
+B	url	https://devpost.com/software/omenai	если появится GitHub URL от создателей, проверить код победителя TD и его объяснение risk score.	R-B-29;issued:R-B-30
+B	url	https://devpost.com/software/callio-labs	проверить через авторов/публичный профиль команды точное исходное хранилище и JSON-гейты с цитатами.	R-B-29;issued:R-B-30
+B	query	AI agent hackathon South Africa 2025 winners github research	New country research	orchestrator;issued:R-B-31
+B	query	hackathon agentes inteligencia artificial Argentina 2024 ganadores github	New country research	orchestrator;issued:R-B-31
+B	query	AI agent hackathon Finland 2026 winner business analytics github	New country research	orchestrator;issued:R-B-31
+B	query	Indonesia AI agent hackathon 2025 winner evaluation github	New country research	orchestrator;issued:R-B-31
+B	query	Taiwan agent AI hackathon 2025 winners decision support github	New country research	orchestrator;issued:R-B-31
