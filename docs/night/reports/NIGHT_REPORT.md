@@ -488,3 +488,5 @@ R-B-34: common после слияния 0.
 night/S-04: common после слияния 0.
 
 00:10: night/S-04-review слита после собственной приёмки и независимого ACCEPT; проверяется common.
+
+night/S-04-review: common после слияния 0.
