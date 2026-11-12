@@ -103,7 +103,7 @@ B	query	Singapore AI agents hackathon 2026 winners decision support github	new v
 B	url	https://developer.ibm.com/hackathons/	R-B-19 leads	issued:R-B-20
 B	url	https://microsoft.github.io/AI_Agents_Hackathon/winners/	R-B-19 leads	issued:R-B-20
 B	url	https://www.aivalley.io/events/total-agent-recall-hackathon/projects	R-B-19 leads	issued:R-B-20
-B	url	https://cloud.google.com/blog/products/ai-machine-learning/adk-hackathon-results-winners-and-highlights/	Официальные итоги ADK Hackathon 2025; в том числе Edu.AI из Бразилии, проверить GitHub-ссылки и доступность исходников.	R-B-19
+B	url	https://cloud.google.com/blog/products/ai-machine-learning/adk-hackathon-results-winners-and-highlights/	Официальные итоги ADK Hackathon 2025; в том числе Edu.AI из Бразилии, проверить GitHub-ссылки и доступность исходников.	R-B-19;issued:R-B-25
 B	query	OpenAI hackathon 2025 winner customer research github	new batch	issued:R-B-21
 B	query	Mistral hackathon 2025 winners business research github	new batch	issued:R-B-21
 B	query	Hugging Face agents hackathon 2024 winners evaluation github	new batch	issued:R-B-21
@@ -120,5 +120,5 @@ B	query	Korea AI agents hackathon 2026 winner research github	new vendor regiona
 B	url	https://www.snowflake.com/en/blog/startup-challenge-2025-winner/	R-B-23 new lead	R-B-23;issued:R-B-24
 B	url	https://databricks-hackathon.devpost.com/project-gallery	R-B-23 new lead	R-B-23;issued:R-B-24
 B	url	https://www.msit.go.kr/bbs/view.do?bbsSeqNo=94&mId=113&nttSeqNo=3186771	R-B-23 new lead	R-B-23;issued:R-B-24
-B	url	https://www.salesforce.com/	Официальный материал Agentforce Hackathon Tokyo 2025, по Tekuru, описывает победивший retail-проект; стоит искать код и точную страницу результатов.	R-B-23
-B	url	https://webzine.nrf.re.kr/magazine/2605/sub9.php	Первичный список победителей AI Co-Scientist Challenge Korea Track 2; можно искать открытый код остальных награждённых команд.	R-B-24
+B	url	https://www.salesforce.com/	Официальный материал Agentforce Hackathon Tokyo 2025, по Tekuru, описывает победивший retail-проект; стоит искать код и точную страницу результатов.	R-B-23;issued:R-B-25
+B	url	https://webzine.nrf.re.kr/magazine/2605/sub9.php	Первичный список победителей AI Co-Scientist Challenge Korea Track 2; можно искать открытый код остальных награждённых команд.	R-B-24;issued:R-B-25
