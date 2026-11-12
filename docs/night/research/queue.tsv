@@ -201,3 +201,6 @@ B	query	"hackathon" "research agent" "citation verification" github 2026	Focused
 B	query	"hackathon" "grounded research" "winner" github 2024	Focused product/evidence research	orchestrator;issued:R-B-44
 B	query	"strategy" "promptfoo" "evaluation" github	Focused product/evidence research	orchestrator;issued:R-B-44
 B	query	"market research" "agent" "benchmark" "sources" github	Focused product/evidence research	orchestrator;issued:R-B-44
+B	url	https://replit.com/blog/spc-ai-hackathon	Официальный пост описывает Auto Analyst и работу аналитика, но это хакатон 2023 года; проверить исходный репозиторий/статус проекта в отдельной пачке.	R-B-39
+B	url	https://supabase.com/blog/tags/hackathon	Официальный указатель результатов Supabase за 2024 год; уточнить проекты Launch Week 12/13 и публичные репозитории, если появится конкретный исследовательский агент.	R-B-39
+B	url	https://luma.com/mrb95k98	Страница Neo4j Agentic AI & GraphRAG Mini Hack; уточнить дату, официальную публикацию призёров и ссылки на код команд.	R-B-39
