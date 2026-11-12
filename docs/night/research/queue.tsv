@@ -51,3 +51,6 @@ A	url	https://mephi.ru/press/announcements/26733	официальное объя
 B	url	https://devpost.com/software/aegisagent-an-insurance-claim-app-fully-developed-by-kiro	подтверждённое 2-е место AWS; исследовать репозиторий, если удастся найти публичную ссылку, и проверить схему дебатов/запроса недостающих данных.	R-B-01
 B	url	https://googlecloudmultiagents.devpost.com/updates/35783-and-the-winners-are	список победителей Google ADK Hackathon 2025; отдельно проверить репозитории SalesShortcut и региональных призёров.	R-B-01
 B	url	https://huggingface.co/MCP-1st-Birthday	страница MCP 1st Birthday с объявлением результатов и коллекциями проектов; найти победителя, чья реализация может дать переносимый метод оценки или проверки.	R-B-01
+B	url	https://aclanthology.org/2024.naacl-long.347/	публикация STORM 2024: можно проверить оценивание качества исследовательского отчёта с цитатами	R-B-03
+B	url	https://github.com/deer-flow/llm-space	сестринский проект DeerFlow для инспекции шагов harness, воспроизведения ошибок и бенчмарков; проверить как возможный источник конкретных практик оценки	R-B-03
+B	url	https://github.com/mvanhorn/last30days-skill/tree/main/tests/eval	фикстуры оценки исследовательских запросов и поискового качества; проверить возможность переноса малой методики проверки	R-B-03
