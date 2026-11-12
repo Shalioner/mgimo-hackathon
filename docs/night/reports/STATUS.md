@@ -128,3 +128,5 @@ night/T01-review: common после слияния 0.
 night/T04: common после слияния 0.
 
 22:02: night/T04-review слита после собственной приёмки и независимого ACCEPT; проверяется common.
+
+night/T04-review: common после слияния 0.
