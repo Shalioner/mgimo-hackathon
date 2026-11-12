@@ -1,56 +1,66 @@
 group	kind	value	why	source
-B	url	https://github.com/garrytan/gstack	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
-B	url	https://github.com/affaan-m/ECC	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
-B	url	https://github.com/obra/superpowers	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
-B	url	https://github.com/wshobson/agents	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
-B	url	https://github.com/hesreallyhim/awesome-claude-code	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
-A	query	"Стратег Фабрики продуктов"	стартовая зацепка	ORCHESTRATOR
-A	query	"MGIMO AI Challenge"	стартовая зацепка	ORCHESTRATOR
-A	query	"MGIMO×AI"	стартовая зацепка	ORCHESTRATOR
-A	query	"Фабрика продуктов" агент	стартовая зацепка	ORCHESTRATOR
-A	query	product strategist agent МегаФон	стартовая зацепка	ORCHESTRATOR
-A	query	AGENTS.md стратег продукт	стартовая зацепка	ORCHESTRATOR
-A	query	megafon hackathon agent	стартовая зацепка	ORCHESTRATOR
-A	query	mgimo hackathon 2026	стартовая зацепка	ORCHESTRATOR
-B	query	devpost AI agents hackathon winners 2025	стартовая зацепка	ORCHESTRATOR
-B	query	devpost multi-agent hackathon winner 2026	стартовая зацепка	ORCHESTRATOR
-B	query	lablab.ai hackathon winners agents	стартовая зацепка	ORCHESTRATOR
-B	query	deep research agent hackathon winner github	стартовая зацепка	ORCHESTRATOR
-B	query	MCP hackathon winner github	стартовая зацепка	ORCHESTRATOR
-B	query	LLM evaluation hackathon winner	стартовая зацепка	ORCHESTRATOR
-B	query	AI product manager agent hackathon	стартовая зацепка	ORCHESTRATOR
-B	query	decision support agent citations hackathon	стартовая зацепка	ORCHESTRATOR
-B	query	market research agent open source citations	стартовая зацепка	ORCHESTRATOR
-B	query	model routing cost hackathon	стартовая зацепка	ORCHESTRATOR
-A	url	https://api.github.com/repos/fighter90/product-factory-strategist/forks	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/users/fighter90/repos	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/repos/thai1311-fuk/product-strategist-agent/forks	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/users/thai1311-fuk/repos	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/repos/vladekds/mgimo_ai/forks	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/users/vladekds/repos	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/repos/andrewwqq200/mega-product-strategist/forks	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/users/andrewwqq200/repos	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/repos/alexprotop302-tech/product-strategist-agent/forks	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/users/alexprotop302-tech/repos	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/repos/hfuvoo-art/strateg-agent/forks	форки и репозитории автора	index.tsv
-A	url	https://api.github.com/users/hfuvoo-art/repos	форки и репозитории автора	index.tsv
-B	url	https://github.com/topics/ai-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
-B	url	https://github.com/topics/multi-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
-B	url	https://github.com/topics/deep-research?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
+B	url	https://github.com/garrytan/gstack	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-05
+B	url	https://github.com/affaan-m/ECC	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-05
+B	url	https://github.com/obra/superpowers	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-05
+B	url	https://github.com/wshobson/agents	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-04
+B	url	https://github.com/hesreallyhim/awesome-claude-code	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-04
+A	query	"Стратег Фабрики продуктов"	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	"MGIMO AI Challenge"	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	"MGIMO×AI"	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	"Фабрика продуктов" агент	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	product strategist agent МегаФон	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	AGENTS.md стратег продукт	стартовая зацепка	ORCHESTRATOR;issued:R-A-06
+A	query	megafon hackathon agent	стартовая зацепка	ORCHESTRATOR;issued:R-A-06
+A	query	mgimo hackathon 2026	стартовая зацепка	ORCHESTRATOR;issued:R-A-06
+B	query	devpost AI agents hackathon winners 2025	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	devpost multi-agent hackathon winner 2026	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	lablab.ai hackathon winners agents	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	deep research agent hackathon winner github	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	MCP hackathon winner github	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	LLM evaluation hackathon winner	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	AI product manager agent hackathon	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	decision support agent citations hackathon	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	market research agent open source citations	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	model routing cost hackathon	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+A	url	https://api.github.com/repos/fighter90/product-factory-strategist/forks	форки и репозитории автора	index.tsv;issued:R-A-02
+A	url	https://api.github.com/users/fighter90/repos	форки и репозитории автора	index.tsv;issued:R-A-02
+A	url	https://api.github.com/repos/thai1311-fuk/product-strategist-agent/forks	форки и репозитории автора	index.tsv;issued:R-A-02
+A	url	https://api.github.com/users/thai1311-fuk/repos	форки и репозитории автора	index.tsv;issued:R-A-03
+A	url	https://api.github.com/repos/vladekds/mgimo_ai/forks	форки и репозитории автора	index.tsv;issued:R-A-03
+A	url	https://api.github.com/users/vladekds/repos	форки и репозитории автора	index.tsv;issued:R-A-03
+A	url	https://api.github.com/repos/andrewwqq200/mega-product-strategist/forks	форки и репозитории автора	index.tsv;issued:R-A-04
+A	url	https://api.github.com/users/andrewwqq200/repos	форки и репозитории автора	index.tsv;issued:R-A-04
+A	url	https://api.github.com/repos/alexprotop302-tech/product-strategist-agent/forks	форки и репозитории автора	index.tsv;issued:R-A-04
+A	url	https://api.github.com/users/alexprotop302-tech/repos	форки и репозитории автора	index.tsv;issued:R-A-05
+A	url	https://api.github.com/repos/hfuvoo-art/strateg-agent/forks	форки и репозитории автора	index.tsv;issued:R-A-05
+A	url	https://api.github.com/users/hfuvoo-art/repos	форки и репозитории автора	index.tsv;issued:R-A-05
+B	url	https://github.com/topics/ai-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-03
+B	url	https://github.com/topics/multi-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-03
+B	url	https://github.com/topics/deep-research?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-03
 B	url	https://github.com/topics/mcp-server?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
 B	url	https://github.com/topics/llm-evaluation?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
-B	url	https://dev.ua/en/news/softserve-proviv-khakaton-agentforge-prysviachenyi-rozrobtsi-shi-ahentiv-1771510332	материал о результатах AgentForge, включая AI Product Manager Colleague; найти точный GitHub команды No More Tokens.	R-B-02
+B	url	https://dev.ua/en/news/softserve-proviv-khakaton-agentforge-prysviachenyi-rozrobtsi-shi-ahentiv-1771510332	материал о результатах AgentForge, включая AI Product Manager Colleague; найти точный GitHub команды No More Tokens.	R-B-02;issued:R-B-04
 B	url	https://devpost.com/software/the-idea-hub-6h1730	3-е место 100 Agents Hackathon; описание multi-agent анализа идей, найти связанный исходный репозиторий.	R-B-02
 B	url	https://hackthenorth2025.devpost.com/submissions/search	победитель Tunnel AI Agents for Simulated Market Research; найти страницу проекта и GitHub.	R-B-02
-A	query	"МГИМО" "МегаФон" "агент" github	уточнение поиска оставшихся участников	R-A-06
-A	query	"MGIMO" "product strategist" github	уточнение поиска оставшихся участников	R-A-06
-A	url	https://github.com/hfuvoo-art/chellenge	Публичный репозиторий автора участника; проверить README и дерево, если появится содержимое.	R-A-05
-A	url	https://github.com/hfuvoo-art/surname-bot	Другой репозиторий автора; проверить содержимое на агентное решение и связь с кейсом.	R-A-05
-A	url	https://challenge.mgimo.ai/	официальный сайт сообщает дату дедлайна 22.11.2026 и объявления результатов 28.11.2026; повторить поиск публичных работ после дедлайна/объявления итогов.	R-A-06
-A	url	https://mephi.ru/press/announcements/26733	официальное объявление вуза о MGIMO AI Challenge подтверждает срок конкурса и партнёров; проверить новости после публикации результатов.	R-A-06
-B	url	https://devpost.com/software/aegisagent-an-insurance-claim-app-fully-developed-by-kiro	подтверждённое 2-е место AWS; исследовать репозиторий, если удастся найти публичную ссылку, и проверить схему дебатов/запроса недостающих данных.	R-B-01
-B	url	https://googlecloudmultiagents.devpost.com/updates/35783-and-the-winners-are	список победителей Google ADK Hackathon 2025; отдельно проверить репозитории SalesShortcut и региональных призёров.	R-B-01
-B	url	https://huggingface.co/MCP-1st-Birthday	страница MCP 1st Birthday с объявлением результатов и коллекциями проектов; найти победителя, чья реализация может дать переносимый метод оценки или проверки.	R-B-01
+A	query	"МГИМО" "МегаФон" "агент" github	уточнение поиска оставшихся участников	R-A-06;issued:R-A-06
+A	query	"MGIMO" "product strategist" github	уточнение поиска оставшихся участников	R-A-06;issued:R-A-06
+A	url	https://github.com/hfuvoo-art/chellenge	Публичный репозиторий автора участника; проверить README и дерево, если появится содержимое.	R-A-05;issued:R-A-07
+A	url	https://github.com/hfuvoo-art/surname-bot	Другой репозиторий автора; проверить содержимое на агентное решение и связь с кейсом.	R-A-05;issued:R-A-07
+A	url	https://challenge.mgimo.ai/	официальный сайт сообщает дату дедлайна 22.11.2026 и объявления результатов 28.11.2026; повторить поиск публичных работ после дедлайна/объявления итогов.	R-A-06;issued:R-A-07
+A	url	https://mephi.ru/press/announcements/26733	официальное объявление вуза о MGIMO AI Challenge подтверждает срок конкурса и партнёров; проверить новости после публикации результатов.	R-A-06;issued:R-A-08
+B	url	https://devpost.com/software/aegisagent-an-insurance-claim-app-fully-developed-by-kiro	подтверждённое 2-е место AWS; исследовать репозиторий, если удастся найти публичную ссылку, и проверить схему дебатов/запроса недостающих данных.	R-B-01;issued:R-B-06
+B	url	https://googlecloudmultiagents.devpost.com/updates/35783-and-the-winners-are	список победителей Google ADK Hackathon 2025; отдельно проверить репозитории SalesShortcut и региональных призёров.	R-B-01;issued:R-B-06
+B	url	https://huggingface.co/MCP-1st-Birthday	страница MCP 1st Birthday с объявлением результатов и коллекциями проектов; найти победителя, чья реализация может дать переносимый метод оценки или проверки.	R-B-01;issued:R-B-06
 B	url	https://aclanthology.org/2024.naacl-long.347/	публикация STORM 2024: можно проверить оценивание качества исследовательского отчёта с цитатами	R-B-03
 B	url	https://github.com/deer-flow/llm-space	сестринский проект DeerFlow для инспекции шагов harness, воспроизведения ошибок и бенчмарков; проверить как возможный источник конкретных практик оценки	R-B-03
 B	url	https://github.com/mvanhorn/last30days-skill/tree/main/tests/eval	фикстуры оценки исследовательских запросов и поискового качества; проверить возможность переноса малой методики проверки	R-B-03
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/devrel-agent-gradio	DevRel Campaign Generator — призёр Enterprise Track 2; исследовать исходные файлы.	R-B-06-blocked
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Finance-Portfolio-Intelligence-Platform	победитель Consumer Track 1; исследовать исходные файлы платформы аналитики.	R-B-06-blocked
+A	url	https://api.github.com/repos/hfuvoo-art/chellenge/forks	assigned batch	issued:R-A-08
+A	url	https://api.github.com/repos/Fighter90/product-decision-skills/forks	assigned batch	issued:R-A-08
+A	query	"MGIMOxAI" strategist github	assigned batch	issued:R-A-09
+A	query	"MGIMO AI Challenge 2026" "strategist"	assigned batch	issued:R-A-09
+A	query	"МГИМО AI Challenge" "Стратег" github	assigned batch	issued:R-A-09
+A	query	"МегаФон" "Фабрика продуктов" "github.com"	assigned batch	issued:R-A-09
+A	query	"mgimo" "megafon" "AGENTS.md"	assigned batch	issued:R-A-09
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/snowman-ai	assigned batch	issued:R-B-07
