@@ -153,3 +153,8 @@ B	url	https://www.bi.go.id/id/publikasi/ruang-media/news-release/Documents/Pemen
 B	url	https://hackathon-26.melsoft.org/	Проверить результаты после 14.11.2026; южноафриканское событие об автономных агентных системах, но на момент этой пачки ещё не завершено.	R-B-31;deferred:after-2026-11-14
 B	url	https://github.com/amboltio/Nordic-AI-Cup-2026	Distinct code lead	R-B-32;issued:R-B-33
 B	url	https://github.com/amboltio/DM-i-AI-2025	Distinct code lead	R-B-32;issued:R-B-33
+B	query	AWS Bedrock hackathon 2024 winner research agent github	New vendor research	orchestrator;issued:R-B-34
+B	query	LangChain LangGraph hackathon 2025 winners business research github	New vendor research	orchestrator;issued:R-B-34
+B	query	LlamaIndex agent hackathon 2026 winner evaluation github	New vendor research	orchestrator;issued:R-B-34
+B	query	Cloudflare agents hackathon 2025 winners research github	New vendor research	orchestrator;issued:R-B-34
+B	query	Elastic agent builder hackathon 2026 winner decision support github	New vendor research	orchestrator;issued:R-B-34
