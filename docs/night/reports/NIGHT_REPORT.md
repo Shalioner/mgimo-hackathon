@@ -558,3 +558,5 @@ S05 финальный SHA 9566a5c91ff75a8a65b47ee0c63c12c1827c817c, содер�
 night/S-05: common после слияния 0.
 
 00:41: night/S-05-review слита после собственной приёмки и независимого ACCEPT; проверяется common.
+
+night/S-05-review: common после слияния 0.
