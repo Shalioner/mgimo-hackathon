@@ -1,0 +1,6 @@
+- id: CHG-001
+  date: 2026-11-10
+  processed: false
+- id: CHG-002
+  date: 2026-11-09
+  processed: true
