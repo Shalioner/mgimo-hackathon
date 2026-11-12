@@ -2,7 +2,7 @@
 - Группа: B
 - URL: https://github.com/TheApexWu/crucible
 - Хакатон: Self Improving Agents Hack at Datadog, NYC, 2026
-- Результат: победитель (1st Prize, General Judge)
+- Результат: победитель — Devpost показывает метку «1st Prize Winner - General Judge»
 - Доказательство результата: https://devpost.com/software/crucible-c3qabe
 - Активность: коммитов 20, файлов 48, обновлён 2026-10-01
 - Стек: Python; Google Gemini API (README сообщает Gemini 2.0 Flash для headline run; часть поздних сравнений — Gemini 2.5 Flash); Streamlit и статические HTML-страницы для демо; JSON-артефакты; pytest; опциональные Datadog LLM Observability и Braintrust. MCP/CLI: MCP не виден в просмотренных файлах; запуск и обработка — Python CLI.
