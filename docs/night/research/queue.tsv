@@ -149,5 +149,7 @@ B	query	Taiwan agent AI hackathon 2025 winners decision support github	New count
 B	url	https://sites.google.com/view/amd-online-hackathon-2025/首頁/得獎名單	Проверить публичные project pages/репозитории MEDFLOW AI, SmartTrip_Team и Algopilot; официально подтверждены призовые места.	R-B-31;issued:R-B-32
 B	url	https://fcai.fi/news/2026/10/28/nordic-ai-cup	Интервью с победителем национального AI-хакатона Финляндии и Nordic AI Cup описывает планировщик, multi-agent RL и проверку на разных картах; найти опубликованный код.	R-B-31;issued:R-B-32
 B	url	https://siliconmisiones.gob.ar/simi-data/el-hackathon-ia-ya-tiene-ganadores-innovacion-aplicada-para-resolver-desafios-reales/	Уточнить год издания и поискать код команд Cuidafy/PIA/CIMIA; среди проектов есть поддержка решений и аналитика.	R-B-31;issued:R-B-32
-B	url	https://www.bi.go.id/id/publikasi/ruang-media/news-release/Documents/Pemenang-Hackathon-Bank-Indonesia-Tahun-2024.pdf	Проверить команды-призёры и наличие публичных репозиториев; это найденное индонезийское соседнее соревнование 2024 года, не искомый 2025.	R-B-31
+B	url	https://www.bi.go.id/id/publikasi/ruang-media/news-release/Documents/Pemenang-Hackathon-Bank-Indonesia-Tahun-2024.pdf	Проверить команды-призёры и наличие публичных репозиториев; это найденное индонезийское соседнее соревнование 2024 года, не искомый 2025.	R-B-31;issued:R-B-33
 B	url	https://hackathon-26.melsoft.org/	Проверить результаты после 14.11.2026; южноафриканское событие об автономных агентных системах, но на момент этой пачки ещё не завершено.	R-B-31;deferred:after-2026-11-14
+B	url	https://github.com/amboltio/Nordic-AI-Cup-2026	Distinct code lead	R-B-32;issued:R-B-33
+B	url	https://github.com/amboltio/DM-i-AI-2025	Distinct code lead	R-B-32;issued:R-B-33
