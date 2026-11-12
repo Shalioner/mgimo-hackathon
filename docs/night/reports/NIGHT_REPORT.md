@@ -305,3 +305,5 @@ night/T02: common после слияния 0.
 night/T02-review: common после слияния 0.
 
 22:51: night/S-02 слита после собственной приёмки и независимого ACCEPT; проверяется common.
+
+night/S-02: common после слияния 0.
