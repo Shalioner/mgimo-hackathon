@@ -301,3 +301,5 @@ R-B-11: common после слияния 0.
 night/T02: common после слияния 0.
 
 22:51: night/T02-review слита после собственной приёмки и независимого ACCEPT; проверяется common.
+
+night/T02-review: common после слияния 0.
