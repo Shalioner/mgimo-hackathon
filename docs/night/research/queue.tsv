@@ -70,3 +70,5 @@ B	url	https://github.com/gradio-app/gradio/issues/12622	первичная за�
 B	url	https://100agents.devpost.com/	Страница хакатона, связанного с The Idea Hub; проверить победителей и репозитории других призёров.	R-B-08
 B	url	https://huggingface.co/spaces/castlebbs/elm327-simulator	README Vehicle Diagnostic Assistant указывает этот Space как симулятор OBD-II, связанный с MCP-агентом.	R-B-10
 B	url	https://huggingface.co/blog/MCP-1st-Birthday/mcp-blockly	README MCP Blockly ссылается на статью проекта, потенциально полезную для разбора его дизайна и контекста события.	R-B-10
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/cite-before-act-mcp	Best Overall в Building MCP по issue Gradio; проверить открытые исходники и способы привязки цитат к действиям.	R-B-11
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Brand-Identity-Generator	OpenAI Best API Integration по issue Gradio; проверить источники к маркетинговым рекомендациям.	R-B-11
