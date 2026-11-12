@@ -122,3 +122,8 @@ B	url	https://databricks-hackathon.devpost.com/project-gallery	R-B-23 new lead	R
 B	url	https://www.msit.go.kr/bbs/view.do?bbsSeqNo=94&mId=113&nttSeqNo=3186771	R-B-23 new lead	R-B-23;issued:R-B-24
 B	url	https://www.salesforce.com/	Официальный материал Agentforce Hackathon Tokyo 2025, по Tekuru, описывает победивший retail-проект; стоит искать код и точную страницу результатов.	R-B-23;issued:R-B-25
 B	url	https://webzine.nrf.re.kr/magazine/2605/sub9.php	Первичный список победителей AI Co-Scientist Challenge Korea Track 2; можно искать открытый код остальных награждённых команд.	R-B-24;issued:R-B-25
+B	query	Anthropic Claude hackathon 2025 winners research agent github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	Cerebras agent hackathon 2026 winner evaluation github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	hackathon agentes IA Chile 2025 ganadores investigacion github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	KI Agenten Hackathon Deutschland 2024 Gewinner Entscheidungsunterstuetzung github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	Alibaba Qwen agent hackathon 2025 winners research github	New country/vendor research	orchestrator;issued:R-B-26
