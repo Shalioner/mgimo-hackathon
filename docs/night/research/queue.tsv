@@ -168,8 +168,8 @@ B	query	AI agents hackathon Nigeria 2025 winners business github	New vendor/coun
 B	query	hackathon agentes IA Colombia 2026 ganadores github	New vendor/country research	orchestrator;issued:R-B-36
 B	query	AI agent hackathon Netherlands 2024 winner research github	New vendor/country research	orchestrator;issued:R-B-36
 B	query	AI agent hackathon Sweden 2025 winners evaluation github	New vendor/country research	orchestrator;issued:R-B-36
-B	url	https://ecoactu.ma/hackathon-aiwa-voici-les-laureats-de-ledition-2025/	результаты AIWA 2025; можно искать команды и ссылки на публичный код отдельно.	R-B-36
-B	url	https://bizthon.com/pdf/Report-BizThon-x-PBW-Hackathon-2025.pdf	победитель Agentic Technologies из Лагоса; искать по участникам Agrify Technologies.	R-B-36
-B	url	https://usecroma.com/es/blog/hackathon-govtech-resultados	результаты Croma и упоминание TRAZA; уточнить связь команд/проектов с GitHub, не переносить награду победителя.	R-B-36
+B	url	https://ecoactu.ma/hackathon-aiwa-voici-les-laureats-de-ledition-2025/	результаты AIWA 2025; можно искать команды и ссылки на публичный код отдельно.	R-B-36;issued:R-B-37
+B	url	https://bizthon.com/pdf/Report-BizThon-x-PBW-Hackathon-2025.pdf	победитель Agentic Technologies из Лагоса; искать по участникам Agrify Technologies.	R-B-36;issued:R-B-37
+B	url	https://usecroma.com/es/blog/hackathon-govtech-resultados	результаты Croma и упоминание TRAZA; уточнить связь команд/проектов с GitHub, не переносить награду победителя.	R-B-36;issued:R-B-37
 B	url	https://www.act.nato.int/article/tide-hackathon-concludes-amsterdam/	победитель LLM-задачи TIDE 2024; возможны дополнительные материалы команды Valkyrie 2.	R-B-36
 B	url	https://www.linkedin.com/posts/sweden-startup-next_swedenstartupnation-aiagents-innovationecosystem-activity-7398756668265684994-6fYc	CEO Reputation Radar, победитель шведского события; проверить дальнейшую публикацию кода.	R-B-36
