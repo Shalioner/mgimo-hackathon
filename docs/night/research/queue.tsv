@@ -41,7 +41,7 @@ B	url	https://github.com/topics/mcp-server?o=desc&s=stars	популярные �
 B	url	https://github.com/topics/llm-evaluation?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-08
 B	url	https://dev.ua/en/news/softserve-proviv-khakaton-agentforge-prysviachenyi-rozrobtsi-shi-ahentiv-1771510332	материал о результатах AgentForge, включая AI Product Manager Colleague; найти точный GitHub команды No More Tokens.	R-B-02;issued:R-B-04
 B	url	https://devpost.com/software/the-idea-hub-6h1730	3-е место 100 Agents Hackathon; описание multi-agent анализа идей, найти связанный исходный репозиторий.	R-B-02;issued:R-B-08
-B	url	https://hackthenorth2025.devpost.com/submissions/search	победитель Tunnel AI Agents for Simulated Market Research; найти страницу проекта и GitHub.	R-B-02
+B	url	https://hackthenorth2025.devpost.com/submissions/search	победитель Tunnel AI Agents for Simulated Market Research; найти страницу проекта и GitHub.	R-B-02;issued:R-B-09
 A	query	"МГИМО" "МегаФон" "агент" github	уточнение поиска оставшихся участников	R-A-06;issued:R-A-06
 A	query	"MGIMO" "product strategist" github	уточнение поиска оставшихся участников	R-A-06;issued:R-A-06
 A	url	https://github.com/hfuvoo-art/chellenge	Публичный репозиторий автора участника; проверить README и дерево, если появится содержимое.	R-A-05;issued:R-A-07
@@ -51,9 +51,9 @@ A	url	https://mephi.ru/press/announcements/26733	официальное объя
 B	url	https://devpost.com/software/aegisagent-an-insurance-claim-app-fully-developed-by-kiro	подтверждённое 2-е место AWS; исследовать репозиторий, если удастся найти публичную ссылку, и проверить схему дебатов/запроса недостающих данных.	R-B-01;issued:R-B-06
 B	url	https://googlecloudmultiagents.devpost.com/updates/35783-and-the-winners-are	список победителей Google ADK Hackathon 2025; отдельно проверить репозитории SalesShortcut и региональных призёров.	R-B-01;issued:R-B-06
 B	url	https://huggingface.co/MCP-1st-Birthday	страница MCP 1st Birthday с объявлением результатов и коллекциями проектов; найти победителя, чья реализация может дать переносимый метод оценки или проверки.	R-B-01;issued:R-B-06
-B	url	https://aclanthology.org/2024.naacl-long.347/	публикация STORM 2024: можно проверить оценивание качества исследовательского отчёта с цитатами	R-B-03
-B	url	https://github.com/deer-flow/llm-space	сестринский проект DeerFlow для инспекции шагов harness, воспроизведения ошибок и бенчмарков; проверить как возможный источник конкретных практик оценки	R-B-03
-B	url	https://github.com/mvanhorn/last30days-skill/tree/main/tests/eval	фикстуры оценки исследовательских запросов и поискового качества; проверить возможность переноса малой методики проверки	R-B-03
+B	url	https://aclanthology.org/2024.naacl-long.347/	публикация STORM 2024: можно проверить оценивание качества исследовательского отчёта с цитатами	R-B-03;issued:R-B-09
+B	url	https://github.com/deer-flow/llm-space	сестринский проект DeerFlow для инспекции шагов harness, воспроизведения ошибок и бенчмарков; проверить как возможный источник конкретных практик оценки	R-B-03;issued:R-B-09
+B	url	https://github.com/mvanhorn/last30days-skill/tree/main/tests/eval	фикстуры оценки исследовательских запросов и поискового качества; проверить возможность переноса малой методики проверки	R-B-03;issued:R-B-10
 B	url	https://huggingface.co/spaces/MCP-1st-Birthday/devrel-agent-gradio	DevRel Campaign Generator — призёр Enterprise Track 2; исследовать исходные файлы.	R-B-06-blocked;issued:R-B-07
 B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Finance-Portfolio-Intelligence-Platform	победитель Consumer Track 1; исследовать исходные файлы платформы аналитики.	R-B-06-blocked;issued:R-B-07
 A	url	https://api.github.com/repos/hfuvoo-art/chellenge/forks	assigned batch	issued:R-A-08
@@ -64,7 +64,7 @@ A	query	"МГИМО AI Challenge" "Стратег" github	assigned batch	issued:
 A	query	"МегаФон" "Фабрика продуктов" "github.com"	assigned batch	issued:R-A-09
 A	query	"mgimo" "megafon" "AGENTS.md"	assigned batch	issued:R-A-09
 B	url	https://huggingface.co/spaces/MCP-1st-Birthday/snowman-ai	assigned batch	issued:R-B-07
-B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Vehicle-Diagnostic-Assistant	победитель Track 2 Enterprise; можно исследовать исходники Space и посмотреть, есть ли переносимые практики.	R-B-07
-B	url	https://huggingface.co/spaces/MCP-1st-Birthday/MCP-Blockly	победитель Track 2 Consumer; проверить реализацию визуализации планирования/инструментов.	R-B-07
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Vehicle-Diagnostic-Assistant	победитель Track 2 Enterprise; можно исследовать исходники Space и посмотреть, есть ли переносимые практики.	R-B-07;issued:R-B-10
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/MCP-Blockly	победитель Track 2 Consumer; проверить реализацию визуализации планирования/инструментов.	R-B-07;issued:R-B-10
 B	url	https://github.com/gradio-app/gradio/issues/12622	первичная запись с данными победителей и указанием проекта Finance Platform; проверить связанные исходники/практики.	R-B-07
 B	url	https://100agents.devpost.com/	Страница хакатона, связанного с The Idea Hub; проверить победителей и репозитории других призёров.	R-B-08
