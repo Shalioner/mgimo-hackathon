@@ -63,7 +63,7 @@ Sol-придумыватель (`tasks/G_ideas.md`) запускается в н
    ```
 3. Запустить оркестратора в отдельном worktree:
    ```bash
-   orca worktree create --repo id:e98d5423-4581-4be3-bd78-bdd52ede02a8 --name night-orchestrator --base-branch main --agent codex --model gpt-6-astra --effort medium --prompt "Ты оркестратор ночного прогона. Прочитай docs/night/ORCHESTRATOR.md и docs/night/WORKER_RULES.md и выполни их. Человек недоступен до утра: ничего не спрашивай, спорное записывай в отчёт." --activate
+   orca worktree create --repo id:e98d5423-1bbf-4580-a36a-dcf928353f65 --name night-orchestrator --base-branch main --agent codex --model gpt-6-astra --effort medium --prompt "Ты оркестратор ночного прогона. Прочитай docs/night/ORCHESTRATOR.md и docs/night/WORKER_RULES.md и выполни их. Человек недоступен до утра: ничего не спрашивай, спорное записывай в отчёт." --activate
    ```
 4. Посмотреть 5 минут, что оркестратор создал Run, задачи и запустил первых воркеров (T05 — первым).
 5. В этой сессии Claude Code включить надзор: запрет сна Mac на ночь и `/loop 60m` по [SUPERVISOR.md](SUPERVISOR.md). Окно приложения не закрывать. Дальше можно идти спать.
