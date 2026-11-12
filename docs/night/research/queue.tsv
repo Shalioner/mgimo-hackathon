@@ -48,3 +48,6 @@ A	url	https://github.com/hfuvoo-art/chellenge	Публичный репозит�
 A	url	https://github.com/hfuvoo-art/surname-bot	Другой репозиторий автора; проверить содержимое на агентное решение и связь с кейсом.	R-A-05
 A	url	https://challenge.mgimo.ai/	официальный сайт сообщает дату дедлайна 22.11.2026 и объявления результатов 28.11.2026; повторить поиск публичных работ после дедлайна/объявления итогов.	R-A-06
 A	url	https://mephi.ru/press/announcements/26733	официальное объявление вуза о MGIMO AI Challenge подтверждает срок конкурса и партнёров; проверить новости после публикации результатов.	R-A-06
+B	url	https://devpost.com/software/aegisagent-an-insurance-claim-app-fully-developed-by-kiro	подтверждённое 2-е место AWS; исследовать репозиторий, если удастся найти публичную ссылку, и проверить схему дебатов/запроса недостающих данных.	R-B-01
+B	url	https://googlecloudmultiagents.devpost.com/updates/35783-and-the-winners-are	список победителей Google ADK Hackathon 2025; отдельно проверить репозитории SalesShortcut и региональных призёров.	R-B-01
+B	url	https://huggingface.co/MCP-1st-Birthday	страница MCP 1st Birthday с объявлением результатов и коллекциями проектов; найти победителя, чья реализация может дать переносимый метод оценки или проверки.	R-B-01
