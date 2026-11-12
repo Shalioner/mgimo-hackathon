@@ -185,3 +185,7 @@ B	query	Datadog AI agent hackathon 2026 winners github evaluation	New vendor res
 B	query	Snowflake Cortex agents hackathon 2026 winner github	New vendor research	orchestrator;issued:R-B-40
 B	query	IBM Granite agent hackathon 2025 winner business github	New vendor research	orchestrator;issued:R-B-40
 B	query	Oracle AI agent hackathon 2025 winners decision support github	New vendor research	orchestrator;issued:R-B-40
+B	url	https://developer.nvidia.com/blog/hackathon-winners-bring-agentic-ai-to-life-with-the-nvidia-nemo-agent-toolkit/	официальный список NVIDIA NeMo победителей; найти ссылки на исходные репозитории Route Optimization Agent и OpenCodeReview.	R-B-40
+B	url	https://github.com/TheApexWu/crucible	поисковая наводка на призовой проект Datadog Self Improving Agents Hack; найти/проверить первичный источник результата и содержимое для evaluation.	R-B-40
+B	url	https://www.mlh.com/events/elementx-2026/submissions	проверить победителя «Best Use of Snowflake» и репозиторий; установить, использует ли он именно Cortex Agents.	R-B-40
+B	url	https://community.oracle.com/CustomerConnect/discussion/904205/ai-agent-studio-inspiration-series-introduction-part-1-supply-chain-shipping-advisor-agent	официальный обзор Oracle hackathon 2025; выяснить, какие из 12 команд были победителями и есть ли публичный код для decision support.	R-B-40
