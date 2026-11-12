@@ -8,10 +8,12 @@
 
 ## Быстрый старт (5 минут)
 
-**Нужно:** Python 3.9+ и любая агентная среда с доступом к файлам и терминалу. Веб-поиск — встроенный в среду. Платных сервисов и ключей сверх подписки на саму среду не требуется.
+### Требования
+
+Python 3.9+ и агентная среда с доступом к файлам и терминалу (реальные сквозные прогоны: [Codex](docs/E2E_RUN_1.md), [ZCode](docs/E2E_RUN_2_ZCODE.md)). Веб-поиск — встроенный в среду. Платных сервисов и ключей сверх подписки на саму среду не требуется; `JEV_API_KEY` необязателен.
 
 ```bash
-git clone <ссылка на репозиторий> strategist && cd strategist
+git clone https://github.com/Shalioner/mgimo-hackathon.git strategist && cd strategist
 ```
 
 ```bash
@@ -109,10 +111,18 @@ docs/                ТЗ, требования, модель данных, пл
 
 ## Проверка инструментов
 
+В том же терминале, из папки `strategist`, с активированным окружением из «Быстрого старта»:
+
 ```bash
 python -m pytest -q tests
 ```
 
 ```bash
 python tools/ledger.py validate projects/example
+```
+
+Проверка MCP без подключения к агентной среде и без ключей: ответ на `tools/list` должен содержать инструменты `strategist_*`.
+
+```bash
+printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"t","version":"0"}}}' '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' | .venv/bin/python tools/mcp_server.py
 ```
