@@ -395,3 +395,5 @@ R-B-21: common после слияния 0.
 R-B-22: common после слияния 0.
 
 R22: common0, 33 cards. I03 final test slot assigned via msg_4903d9817097; next ready S03.
+
+23:24: R-B-23 слита, новых карточек 1; индекс и очередь обновлены. Проверка common после слияния выполняется.
