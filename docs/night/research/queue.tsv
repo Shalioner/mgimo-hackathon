@@ -1,4 +1,9 @@
 group	kind	value	why	source
+B	url	https://github.com/garrytan/gstack	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
+B	url	https://github.com/affaan-m/ECC	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
+B	url	https://github.com/obra/superpowers	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
+B	url	https://github.com/wshobson/agents	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
+B	url	https://github.com/hesreallyhim/awesome-claude-code	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f
 A	query	"Стратег Фабрики продуктов"	стартовая зацепка	ORCHESTRATOR
 A	query	"MGIMO AI Challenge"	стартовая зацепка	ORCHESTRATOR
 A	query	"MGIMO×AI"	стартовая зацепка	ORCHESTRATOR
