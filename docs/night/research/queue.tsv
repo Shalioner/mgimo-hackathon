@@ -69,7 +69,7 @@ B	url	https://huggingface.co/spaces/MCP-1st-Birthday/MCP-Blockly	победит�
 B	url	https://github.com/gradio-app/gradio/issues/12622	первичная запись с данными победителей и указанием проекта Finance Platform; проверить связанные исходники/практики.	R-B-07;issued:R-B-11
 B	url	https://100agents.devpost.com/	Страница хакатона, связанного с The Idea Hub; проверить победителей и репозитории других призёров.	R-B-08;issued:R-B-11
 B	url	https://huggingface.co/spaces/castlebbs/elm327-simulator	README Vehicle Diagnostic Assistant указывает этот Space как симулятор OBD-II, связанный с MCP-агентом.	R-B-10;issued:R-B-12
-B	url	https://huggingface.co/blog/MCP-1st-Birthday/mcp-blockly	README MCP Blockly ссылается на статью проекта, потенциально полезную для разбора его дизайна и контекста события.	R-B-10
+B	url	https://huggingface.co/blog/MCP-1st-Birthday/mcp-blockly	README MCP Blockly ссылается на статью проекта, потенциально полезную для разбора его дизайна и контекста события.	R-B-10;issued:R-B-14
 B	url	https://huggingface.co/spaces/MCP-1st-Birthday/cite-before-act-mcp	Best Overall в Building MCP по issue Gradio; проверить открытые исходники и способы привязки цитат к действиям.	R-B-11;issued:R-B-12
 B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Brand-Identity-Generator	OpenAI Best API Integration по issue Gradio; проверить источники к маркетинговым рекомендациям.	R-B-11;issued:R-B-12
 B	query	Alibaba agent hackathon 2025 winners research citations github	assigned batch	issued:R-B-13
@@ -77,3 +77,5 @@ B	query	中国 智能体 黑客松 2025 获奖 市场研究 github	assigned batc
 B	query	hackathon agentes inteligencia artificial ganadores 2025 investigación mercado github	assigned batch	issued:R-B-13
 B	query	Deutschland KI Agenten Hackathon 2024 Gewinner Entscheidungsunterstützung github	assigned batch	issued:R-B-13
 B	query	Kaggle agents intensive capstone 2025 winners decision support github	assigned batch	issued:R-B-13
+B	url	https://github.com/microsoft/AI_Agents_Hackathon/issues/526	new leads R-B-13 / pending MCP blog	issued:R-B-14
+B	url	https://www.kaggle.com/competitions/agents-intensive-capstone-project/discussion/663531	new leads R-B-13 / pending MCP blog	issued:R-B-14
