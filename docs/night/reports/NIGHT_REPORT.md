@@ -359,3 +359,5 @@ R-B-16: common после слияния 0.
 night/T07: common после слияния 0.
 
 23:08: night/T07-review слита после собственной приёмки и независимого ACCEPT; проверяется common.
+
+night/T07-review: common после слияния 0.
