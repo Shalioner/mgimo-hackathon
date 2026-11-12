@@ -1,9 +1,9 @@
 # boatcow/SmoothOperatorAI
 - Группа: B
 - URL: https://github.com/boatcow/SmoothOperatorAI
-- Хакатон: Berkeley RDI LLM Agents Hackathon, 2025 (год указан по официальной странице hackathon и её итоговой публикации; запрос был про 2024)
+- Хакатон: UC Berkeley RDI LLM Agents MOOC Hackathon, 2024 (Devpost указывает 22 октября — 16 декабря 2024)
 - Результат: победитель, 1-е место в Applications Track
-- Доказательство результата: https://rdi.berkeley.edu/llm-agents-hackathon/ — официальная страница, раздел Hackathon Winners, 1st Place, ссылка Code на этот репозиторий
+- Доказательство результата: https://rdi.berkeley.edu/llm-agents-hackathon/ — официальная страница, раздел Hackathon Winners, 1st Place, ссылка Code на этот репозиторий; дата события подтверждается страницей организатора на Devpost: https://uc-berkeley-rdi-llm-agents.devpost.com/ (22.10–16.12.2024)
 - Активность: коммитов 6, файлов 141, обновлён 2026-11-11 (последний push по API GitHub)
 - Стек: Python, LangChain, LangGraph, OpenAI API, Twilio, Firebase, React Native
 - Проверено чтением: `README.md`, `backend/agents/agent_graph.py`, `backend/agents/strategist_agent.py`; перечисленные в дереве credential-файлы не открывались

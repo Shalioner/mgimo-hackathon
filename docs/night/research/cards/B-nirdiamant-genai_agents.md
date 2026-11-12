@@ -1,9 +1,9 @@
 # NirDiamant/GenAI_Agents
 - Группа: B
 - URL: https://github.com/NirDiamant/GenAI_Agents
-- Хакатон: LangChain-organized online hackathon, 2024 (scientific-paper agent; reported by the event organizer)
-- Результат: победитель (1-е место по сообщению организатора)
-- Доказательство результата: https://www.reddit.com/r/LangChain/comments/1h81b4p/langgraph_based_literature_review_agent_hackathon/ — пост организатора и подтверждение ссылки на код в комментарии
+- Хакатон: заявленный LangChain online hackathon, 2024 (связь события с LangChain утверждает автор Reddit-поста; независимо не подтверждена)
+- Результат: неизвестно
+- Доказательство результата: https://www.reddit.com/r/LangChain/comments/1h81b4p/langgraph_based_literature_review_agent_hackathon/ — удалённый автор поста заявляет, что организовал хакатон с LangChain и что агент сделан победителями 1-го места; личность автора и эти заявления независимо не подтверждены
 - Активность: коммитов 444, файлов 198, обновлён 2026-11-02 (последний push по API GitHub)
 - Стек: Python, Jupyter, LangGraph, LangChain, OpenAI API, CORE API, pdfplumber, Pydantic
 - Проверено чтением: `all_agents_tutorials/scientific_paper_agent_langgraph.ipynb` (Markdown и кодовые ячейки)
