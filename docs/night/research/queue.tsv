@@ -191,3 +191,13 @@ B	url	https://www.mlh.com/events/elementx-2026/submissions	проверить п
 B	url	https://community.oracle.com/CustomerConnect/discussion/904205/ai-agent-studio-inspiration-series-introduction-part-1-supply-chain-shipping-advisor-agent	официальный обзор Oracle hackathon 2025; выяснить, какие из 12 команд были победителями и есть ли публичный код для decision support.	R-B-40;issued:R-B-42
 B	url	https://community.vercel.com/hackathons/zero-to-agent/winners	Code provenance lead	R-B-39;issued:R-B-42
 B	url	https://www.linkedin.com/posts/lastmile-ai_hackathon-recap-two-weeks-ago-we-teamed-activity-7402413889080066048-h1f_	Code provenance lead	R-B-39;issued:R-B-42
+B	query	"hackathon" "winner" "product strategy" "github" 2025	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "market research" "citations" "github" 2026	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "customer research" "evidence" winner 2024 github	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "decision support" "source verification" github	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"product manager" "agent skills" "research" github	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "winner" "LLM evaluation" "test cases" github 2025	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"hackathon" "research agent" "citation verification" github 2026	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"hackathon" "grounded research" "winner" github 2024	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"strategy" "promptfoo" "evaluation" github	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"market research" "agent" "benchmark" "sources" github	Focused product/evidence research	orchestrator;issued:R-B-44
