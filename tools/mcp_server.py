@@ -122,11 +122,18 @@ def t_datacheck(args):
     return run(D.main, a)
 
 
+def t_report(args):
+    import report as R
+    return run(R.main, [str(project_path(args["project"]))])
+
+
 S = {"type": "string"}
 TOOLS: Dict[str, dict] = {
     "strategist_datacheck": {"fn": t_datacheck, "description": "Проверить CSV/XLSX перед CLM: пропуски, повторы, единицы, периоды, выбросы и типы (T0). Код 1 — найдены проблемы; XLSX требует установленный openpyxl.",
                              "schema": {"type": "object", "properties": {"file": S, "sheet": S, "sep": S,
                                                                          "json": {"type": "boolean"}}, "required": ["file"]}},
+    "strategist_report": {"fn": t_report, "description": "Собрать один офлайн report.html: Главное, документы и реестр с подсказками по ID.",
+                          "schema": {"type": "object", "properties": {"project": S}, "required": ["project"]}},
     "strategist_status": {"fn": t_status, "description": "Проекты, текущий шаг каждого и что ждёт решения человека.",
                           "schema": {"type": "object", "properties": {}}},
     "strategist_trace": {"fn": t_trace, "description": "На чём держится объект реестра (например, DEC-001): цепочка до источников.",
