@@ -1,0 +1,36 @@
+group	kind	value	why	source
+A	query	"Стратег Фабрики продуктов"	стартовая зацепка	ORCHESTRATOR
+A	query	"MGIMO AI Challenge"	стартовая зацепка	ORCHESTRATOR
+A	query	"MGIMO×AI"	стартовая зацепка	ORCHESTRATOR
+A	query	"Фабрика продуктов" агент	стартовая зацепка	ORCHESTRATOR
+A	query	product strategist agent МегаФон	стартовая зацепка	ORCHESTRATOR
+A	query	AGENTS.md стратег продукт	стартовая зацепка	ORCHESTRATOR
+A	query	megafon hackathon agent	стартовая зацепка	ORCHESTRATOR
+A	query	mgimo hackathon 2026	стартовая зацепка	ORCHESTRATOR
+B	query	devpost AI agents hackathon winners 2025	стартовая зацепка	ORCHESTRATOR
+B	query	devpost multi-agent hackathon winner 2026	стартовая зацепка	ORCHESTRATOR
+B	query	lablab.ai hackathon winners agents	стартовая зацепка	ORCHESTRATOR
+B	query	deep research agent hackathon winner github	стартовая зацепка	ORCHESTRATOR
+B	query	MCP hackathon winner github	стартовая зацепка	ORCHESTRATOR
+B	query	LLM evaluation hackathon winner	стартовая зацепка	ORCHESTRATOR
+B	query	AI product manager agent hackathon	стартовая зацепка	ORCHESTRATOR
+B	query	decision support agent citations hackathon	стартовая зацепка	ORCHESTRATOR
+B	query	market research agent open source citations	стартовая зацепка	ORCHESTRATOR
+B	query	model routing cost hackathon	стартовая зацепка	ORCHESTRATOR
+A	url	https://api.github.com/repos/fighter90/product-factory-strategist/forks	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/users/fighter90/repos	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/repos/thai1311-fuk/product-strategist-agent/forks	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/users/thai1311-fuk/repos	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/repos/vladekds/mgimo_ai/forks	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/users/vladekds/repos	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/repos/andrewwqq200/mega-product-strategist/forks	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/users/andrewwqq200/repos	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/repos/alexprotop302-tech/product-strategist-agent/forks	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/users/alexprotop302-tech/repos	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/repos/hfuvoo-art/strateg-agent/forks	форки и репозитории автора	index.tsv
+A	url	https://api.github.com/users/hfuvoo-art/repos	форки и репозитории автора	index.tsv
+B	url	https://github.com/topics/ai-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
+B	url	https://github.com/topics/multi-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
+B	url	https://github.com/topics/deep-research?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
+B	url	https://github.com/topics/mcp-server?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
+B	url	https://github.com/topics/llm-evaluation?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR
