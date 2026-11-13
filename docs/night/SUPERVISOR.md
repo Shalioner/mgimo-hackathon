@@ -32,7 +32,7 @@
 ## Как отправить поправку
 
 ```bash
-orca orchestration send --to @worktree:<identity оркестратора из supervise.sh> --subject "НАДЗОР: <коротко>" --body "<что сделать, по пунктам; ссылка на § ТЗ>"
+orca orchestration send --to run:<id Run оркестратора: orca orchestration run-list, objective «Ночной прогон…»> --subject "НАДЗОР: <коротко>" --body "<что сделать, по пунктам; ссылка на § ТЗ>"
 ```
 
 Правила:

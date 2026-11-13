@@ -1,0 +1,207 @@
+group	kind	value	why	source
+B	url	https://github.com/garrytan/gstack	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-05
+B	url	https://github.com/affaan-m/ECC	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-05
+B	url	https://github.com/obra/superpowers	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-05
+B	url	https://github.com/wshobson/agents	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-04
+B	url	https://github.com/hesreallyhim/awesome-claude-code	приоритет надзора: агентные стеки	НАДЗОР msg_d7b641ddb55f;issued:R-B-04
+A	query	"Стратег Фабрики продуктов"	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	"MGIMO AI Challenge"	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	"MGIMO×AI"	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	"Фабрика продуктов" агент	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	product strategist agent МегаФон	стартовая зацепка	ORCHESTRATOR;issued:R-A-01
+A	query	AGENTS.md стратег продукт	стартовая зацепка	ORCHESTRATOR;issued:R-A-06
+A	query	megafon hackathon agent	стартовая зацепка	ORCHESTRATOR;issued:R-A-06
+A	query	mgimo hackathon 2026	стартовая зацепка	ORCHESTRATOR;issued:R-A-06
+B	query	devpost AI agents hackathon winners 2025	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	devpost multi-agent hackathon winner 2026	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	lablab.ai hackathon winners agents	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	deep research agent hackathon winner github	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	MCP hackathon winner github	стартовая зацепка	ORCHESTRATOR;issued:R-B-01
+B	query	LLM evaluation hackathon winner	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	AI product manager agent hackathon	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	decision support agent citations hackathon	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	market research agent open source citations	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+B	query	model routing cost hackathon	стартовая зацепка	ORCHESTRATOR;issued:R-B-02
+A	url	https://api.github.com/repos/fighter90/product-factory-strategist/forks	форки и репозитории автора	index.tsv;issued:R-A-02
+A	url	https://api.github.com/users/fighter90/repos	форки и репозитории автора	index.tsv;issued:R-A-02
+A	url	https://api.github.com/repos/thai1311-fuk/product-strategist-agent/forks	форки и репозитории автора	index.tsv;issued:R-A-02
+A	url	https://api.github.com/users/thai1311-fuk/repos	форки и репозитории автора	index.tsv;issued:R-A-03
+A	url	https://api.github.com/repos/vladekds/mgimo_ai/forks	форки и репозитории автора	index.tsv;issued:R-A-03
+A	url	https://api.github.com/users/vladekds/repos	форки и репозитории автора	index.tsv;issued:R-A-03
+A	url	https://api.github.com/repos/andrewwqq200/mega-product-strategist/forks	форки и репозитории автора	index.tsv;issued:R-A-04
+A	url	https://api.github.com/users/andrewwqq200/repos	форки и репозитории автора	index.tsv;issued:R-A-04
+A	url	https://api.github.com/repos/alexprotop302-tech/product-strategist-agent/forks	форки и репозитории автора	index.tsv;issued:R-A-04
+A	url	https://api.github.com/users/alexprotop302-tech/repos	форки и репозитории автора	index.tsv;issued:R-A-05
+A	url	https://api.github.com/repos/hfuvoo-art/strateg-agent/forks	форки и репозитории автора	index.tsv;issued:R-A-05
+A	url	https://api.github.com/users/hfuvoo-art/repos	форки и репозитории автора	index.tsv;issued:R-A-05
+B	url	https://github.com/topics/ai-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-03
+B	url	https://github.com/topics/multi-agent?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-03
+B	url	https://github.com/topics/deep-research?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-03
+B	url	https://github.com/topics/mcp-server?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-08
+B	url	https://github.com/topics/llm-evaluation?o=desc&s=stars	популярные обновлённые 2025–2026	ORCHESTRATOR;issued:R-B-08
+B	url	https://dev.ua/en/news/softserve-proviv-khakaton-agentforge-prysviachenyi-rozrobtsi-shi-ahentiv-1771510332	материал о результатах AgentForge, включая AI Product Manager Colleague; найти точный GitHub команды No More Tokens.	R-B-02;issued:R-B-04
+B	url	https://devpost.com/software/the-idea-hub-6h1730	3-е место 100 Agents Hackathon; описание multi-agent анализа идей, найти связанный исходный репозиторий.	R-B-02;issued:R-B-08
+B	url	https://hackthenorth2025.devpost.com/submissions/search	победитель Tunnel AI Agents for Simulated Market Research; найти страницу проекта и GitHub.	R-B-02;issued:R-B-09
+A	query	"МГИМО" "МегаФон" "агент" github	уточнение поиска оставшихся участников	R-A-06;issued:R-A-06
+A	query	"MGIMO" "product strategist" github	уточнение поиска оставшихся участников	R-A-06;issued:R-A-06
+A	url	https://github.com/hfuvoo-art/chellenge	Публичный репозиторий автора участника; проверить README и дерево, если появится содержимое.	R-A-05;issued:R-A-07
+A	url	https://github.com/hfuvoo-art/surname-bot	Другой репозиторий автора; проверить содержимое на агентное решение и связь с кейсом.	R-A-05;issued:R-A-07
+A	url	https://challenge.mgimo.ai/	официальный сайт сообщает дату дедлайна 22.11.2026 и объявления результатов 28.11.2026; повторить поиск публичных работ после дедлайна/объявления итогов.	R-A-06;issued:R-A-07
+A	url	https://mephi.ru/press/announcements/26733	официальное объявление вуза о MGIMO AI Challenge подтверждает срок конкурса и партнёров; проверить новости после публикации результатов.	R-A-06;issued:R-A-08
+B	url	https://devpost.com/software/aegisagent-an-insurance-claim-app-fully-developed-by-kiro	подтверждённое 2-е место AWS; исследовать репозиторий, если удастся найти публичную ссылку, и проверить схему дебатов/запроса недостающих данных.	R-B-01;issued:R-B-06
+B	url	https://googlecloudmultiagents.devpost.com/updates/35783-and-the-winners-are	список победителей Google ADK Hackathon 2025; отдельно проверить репозитории SalesShortcut и региональных призёров.	R-B-01;issued:R-B-06
+B	url	https://huggingface.co/MCP-1st-Birthday	страница MCP 1st Birthday с объявлением результатов и коллекциями проектов; найти победителя, чья реализация может дать переносимый метод оценки или проверки.	R-B-01;issued:R-B-06
+B	url	https://aclanthology.org/2024.naacl-long.347/	публикация STORM 2024: можно проверить оценивание качества исследовательского отчёта с цитатами	R-B-03;issued:R-B-09
+B	url	https://github.com/deer-flow/llm-space	сестринский проект DeerFlow для инспекции шагов harness, воспроизведения ошибок и бенчмарков; проверить как возможный источник конкретных практик оценки	R-B-03;issued:R-B-09
+B	url	https://github.com/mvanhorn/last30days-skill/tree/main/tests/eval	фикстуры оценки исследовательских запросов и поискового качества; проверить возможность переноса малой методики проверки	R-B-03;issued:R-B-10
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/devrel-agent-gradio	DevRel Campaign Generator — призёр Enterprise Track 2; исследовать исходные файлы.	R-B-06-blocked;issued:R-B-07
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Finance-Portfolio-Intelligence-Platform	победитель Consumer Track 1; исследовать исходные файлы платформы аналитики.	R-B-06-blocked;issued:R-B-07
+A	url	https://api.github.com/repos/hfuvoo-art/chellenge/forks	assigned batch	issued:R-A-08
+A	url	https://api.github.com/repos/Fighter90/product-decision-skills/forks	assigned batch	issued:R-A-08
+A	query	"MGIMOxAI" strategist github	assigned batch	issued:R-A-09
+A	query	"MGIMO AI Challenge 2026" "strategist"	assigned batch	issued:R-A-09
+A	query	"МГИМО AI Challenge" "Стратег" github	assigned batch	issued:R-A-09
+A	query	"МегаФон" "Фабрика продуктов" "github.com"	assigned batch	issued:R-A-09
+A	query	"mgimo" "megafon" "AGENTS.md"	assigned batch	issued:R-A-09
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/snowman-ai	assigned batch	issued:R-B-07
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Vehicle-Diagnostic-Assistant	победитель Track 2 Enterprise; можно исследовать исходники Space и посмотреть, есть ли переносимые практики.	R-B-07;issued:R-B-10
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/MCP-Blockly	победитель Track 2 Consumer; проверить реализацию визуализации планирования/инструментов.	R-B-07;issued:R-B-10
+B	url	https://github.com/gradio-app/gradio/issues/12622	первичная запись с данными победителей и указанием проекта Finance Platform; проверить связанные исходники/практики.	R-B-07;issued:R-B-11
+B	url	https://100agents.devpost.com/	Страница хакатона, связанного с The Idea Hub; проверить победителей и репозитории других призёров.	R-B-08;issued:R-B-11
+B	url	https://huggingface.co/spaces/castlebbs/elm327-simulator	README Vehicle Diagnostic Assistant указывает этот Space как симулятор OBD-II, связанный с MCP-агентом.	R-B-10;issued:R-B-12
+B	url	https://huggingface.co/blog/MCP-1st-Birthday/mcp-blockly	README MCP Blockly ссылается на статью проекта, потенциально полезную для разбора его дизайна и контекста события.	R-B-10;issued:R-B-14
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/cite-before-act-mcp	Best Overall в Building MCP по issue Gradio; проверить открытые исходники и способы привязки цитат к действиям.	R-B-11;issued:R-B-12
+B	url	https://huggingface.co/spaces/MCP-1st-Birthday/Brand-Identity-Generator	OpenAI Best API Integration по issue Gradio; проверить источники к маркетинговым рекомендациям.	R-B-11;issued:R-B-12
+B	query	Alibaba agent hackathon 2025 winners research citations github	assigned batch	issued:R-B-13
+B	query	中国 智能体 黑客松 2025 获奖 市场研究 github	assigned batch	issued:R-B-13
+B	query	hackathon agentes inteligencia artificial ganadores 2025 investigación mercado github	assigned batch	issued:R-B-13
+B	query	Deutschland KI Agenten Hackathon 2024 Gewinner Entscheidungsunterstützung github	assigned batch	issued:R-B-13
+B	query	Kaggle agents intensive capstone 2025 winners decision support github	assigned batch	issued:R-B-13
+B	url	https://github.com/microsoft/AI_Agents_Hackathon/issues/526	new leads R-B-13 / pending MCP blog	issued:R-B-14
+B	url	https://www.kaggle.com/competitions/agents-intensive-capstone-project/discussion/663531	new leads R-B-13 / pending MCP blog	issued:R-B-14
+B	query	Anthropic hackathon 2025 winner market research github	new vendor university batch	issued:R-B-15
+B	query	Berkeley agent hackathon 2024 winner research assistant github	new vendor university batch	issued:R-B-15
+B	query	MIT AI agents hackathon 2025 winner decision support github	new vendor university batch	issued:R-B-15
+B	query	LangChain hackathon 2026 winners research citations github	new vendor university batch	issued:R-B-15
+B	query	Cerebral Valley agent hackathon 2025 winners github analyst	new vendor university batch	issued:R-B-15
+B	query	Google Gemini hackathon 2024 winner market research agent github	new vendor international batch	issued:R-B-16
+B	query	AWS AI agent hackathon 2025 winner business intelligence github	new vendor international batch	issued:R-B-16
+B	query	Microsoft AI agents hackathon 2026 winner product analytics github	new vendor international batch	issued:R-B-16
+B	query	hackathon IA agentes ganadores 2024 estrategia marketing github	new vendor international batch	issued:R-B-16
+B	query	hackathon agents IA France 2025 gagnants recherche marché github	new vendor international batch	issued:R-B-16
+B	url	https://ai.google.dev/competition?hl=en	проверить победителя Prospera (Most Useful App): продажи/коучинг, возможная полезная декомпозиция рекомендаций и репозиторий.	R-B-16;issued:R-B-17
+B	url	https://aws-agent-hackathon.devpost.com/updates/38140-congratulations-to-the-winners-of-the-aws-ai-agent-global-hackathon	проверить AegisAgent как пример explainable evidence-curation и разрешения неоднозначностей; приоритет — только артефакты, переносимые в папку агента.	R-B-16;issued:R-B-18
+B	url	https://devblogs.microsoft.com/powerplatform/agent-academy-hackathon-winners/	проверить репозитории Team Yaito и Client Kick-off Skill на применение в продуктовой работе; у Team Yaito ссылка на предполагаемый repo сейчас даёт 404 через GitHub API.	R-B-16;issued:R-B-17
+B	url	https://cloud.google.com/blog/products/ai-machine-learning/adk-hackathon-results-winners-and-highlights?hl=en	исследовать SalesShortcut: официальный победитель ADK Hackathon 2025, агентная лидогенерация и research, первичный источник и Devpost-linked project.	R-B-16;issued:R-B-17
+B	url	https://github.com/appieschot/client-kickoff-skill	R17 rejected branch recovery / public winners	issued:R-B-18
+B	url	https://rdi.berkeley.edu/llm-agents-hackathon/	R17 rejected branch recovery / public winners	issued:R-B-18
+B	query	IBM watsonx hackathon 2025 winner business research github	new vendor regional batch	issued:R-B-19
+B	query	Salesforce agentforce hackathon 2025 winner customer insights github	new vendor regional batch	issued:R-B-19
+B	query	NVIDIA agent hackathon 2024 winner market intelligence github	new vendor regional batch	issued:R-B-19
+B	query	hackathon agentes IA Brasil 2025 vencedores pesquisa mercado github	new vendor regional batch	issued:R-B-19
+B	query	Singapore AI agents hackathon 2026 winners decision support github	new vendor regional batch	issued:R-B-19
+B	url	https://developer.ibm.com/hackathons/	R-B-19 leads	issued:R-B-20
+B	url	https://microsoft.github.io/AI_Agents_Hackathon/winners/	R-B-19 leads	issued:R-B-20
+B	url	https://www.aivalley.io/events/total-agent-recall-hackathon/projects	R-B-19 leads	issued:R-B-20
+B	url	https://cloud.google.com/blog/products/ai-machine-learning/adk-hackathon-results-winners-and-highlights/	Официальные итоги ADK Hackathon 2025; в том числе Edu.AI из Бразилии, проверить GitHub-ссылки и доступность исходников.	R-B-19;issued:R-B-25
+B	query	OpenAI hackathon 2025 winner customer research github	new batch	issued:R-B-21
+B	query	Mistral hackathon 2025 winners business research github	new batch	issued:R-B-21
+B	query	Hugging Face agents hackathon 2024 winners evaluation github	new batch	issued:R-B-21
+B	query	AI Tinkerers hackathon 2026 winner decision research github	new batch	issued:R-B-21
+B	query	hackathon agentes IA México 2026 ganadores análisis clientes github	new batch	issued:R-B-21
+B	url	https://devpost.com/software/codex-lsab2z	new batch	issued:R-B-22
+B	url	https://nyc.aitinkerers.org/hackathons/h_NFPMYHfc0gw/showcase	new batch	issued:R-B-22
+B	url	https://openai2025.devpost.com/project-gallery	new batch	issued:R-B-22
+B	query	Databricks agent hackathon 2025 winner business analytics github	new vendor regional batch	issued:R-B-23
+B	query	Snowflake AI hackathon 2025 winner market research github	new vendor regional batch	issued:R-B-23
+B	query	AgentX Berkeley 2025 winners research evaluation github	new vendor regional batch	issued:R-B-23
+B	query	Japan AI agent hackathon 2025 winner business strategy github	new vendor regional batch	issued:R-B-23
+B	query	Korea AI agents hackathon 2026 winner research github	new vendor regional batch	issued:R-B-23
+B	url	https://www.snowflake.com/en/blog/startup-challenge-2025-winner/	R-B-23 new lead	R-B-23;issued:R-B-24
+B	url	https://databricks-hackathon.devpost.com/project-gallery	R-B-23 new lead	R-B-23;issued:R-B-24
+B	url	https://www.msit.go.kr/bbs/view.do?bbsSeqNo=94&mId=113&nttSeqNo=3186771	R-B-23 new lead	R-B-23;issued:R-B-24
+B	url	https://www.salesforce.com/	Официальный материал Agentforce Hackathon Tokyo 2025, по Tekuru, описывает победивший retail-проект; стоит искать код и точную страницу результатов.	R-B-23;issued:R-B-25
+B	url	https://webzine.nrf.re.kr/magazine/2605/sub9.php	Первичный список победителей AI Co-Scientist Challenge Korea Track 2; можно искать открытый код остальных награждённых команд.	R-B-24;issued:R-B-25
+B	query	Anthropic Claude hackathon 2025 winners research agent github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	Cerebras agent hackathon 2026 winner evaluation github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	hackathon agentes IA Chile 2025 ganadores investigacion github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	KI Agenten Hackathon Deutschland 2024 Gewinner Entscheidungsunterstuetzung github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	Alibaba Qwen agent hackathon 2025 winners research github	New country/vendor research	orchestrator;issued:R-B-26
+B	query	AI agents hackathon India 2025 winner business research github	New country research	orchestrator;issued:R-B-27
+B	query	hackathon IA agentes Portugal 2025 vencedores decisao github	New country research	orchestrator;issued:R-B-27
+B	query	AI agent hackathon Australia 2024 winner evaluation github	New country research	orchestrator;issued:R-B-27
+B	query	Canadian agentic AI hackathon 2026 winners market research github	New country research	orchestrator;issued:R-B-27
+B	query	hackathon agenti AI Italia 2025 vincitori ricerca github	New country research	orchestrator;issued:R-B-27
+B	url	https://car-bench.github.io/car-bench/leaderboard.html	отдельная Cerebras track и опубликованные организаторами метрики надёжности; искать конкретные работы участников и их подтверждённые корни репозиториев.	R-B-26;issued:R-B-28
+B	url	https://www.linkedin.com/posts/claude_built-with-claude-winners-activity-7384664597137387520-t0RL	первичный список победителей конкурса Claude 2025; можно проверить ссылки победителей и наличие исходного кода, если нужен следующий поиск по конкурсам Anthropic.	R-B-26;issued:R-B-28
+B	url	https://www.covasant.com/events/ai-hackathon-2025	проверить, опубликовала ли команда Team Jigglypuff репозиторий Agent Testing или имена участников раскрывают его.	R-B-27;issued:R-B-28
+B	url	https://novaims.unl.pt/en/here-now/news/nova-ims-students-win-both-challenges-at-portugal-s-largest-ai-hackathon/	проверить участников Homodeus/Vora и связанные с ними публичные репозитории; результат — второе место.	R-B-27;issued:R-B-29
+B	url	https://genai-genesis-2026.devpost.com/project-gallery	изучить остальные призовые заявки и проверить первичные ссылки на исходники; OmenAI — победитель отдельной спонсорской категории.	R-B-27;issued:R-B-29
+B	url	https://www.linkedin.com/posts/dan-palmer_last-week-we-ran-a-relevance-ai-agents-hackathon-activity-7150292660069605376-90os	проверить, доступен ли проект Team Scoop / SCOOP (Sydney, 2024) в публичном репозитории; текущая находка — только публикация организатора в LinkedIn.	R-B-27;issued:R-B-29
+B	url	https://hackitaly.ai/n8n-hackathon	проверить публикацию итогов и репозиториев AI Automation Hackathon; текущая страница сообщает о событии, но не подтверждает победителей.	R-B-27;issued:R-B-30
+B	url	https://devpost.com/software/omenai	если появится GitHub URL от создателей, проверить код победителя TD и его объяснение risk score.	R-B-29;issued:R-B-30
+B	url	https://devpost.com/software/callio-labs	проверить через авторов/публичный профиль команды точное исходное хранилище и JSON-гейты с цитатами.	R-B-29;issued:R-B-30
+B	query	AI agent hackathon South Africa 2025 winners github research	New country research	orchestrator;issued:R-B-31
+B	query	hackathon agentes inteligencia artificial Argentina 2024 ganadores github	New country research	orchestrator;issued:R-B-31
+B	query	AI agent hackathon Finland 2026 winner business analytics github	New country research	orchestrator;issued:R-B-31
+B	query	Indonesia AI agent hackathon 2025 winner evaluation github	New country research	orchestrator;issued:R-B-31
+B	query	Taiwan agent AI hackathon 2025 winners decision support github	New country research	orchestrator;issued:R-B-31
+B	url	https://sites.google.com/view/amd-online-hackathon-2025/首頁/得獎名單	Проверить публичные project pages/репозитории MEDFLOW AI, SmartTrip_Team и Algopilot; официально подтверждены призовые места.	R-B-31;issued:R-B-32
+B	url	https://fcai.fi/news/2026/10/28/nordic-ai-cup	Интервью с победителем национального AI-хакатона Финляндии и Nordic AI Cup описывает планировщик, multi-agent RL и проверку на разных картах; найти опубликованный код.	R-B-31;issued:R-B-32
+B	url	https://siliconmisiones.gob.ar/simi-data/el-hackathon-ia-ya-tiene-ganadores-innovacion-aplicada-para-resolver-desafios-reales/	Уточнить год издания и поискать код команд Cuidafy/PIA/CIMIA; среди проектов есть поддержка решений и аналитика.	R-B-31;issued:R-B-32
+B	url	https://www.bi.go.id/id/publikasi/ruang-media/news-release/Documents/Pemenang-Hackathon-Bank-Indonesia-Tahun-2024.pdf	Проверить команды-призёры и наличие публичных репозиториев; это найденное индонезийское соседнее соревнование 2024 года, не искомый 2025.	R-B-31;issued:R-B-33
+B	url	https://hackathon-26.melsoft.org/	Проверить результаты после 14.11.2026; южноафриканское событие об автономных агентных системах, но на момент этой пачки ещё не завершено.	R-B-31;deferred:after-2026-11-14
+B	url	https://github.com/amboltio/Nordic-AI-Cup-2026	Distinct code lead	R-B-32;issued:R-B-33
+B	url	https://github.com/amboltio/DM-i-AI-2025	Distinct code lead	R-B-32;issued:R-B-33
+B	query	AWS Bedrock hackathon 2024 winner research agent github	New vendor research	orchestrator;issued:R-B-34
+B	query	LangChain LangGraph hackathon 2025 winners business research github	New vendor research	orchestrator;issued:R-B-34
+B	query	LlamaIndex agent hackathon 2026 winner evaluation github	New vendor research	orchestrator;issued:R-B-34
+B	query	Cloudflare agents hackathon 2025 winners research github	New vendor research	orchestrator;issued:R-B-34
+B	query	Elastic agent builder hackathon 2026 winner decision support github	New vendor research	orchestrator;issued:R-B-34
+B	query	Microsoft AutoGen hackathon 2024 winners research github	New vendor/country research	orchestrator;issued:R-B-35
+B	query	CrewAI hackathon 2025 winners market analysis github	New vendor/country research	orchestrator;issued:R-B-35
+B	query	Google Gemini hackathon 2026 winners product research github	New vendor/country research	orchestrator;issued:R-B-35
+B	query	OpenAI Agents SDK hackathon 2025 winner evaluation github	New vendor/country research	orchestrator;issued:R-B-35
+B	query	Anthropic MCP hackathon 2026 winner business research github	New vendor/country research	orchestrator;issued:R-B-35
+B	query	hackathon IA agents Maroc 2025 gagnants github	New vendor/country research	orchestrator;issued:R-B-36
+B	query	AI agents hackathon Nigeria 2025 winners business github	New vendor/country research	orchestrator;issued:R-B-36
+B	query	hackathon agentes IA Colombia 2026 ganadores github	New vendor/country research	orchestrator;issued:R-B-36
+B	query	AI agent hackathon Netherlands 2024 winner research github	New vendor/country research	orchestrator;issued:R-B-36
+B	query	AI agent hackathon Sweden 2025 winners evaluation github	New vendor/country research	orchestrator;issued:R-B-36
+B	url	https://ecoactu.ma/hackathon-aiwa-voici-les-laureats-de-ledition-2025/	результаты AIWA 2025; можно искать команды и ссылки на публичный код отдельно.	R-B-36;issued:R-B-37
+B	url	https://bizthon.com/pdf/Report-BizThon-x-PBW-Hackathon-2025.pdf	победитель Agentic Technologies из Лагоса; искать по участникам Agrify Technologies.	R-B-36;issued:R-B-37
+B	url	https://usecroma.com/es/blog/hackathon-govtech-resultados	результаты Croma и упоминание TRAZA; уточнить связь команд/проектов с GitHub, не переносить награду победителя.	R-B-36;issued:R-B-37
+B	url	https://www.act.nato.int/article/tide-hackathon-concludes-amsterdam/	победитель LLM-задачи TIDE 2024; возможны дополнительные материалы команды Valkyrie 2.	R-B-36;issued:R-B-38
+B	url	https://www.linkedin.com/posts/sweden-startup-next_swedenstartupnation-aiagents-innovationecosystem-activity-7398756668265684994-6fYc	CEO Reputation Radar, победитель шведского события; проверить дальнейшую публикацию кода.	R-B-36;issued:R-B-38
+B	url	https://github.com/mincasurong/GeminiSeoulHackathon2026	проект с публичным GitHub-кодом и 31 звездой; проверить официальный результат и наличие полезного агентного паттерна	R-B-35;issued:R-B-38
+B	url	https://github.com/aleetreny/Andes	README заявляет победу Encode London 2026; проверить страницу результатов именно этого события	R-B-35;duplicate:indexed
+B	query	Replit agents hackathon 2025 winner business intelligence github	New vendor research	orchestrator;issued:R-B-39
+B	query	Vercel AI SDK hackathon 2026 winner research github	New vendor research	orchestrator;issued:R-B-39
+B	query	MongoDB AI agents hackathon 2025 winners evaluation github	New vendor research	orchestrator;issued:R-B-39
+B	query	Supabase AI hackathon 2024 winner research agent github	New vendor research	orchestrator;issued:R-B-39
+B	query	Neo4j GraphRAG hackathon 2025 winner decision support github	New vendor research	orchestrator;issued:R-B-39
+B	query	NVIDIA NIM agent hackathon 2025 winners research github	New vendor research	orchestrator;issued:R-B-40
+B	query	Datadog AI agent hackathon 2026 winners github evaluation	New vendor research	orchestrator;issued:R-B-40
+B	query	Snowflake Cortex agents hackathon 2026 winner github	New vendor research	orchestrator;issued:R-B-40
+B	query	IBM Granite agent hackathon 2025 winner business github	New vendor research	orchestrator;issued:R-B-40
+B	query	Oracle AI agent hackathon 2025 winners decision support github	New vendor research	orchestrator;issued:R-B-40
+B	url	https://developer.nvidia.com/blog/hackathon-winners-bring-agentic-ai-to-life-with-the-nvidia-nemo-agent-toolkit/	официальный список NVIDIA NeMo победителей; найти ссылки на исходные репозитории Route Optimization Agent и OpenCodeReview.	R-B-40;issued:R-B-41
+B	url	https://github.com/TheApexWu/crucible	поисковая наводка на призовой проект Datadog Self Improving Agents Hack; найти/проверить первичный источник результата и содержимое для evaluation.	R-B-40;issued:R-B-41
+B	url	https://www.mlh.com/events/elementx-2026/submissions	проверить победителя «Best Use of Snowflake» и репозиторий; установить, использует ли он именно Cortex Agents.	R-B-40;issued:R-B-41
+B	url	https://community.oracle.com/CustomerConnect/discussion/904205/ai-agent-studio-inspiration-series-introduction-part-1-supply-chain-shipping-advisor-agent	официальный обзор Oracle hackathon 2025; выяснить, какие из 12 команд были победителями и есть ли публичный код для decision support.	R-B-40;issued:R-B-42
+B	url	https://community.vercel.com/hackathons/zero-to-agent/winners	Code provenance lead	R-B-39;issued:R-B-42
+B	url	https://www.linkedin.com/posts/lastmile-ai_hackathon-recap-two-weeks-ago-we-teamed-activity-7402413889080066048-h1f_	Code provenance lead	R-B-39;issued:R-B-42
+B	query	"hackathon" "winner" "product strategy" "github" 2025	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "market research" "citations" "github" 2026	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "customer research" "evidence" winner 2024 github	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "decision support" "source verification" github	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"product manager" "agent skills" "research" github	Focused product/evidence research	orchestrator;issued:R-B-43
+B	query	"hackathon" "winner" "LLM evaluation" "test cases" github 2025	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"hackathon" "research agent" "citation verification" github 2026	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"hackathon" "grounded research" "winner" github 2024	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"strategy" "promptfoo" "evaluation" github	Focused product/evidence research	orchestrator;issued:R-B-44
+B	query	"market research" "agent" "benchmark" "sources" github	Focused product/evidence research	orchestrator;issued:R-B-44
+B	url	https://replit.com/blog/spc-ai-hackathon	Официальный пост описывает Auto Analyst и работу аналитика, но это хакатон 2023 года; проверить исходный репозиторий/статус проекта в отдельной пачке.	R-B-39;excluded:year-2023
+B	url	https://supabase.com/blog/tags/hackathon	Официальный указатель результатов Supabase за 2024 год; уточнить проекты Launch Week 12/13 и публичные репозитории, если появится конкретный исследовательский агент.	R-B-39;deferred:supervision-focused-queries
+B	url	https://luma.com/mrb95k98	Страница Neo4j Agentic AI & GraphRAG Mini Hack; уточнить дату, официальную публикацию призёров и ссылки на код команд.	R-B-39;deferred:supervision-focused-queries
+B	url	https://devpost.com/software/forkprobe-ai-skill-selection-and-trial-run-tool	NexHacks 2026; сравнивает реальные результаты навыков на одной задаче и включает research workflow; стоит проверить GitHub-ссылку и наградной статус.	R-B-43

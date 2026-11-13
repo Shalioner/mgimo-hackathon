@@ -1,0 +1,12 @@
+# Сокращённая учебная фикстура полей очереди, не пакет стратегии для C2.
+- id: DEC-001
+  state: decided
+  chosen: ALT-001
+  decided_by: руководитель продукта
+  review_by: 2026-11-11
+- id: DEC-002
+  state: needs_review
+  review_by: 2026-11-12
+- id: DEC-003
+  state: decided
+  review_by: 2026-11-13

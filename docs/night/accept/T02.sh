@@ -46,8 +46,12 @@ for proj in ["esim-travel", "ryadom"]:
 # Несуществующий ID → ref missing; экранирование HTML
 ex = tmp / "example"
 shutil.copytree("projects/example", ex)
-f = sorted((ex / "outputs").glob("0*.md"))[0]
-f.write_text(f.read_text(encoding="utf-8") + "\n\nПроверка CLM-999 и <b>тег</b>.\n", encoding="utf-8")
+# В projects/example может не быть outputs/ — тогда создаём один md в копии
+(ex / "outputs").mkdir(exist_ok=True)
+mds = sorted((ex / "outputs").glob("0*.md"))
+f = mds[0] if mds else ex / "outputs" / "01_brief.md"
+prev = f.read_text(encoding="utf-8") if f.exists() else "# Проверка\n\n## Главное\nПроверка отчёта.\n"
+f.write_text(prev + "\n\nПроверка CLM-999 и <b>тег</b>.\n", encoding="utf-8")
 out = tmp / "ex.html"
 r = subprocess.run([py, "tools/report.py", str(ex), "--out", str(out)], capture_output=True, text=True)
 if r.returncode == 0 and out.exists():

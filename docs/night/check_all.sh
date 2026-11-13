@@ -47,7 +47,7 @@ for b in $(git -C "$ROOT" for-each-ref --format='%(refname:short)' 'refs/heads/n
   first=$(git -C "$ROOT" log --reverse --format=%h "night/integration..$b" | head -1)
   only=$(git -C "$ROOT" show --name-only --format= "$first" | tr '\n' ' ')
   rv=$(git -C "$ROOT" show "$b:docs/night/reports/$id.review.md" 2>/dev/null | grep -m1 -o -E 'ACCEPT|REJECT')
-  echo "$b · первый коммит: $only· ревью: ${rv:--} · diff: git diff night/integration...$b --stat"
+  echo "$b · первый коммит: ${only}· ревью: ${rv:--} · diff: git diff night/integration...$b --stat"
 done
 echo
 bash docs/night/accept/common.sh 2>&1 | tail -12
