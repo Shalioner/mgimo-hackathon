@@ -364,7 +364,10 @@ def refresh(binary, output):
                                    "--proto", "=https", "--max-time", "30", SOURCE],
                                   env=env, cwd=directory, capture_output=True, text=True, timeout=35)
         require(response.returncode == 0, "Official catalog refresh failed")
-        provider = json.loads(response.stdout)["opencode"]
+        catalog = json.loads(response.stdout)
+        require(type(catalog) is dict, "Malformed catalog mapping")
+        provider = catalog.get("opencode")
+        require(type(provider) is dict, "Malformed catalog provider")
         require(provider.get("id") == "opencode" and type(provider.get("models")) is dict, "Malformed catalog")
         data = {"schema": 1, "source": SOURCE, "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
                 "provider": provider, "sha256": digest(provider), "binary": str(binary), "version": VERSION,
