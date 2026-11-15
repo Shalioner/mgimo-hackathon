@@ -1,5 +1,97 @@
 # Исполнение маршрутов: безопасное ядро
 
+## Общий вход на каждый запрос (2026-11-15)
+
+Среда разработки: codex внутри Orca. Baseline этого изменения: `63a17d8910e4b4d0b9b2c1e4b69b906c3b0c8317`.
+`tools/route_request.py` — явная точка подключения для одного запроса из любого host.
+Она реализует classification → candidates/plan → rechecked start → result.
+Это исполняемый scoped text pipeline, **не установленный перехват ввода GUI/Orca**.
+Host или вызывающий скрипт должен передавать каждый новый запрос сюда до своей генерации;
+сама установка репозитория этого не делает. Запросы напрямую в обычный чат идут мимо router.
+
+```bash
+# Offline preflight: план bootstrap, без классификации, subprocess и сети
+.venv/bin/python tools/route_request.py --prompt-file request.md --context-file context.md --host codex
+# Один classifier + один task; только после существующего gate каждого транспорта
+.venv/bin/python tools/route_request.py --prompt-file request.md --context-file context.md --host codex --execute --receipt request-routing.json
+```
+
+`--host` можно повторить: это разрешённые оператором кандидаты в порядке предпочтения,
+а не инструкция пробовать аккаунты после ошибки. Выбирается первый executable кандидат
+до запуска задачи; после ошибки, quota, timeout или неверного результата переключения нет.
+Порядок задаёт операционное предпочтение, а не измеренную экономию или качество моделей.
+Default — subscription-only; новый вход не включает API, не получает ключи и не меняет конфиги.
+Выбор модели переиспользует `delegate.select_route`, resolver и существующие tier/effort ladders;
+это один кандидат модели на host, без нового рейтинга моделей и без поиска обхода квот.
+
+Текст запроса и контекст сохраняются без усечения в JSON (`request`, `context`). Классификатор
+получает оба поля и существующий `route_tier.yaml`, дополненный вопросами глубины и capability.
+Он возвращает T1/T2/T3, normal/deep и text/tools; model/provider/endpoint/grants он не выбирает.
+Normal выбирает первую ступень effort, deep — последнюю доступную ступень уровня.
+Для OpenCode deep запрашивает high через существующий variant/capability gate; неизвестный
+или неподдерживаемый вариант останавливает маршрут, а не подменяется default effort.
+Задачи с инструментами, внешними данными, изображениями или изменениями файлов пока manual:
+исполняемые адаптеры здесь изолированы и возвращают только текст. Оценка сложности моделью
+не гарантирует правильный выбор: quoted evidence — структурная проверка, не calibration/eval.
+
+Bootstrap отделён от маршрутизации задачи: фиксированный T1/low, `classify`, host codex
+по умолчанию. Локальная настройка `automatic_routing.bootstrap_host` может указать
+claude-code или другой уже разрешённый adapter. Resolver выбирает T1, policy проверяет
+точные model/effort; bootstrap не вызывает router, `decide.emulate` или повторную классификацию.
+Нужен разрешённый профиль и для classifier, и для задачи. Если его нет, результат manual,
+без молчаливой подстановки дешёвой/дорогой модели. Неуверенность, отказ или неверная форма
+ответа дают `classification.status=needs_review` и не запускают задачу.
+
+Для **уже разрешённой** decision-модели оператор может явно задать
+`automatic_routing.decision_provider: <имя из decision.providers>`. Используются существующие
+System One protocol, `decide.decision_plan/call`, API grants и повторный gate перед HTTP.
+Автоматического поиска платного провайдера или fallback к LLM после его отказа нет.
+Без этой настройки используется только T1 bootstrap. JSON LLM не может объявить себе
+System One confidence: принимаются labels с boolean sure и цитатой, проверенной кодом.
+Пороги — 0.85 для bootstrap и 0.75 для decision provider; недопустимые/нечисловые значения
+и confidence вне [0,1] отклоняются. T4 не автоматизируется, max требует прежнего согласования
+в существующем ручном процессе, ultra запрещён; этот entrypoint согласие сам не выдаёт.
+
+`classification`, `plan`, `start`, `result` разделены; plan — снимок до выполнения,
+start содержит фактическую receipt adapter. `requested/transmitted/observed` не смешиваются.
+Перед запуском reload конфигурации и повторный план; смена выбранного model/effort или
+отзыв разрешения останавливают задачу. Transport повторно проверяет свой профиль/auth.
+Один общий `delegate.execute_route` обслуживает прежний delegate и новый router:
+невалидный ответ, metadata mismatch и transport failure не публикуют текст результата.
+Старые ограничения внутренних CLI retries и race с hostile same-user процессом сохраняются.
+
+JSON печатается в stdout, `--receipt` дополнительно сохраняет его в **новый** локальный файл.
+Он содержит исходные данные: получателя и путь выбирает вызывающая сторона. Product ledger
+и projects router не изменяет. Exit 0 — offline план либо successful execution; exit 3 —
+manual/needs_review/ошибка выполнения, подробность в JSON; неправильные аргументы — exit 2.
+
+| Host | Общий request interface | Исполнение | Автоматический trigger в host |
+|---|---|---|---|
+| Codex | `--host codex` | Проверенный ChatGPT profile | Отсутствует; wrapper вызывается для каждого запроса |
+| Claude Code | `--host claude-code` (alias claude) | Проверенный claude.ai profile | Отсутствует; wrapper вызывается для каждого запроса |
+| OpenCode | `--host opencode` | Существующий fresh exact-zero adapter | Отсутствует; wrapper вызывается для каждого запроса |
+| ZCode | `--host zcode` | Manual: isolation/auth/billing contract не доказан | Отсутствует |
+| Cursor | `--host cursor` | Manual: picker/allowlist не execution adapter | Отсутствует |
+| Gemini CLI | `--host gemini-cli` | Manual: нет проверенного adapter | Отсутствует |
+| Antigravity App/IDE | `--host antigravity` / `antigravity-ide` | Manual: нет проверенного adapter | Отсутствует |
+| DeepSeek Harness | `--host deepseek-harness` | Manual: нет проверенного adapter | Отсутствует |
+| Kimi / Qwen | `--host kimi` / `qwen` | Manual: нет проверенного adapter | Отсутствует |
+| Orca | Вызывает тот же CLI с выбранным host | Сам Orca не объявлен прошедшим Python gate | Перехват ввода не реализован |
+
+Offline/fake регрессии: `tests/test_route_request.py`; реальные локальные fake subprocess
+для Codex/Claude, контекст и сложность/effort, manual hosts, denied/authorized decision
+provider с HTTP spy, confidence/invalid result, max, stale free catalog, повторный policy
+gate и отсутствие recursive classification/paid fallback. Live inference, установки модов
+и глобальные конфиги вне проверки. Тарифные подтверждения остаются заявлениями оператора.
+
+Проверки общего входа: `rtk proxy .venv/bin/python -m pytest -q tests` — 445 passed,
+1 skipped (необязательный openpyxl), 40.04 s. После уточнения outcome decision transport
+и двух дополнительных регрессий выполнен отдельный финальный прогон
+`rtk proxy .venv/bin/python -m pytest -q tests/test_route_request.py` — 38 passed.
+`rtk proxy git diff --check` — без ошибок. Реальный CLI preflight без inference:
+status manual, причина — отсутствует включённый Codex subscription profile, transmitted/observed null.
+Product projects, doctor.py и глобальные настройки не изменены.
+
 Среда разработки: codex внутри Orca. Baseline: `afd90c2cd712a23eb56557c9add43fe9fadd3028`.
 
 Рекомендации `ledger route` и offline validate сохранены. Уровни, задачи и лестницы effort не заменены. Исполнение теперь отделено от рекомендации: установленный CLI, inventory, API key и legacy local config не разрешают запрос. Default — `subscription_only`, API выключен.

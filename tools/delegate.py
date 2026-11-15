@@ -357,6 +357,56 @@ def select_route(cfg, backend, task, tier, explicit_model=None, explicit_effort=
     return family, model, effort, selection_error
 
 
+def execute_route(cfg, backend, model, prompt, effort, timeout, receipt, human_approved=False):
+    """Shared execution boundary. Transport rechecks policy; parse before publishing."""
+    if backend not in {"codex", "claude", "claude-code", "opencode", "selfhosted"}:
+        receipt.update(status="manual", reason="Execution adapter absent", result="not_started", exit_code=3,
+                       started=False, inference_calls=0)
+        return receipt, "", ""
+    answer = ""
+    if backend == "codex":
+        code, stdout, stderr, answer = call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved)
+    elif backend in {"claude", "claude-code"}:
+        code, stdout, stderr, answer = call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved)
+    elif backend == "opencode":
+        import opencode_free as O
+        code, stdout, stderr, answer = O.call(cfg, model, prompt, effort, timeout, receipt, human_approved)
+    else:
+        receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
+        code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, timeout, human_approved)
+        receipt["started"] = code != 3
+        receipt["wrapper_invocations"] = int(code != 3)
+        receipt["transport_status_code"] = code
+    if code == 3 and not receipt["started"]:
+        receipt.update(status="manual", reason=stderr)
+        receipt.update(exit_code=3, result="not_started", inference_calls=0)
+        return receipt, "", ""
+
+    parsed = parse_result(backend, stdout, answer)
+    integrity = True
+    observed = {}
+    for event in parsed["events"]:
+        for key in ("provider", "model", "effort"):
+            if isinstance(event.get(key), str):
+                observed[key] = event[key]
+        integrity = P.observe(receipt, observed) and integrity
+    P.observe(receipt, observed)
+    event_failed = any(e.get("type") in {"error", "turn.failed"} or e.get("is_error") is True for e in parsed["events"])
+    if not integrity:
+        receipt["integrity"] = "mismatch"
+        outcome = "quarantined"
+    elif code != 0 or event_failed:
+        outcome = "failed"
+    elif not parsed["valid"]:
+        outcome = "invalid_result"
+    else:
+        outcome = "succeeded"
+    final_code = 0 if outcome == "succeeded" else 1
+    receipt.update(exit_code=final_code, result=outcome)
+    receipt["inference_calls"] = None if receipt["started"] else 0
+    return receipt, parsed["text"] if final_code == 0 else "", parsed["usage"]
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="Делегировать подзадачу модели нужного уровня")
     ap.add_argument("--project", type=Path, required=True)
@@ -456,54 +506,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     out_file = out_dir / f"{stamp}_{args.task}.md"
     shown_model = f"{model}@{effort}" if effort else model
     t0 = time.monotonic()
-    answer = ""
-    if backend == "codex":
-        code, stdout, stderr, answer = call_codex(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
-    elif backend in {"claude", "claude-code"}:
-        code, stdout, stderr, answer = call_claude(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
-    elif backend == "opencode":
-        import opencode_free as O
-        code, stdout, stderr, answer = O.call(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
-    else:
-        receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
-        code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout, args.human_approved)
-        receipt["started"] = code != 3
-        receipt["wrapper_invocations"] = int(code != 3)
-        receipt["transport_status_code"] = code
-    if code == 3 and not receipt["started"]:
-        receipt.update(status="manual", reason=stderr)
+    receipt, answer, usage = execute_route(cfg, backend, model, prompt, effort, args.timeout, receipt, args.human_approved)
+    final_code = receipt["exit_code"]
+    outcome = receipt["result"]
+    if outcome == "not_started":
         P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
-        print(f"manual: {stderr}", file=sys.stderr)
+        print(f"manual: {receipt['reason']}", file=sys.stderr)
         return 3
-
-    parsed = parse_result(backend, stdout, answer)
-    integrity = True
-    observed = {}
-    for event in parsed["events"]:
-        for key in ("provider", "model", "effort"):
-            if isinstance(event.get(key), str):
-                observed[key] = event[key]
-        integrity = P.observe(receipt, observed) and integrity
-    P.observe(receipt, observed)
-    event_failed = any(e.get("type") in {"error", "turn.failed"} or e.get("is_error") is True for e in parsed["events"])
-    if not integrity:
-        receipt["integrity"] = "mismatch"
-        outcome = "quarantined"
-    elif code != 0 or event_failed:
-        outcome = "failed"
-    elif not parsed["valid"]:
-        outcome = "invalid_result"
-    else:
-        outcome = "succeeded"
-    final_code = 0 if outcome == "succeeded" else 1
-    receipt.update(exit_code=final_code, result=outcome)
-    receipt["inference_calls"] = None if receipt["started"] else 0
     out_file.with_suffix(".receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
     if final_code == 0:
-        out_file.write_text(parsed["text"], encoding="utf-8")
+        out_file.write_text(answer, encoding="utf-8")
     secs = round(time.monotonic() - t0)
     rel = out_file.relative_to(project)
-    usage = parsed["usage"]
     L.cmd_log(project, args.step, f"делегирование {args.task}", tier, f"{backend}:{shown_model}",
               f"ok → {rel}" if final_code == 0 else f"{outcome}: task exit {final_code}; process exit {receipt['process_exit_code']}",
               f"{secs} с; {usage or 'токены не отданы CLI'}; wrapper invocations {receipt['wrapper_invocations']}; inference count unknown")
