@@ -17,21 +17,58 @@ WEIGHTS = base.LAB / 'mlx-weights' / REVISION
 MANIFEST = Path(__file__).with_name('local_decision_mlx_manifest.json')
 
 
+def phase(name, mx=None):
+    """Flush before each expensive stage so a killed child leaves diagnostic evidence."""
+    import datetime
+    import os
+    import resource
+    import subprocess
+    rss, rss_error = '', None
+    try:
+        rss = subprocess.run(['/bin/ps', '-o', 'rss=', '-p', str(os.getpid())],
+                             capture_output=True, text=True, timeout=5).stdout.strip()
+    except (OSError, subprocess.SubprocessError) as exc:
+        rss_error = type(exc).__name__  # sandbox may deny ps; diagnostics must not abort inference
+    record = {'phase': name, 'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'monotonic_seconds': time.monotonic(), 'rss_kib': int(rss) if rss.isdigit() else None,
+              'max_rss_bytes': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+              'rss_probe_error': rss_error}
+    if mx is not None:
+        record.update(metal_active_bytes=mx.get_active_memory(), metal_peak_bytes=mx.get_peak_memory())
+    print('D1_PHASE ' + json.dumps(record), file=sys.stderr, flush=True)
+
+
 def worker(payload):
     import resource
     import importlib.metadata
+    directory = Path(payload['weights'])
+    phase('hash_start')
+    base.verify_weights(directory, MANIFEST)
+    phase('hash_done')
+    phase('import_start')
     from PIL import Image
     import mlx.core as mx
-    from mlx_vlm import load
-
+    from mlx_vlm import load, utils
+    phase('import_done', mx)
     base.require(importlib.metadata.version('mlx-vlm') == '0.7.11', 'Reviewed mlx-vlm 0.7.11 required')
-    directory = Path(payload['weights'])
-    base.verify_weights(directory, MANIFEST)
     base.require(mx.metal.is_available(), 'Metal unavailable; no CPU/cloud fallback')
     start = time.monotonic()
-    model, processor = load(str(directory), revision=REVISION, lazy=False, strict=True,
-                            local_files_only=True, trust_remote_code=False)
+    phase('load_start', mx)
+    original_processor_loader = utils.load_processor
+    def traced_processor(*args, **kwargs):
+        phase('load_weights_done', mx)
+        phase('processor_start', mx)
+        result = original_processor_loader(*args, **kwargs)
+        phase('processor_done', mx)
+        return result
+    utils.load_processor = traced_processor
+    try:
+        model, processor = load(str(directory), revision=REVISION, lazy=False, strict=True,
+                                local_files_only=True, trust_remote_code=False)
+    finally:
+        utils.load_processor = original_processor_loader
     mx.synchronize()
+    phase('load_done', mx)
     load_seconds = time.monotonic() - start
     base.require(model.__class__.__module__.endswith('d1_lfm3_vl.d1'), 'Expected custom d1 System One model')
     base.require(model.engine.calibration is not None, 'Pinned calibration not attached')
@@ -59,8 +96,10 @@ def worker(payload):
             image.thumbnail((384, 384))
             media, image_info = [image], {'original_size': original, 'inference_size': image.size}
         began = time.monotonic()
+        phase(case['id'] + ':forward_start', mx)
         response = model.system_one(case['state'], case['questions'], media=media, score_readout='median')
         mx.synchronize()
+        phase(case['id'] + ':forward_done', mx)
         base.validate_result(response, case['questions'])
         results.append({'id': case['id'], 'response': response, 'seconds': round(time.monotonic()-began, 3),
                         'image': image_info, 'mlx_active_bytes': mx.get_active_memory(),
@@ -124,7 +163,9 @@ def main(argv=None):
                 base.require(state is not None or args.image is not None, 'Provide state or image')
                 cases = [{'id': 'request', 'state': state, 'questions': base.read_questions(args.questions),
                           'image': str(args.image.resolve()) if args.image else None}]
-            report = base.execute(cases, args.weights, args.timeout, worker_script=__file__)
+            report = base.execute(cases, args.weights, args.timeout, worker_script=__file__, preflight_samples=3)
+            report['phases'] = [json.loads(line[len('D1_PHASE '):]) for line in report.get('worker_stderr', '').splitlines() if line.startswith('D1_PHASE ')]
+            report['last_phase'] = report['phases'][-1]['phase'] if report['phases'] else 'preflight_or_child_start'
     except (ValueError, OSError, ImportError, RuntimeError) as exc:
         report = {'status': 'blocked', 'reason': f'{type(exc).__name__}: {exc}', 'fallback': False}
     output = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)

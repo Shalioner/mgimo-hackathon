@@ -200,7 +200,7 @@ def worker(payload):
             "projection_fusion": False, "load_seconds": round(load_seconds, 3), "results": results}
 
 
-def execute(cases, directory, timeout, *, worker_script=None):
+def execute(cases, directory, timeout, *, worker_script=None, preflight_samples=0):
     import fcntl
     require(sys.platform == "darwin", "This optional lab launcher supports macOS only; no fallback")
     require(1 <= len(cases) <= 6 and 1 <= timeout <= 300, "At most 6 cases and timeout 1–300 seconds")
@@ -212,7 +212,19 @@ def execute(cases, directory, timeout, *, worker_script=None):
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
             raise ValueError("Another local d1 process holds the lab lock")
+        preflight = []
+        for i in range(preflight_samples):
+            sample = {"timestamp": time.time(), **memory()}
+            preflight.append(sample)
+            if sample.get("pressure_level") != 1 or sample.get("swap_used_mib") is None or sample["swap_used_mib"] > 8192:
+                return {"status": "blocked", "reason": "Preflight requires normal pressure=1 and swap<=8 GiB; no process started",
+                        "preflight": preflight, "process_started": False, "fallback": False}
+            if i + 1 < preflight_samples:
+                time.sleep(1)
         before = memory()
+        if preflight_samples and (before.get("pressure_level") != 1 or before.get("swap_used_mib") is None or before["swap_used_mib"] > 8192):
+            return {"status": "blocked", "reason": "Pressure changed after preflight; no process started",
+                    "preflight": preflight, "memory_before": before, "process_started": False, "fallback": False}
         with tempfile.TemporaryDirectory(prefix="run-", dir=LAB) as tmp:
             env = {"PATH": "/usr/bin:/bin", "HOME": str(LAB), "HF_HOME": str(Path(tmp)/"hf"),
                    "HF_MODULES_CACHE": str(Path(tmp)/"modules"), "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1",
@@ -259,7 +271,8 @@ def execute(cases, directory, timeout, *, worker_script=None):
                     report = {"status": "blocked", "reason": "Local model process failed or returned invalid JSON"}
             if report["status"] == "blocked":
                 report["stderr"] = stderr[-12000:]
-            report.update(process_exit=proc.returncode, process_finished=proc.poll() is not None,
+            report.update(worker_stderr=stderr, preflight=preflight, process_started=True,
+                          process_exit=proc.returncode, process_finished=proc.poll() is not None,
                           elapsed_seconds=round(time.monotonic()-start, 3), memory_before=before,
                           memory_after=memory(), memory_samples=samples, network="OS sandbox deny network; HF offline")
             return report

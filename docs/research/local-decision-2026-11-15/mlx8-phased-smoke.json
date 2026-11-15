@@ -1,0 +1,45 @@
+{
+  "status": "blocked",
+  "reason": "PermissionError: [Errno 1] Operation not permitted: '/bin/ps'",
+  "fallback": false,
+  "stderr": "",
+  "worker_stderr": "",
+  "preflight": [
+    {
+      "timestamp": 1794752656.0871449,
+      "swap_used_mib": 3878.38,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 3878.38M  free = 1241.62M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1"
+    },
+    {
+      "timestamp": 1794752657.102182,
+      "swap_used_mib": 3878.38,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 3878.38M  free = 1241.62M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1"
+    },
+    {
+      "timestamp": 1794752658.1123042,
+      "swap_used_mib": 3878.38,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 3878.38M  free = 1241.62M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1"
+    }
+  ],
+  "process_started": true,
+  "process_exit": 3,
+  "process_finished": true,
+  "elapsed_seconds": 0.16,
+  "memory_before": {
+    "swap_used_mib": 3878.38,
+    "pressure_level": 1,
+    "swap_raw": "vm.swapusage: total = 5120.00M  used = 3878.38M  free = 1241.62M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1"
+  },
+  "memory_after": {
+    "swap_used_mib": 3878.38,
+    "pressure_level": 1,
+    "swap_raw": "vm.swapusage: total = 5120.00M  used = 3878.38M  free = 1241.62M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1"
+  },
+  "memory_samples": [],
+  "network": "OS sandbox deny network; HF offline",
+  "phases": [],
+  "last_phase": "preflight_or_child_start"
+}

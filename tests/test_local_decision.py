@@ -167,3 +167,24 @@ def test_multiple_independent_threshold_and_duplicates():
         a['choices'] = bad
         with pytest.raises(ValueError, match='disagree'):
             L.validate_result(r, q)
+
+
+@pytest.mark.parametrize('pressure', [2, 4, None])
+def test_preflight_refuses_non_normal_pressure(tmp_path, monkeypatch, pressure):
+    monkeypatch.setattr(L, 'LAB', tmp_path)
+    monkeypatch.setattr(L.sys, 'platform', 'darwin')
+    monkeypatch.setattr(L, 'memory', lambda: {'swap_used_mib': 4000, 'pressure_level': pressure})
+    monkeypatch.setattr(L.subprocess, 'Popen', lambda *a, **k: pytest.fail('Must not start'))
+    report = L.execute([{'id': 'x', 'state': 'x', 'questions': Q}], tmp_path, 10, preflight_samples=3)
+    assert report['status'] == 'blocked' and report['process_started'] is False
+
+
+def test_preflight_checks_all_samples_and_final_race(tmp_path, monkeypatch):
+    monkeypatch.setattr(L, 'LAB', tmp_path)
+    monkeypatch.setattr(L.sys, 'platform', 'darwin')
+    values = iter([1, 1, 1, 4])
+    monkeypatch.setattr(L, 'memory', lambda: {'swap_used_mib': 4000, 'pressure_level': next(values)})
+    monkeypatch.setattr(L.time, 'sleep', lambda _: None)
+    monkeypatch.setattr(L.subprocess, 'Popen', lambda *a, **k: pytest.fail('Must not start'))
+    report = L.execute([{'id': 'x', 'state': 'x', 'questions': Q}], tmp_path, 10, preflight_samples=3)
+    assert len(report['preflight']) == 3 and report['process_started'] is False

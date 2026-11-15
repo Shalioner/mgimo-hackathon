@@ -146,8 +146,51 @@ python3.12 -m venv ~/.cache/strategist/d1-2b-lab/mlx-venv
 
 Дальше возможен новый ограниченный прогон после освобождения памяти пользователем
 или на машине с большим запасом RAM, с теми же guards и дополнительными фазовыми
-метками. Это потребует нового бюджета попыток, а не снятия ограничений.
+метками. Бюджет дополнительных попыток задаёт координатор; повторное согласие пользователя
+для каждой уже разрешённой локальной попытки не требуется. Лимиты памяти сохраняются.
 4bit — официальный меньший вариант, но с существенно большим заявленным drift;
 автоматически переходить на него для probability routing нельзя. GGUF поддерживает
 System One, но его преимущества по памяти здесь ещё не измерены. 600M и generative
 модели заменой пользовательской d1-2B не считаются.
+
+
+## Дополнительная фазовая попытка (одна разрешённая)
+
+Координатор разрешил ровно один дополнительный text запуск и image только после
+успешного text. Этот лимит относится к текущей итерации, а не является правилом
+повторно спрашивать пользователя перед каждой разрешённой локальной попыткой.
+Полный pytest и установки во время запуска не выполнялись.
+
+CLI теперь требует три нормальных `pressure_level=1` замера с интервалом1 s и
+повторную проверку непосредственно перед запуском; неизвестный pressure, pressure2/4
+или swap>8 GiB блокируют старт. Проценты `memory_pressure` не переводятся в гигабайты.
+Фазы hash/import/load/processor/forward записываются в stderr с UTC timestamp,
+monotonic time, peak RSS и доступными Metal active/peak allocations. Текущий RSS внутри
+sandbox может быть недоступен: это теперь отдельная метка `rss_probe_error`, не отказ
+всего процесса. Супервизор продолжает измерять RSS извне, guards не изменены.
+Полный stderr, preflight, список фаз и последняя фаза сохраняются в JSON.
+
+Команда:
+
+```sh
+~/.cache/strategist/d1-2b-lab/mlx-venv/bin/python tools/local_decision_mlx.py smoke \
+  --timeout 240 --output docs/research/local-decision-2026-11-15/mlx8-phased-smoke.json
+```
+
+[Сырой отчёт](research/local-decision-2026-11-15/mlx8-phased-smoke.json):
+три preflight samples pressure1/swap3878.38 MiB; последний замер перед стартом тоже1.
+Процесс завершился exit3 за0.160 s с `PermissionError: Operation not permitted: /bin/ps`.
+**Точный stage: диагностика первой метки hash_start, до hash, import MLX, load и forward.**
+Ошибка добавленной диагностики не является ошибкой модели или memory failure.
+Нет новых данных о пике памяти модели; text/image не выполнялись, probabilities нет.
+
+После ошибки phase RSS-probe сделан best-effort: `PermissionError` больше не блокирует
+метку, доступный peak RSS берётся через `resource.getrusage`. Проверено отдельным
+вызовом только `phase("diagnostic_only_no_model")` под тем же sandbox: exit0,
+`rss_kib=null`, `max_rss_bytes=21528576`, `rss_probe_error=PermissionError`.
+Этот probe не читает веса, не импортирует MLX и не запускает inference.
+41 targeted offline tests passed за0.25 s, включая regression sandbox denial,
+preflight nonnormal/unknown и изменение pressure после трёх нормальных замеров.
+Полного pytest в этой итерации не было. Повторного модельного запуска после исправления
+не выполнено: текущий лимит одной попытки исчерпан. Нужна следующая разрешённая
+координатором попытка, чтобы фазами локализовать исходный memory blocker.

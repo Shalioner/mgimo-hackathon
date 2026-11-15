@@ -31,7 +31,7 @@ def test_single_instance_and_stop_before_image_on_bad_text(monkeypatch, tmp_path
         events.append('load')
         assert kwargs['local_files_only'] and kwargs['trust_remote_code'] is False
         return Model(), SimpleNamespace(tokenizer=SimpleNamespace(encode=lambda _: [1]))
-    monkeypatch.setitem(sys.modules, 'mlx_vlm', SimpleNamespace(load=load))
+    monkeypatch.setitem(sys.modules, 'mlx_vlm', SimpleNamespace(load=load, utils=SimpleNamespace(load_processor=lambda *a, **kw: None)))
     monkeypatch.setattr(importlib.metadata, 'version', lambda _: '0.7.11')
     monkeypatch.setattr(M.base, 'verify_weights', lambda *a: None)
     payload = {'weights': str(tmp_path), 'cases': [
@@ -76,3 +76,14 @@ def test_oversized_request_never_starts_child(monkeypatch, tmp_path):
     with pytest.raises(ValueError, match='8192'):
         M.base.execute([{'id': 'bad', 'state': 'x'*8193, 'questions': Q}], tmp_path, 10,
                        worker_script=M.__file__)
+
+
+def test_phase_marker_survives_sandbox_ps_denial(monkeypatch, capsys):
+    import subprocess
+    def denied(*args, **kwargs):
+        raise PermissionError('sandbox denies ps')
+    monkeypatch.setattr(subprocess, 'run', denied)
+    M.phase('hash_start')
+    record = json.loads(capsys.readouterr().err.removeprefix('D1_PHASE '))
+    assert record['phase'] == 'hash_start' and record['rss_kib'] is None
+    assert record['rss_probe_error'] == 'PermissionError' and record['max_rss_bytes'] > 0
