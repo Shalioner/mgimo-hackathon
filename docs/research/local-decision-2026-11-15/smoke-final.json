@@ -1,0 +1,42 @@
+{
+  "status": "blocked",
+  "reason": "Timeout or lab memory budget (RSS 6 GiB / swap growth 3 GiB / total swap 8 GiB / critical pressure) reached; no fallback",
+  "stderr": "\nLoading weights:   0%|          | 0/424 [00:00<?, ?it/s]\nLoading weights:   4%|▍         | 16/424 [00:00<00:03, 133.22it/s]\nLoading weights:   7%|▋         | 31/424 [00:00<00:03, 121.06it/s]\nLoading weights:  10%|█         | 44/424 [00:02<00:25, 14.73it/s] \nLoading weights:  25%|██▌       | 106/424 [00:02<00:06, 52.82it/s]\nLoading weights:  52%|█████▏    | 221/424 [00:02<00:01, 143.30it/s]\nLoading weights:  81%|████████  | 344/424 [00:02<00:00, 257.83it/s]\nLoading weights: 100%|██████████| 424/424 [00:02<00:00, 161.22it/s]\n/opt/homebrew/Cellar/python@3.12/3.12.13/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown\n  warnings.warn('resource_tracker: There appear to be %d '\n",
+  "process_exit": -9,
+  "process_finished": true,
+  "elapsed_seconds": 15.226,
+  "memory_before": {
+    "swap_used_mib": 4238.88,
+    "pressure_level": 1,
+    "swap_raw": "vm.swapusage: total = 5120.00M  used = 4238.88M  free = 881.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1"
+  },
+  "memory_after": {
+    "swap_used_mib": 6236.19,
+    "pressure_level": 2,
+    "swap_raw": "vm.swapusage: total = 7168.00M  used = 6236.19M  free = 931.81M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2"
+  },
+  "memory_samples": [
+    {
+      "seconds": 5.0,
+      "rss_kib": 292752,
+      "swap_used_mib": 4230.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 4230.88M  free = 889.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1"
+    },
+    {
+      "seconds": 10.1,
+      "rss_kib": 176320,
+      "swap_used_mib": 4303.56,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 4303.56M  free = 816.44M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2"
+    },
+    {
+      "seconds": 15.1,
+      "rss_kib": 29712,
+      "swap_used_mib": 6218.56,
+      "pressure_level": 4,
+      "swap_raw": "vm.swapusage: total = 7168.00M  used = 6218.56M  free = 949.44M  (encrypted)\nkern.memorystatus_vm_pressure_level: 4"
+    }
+  ],
+  "network": "OS sandbox deny network; HF offline"
+}

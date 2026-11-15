@@ -1,0 +1,37 @@
+{
+  "status": "blocked",
+  "reason": "Timeout or lab memory budget (RSS 6 GiB / swap growth 2 GiB) reached; no fallback",
+  "stderr": "\nLoading weights:   0%|          | 0/424 [00:00<?, ?it/s]\nLoading weights:   1%|          | 3/424 [00:00<00:15, 27.68it/s]\nLoading weights:   4%|▎         | 15/424 [00:00<00:08, 49.39it/s]\nLoading weights:   5%|▍         | 20/424 [00:00<00:11, 35.22it/s]\nLoading weights:  12%|█▏        | 49/424 [00:00<00:03, 97.33it/s]\nLoading weights:  15%|█▍        | 62/424 [00:01<00:06, 59.14it/s]\nLoading weights:  20%|██        | 85/424 [00:01<00:03, 86.40it/s]\nLoading weights:  23%|██▎       | 98/424 [00:01<00:04, 67.89it/s]\nLoading weights:  31%|███       | 132/424 [00:01<00:02, 107.29it/s]\nLoading weights:  36%|███▌      | 152/424 [00:01<00:02, 111.28it/s]\nLoading weights:  39%|███▉      | 167/424 [00:02<00:03, 74.30it/s] \nLoading weights: 100%|██████████| 424/424 [00:02<00:00, 186.90it/s]\n/opt/homebrew/Cellar/python@3.12/3.12.13/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown\n  warnings.warn('resource_tracker: There appear to be %d '\n",
+  "process_exit": -9,
+  "process_finished": true,
+  "elapsed_seconds": 15.377,
+  "memory_before": {
+    "swap_used_mib": 3476.19,
+    "swap_raw": "vm.swapusage: total = 5120.00M  used = 3476.19M  free = 1643.81M  (encrypted)"
+  },
+  "memory_after": {
+    "swap_used_mib": 6141.62,
+    "swap_raw": "vm.swapusage: total = 7168.00M  used = 6141.62M  free = 1026.38M  (encrypted)"
+  },
+  "memory_samples": [
+    {
+      "seconds": 5.0,
+      "rss_kib": 234736,
+      "swap_used_mib": 3476.19,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 3476.19M  free = 1643.81M  (encrypted)"
+    },
+    {
+      "seconds": 10.0,
+      "rss_kib": 41072,
+      "swap_used_mib": 3616.31,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 3616.31M  free = 1503.69M  (encrypted)"
+    },
+    {
+      "seconds": 15.1,
+      "rss_kib": 34608,
+      "swap_used_mib": 6018.62,
+      "swap_raw": "vm.swapusage: total = 7168.00M  used = 6018.62M  free = 1149.38M  (encrypted)"
+    }
+  ],
+  "network": "OS sandbox deny network; HF offline"
+}

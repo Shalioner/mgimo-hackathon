@@ -1,0 +1,8 @@
+questions:
+  color:
+    type: choice
+    instructions: Какого цвета большой квадрат на изображении?
+    criteria:
+      red: красный
+      blue: синий
+      green: зелёный

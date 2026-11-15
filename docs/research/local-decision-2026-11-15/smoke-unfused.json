@@ -1,0 +1,37 @@
+{
+  "status": "blocked",
+  "reason": "Timeout or lab memory budget (RSS 6 GiB / swap growth 2 GiB) reached; no fallback",
+  "stderr": "\nLoading weights:   0%|          | 0/424 [00:00<?, ?it/s]\nLoading weights:   0%|          | 1/424 [00:00<01:47,  3.92it/s]\nLoading weights:  17%|█▋        | 70/424 [00:00<00:01, 250.02it/s]\nLoading weights:  33%|███▎      | 140/424 [00:00<00:00, 402.34it/s]\nLoading weights: 100%|██████████| 424/424 [00:00<00:00, 858.07it/s]\nLoaded model: MPS allocated=1536 driver=3845242880; projection fusion disabled\n/opt/homebrew/Cellar/python@3.12/3.12.13/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown\n  warnings.warn('resource_tracker: There appear to be %d '\n",
+  "process_exit": -9,
+  "process_finished": true,
+  "elapsed_seconds": 15.318,
+  "memory_before": {
+    "swap_used_mib": 4543.56,
+    "swap_raw": "vm.swapusage: total = 6144.00M  used = 4543.56M  free = 1600.44M  (encrypted)"
+  },
+  "memory_after": {
+    "swap_used_mib": 6624.38,
+    "swap_raw": "vm.swapusage: total = 7168.00M  used = 6624.38M  free = 543.62M  (encrypted)"
+  },
+  "memory_samples": [
+    {
+      "seconds": 5.0,
+      "rss_kib": 312864,
+      "swap_used_mib": 4535.56,
+      "swap_raw": "vm.swapusage: total = 6144.00M  used = 4535.56M  free = 1608.44M  (encrypted)"
+    },
+    {
+      "seconds": 10.0,
+      "rss_kib": 357616,
+      "swap_used_mib": 4511.56,
+      "swap_raw": "vm.swapusage: total = 6144.00M  used = 4511.56M  free = 1632.44M  (encrypted)"
+    },
+    {
+      "seconds": 15.1,
+      "rss_kib": 577296,
+      "swap_used_mib": 6684.75,
+      "swap_raw": "vm.swapusage: total = 7168.00M  used = 6684.75M  free = 483.25M  (encrypted)"
+    }
+  ],
+  "network": "OS sandbox deny network; HF offline"
+}
