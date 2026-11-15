@@ -31,7 +31,7 @@ def request(cfg, **over):
 @pytest.mark.parametrize("host", sorted(P.HOSTS))
 def test_subscription_hosts_do_not_infer_entitlement(host):
     r = request({}, host=host)
-    assert r["status"] == "manual"
+    assert r["status"] == ("denied" if host == "opencode" else "manual")
     assert r["observed"]["model"] is None
 
 

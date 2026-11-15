@@ -29,7 +29,7 @@ def test_families_cover_tiers_and_real_codex_ids():
 
 
 @pytest.mark.parametrize("env,expected", [("codex", "gpt-6-luna"), ("claude-code", "haiku"),
-                                          ("opencode", "opencode/claude-haiku-5-5")])
+                                          ("opencode", "opencode/deepseek-v4.1-flash-free")])
 def test_route_env_gives_concrete_model(env, expected, capsys):
     assert L.main(["route", "extract-claims", "--env", env]) == 0
     assert expected in capsys.readouterr().out

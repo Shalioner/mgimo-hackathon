@@ -6,11 +6,22 @@
 # families:
 #   claude: {T1: "<дешёвая модель прокси>", T2: "<средняя>", T3: "<сильная>", T4: null}
 
-# 2) OpenCode только на бесплатных моделях (Zen free; квоты по IP, состав меняется — сверяйте `opencode models`):
+# 2) OpenCode signed-out free-only, контракт v2.2.5: docs/OPENCODE_FREE.md.
+# Сначала явно обновите каталог через tools/opencode_free.py refresh.
+# Для обновления также allowlist добавьте --write-candidates knowledge/routing.local.yaml:
+# сохраняет остальные настройки, новые eligible ID получает из metadata, quality=not_evaluated.
+# `opencode models` и суффикс free НЕ доказывают нулевую цену.
 # environments:
 #   opencode: {family: opencode-free}
 # delegate_families:
 #   opencode: opencode-free
+# execution_policy:
+#   opencode_free:
+#     enabled: true
+#     catalog: /absolute/path/to/opencode-free-catalog.json
+# Рекомендации T1/T2/T3 различаются; исполнение повторно проверяет все цены,
+# срок каталога <=24h и exact allowlist. Нет paid fallback или login.
+# Preflight не запускает CLI, не обновляет каталог и не пишет файлы.
 
 # 3) Свой лимит эскалаций:
 # budget: {max_t4_calls: 0}

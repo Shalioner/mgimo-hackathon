@@ -227,6 +227,11 @@ def plan(cfg, *, host, provider, model, effort=None, tier="T1", endpoint=None,
         return stop("Некорректный max_input_bytes")
     if input_bytes > limit:
         return stop("Вход превышает max_input_bytes; разделите материалы, усечения нет")
+    if host == "opencode":
+        if provider != "opencode":
+            return stop("OpenCode adapter supports only signed-out opencode free routes")
+        import opencode_free
+        return opencode_free.authorize(cfg, result, model, effort, tier, input_bytes)
     if mode == "subscription_only":
         result["billing"]["auth"] = "subscription"
         if (host == "codex" and provider == "openai") or (host in {"claude", "claude-code"} and provider == "anthropic"):

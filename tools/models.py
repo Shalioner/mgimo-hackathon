@@ -335,7 +335,10 @@ def map_efforts(wanted: List[str], supported: List[str]) -> List[str]:
 # ---------- гайды ----------
 def load_guides() -> List[dict]:
     out = []
-    for f in sorted(GUIDES.glob("*.md")):
+    # The free-only OpenCode transport contract covers opaque hosted models
+    # without pretending to know their vendor internals or quality ranking.
+    transport_guide = ROOT / "docs" / "OPENCODE_FREE.md"
+    for f in [*sorted(GUIDES.glob("*.md")), *([transport_guide] if transport_guide.is_file() else [])]:
         text = f.read_text(encoding="utf-8")
         if not text.startswith("---"):
             continue

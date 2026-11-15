@@ -76,11 +76,11 @@ families:
     T2: {regex: "^GLM-\\d+(\\.\\d+)?-Flash$", pin: GLM-5.3-Flash}
     T3: {regex: "^GLM-\\d+(\\.\\d+)?$",       pin: GLM-5.3}
     T4: null
-  opencode-free: # бесплатные Zen: квоты по IP, состав меняется
+  opencode-free: # Рекомендации, не доказательство цены: executor проверяет свежий каталог
     inventory: opencode
     T1: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
-    T2: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
-    T3: {pattern: "opencode/deepseek-*-flash-free", pin: opencode/deepseek-v4.1-flash-free}
+    T2: opencode/big-pickle
+    T3: opencode/minimax-m3.1-flash-free
     T4: null
   gigachat: {T1: null, T2: null, T3: null, T4: null}       # GigaCode: уточнить линейку
 
@@ -101,9 +101,9 @@ environments:
     switch: [subagent, cli, current]
     how: "Codex ChatGPT: tools/delegate.py --host codex --preflight. Исполнение через отдельный явно проверенный subscription profile; неизвестный профиль остаётся manual. Основной чат — модель из ~/.codex/config.toml или /model. Наличие CLI или API key не разрешает запуск."
   opencode:
-    family: opencode
+    family: opencode-free
     switch: [cli, current]
-    how: "tools/delegate.py --backend opencode (opencode run -m <provider/model>); можно описать агентов с моделью в конфиге OpenCode."
+    how: "tools/delegate.py --host opencode --preflight; только свежий exact-zero каталог и signed-out private server. Настройка: docs/OPENCODE_FREE.md."
   cursor:
     family: null
     switch: [picker, current]
@@ -196,6 +196,14 @@ delegate_backends: [codex]
 execution_policy:
   mode: subscription_only
   max_input_bytes: 128000
+  opencode_free:
+    enabled: false  # включить локально после explicit refresh; пользовательские auth/config не используются
+    catalog: null  # абсолютный путь к snapshot, обновление отдельной командой
+    # Порядок — операционная политика, не рейтинг качества (eval пока нет).
+    candidates:
+      T1: [opencode/deepseek-v4.1-flash-free, opencode/big-pickle]
+      T2: [opencode/big-pickle, opencode/deepseek-v4.1-flash-free]
+      T3: [opencode/minimax-m3.1-flash-free, opencode/deepseek-v4.1-flash-free]
   codex_subscription:
     enabled: false
   claude_subscription:

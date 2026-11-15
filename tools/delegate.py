@@ -24,8 +24,8 @@ import ledger as L  # noqa: E402
 import routing_policy as P
 
 ROOT = L.ROOT
-BACKEND_FAMILY = {"codex": "openai", "claude": "claude", "claude-code": "claude", "opencode": "opencode", "selfhosted": "selfhosted", "cursor": "cursor", "zcode": "glm", "kimi": "kimi", "qwen": "qwen", "gemini-cli": "gemini", "antigravity": "gemini", "antigravity-ide": "gemini", "deepseek-harness": "deepseek"}
-HOST_PROVIDER = {"codex": "openai", "claude": "anthropic", "claude-code": "anthropic", "zcode": "z.ai"}
+BACKEND_FAMILY = {"codex": "openai", "claude": "claude", "claude-code": "claude", "opencode": "opencode-free", "selfhosted": "selfhosted", "cursor": "cursor", "zcode": "glm", "kimi": "kimi", "qwen": "qwen", "gemini-cli": "gemini", "antigravity": "gemini", "antigravity-ide": "gemini", "deepseek-harness": "deepseek"}
+HOST_PROVIDER = {"codex": "openai", "claude": "anthropic", "claude-code": "anthropic", "zcode": "z.ai", "opencode": "opencode"}
 # Через какой параметр бэкенд принимает effort (у остальных — уровень по умолчанию модели).
 EFFORT_BACKENDS = {"codex", "selfhosted"}
 GUARD = (
@@ -58,7 +58,7 @@ def build_command(backend: str, model: str, prompt: str, out_file: Path, workdir
     if backend == "claude":
         return ["claude", "-p", "--model", model, "--output-format", "json", "--tools", "", prompt]
     if backend == "opencode":
-        return ["opencode", "run", "-m", model, prompt]
+        raise ValueError("OpenCode requires opencode_free.call: isolated catalog/auth gate")
     raise ValueError(f"Неизвестный бэкенд {backend}")
 
 
@@ -66,11 +66,54 @@ def parse_result(backend, stdout, answer=""):
     """One structural parse before any final receipt or output is published."""
     invalid = {"valid": False, "text": "", "usage": "", "events": [], "error": "Invalid JSON/result/usage"}
     try:
-        if backend == "codex":
+        if backend in {"codex", "opencode"}:
             events = [json.loads(line) for line in stdout.splitlines() if line.strip()]
             if not events or any(not isinstance(e, dict) or not isinstance(e.get("type"), str) for e in events):
                 return invalid
             text = answer
+            if backend == "opencode":
+                # v2.2.5 NDJSON carries parts, not an authoritative model ID.
+                # Do not substitute the requested model into observed fields.
+                text = "".join(e.get("part", {}).get("text", "") for e in events if e["type"] == "text")
+                # v2.2.5 may reconcile text after its step_finish, and does not
+                # emit a separate final-stream marker. Match all assistant
+                # parts by messageID instead of requiring a made-up event order.
+                if not any(e["type"] == "error" for e in events):
+                    seen, finished = set(), set()
+                    for event in events:
+                        if event["type"] not in {"step_start", "step_finish", "text", "reasoning", "tool_use"}:
+                            return invalid
+                        ident = event.get("part", {}).get("messageID")
+                        if not isinstance(ident, str) or not ident:
+                            return invalid
+                        seen.add(ident)
+                        if event["type"] == "step_finish":
+                            finished.add(ident)
+                    if not seen or seen != finished:
+                        return invalid
+                finishes = [e.get("part") for e in events if e["type"] == "step_finish"]
+                for part in finishes:
+                    if (not isinstance(part, dict) or part.get("reason") not in {"stop", "end_turn"}
+                            or type(part.get("cost")) not in (int, float) or part["cost"] != 0):
+                        return invalid
+                    tokens = part.get("tokens")
+                    if not isinstance(tokens, dict):
+                        return invalid
+                    def token_counts(value):
+                        return (type(value) is int and value >= 0) or (isinstance(value, dict) and all(token_counts(v) for v in value.values()))
+                    if not all(token_counts(v) for v in tokens.values()):
+                        return invalid
+                for event in events:
+                    if event["type"] == "step_finish":
+                        tokens = event["part"]["tokens"]
+                        cache = tokens.get("cache", {})
+                        if not isinstance(cache, dict):
+                            return invalid
+                        event["usage"] = {"input_tokens": tokens.get("input", 0),
+                                          "output_tokens": tokens.get("output", 0),
+                                          "cached_input_tokens": cache.get("read", 0)}
+                if not finishes and not any(e["type"] == "error" for e in events):
+                    return invalid
         else:
             data = json.loads(stdout)
             if not isinstance(data, dict):
@@ -96,7 +139,7 @@ def parse_result(backend, stdout, answer=""):
             return invalid
         return {"valid": True, "text": text, "usage": "; ".join(usage_parts), "events": events,
                 "error": ""}
-    except (ValueError, TypeError, KeyError, IndexError):
+    except (ValueError, TypeError, KeyError, IndexError, AttributeError):
         return invalid
 
 
@@ -290,6 +333,30 @@ def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=Fal
             return 1, "", "CLI failure/timeout; no wrapper retry", ""
 
 
+def select_route(cfg, backend, task, tier, explicit_model=None, explicit_effort=None):
+    """Offline selection shared by delegation and decision emulation preflight."""
+    family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY.get(backend)
+    model = explicit_model or (L.model_for(cfg, family, tier) if family else None)
+    ladder = L.tier_efforts(cfg, tier, family, model)
+    effort = explicit_effort or (ladder[0] if ladder else None)
+    selection_error = None
+    if backend == "opencode":
+        import opencode_free as O
+        effort = explicit_effort  # no invented high from a generic tier ladder
+        explicit = explicit_model
+        if explicit and "#" in explicit:
+            explicit, variant = explicit.split("#", 1)
+            if effort is not None and effort != variant:
+                selection_error = "--model variant and --effort disagree"
+            effort = variant
+        try:
+            model = O.select(cfg, task, tier, explicit, effort)
+        except (ValueError, OSError, TypeError, KeyError) as exc:
+            selection_error = str(exc)
+            model = explicit or model
+    return family, model, effort, selection_error
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="Делегировать подзадачу модели нужного уровня")
     ap.add_argument("--project", type=Path, required=True)
@@ -339,10 +406,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
         print("denied: неизвестный backend", file=sys.stderr)
         return 3
-    family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY[backend]
-    model = args.model or L.model_for(cfg, family, tier)
-    ladder = L.tier_efforts(cfg, tier, family, model)
-    effort = args.effort or (ladder[0] if ladder else None)
+    family, model, effort, selection_error = select_route(cfg, backend, args.task, tier, args.model, args.effort)
     pol = cfg.get("effort_policy") or {}
     if effort in (pol.get("never") or ["ultra"]):
         print(f"effort {effort} запрещён в routing.yaml → effort_policy.never", file=sys.stderr)
@@ -374,6 +438,8 @@ def main(argv: Optional[List[str]] = None) -> int:
                          tier=tier, input_bytes=len(prompt.encode("utf-8")), human_approved=args.human_approved)
     receipt["files"] = manifest
     receipt["tier"] = tier
+    if selection_error:
+        receipt.update(status="denied", reason=selection_error)
     if args.dry_run:
         print(json.dumps(receipt, ensure_ascii=False, indent=2))
         return 0  # Planning succeeded; status describes executability.
@@ -381,7 +447,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
         print(f"{receipt['status']}: {receipt['reason']}", file=sys.stderr)
         return 3
-    if backend not in {"selfhosted", "codex", "claude", "claude-code"}:
+    if backend not in {"selfhosted", "codex", "claude", "claude-code", "opencode"}:
         print("manual: CLI enforcement adapter absent", file=sys.stderr)
         return 3
     out_dir = project / "state" / "delegated"
@@ -395,6 +461,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         code, stdout, stderr, answer = call_codex(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
     elif backend in {"claude", "claude-code"}:
         code, stdout, stderr, answer = call_claude(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
+    elif backend == "opencode":
+        import opencode_free as O
+        code, stdout, stderr, answer = O.call(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
     else:
         receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
         code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout, args.human_approved)
