@@ -96,10 +96,10 @@ environments:
     switch: [subagent, cli, current]
     how: "Субагенты .claude/agents/*.md с полем model (source-extractor, claim-verifier — haiku). Основной чат — модель, выбранная пользователем (/model). Автозапуск delegate пока manual до проверки account/config/overage enforcement. Если задан ANTHROPIC_BASE_URL (прокси), алиасы haiku/sonnet/opus разрешает прокси; CLAUDE_CODE_SUBAGENT_MODEL перекрывает модель всех субагентов — проверьте, что за ними стоит."
   codex:
-    capability: manual
+    capability: reviewed_subscription_profile
     family: openai
     switch: [subagent, cli, current]
-    how: "Субагент Codex с моделью уровня (проверено 2026-11-10: claim-verifier запущен на gpt-6-luna). Запасной путь — tools/delegate.py --backend codex. Основной чат — модель из ~/.codex/config.toml или /model. delegate пока manual: наличие подписки/CLI не доказывает account/config/overage enforcement."
+    how: "Codex ChatGPT: tools/delegate.py --host codex --preflight. Исполнение через отдельный явно проверенный subscription profile; неизвестный профиль остаётся manual. Основной чат — модель из ~/.codex/config.toml или /model. Наличие CLI или API key не разрешает запуск."
   opencode:
     family: opencode
     switch: [cli, current]
@@ -192,10 +192,12 @@ decision:
 delegate_backends: [codex]
 
 # Наличие CLI, ключа, inventory или legacy local config не даёт права вызова.
-# CLI пока manual: verified enforcement adapter отсутствует (docs/ADAPTIVE_ROUTING.md).
+# Codex: явно проверенный subscription profile; остальные CLI manual.
 execution_policy:
   mode: subscription_only
   max_input_bytes: 128000
+  codex_subscription:
+    enabled: false
   api:
     enabled: false
     grants: []

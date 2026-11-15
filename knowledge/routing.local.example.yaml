@@ -35,7 +35,7 @@
 #     - {name: openrouter, base_url: "https://openrouter.ai/api/v1", model: typesafe/jev-1.13, api_key_env: OPENROUTER_API_KEY}
 
 # 6) Исполнение отдельно от рекомендаций. Примеры выше НЕ разрешают вызов.
-# По умолчанию subscription_only; все CLI пока manual до verified enforcement.
+# По умолчанию subscription_only; Codex требует reviewed profile ниже, остальные CLI manual.
 # API opt-in — только после отдельного решения оператора. Это НЕ настройка лимита
 # у провайдера: external_cap подтверждает уже установленный внешний лимит аккаунта.
 # Без такого лимита маршрут manual. Код не проверяет баланс/тариф и не обещает hard cap.
@@ -69,3 +69,33 @@
 # При HTTP 401/403/429/timeout — остановка, не переход на другой аккаунт/провайдера.
 # decision использует такой же grant, host: decision и endpoint .../systemone.
 # Наличие ключа не включает api_opt_in. CLI API adapters не реализованы.
+
+# 7) Subscription-first: заранее авторизованный выделенный Codex ChatGPT profile.
+# Login/копирование credentials этот код не выполняет. Оператор выбирает existing
+# dedicated CODEX_HOME (0700), auth.json (0600), без config/hooks/plugins/skills.
+# Подтверждаются план, отключённый overage и отсутствие MDM/cloud-managed config.
+# execution_policy:
+#   mode: subscription_only
+#   codex_subscription:
+#     enabled: true
+#     binary: /absolute/path/to/reviewed/codex
+#     binary_sha256: <SHA256 reviewed executable>
+#     version: "codex-cli <exact reviewed version>"
+#     codex_home: /absolute/path/to/dedicated-codex-profile
+#     entitlement_confirmed: true
+#     overage_disabled: true
+#     cli_contract_reviewed: true
+#     managed_config_absent: true
+#     cloud_managed_config_absent: true
+#     evidence_ref: local-profile-review
+#     models: [exact-reviewed-model-id]
+#     efforts: [low, medium, high]
+#     context:
+#       model_limit: 32000
+#       plan_limit: 32000
+#       user_limit: 16000
+#       output_reserve: 2048
+#       system_reserve: 4096
+# Preflight читает границы профиля без CLI/network/writes; runtime перед exec
+# проверяет fingerprint/version и login status == Logged in using ChatGPT.
+# Ошибка/квота завершает маршрут; API/account/model fallback отсутствует.

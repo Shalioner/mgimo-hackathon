@@ -363,6 +363,15 @@ def main(argv: Optional[List[str]] = None) -> int:
         provider = {"name": "code", "model": None, "base_url": "-"}
         emulating = False
     if not provider and not emulating:
+        receipt = P.plan(cfg, host="decision", provider=args.provider, model=None,
+                         input_bytes=len("\n\n".join(parts).encode("utf-8")))
+        if args.dry_run:
+            print(json.dumps({"route": receipt, "questions": len(ask_q),
+                              "files": [{"name": f.name, "bytes": f.stat().st_size}
+                                        for f in [*(args.gate or []), *args.input, *([args.items] if args.items else [])]]},
+                             ensure_ascii=False, indent=2))
+            return 0
+        P.audit_refusal(project, args.step, "decide " + qname, "T1", receipt)
         print("Модель решений не настроена (routing.yaml → decision.providers: нет адреса или ключа в окружении). "
               "Выполните задачу на T1 (`ledger.py route classify`) и запишите это в журнал.", file=sys.stderr)
         return 3
@@ -398,6 +407,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                          ensure_ascii=False, indent=2))
         return 0
     if receipt and receipt["status"] != "executable":
+        P.audit_refusal(project, args.step, "decide " + qname, "T1", receipt)
         print(f"{receipt['status']}: {receipt['reason']}", file=sys.stderr)
         return 3
 

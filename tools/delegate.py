@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Plan a scoped delegation; execute only a policy-authorized HTTP adapter.
+"""Plan a scoped delegation; execute only a policy-authorized adapter.
 
-Subscription CLI routes are manual until auth/config/overage enforcement exists.
+Codex supports a dedicated, reviewed ChatGPT profile; unknown profiles are manual.
 --dry-run/--preflight prints a side-effect-free JSON plan. Existing task tiers,
 model recommendations and effort approval gates remain independent of billing.
 """
@@ -102,12 +102,18 @@ def selfhosted_plan(cfg, model, prompt, effort, human_approved=False):
     sh = cfg.get("selfhosted") or {}
     endpoint = str(sh.get("base_url") or "").rstrip("/") + "/chat/completions"
     body = {"model": model, "messages": [{"role": "user", "content": prompt}]}
-    if effort and sh.get("send_effort", True):
+    send_effort = sh.get("send_effort", True)
+    effective_effort = effort if send_effort is True else None
+    if effective_effort:
         body["reasoning_effort"] = effort
     receipt = P.plan(cfg, host="selfhosted", provider=sh.get("provider", "selfhosted"), model=model,
-                     effort=effort, endpoint=endpoint, human_approved=human_approved,
+                     effort=effective_effort, endpoint=endpoint, human_approved=human_approved,
                      input_bytes=len(json.dumps(body).encode("utf-8")),
                      key_present=bool(os.environ.get(sh.get("api_key_env") or "")))
+    receipt["requested"]["effort"] = effort
+    if type(send_effort) is not bool or (effort is not None and not send_effort):
+        receipt.update(status="denied", reason="Explicit effort не передаётся adapter; default не заменяет запрос")
+        return receipt, endpoint, body
     if receipt["status"] == "executable":
         body["max_completion_tokens"] = receipt["context"]["output_reserve"]
         receipt = P.plan(cfg, host="selfhosted", provider=sh.get("provider", "selfhosted"), model=model,
@@ -151,6 +157,66 @@ def pick_backend(cfg: dict, requested: Optional[str]) -> Optional[str]:
     # Selection is a recommendation, never authorization. Do not search installed
     # CLIs or silently migrate to another account when the preferred host fails.
     return requested or next(iter(cfg.get("delegate_backends") or ["codex"]), None)
+
+
+def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
+    """One isolated subscription exec, with local version/auth probes beforehand.
+
+    Never login, copy credentials, inherit user config, retry, or fall back to API.
+    Probe output is consumed as a predicate and never persisted (may contain keys).
+    """
+    checked = P.plan(cfg, host="codex", provider="openai", model=model, effort=effort,
+                     tier=receipt.get("tier", "T1"), input_bytes=len(prompt.encode("utf-8")),
+                     human_approved=human_approved)
+    if checked["status"] != "executable":
+        return 3, "", checked["reason"], ""
+    profile, error = P.codex_profile(cfg)
+    if error:
+        return 3, "", error, ""
+    fixed = ["forced_login_method=\"chatgpt\"", "cli_auth_credentials_store=\"file\"",
+             "model_provider=\"openai\"", "chatgpt_base_url=\"https://chatgpt.com/backend-api/\"",
+             "openai_base_url=\"https://api.openai.com/v1\"", "service_tier=\"default\"",
+             "approval_policy=\"never\"", "features.shell_tool=false",
+             "features.multi_agent=false", "features.multi_agent_v2=false"]
+    overrides = [arg for setting in fixed for arg in ("-c", setting)]
+    with tempfile.TemporaryDirectory(prefix="strategist-codex-") as directory:
+        workdir = Path(directory)
+        # A temp cwd can still have ancestor config; never silently inherit it.
+        if any((p / ".codex").exists() or (p / "AGENTS.md").exists() or (p / "config.toml").exists()
+               for p in workdir.parents):
+            return 3, "", "Ancestor project config found; isolation not established", ""
+        home = workdir / "home"
+        home.mkdir(mode=0o700)
+        env = child_env()
+        env.update(HOME=str(home), CODEX_HOME=profile["codex_home"])
+
+        def run(argv, limit):
+            return subprocess.run(argv, cwd=str(workdir), env=env, stdin=subprocess.DEVNULL,
+                                  capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=limit)
+
+        try:
+            version = run([profile["binary"], "--version"], min(timeout, 10))
+            if version.returncode != 0 or version.stdout.strip() != profile["version"]:
+                return 3, "", "CLI version differs from reviewed contract", ""
+            auth = run([profile["binary"], *overrides, "login", "status"], min(timeout, 10))
+            if auth.returncode != 0 or (auth.stdout + auth.stderr).strip() != "Logged in using ChatGPT":
+                return 3, "", "ChatGPT auth not confirmed; no inference or fallback", ""
+            receipt["auth_check"] = "chatgpt_confirmed_by_cli"
+            # Recheck config/binary boundary after the probes, before inference.
+            _, error = P.codex_profile(cfg)
+            if error:
+                return 3, "", error, ""
+            output = workdir / "response.md"
+            command = build_command("codex", model, prompt, output, workdir, effort)
+            command[0] = profile["binary"]
+            command[1:1] = overrides
+            receipt["transmitted"] = {"model": model, "effort": effort}
+            proc = run(command, timeout)
+            result = output.read_text(encoding="utf-8") if output.is_file() else ""
+            # Do not return raw stderr: login/transport errors can include secrets.
+            return proc.returncode, proc.stdout, "CLI error; no retry/fallback" if proc.returncode else "", result
+        except (OSError, subprocess.TimeoutExpired):
+            return 1, "", "CLI failure/timeout; no retry/fallback", ""
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -197,6 +263,9 @@ def main(argv: Optional[List[str]] = None) -> int:
               f"«рекомендован {tier}, выполнен на <модель>».", file=sys.stderr)
         return 3
     if backend not in BACKEND_FAMILY:
+        receipt = P.plan(cfg, host=backend, provider=None, model=args.model, tier=tier)
+        if not args.dry_run:
+            P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
         print("denied: неизвестный backend", file=sys.stderr)
         return 3
     family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY[backend]
@@ -211,10 +280,6 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"effort {effort} — только с согласия человека: спросите и повторите с --human-approved "
               "(цена задачи растёт в разы, поведение менее предсказуемо)", file=sys.stderr)
         return 2
-    if not model and backend not in {"cursor", "kimi", "qwen", "gemini-cli", "antigravity", "antigravity-ide", "deepseek-harness"}:
-        print(f"Для бэкенда {backend} (семейство {family}) не задана модель уровня {tier} в routing.yaml", file=sys.stderr)
-        return 3
-
     prompt_path = args.prompt_file if args.prompt_file.is_absolute() else Path.cwd() / args.prompt_file
     if not prompt_path.exists():
         print(f"Нет файла задания {prompt_path}", file=sys.stderr)
@@ -242,10 +307,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(json.dumps(receipt, ensure_ascii=False, indent=2))
         return 0  # Planning succeeded; status describes executability.
     if receipt["status"] != "executable":
+        P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
         print(f"{receipt['status']}: {receipt['reason']}", file=sys.stderr)
         return 3
-    # No CLI adapter has verified account/config/overage enforcement yet.
-    if backend != "selfhosted":
+    if backend not in {"selfhosted", "codex"}:
         print("manual: CLI enforcement adapter absent", file=sys.stderr)
         return 3
     out_dir = project / "state" / "delegated"
@@ -253,21 +318,54 @@ def main(argv: Optional[List[str]] = None) -> int:
     stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S%f")
     out_file = out_dir / f"{stamp}_{args.task}.md"
     shown_model = f"{model}@{effort}" if effort else model
-    receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
     t0 = time.monotonic()
-    code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout, args.human_approved)
-    try:
-        event = json.loads(stdout)
-    except ValueError:
-        event = {}
-    integrity = P.observe(receipt, event if isinstance(event, dict) else {})
+    codex_text = ""
+    if backend == "codex":
+        code, stdout, stderr, codex_text = call_codex(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
+        events = []
+        for line in stdout.splitlines():
+            try:
+                event = json.loads(line)
+                if isinstance(event, dict):
+                    events.append(event)
+            except ValueError:
+                pass
+        if any(e.get("type") in {"error", "turn.failed"} for e in events):
+            code, codex_text, stderr = 1, "", "CLI error event; no retry/fallback"
+        integrity = True
+        # Only explicit machine events, never inferred from requested argv.
+        observed = {}
+        for event in events:
+            for key in ("provider", "model", "effort"):
+                if isinstance(event.get(key), str):
+                    observed[key] = event[key]
+            integrity = P.observe(receipt, observed) and integrity
+        P.observe(receipt, observed)
+        if not integrity:
+            receipt["integrity"] = "mismatch"
+    else:
+        receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
+        code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout, args.human_approved)
+        try:
+            event = json.loads(stdout)
+        except ValueError:
+            event = {}
+        integrity = P.observe(receipt, event if isinstance(event, dict) else {})
+    if code == 3:
+        receipt["status"] = "manual"
+        receipt["reason"] = stderr
+        P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
+        print(f"manual: {stderr}", file=sys.stderr)
+        return 3
     receipt["exit_code"] = code
-    receipt["result"] = "quarantined" if not integrity else "response_received" if code == 0 else "failed"
+    receipt["result"] = "quarantined" if not integrity else "not_started" if code == 3 else "response_received" if code == 0 else "failed"
     out_file.with_suffix(".receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
     if not integrity:
         code, stdout, stderr = 1, "", "Response metadata mismatch; quarantined; no fallback"
     secs = round(time.monotonic() - t0)
     text, usage = parse_output(backend, stdout, out_file)
+    if backend == "codex":
+        text = codex_text if integrity else ""
     ok = code == 0 and text.strip() != ""
     if ok:
         out_file.write_text(text, encoding="utf-8")
@@ -277,7 +375,7 @@ def main(argv: Optional[List[str]] = None) -> int:
               f"{secs} с; {usage or 'токены не отданы CLI'}")
     if not ok:
         print(f"Делегирование не удалось (код {code}). Выполните текущей моделью или эскалируйте.", file=sys.stderr)
-        return 1
+        return 3 if code == 3 else 1
     print(f"Ответ делегата: {rel} ({secs} с; {usage or 'токены неизвестны'})")
     print("Проверьте результат перед внесением в реестр: делегат не должен быть последней инстанцией.")
     return 0

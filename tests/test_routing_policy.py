@@ -74,6 +74,7 @@ def test_entry_points_gate_before_network(monkeypatch):
 def test_observed_is_not_requested():
     r = request({})
     assert P.observe(r, {}) and r["observed"] == {"provider": None, "model": None, "effort": None}
+    r["transmitted"] = {"model": "m", "effort": None}
     assert not P.observe(r, {"model": "other"})
     assert r["integrity"] == "mismatch"
 

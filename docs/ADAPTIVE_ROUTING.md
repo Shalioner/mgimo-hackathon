@@ -8,11 +8,11 @@
 
 `tools/routing_policy.py` — общий offline gate; `delegate` и `decide` повторно проверяют его непосредственно перед HTTP. `revise_lines` вызывает delegate и наследует gate. Остальные вызовы в tools: hooks запускают локальные ledger/models команды; ledger запускает только git. Автосканирование больше не запускает OpenCode и не обращается к selfhosted `/models`: их auth/config precedence не доказан. Чтение локального inventory остаётся рекомендацией.
 
-- `executable`: только прямые HTTP adapters selfhosted Chat Completions и decision System One, после явного API opt-in.
-- `manual`: неизвестны entitlement, auth isolation или billing enforcement. **Все подписочные CLI, включая Codex и Claude Code, пока manual.** Существующие argv builders не являются разрешением запуска.
+- `executable`: Codex ChatGPT с явно проверенным отдельным профилем; HTTP adapters selfhosted Chat Completions и decision System One — только после API opt-in.
+- `manual`: неизвестны entitlement, auth isolation или billing enforcement. **Unknown Codex profiles и остальные подписочные CLI, включая Claude Code, остаются manual.** CLI или argv builder не является разрешением запуска.
 - `denied`: неверный маршрут, нет точного grant, превышен вход/контекст, запрещён effort.
 
-Это сознательное сужение исполняемых adapters: из исследования нельзя вывести безопасный доступ к аккаунту пользователя. Автоматический Codex/Claude subscription запуск остаётся отдельным live gate: нужна изоляция config/hooks/plugins, pin auth, подтверждение плана/overage и версии. Одной настройки `verified: true` для включения CLI нет. Нативные субагенты/Orca workers, запущенные вне этих инструментов, технически этим Python gate не контролируются; их нельзя выдавать за проверенное исполнение, они требуют отдельной host enforcement интеграции.
+Codex subscription adapter проверяет fingerprint, version, isolated config и ChatGPT auth; entitlement/overage подтверждает оператор. Одной настройки `verified: true` недостаточно. Нативные субагенты/Orca workers вне этих инструментов технически этим Python gate не контролируются и требуют отдельной host enforcement интеграции.
 
 ## Платёжная политика
 
@@ -27,7 +27,7 @@
 
 Никакого API fallback: одна попытка, ошибки квоты/auth/таймаута завершают вызов. Explicit `--provider` не переключается на LLM, даже если провайдер недоступен. Fallback decision→T1, если прямой провайдер не выбран, проходит тот же delegate gate; подписочный режим не превращается в API из-за ключа.
 
-HTTP endpoint берётся только из конфигурации и сверяется как полный URL, без wildcard. Запрещены credentials/query/fragment, non-loopback HTTP, redirects и proxy-env. Глобальные настройки не меняются. Для потенциального CLI child env — узкий allowlist без HOME, CODEX_HOME, cloud/API credentials, endpoint overrides, NODE_OPTIONS и ORCA session bindings. Автоматического login/install нет.
+HTTP endpoint берётся только из конфигурации и сверяется как полный URL, без wildcard. Запрещены credentials/query/fragment, non-loopback HTTP, redirects и proxy-env. Глобальные настройки не меняются. CLI child env не наследует HOME, CODEX_HOME, cloud/API credentials, endpoint overrides, NODE_OPTIONS и ORCA session bindings; adapter добавляет временный HOME и явно разрешённый dedicated CODEX_HOME. Автоматического login/install нет.
 
 ## Контекст, preflight и receipts
 
@@ -60,7 +60,7 @@ T0 не вызывает LLM. T4 автоматически не делегир�
 
 `--preflight` — alias `--dry-run`. У delegate JSON-план на верхнем уровне, у decide — в `route`. `status: manual|denied` означает остановку автоматического запуска; `requested` не доказательство `observed`. Для выполнения убирается preflight, но gate остаётся. Exit execution: 0 — результат, 1 — ошибка транспорта/результата, 2 — некорректный запрос или T0/T4/max/ultra gate, 3 — маршрут недоступен/не разрешён; у decide 4 — содержательная проверка не пройдена. При dry-run exit 0 означает сформированный план, а не executable. Отсутствующий проект/файл и ошибочные аргументы дают ненулевой exit.
 
-`--backend` сохранён; `--host` — явный выбор host, противоречащие значения отклоняются. Grant не создаётся CLI flag, а приходит из проверенной локальной конфигурации. Подписочные маршруты пока требуют manual работы в текущем host; этот факт надо сохранять в методических инструкциях.
+`--backend` сохранён; `--host` — явный выбор host, противоречащие значения отклоняются. Grant приходит из проверенной локальной конфигурации. Codex subscription profile может дать executable без включения API; unknown profiles и другие hosts остаются manual.
 
 ### Результаты offline-проверки 2026-11-15
 
@@ -72,3 +72,36 @@ T0 не вызывает LLM. T4 автоматически не делегир�
 - Реальные процессы обоих CLI с `--preflight` в временном fixture-проекте: exit 0, status manual, transmitted.model null; снимок списка файлов до/после одинаков. Первоначальная попытка с projects/example корректно дала exit 2: там нет state/run_log.md; кейс не изменяли, проверку перенесли во временный fixture.
 
 Регрессии: API key/env isolation; legacy config; точные endpoint/model grants; unknown enforcement/context; max/T4/ultra; context overflow без усечения; JSON preflight без spawn/network/записи; proxy/redirect; 401/403/429/500/timeout без повторов и paid fallback; metadata mismatch quarantine и unknown null; code-only gate без модели. Все HTTP-вызовы тестов — spies или loopback fixtures, не реальные провайдеры.
+
+## Codex subscription adapter v1: follow-up к eef2fde
+
+После замечания координатора API-only промежуточное ядро дополнено исполняемым Codex adapter. `subscription_only` разрешает included quota без отдельного денежного hard-cap ритуала. Unknown profiles по-прежнему manual, API отдельно выключен.
+
+Оператор задаёт `execution_policy.codex_subscription`: absolute binary + SHA256 + exact version, заранее авторизованный отдельный CODEX_HOME, точные списки model/effort и context bounds; подтверждает entitlement, отключённый overage, проверку CLI contract и отсутствие managed/cloud config. Это заявление оператора, не измерение тарифа кодом. Нет установки, login, импорта OAuth, чтения/копирования auth.json или изменения общего профиля.
+
+Preflight проверяет fingerprint, absolute paths, owner/private permissions (home 0700, auth.json 0600), отсутствие config/extensions/symlinks/unknown files в dedicated home и известных `/etc/codex/{config,managed_config,requirements}.toml`. На non-POSIX — manual. MDM/cloud absence требует отдельного подтверждения, поскольку не определяется одним local file. Runtime files Codex допускаются узким списком; неизвестный файл блокирует следующий вызов до проверки.
+
+Runtime создаёт пустые cwd/HOME вне репозитория и проверяет ancestor configs. Минимальный child env получает только разрешённый CODEX_HOME. Exact binary последовательно проверяется через `--version`, затем `login status`; только точный `Logged in using ChatGPT` разрешает один `exec`. Auth output не сохраняется. Перед exec повторяется проверка профиля. Применяются documented forced ChatGPT auth, file credential store, OpenAI provider, фиксированные официальные endpoints, default service tier, read-only sandbox, never approval, ephemeral JSON. Shell tools и обе версии multi-agent выключены, чтобы делегат не создавал скрытые дочерние вызовы. Model/effort передаются явно. Quota/error/timeout завершают маршрут без retries/API/account fallback. Ответ переносится в проект только после проверки metadata; временный каталог удаляется.
+
+Проверенные первичные контракты (Context7 + upstream, 2026-11-15):
+
+- [Config precedence](https://github.com/openai/codex/blob/main/codex-rs/config/src/loader/README.md): managed layers могут перекрывать session flags, поэтому одних `-c` недостаточно.
+- [Loader sources](https://github.com/openai/codex/blob/main/codex-rs/config/src/loader/mod.rs): system, cloud и project layers.
+- [Auth manager](https://github.com/openai/codex/blob/main/codex-rs/login/src/auth/manager.rs): forced login policy фильтрует загруженный auth.
+- [Login status](https://github.com/openai/codex/blob/main/codex-rs/cli/src/login.rs): различает ChatGPT, API key, workload identity и tokens.
+- [Config fields](https://github.com/openai/codex/blob/main/codex-rs/config/src/config_toml.rs): auth, credential store, provider, endpoints и service tier.
+- [Feature definitions](https://github.com/openai/codex/blob/main/codex-rs/features/src/lib.rs) и [tool planner](https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/spec_plan.rs): shell_tool, multi_agent и multi_agent_v2 выключаются через config overrides.
+
+Реальный аккаунт/CLI не запускался. Fake CLI проверяет процессную границу, argv/env, runtime probes и stop до inference, но не тариф пользователя. Оператор должен проверить весь contract выбранной версии, включая поддерживаемые feature keys. Context reserve остаётся консервативным preflight, не доказанным token meter. При неизвестном профиле доступна ручная работа в текущем host; native/Orca не объявляется прошедшим Python gate.
+
+## Исправления независимого review F1–F3
+
+Отчёт координатора `review-core-eef2fde.md` воспроизведён в `tests/test_routing_review_regressions.py`: до исправлений 9 failed, 2 passed.
+
+- F1: API grants, subscription models/efforts и Cursor allowlist требуют строгих списков и допустимых элементов. Scalars/dicts/bools/empty и substring не расширяют разрешение; отсутствующий default effort не подразумевает `[null]`.
+- F2: фактический effort вычисляется до gate. Explicit effort, который adapter не передаёт, запрещён; default возможен только при запросе без effort и явном `[null]` в allowlist. `observed` сравнивается с transmitted contract, `request_satisfaction` отдельно отражает выполнение запроса.
+- F3: runtime refusal записывает одну redacted receipt и одну строку routing refusal с null transmitted/observed и нулём inference calls. Для preflight сохраняется отсутствие записей. Runtime version/auth stop также сохраняет причину и `not_started`.
+
+Проверки subscription adapter используют реальный subprocess с fake executable; credentials — пустой fixture-файл, без live inference. Одна инструментальная попытка обновления документации через heredoc получила encoding error до записи файлов; обновление выполнено через apply_patch.
+
+Финальная проверка follow-up: `.venv/bin/python -m pytest -q tests` — **305 passed, 1 skipped**, 26.82 s; skip — необязательный openpyxl. `git diff --check` — без ошибок. Целевой прогон F1–F3 + Codex + policy/routing/decide до финальных timeout/mismatch assertions — 118 passed, 6.17 s. Успешный validate example из предыдущего этапа не повторялся: ledger, схемы и projects не изменены. Финальный CLI contract прежний (`--host codex --preflight`, alias `--dry-run`); новый opt-in находится только в локальном `execution_policy.codex_subscription`, не в флаге, который обходит policy. Preflight status executable требует последующих runtime probes, отказ runtime возвращает 3 и сохраняет receipt/log один раз.

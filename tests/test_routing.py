@@ -110,7 +110,7 @@ def test_failed_call_is_logged_and_nonzero(proj, monkeypatch):
     monkeypatch.setattr(D.subprocess, "run", lambda *a, **k: pytest.fail("unauthorized spawn"))
     assert run(proj, "--task", "extract-claims", "--step", "3") == 3
     last = (proj / "state/run_log.md").read_text(encoding="utf-8").strip().splitlines()[-1]
-    assert "codex:gpt-6-luna" not in last
+    assert "routing refusal" in last and "codex:gpt-6-luna" in last
 
 
 # ---------- локальные переопределения и новые среды ----------
