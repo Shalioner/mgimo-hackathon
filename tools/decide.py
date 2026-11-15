@@ -410,19 +410,18 @@ def main(argv: Optional[List[str]] = None) -> int:
         if emulating:
             import delegate as D
             backend = D.pick_backend(cfg, None)
-            family = (cfg.get("delegate_families") or {}).get(backend) or D.BACKEND_FAMILY.get(backend)
-            model = L.model_for(cfg, family, "T1") if family else None
+            family, model, effort, selection_error = D.select_route(cfg, backend, "classify", "T1")
             prompt = EMULATION_PROMPT.replace("{questions}", json.dumps(ask_q, ensure_ascii=False, indent=1)).replace("{state}", body["state"])
             import models as M
             hints = M.hints(family)
             prompt = D.GUARD + ("Особенности модели (из knowledge/model_guides):\n" + "\n".join(f"- {h}" for h in hints) + "\n\n" if hints else "") + prompt
-            ladder = L.tier_efforts(cfg, "T1", family, model)
-            effort = ladder[0] if ladder else None
             if backend == "selfhosted":
                 receipt, _, _ = D.selfhosted_plan(cfg, model, prompt, effort)
             else:
                 receipt = P.plan(cfg, host=backend, provider=D.HOST_PROVIDER.get(backend), model=model, effort=effort,
                                  input_bytes=len(prompt.encode("utf-8")))
+            if selection_error:
+                receipt.update(status="denied", reason=selection_error)
         print(json.dumps({"route": receipt or {"status": "code_only"},
                           "questions": len(ask_q), "code_questions": len(code_ans),
                           "state_bytes": len(body["state"].encode("utf-8")),

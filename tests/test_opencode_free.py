@@ -206,6 +206,9 @@ def test_ndjson_result_shapes():
     events = [{"type": "text", "part": {"text": "OK"}}, {"type": "step_finish", "part":
               {"reason": "stop", "cost": 0, "tokens": {"input": 10, "output": 2, "cache": {"read": 0, "write": 0}}}}]
     def parse(value):
+        for event in value:
+            if isinstance(event.get("part"), dict):
+                event["part"].setdefault("messageID", "msg_fixture")
         return D.parse_result("opencode", "\n".join(json.dumps(e) for e in value))
     assert parse(events)["valid"] and parse(events)["text"] == "OK"
     assert not parse(events[:1])["valid"]  # partial success is not success
@@ -231,8 +234,8 @@ def test_delegate_receipt_and_default_effort(configured, monkeypatch, tmp_path):
         receipt.update(started=True, process_exit_code=0, wrapper_invocations=1)
         receipt["transmitted"] = {"model": model_id, "effort": effort}
         return 0, '\n'.join(json.dumps(e) for e in [
-            {"type": "text", "part": {"text": "OK"}},
-            {"type": "step_finish", "part": {"reason": "stop", "cost": 0, "tokens": {"input": 2, "output": 1}}}
+            {"type": "text", "part": {"messageID": "msg_fixture", "text": "OK"}},
+            {"type": "step_finish", "part": {"messageID": "msg_fixture", "reason": "stop", "cost": 0, "tokens": {"input": 2, "output": 1}}}
         ]), "", ""
     monkeypatch.setattr(O, "call", fake_call)
     assert D.main(["--project", str(project), "--prompt-file", str(prompt), "--task", "problem-framing",
@@ -245,3 +248,175 @@ def test_delegate_receipt_and_default_effort(configured, monkeypatch, tmp_path):
     assert receipt["requested"]["model"] == receipt["transmitted"]["model"] == "opencode/big-pickle"
     assert receipt["observed"] == {"provider": None, "model": None, "effort": None}
     assert receipt["integrity"] == "unconfirmed"
+
+
+@pytest.mark.parametrize("choices", ["opencode/big-pickle-paid", {"opencode/big-pickle": True}, True,
+                                    False, [], [True], [""], ["opencode/*"], ["opencode/big-pickle#high"],
+                                    [" opencode/big-pickle"], ["opencode/big-pickle-paid"]])
+def test_exact_allowlist_shared_by_selection_policy_transport(configured, monkeypatch, choices):
+    cfg, _, _ = configured
+    cfg["execution_policy"]["opencode_free"]["candidates"]["T1"] = choices
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: pytest.fail("probe after malformed/unauthorized policy"))
+    monkeypatch.setattr(subprocess, "Popen", lambda *a, **kw: pytest.fail("launch after malformed/unauthorized policy"))
+    with pytest.raises(ValueError):
+        O.select(cfg, "classify", "T1", "opencode/big-pickle")
+    receipt = plan(cfg)
+    assert receipt["status"] == "denied"
+    assert O.call(cfg, "opencode/big-pickle", "fixture", None, 1, receipt)[0] == 3
+    assert not receipt["started"]
+
+
+@pytest.mark.parametrize("change", ["repriced", "removed", "no_variants", "all_paid"])
+def test_decide_delegate_same_offline_route(configured, monkeypatch, tmp_path, capsys, change):
+    import decide as DC
+    cfg, path, data = configured
+    cfg.update(delegate_backends=["opencode"], families={"opencode-free": {"T1": "opencode/flash-free"}},
+               tiers={"T1": {"effort": ["high"]}})
+    if change == "removed":
+        del data["provider"]["models"]["flash-free"]
+    elif change in {"repriced", "all_paid"}:
+        data["provider"]["models"]["flash-free"]["cost"]["text"]["input"]["price"] = 1
+        if change == "all_paid":
+            data["provider"]["models"]["big-pickle"]["cost"]["text"]["output"]["price"] = 1
+    for item in data["provider"]["models"].values():
+        item["capabilities"]["reasoning"].pop("effort", None)
+    data["sha256"] = O.digest(data["provider"])
+    path.write_text(json.dumps(data))
+    monkeypatch.setattr(L, "load_routing", lambda: cfg)
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: pytest.fail("preflight process"))
+    monkeypatch.setattr(subprocess, "Popen", lambda *a, **kw: pytest.fail("preflight launch"))
+    project = tmp_path / "p"
+    (project / "state").mkdir(parents=True)
+    (project / "state" / "run_log.md").write_text("")
+    prompt = tmp_path / "prompt.md"
+    prompt.write_text("fixture")
+    assert DC.main(["--project", str(project), "--ask", "Ready?", "--state", "fixture", "--preflight"]) == 0
+    decision = json.loads(capsys.readouterr().out)["route"]
+    assert D.main(["--project", str(project), "--task", "classify", "--prompt-file", str(prompt),
+                   "--host", "opencode", "--preflight"]) == 0
+    delegate = json.loads(capsys.readouterr().out)
+    assert decision["requested"] == delegate["requested"]
+    assert decision["requested"]["effort"] is None
+    assert decision["status"] == delegate["status"] == ("denied" if change == "all_paid" else "executable")
+    if change in {"repriced", "removed"}:
+        assert decision["requested"]["model"] == "opencode/big-pickle"
+    assert not (project / "state" / "delegated").exists()
+
+
+def test_ndjson_every_message_completed_without_inventing_final_event():
+    def event(kind, ident, **fields):
+        return {"type": kind, "part": {"messageID": ident, **fields}}
+    def finish(ident):
+        return event("step_finish", ident, reason="stop", cost=0, tokens={"input": 1, "output": 1})
+    def parse(events):
+        return D.parse_result("opencode", "\n".join(map(json.dumps, events)))
+    first = [event("step_start", "m1"), event("text", "m1", text="first"), finish("m1")]
+    partial = first + [event("step_start", "m2"), event("text", "m2", text="partial")]
+    assert not parse(partial)["valid"]
+    assert not parse(first + [event("reasoning", "m2", text="partial")])["valid"]
+    assert not parse(first + [event("text", "m2", text="partial")])["valid"]
+    assert parse(partial + [finish("m2")])["valid"]
+    # Reconcile can fill missing text after finish; no final-stream event exists.
+    assert parse([finish("m1"), event("text", "m1", text="backfilled")])["valid"]
+    assert not parse([event("text", "m1", text="wrong id"), finish("m2")])["valid"]
+
+
+def test_metadata_diff_and_sync_new_only_candidate(configured, tmp_path):
+    import yaml
+    cfg, path, old = configured
+    new = copy.deepcopy(old)
+    new["provider"]["models"] = {"new-free": model("new-free"), "flash-free": model("flash-free")}
+    new["provider"]["models"]["flash-free"]["cost"]["text"]["output"]["price"] = 1
+    new["sha256"] = O.digest(new["provider"])
+    diff = O.catalog_diff(old, new)
+    assert diff["added"] == ["opencode/new-free"]
+    assert diff["removed"] == ["opencode/big-pickle"]
+    assert diff["repriced"] == ["opencode/flash-free"]
+    assert diff["supported_exact_zero"] == ["opencode/new-free"]
+    assert diff["quality"] == "not_evaluated"
+    local = tmp_path / "routing.local.yaml"
+    cfg["execution_policy"]["codex_subscription"] = {"enabled": True, "keep": "existing"}
+    cfg["other"] = {"keep": [1, 2]}
+    local.write_text(yaml.safe_dump(cfg))
+    path.write_text(json.dumps(new))
+    O.write_candidates(local, new, path)
+    synced = yaml.safe_load(local.read_text())
+    assert synced["other"] == cfg["other"]
+    assert synced["execution_policy"]["codex_subscription"] == cfg["execution_policy"]["codex_subscription"]
+    assert O.select(synced, "classify", "T1") == "opencode/new-free"
+    assert O.select(synced, "problem-framing", "T2") == "opencode/new-free"
+    assert plan(synced, model="opencode/new-free")["status"] == "executable"
+
+
+def test_candidate_capabilities_exclusions_and_deterministic_order(configured):
+    _, _, data = configured
+    items = {name: model(name) for name in ["z-chat", "a-chat", "medical-free", "vision-free", "image-free", "odd-protocol", "domain-free"]}
+    items["image-free"]["type"] = "image"
+    items["domain-free"]["domain"] = "finance"
+    items["odd-protocol"]["api"]["chat-completions"]["sdk"]["opencodeai"] = "unsupported"
+    items["a-chat"]["capabilities"]["reasoning"] = {"supported": False}
+    data["provider"]["models"] = items
+    patch = O.candidate_patch(data)
+    assert patch == {"T1": ["opencode/a-chat", "opencode/z-chat"], "T2": ["opencode/z-chat"], "T3": ["opencode/z-chat"]}
+    assert O.candidate_patch(data, {"T1": ["opencode/z-chat"]})["T1"] == ["opencode/z-chat", "opencode/a-chat"]
+
+
+def test_refresh_command_sync_offline_fake(configured, monkeypatch, tmp_path, capsys):
+    import yaml
+    cfg, path, data = configured
+    data = copy.deepcopy(data)
+    data["provider"]["models"] = {"new-free": model("new-free")}
+    data["sha256"] = O.digest(data["provider"])
+    def fake_refresh(binary, output):
+        output.write_text(json.dumps(data))
+        return data
+    monkeypatch.setattr(O, "refresh", fake_refresh)
+    local = tmp_path / "routing.local.yaml"
+    local.write_text(yaml.safe_dump(cfg))
+    assert O.main(["refresh", "--binary", data["binary"], "--output", str(path), "--write-candidates", str(local)]) == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["diff"]["supported_exact_zero"] == ["opencode/new-free"]
+    synced = yaml.safe_load(local.read_text())
+    assert O.select(synced, "classify", "T1") == "opencode/new-free"
+
+
+def test_refresh_paid_only_revokes_candidates_without_inference(configured, monkeypatch, tmp_path):
+    import yaml
+    cfg, path, old = configured
+    provider = copy.deepcopy(old["provider"])
+    for item in provider["models"].values():
+        item["cost"]["text"]["output"]["price"] = 1
+    calls = []
+    def fake_metadata(command, **kwargs):
+        calls.append(command)
+        if command[-1] == "--version":
+            return subprocess.CompletedProcess(command, 0, O.VERSION + "\n", "")
+        assert command[0] == "/usr/bin/curl" and command[-1] == O.SOURCE
+        assert "OPENCODE_API_KEY" not in kwargs["env"]
+        return subprocess.CompletedProcess(command, 0, json.dumps({"opencode": provider}), "")
+    monkeypatch.setattr(subprocess, "run", fake_metadata)
+    data = O.refresh(Path(old["binary"]), path)
+    local = tmp_path / "routing.local.yaml"
+    local.write_text(yaml.safe_dump(cfg))
+    O.write_candidates(local, data, path)
+    synced = yaml.safe_load(local.read_text())
+    assert len(calls) == 2
+    assert synced["execution_policy"]["opencode_free"]["candidates"] == {"T1": [], "T2": [], "T3": []}
+    assert plan(synced)["status"] == "denied"
+
+
+def test_sync_preserves_disabled_and_absent_enable(configured, tmp_path):
+    import yaml
+    _, path, data = configured
+    local = tmp_path / "routing.local.yaml"
+    O.write_candidates(local, data, path)
+    assert yaml.safe_load(local.read_text())["execution_policy"]["opencode_free"]["enabled"] is False
+
+
+@pytest.mark.parametrize("bad", [[], {"source": O.SOURCE, "provider": []},
+                                 {"source": O.SOURCE, "provider": {"models": {"x": False}}}])
+def test_refresh_malformed_previous_stops_before_network(tmp_path, monkeypatch, bad):
+    path = tmp_path / "catalog.json"
+    path.write_text(json.dumps(bad))
+    monkeypatch.setattr(O, "refresh", lambda *a: pytest.fail("refresh after malformed snapshot"))
+    assert O.main(["refresh", "--binary", "/fake", "--output", str(path)]) == 3

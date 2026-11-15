@@ -12,9 +12,12 @@ import json
 import os
 from pathlib import Path
 import pwd
+import re
 import subprocess
 import sys
 import tempfile
+
+import yaml
 
 SOURCE = "https://models.opencode.ai/experimental/v2.0/api.json?type=chat,decision,image"
 VERSION = "opencode v2.2.5"
@@ -143,13 +146,22 @@ def candidate(data, model, effort, input_bytes):
     return item, capacity
 
 
+def tier_candidates(profile, tier):
+    """One exact-ID schema at selection, policy and transport boundaries."""
+    require(type(profile) is dict and type(profile.get("candidates")) is dict, "Candidates must be a tier mapping")
+    choices = profile["candidates"].get(tier)
+    require(type(choices) is list and bool(choices)
+            and all(type(x) is str and re.fullmatch(r"opencode/[A-Za-z0-9][A-Za-z0-9._-]*", x) for x in choices),
+            "Tier candidates must be a nonempty list of exact opencode/model IDs")
+    return choices
+
+
 def select(cfg, task, tier, explicit=None, effort=None):
     """Re-evaluate fixed policy order for each task, never round-robin or newest."""
     profile = (cfg.get("execution_policy") or {}).get("opencode_free") or {}
     require(task in cfg.get("tasks", {}) and tier in {"T1", "T2", "T3"}, "Task/tier not allowed")
     # Validate task authorization before explicit model overrides too.
-    choices = profile.get("candidates", {}).get(tier, [])
-    require(type(choices) is list and choices and all(type(x) is str for x in choices), "No approved tier candidates")
+    choices = tier_candidates(profile, tier)
     if explicit:
         require(explicit in choices, "Explicit model outside tier candidate allowlist")
         choices = [explicit]
@@ -167,7 +179,7 @@ def authorize(cfg, result, model, effort, tier, input_bytes):
     profile = (cfg.get("execution_policy") or {}).get("opencode_free") or {}
     try:
         require(profile.get("enabled") is True, "OpenCode free execution not enabled")
-        require(model in profile.get("candidates", {}).get(tier, []), "Model outside tier allowlist")
+        require(model in tier_candidates(profile, tier), "Model outside tier allowlist")
         data = load_catalog(profile)
         item, capacity = candidate(data, model, effort, input_bytes)
         result.update(status="executable", reason="Exact-zero catalog; runtime must confirm signed-out isolated CLI",
@@ -250,6 +262,94 @@ def call(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
             return 3 if not receipt["started"] else 1, "", "Isolation/runtime check failed; no inference retry", ""
 
 
+def supported_models(provider):
+    """Operational eligibility, not a quality judgement or inferred T3 skill."""
+    import models as M
+    catalog = M.load_catalog()
+    eligible = {}
+    for ident, item in provider["models"].items():
+        if type(ident) is not str or not _is_free(item) or item.get("id") != ident:
+            continue
+        full = "opencode/" + ident
+        if not re.fullmatch(r"opencode/[A-Za-z0-9][A-Za-z0-9._-]*", full):
+            continue
+        # Existing domain exclusions also apply to newly discovered chat routes.
+        if any(M.is_specialized(str(value), catalog) for value in (full, item.get("family", ""), item.get("name", ""))):
+            continue
+        if item.get("specialized") not in (None, False) or any(
+                item.get(k) not in (None, "general", "chat") for k in ("domain", "category", "task")):
+            continue
+        try:
+            candidate({"provider": provider}, full, None, 0)
+        except (ValueError, TypeError, KeyError):
+            continue
+        eligible[full] = item
+    return eligible
+
+
+def catalog_diff(previous, current):
+    old = previous["provider"]["models"] if previous else {}
+    new = current["provider"]["models"]
+    prefix = lambda keys: sorted("opencode/" + key for key in keys)
+    return {"baseline": "previous_snapshot" if previous else "none",
+            "added": prefix(new.keys() - old.keys()), "removed": prefix(old.keys() - new.keys()),
+            "repriced": prefix(k for k in old.keys() & new.keys()
+                               if (old[k].get("cost"), old[k].get("experimental")) !=
+                                  (new[k].get("cost"), new[k].get("experimental"))),
+            "supported_exact_zero": sorted(supported_models(current["provider"])),
+            "quality": "not_evaluated"}
+
+
+def candidate_patch(data, previous=None):
+    """Metadata-only text/tool policy; retain eligible preference order, then ID.
+
+T2/T3 additionally require declared reasoning support, not claimed quality.
+An empty tier remains disabled by the exact allowlist gate.
+"""
+    eligible = supported_models(data["provider"])
+    result = {}
+    for tier in ("T1", "T2", "T3"):
+        allowed = {name for name, item in eligible.items()
+                   if tier == "T1" or item["capabilities"].get("reasoning", {}).get("supported") is True}
+        prior = (previous or {}).get(tier, [])
+        require(type(prior) is list and all(type(x) is str for x in prior), "Malformed existing tier candidates")
+        result[tier] = list(dict.fromkeys([x for x in prior if x in allowed] + sorted(allowed)))
+    return result
+
+
+def write_candidates(path, data, snapshot):
+    """Opt-in sync only the free profile's catalog/candidates; retain other keys."""
+    require(not path.is_symlink() and path.resolve() != snapshot.resolve(), "Candidate policy must be a separate regular file")
+    cfg = yaml.safe_load(path.read_text()) if path.exists() else {}
+    require(type(cfg) is dict, "Local routing config must be a mapping")
+    policy = cfg.setdefault("execution_policy", {})
+    require(type(policy) is dict, "execution_policy must be a mapping")
+    profile = policy.setdefault("opencode_free", {})
+    require(type(profile) is dict, "opencode_free must be a mapping")
+    prior = profile.get("candidates", {})
+    require(type(prior) is dict, "candidates must be a mapping")
+    profile["candidates"] = candidate_patch(data, prior)
+    profile["catalog"] = str(snapshot.resolve())
+    # Sync is not authorization to enable a previously disabled transport.
+    profile.setdefault("enabled", False)
+    profile["candidate_provenance"] = {"policy": "text_tools_reasoning_v1", "quality": "not_evaluated",
+                                       "catalog_sha256": data["sha256"], "fetched_at": data["fetched_at"]}
+    atomic_write(path, yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False))
+    return profile["candidates"]
+
+
+def atomic_write(path, text):
+    require(not path.is_symlink(), "Refusing to replace symlink")
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent, delete=False) as stream:
+        tmp = Path(stream.name)
+        try:
+            stream.write(text)
+            stream.flush()
+            os.replace(tmp, path)
+        finally:
+            tmp.unlink(missing_ok=True)
+
+
 def refresh(binary, output):
     """Explicit public metadata GET only; no inference or auth inspection."""
     system_boundary()
@@ -269,9 +369,9 @@ def refresh(binary, output):
         data = {"schema": 1, "source": SOURCE, "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
                 "provider": provider, "sha256": digest(provider), "binary": str(binary), "version": VERSION,
                 "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest()}
-        # Validate before replacing the operator's snapshot.
-        require(any(_is_free(m) for m in provider["models"].values()), "No exact-zero models in catalog")
-        output.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+        # Keep even a zero-candidate snapshot: it revokes obsolete eligibility.
+        require(all(type(k) is str and type(v) is dict for k, v in provider["models"].items()), "Malformed catalog models")
+        atomic_write(output, json.dumps(data, ensure_ascii=False, indent=2))
     return data
 
 
@@ -283,17 +383,32 @@ def _is_free(model):
         return False
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("command", choices=["refresh"])
     ap.add_argument("--binary", type=Path, required=True)
     ap.add_argument("--output", type=Path, required=True)
-    args = ap.parse_args()
+    ap.add_argument("--write-candidates", type=Path,
+                    help="Opt-in: merge supported free candidates into this local routing YAML; preserve other settings")
+    args = ap.parse_args(argv)
     try:
+        previous = json.loads(args.output.read_text()) if args.output.exists() else None
+        if previous is not None:
+            old_provider = previous.get("provider") if type(previous) is dict else None
+            require(type(previous) is dict and previous.get("source") == SOURCE
+                    and type(old_provider) is dict and type(old_provider.get("models")) is dict
+                    and all(type(k) is str and type(v) is dict for k, v in old_provider["models"].items())
+                    and digest(old_provider) == previous.get("sha256"), "Malformed previous snapshot")
         data = refresh(args.binary, args.output)
-        print(json.dumps({k: data[k] for k in ("source", "fetched_at", "sha256", "version")}))
+        report = {k: data[k] for k in ("source", "fetched_at", "sha256", "version")}
+        report["diff"] = catalog_diff(previous, data)
+        if args.write_candidates:
+            report["candidates"] = write_candidates(args.write_candidates, data, args.output)
+        else:
+            report["candidate_patch"] = candidate_patch(data)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
-    except (OSError, ValueError, KeyError, TypeError, subprocess.TimeoutExpired) as exc:
+    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError, subprocess.TimeoutExpired) as exc:
         print(str(exc), file=sys.stderr)
         return 3
 

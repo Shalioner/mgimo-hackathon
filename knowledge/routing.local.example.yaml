@@ -8,6 +8,8 @@
 
 # 2) OpenCode signed-out free-only, контракт v2.2.5: docs/OPENCODE_FREE.md.
 # Сначала явно обновите каталог через tools/opencode_free.py refresh.
+# Для обновления также allowlist добавьте --write-candidates knowledge/routing.local.yaml:
+# сохраняет остальные настройки, новые eligible ID получает из metadata, quality=not_evaluated.
 # `opencode models` и суффикс free НЕ доказывают нулевую цену.
 # environments:
 #   opencode: {family: opencode-free}

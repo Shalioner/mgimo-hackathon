@@ -75,6 +75,22 @@ def parse_result(backend, stdout, answer=""):
                 # v2.2.5 NDJSON carries parts, not an authoritative model ID.
                 # Do not substitute the requested model into observed fields.
                 text = "".join(e.get("part", {}).get("text", "") for e in events if e["type"] == "text")
+                # v2.2.5 may reconcile text after its step_finish, and does not
+                # emit a separate final-stream marker. Match all assistant
+                # parts by messageID instead of requiring a made-up event order.
+                if not any(e["type"] == "error" for e in events):
+                    seen, finished = set(), set()
+                    for event in events:
+                        if event["type"] not in {"step_start", "step_finish", "text", "reasoning", "tool_use"}:
+                            return invalid
+                        ident = event.get("part", {}).get("messageID")
+                        if not isinstance(ident, str) or not ident:
+                            return invalid
+                        seen.add(ident)
+                        if event["type"] == "step_finish":
+                            finished.add(ident)
+                    if not seen or seen != finished:
+                        return invalid
                 finishes = [e.get("part") for e in events if e["type"] == "step_finish"]
                 for part in finishes:
                     if (not isinstance(part, dict) or part.get("reason") not in {"stop", "end_turn"}
@@ -317,6 +333,30 @@ def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=Fal
             return 1, "", "CLI failure/timeout; no wrapper retry", ""
 
 
+def select_route(cfg, backend, task, tier, explicit_model=None, explicit_effort=None):
+    """Offline selection shared by delegation and decision emulation preflight."""
+    family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY.get(backend)
+    model = explicit_model or (L.model_for(cfg, family, tier) if family else None)
+    ladder = L.tier_efforts(cfg, tier, family, model)
+    effort = explicit_effort or (ladder[0] if ladder else None)
+    selection_error = None
+    if backend == "opencode":
+        import opencode_free as O
+        effort = explicit_effort  # no invented high from a generic tier ladder
+        explicit = explicit_model
+        if explicit and "#" in explicit:
+            explicit, variant = explicit.split("#", 1)
+            if effort is not None and effort != variant:
+                selection_error = "--model variant and --effort disagree"
+            effort = variant
+        try:
+            model = O.select(cfg, task, tier, explicit, effort)
+        except (ValueError, OSError, TypeError, KeyError) as exc:
+            selection_error = str(exc)
+            model = explicit or model
+    return family, model, effort, selection_error
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="Делегировать подзадачу модели нужного уровня")
     ap.add_argument("--project", type=Path, required=True)
@@ -366,25 +406,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
         print("denied: неизвестный backend", file=sys.stderr)
         return 3
-    family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY[backend]
-    model = args.model or L.model_for(cfg, family, tier)
-    ladder = L.tier_efforts(cfg, tier, family, model)
-    effort = args.effort or (ladder[0] if ladder else None)
-    selection_error = None
-    if backend == "opencode":
-        import opencode_free as O
-        effort = args.effort  # no invented high from a generic tier ladder
-        explicit = args.model
-        if explicit and "#" in explicit:
-            explicit, variant = explicit.split("#", 1)
-            if effort is not None and effort != variant:
-                selection_error = "--model variant and --effort disagree"
-            effort = variant
-        try:
-            model = O.select(cfg, args.task, tier, explicit, effort)
-        except (ValueError, OSError, TypeError, KeyError) as exc:
-            selection_error = str(exc)
-            model = explicit or model
+    family, model, effort, selection_error = select_route(cfg, backend, args.task, tier, args.model, args.effort)
     pol = cfg.get("effort_policy") or {}
     if effort in (pol.get("never") or ["ultra"]):
         print(f"effort {effort} запрещён в routing.yaml → effort_policy.never", file=sys.stderr)
@@ -440,6 +462,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     elif backend in {"claude", "claude-code"}:
         code, stdout, stderr, answer = call_claude(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
     elif backend == "opencode":
+        import opencode_free as O
         code, stdout, stderr, answer = O.call(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
     else:
         receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
