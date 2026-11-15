@@ -12,6 +12,55 @@ sys.path.insert(0, str(ROOT / "tools"))
 import decide as DC  # noqa: E402
 import ledger as L  # noqa: E402
 
+
+@pytest.mark.parametrize("answer,exit_code,outcome", [
+    ({"type": []}, 1, "invalid_result"),
+    ({"type": {}}, 1, "invalid_result"),
+    ({"type": "noul", "noul": 0.9}, 0, "succeeded"),
+    ({"type": "refusal"}, 0, "succeeded"),
+])
+def test_http_answer_type_validation(tmp_path, monkeypatch, answer, exit_code, outcome):
+    import routing_policy as P
+    from test_routing_policy import api_policy
+    project = tmp_path / "p"
+    (project / "state").mkdir(parents=True)
+    log = project / "state/run_log.md"
+    log.write_text("")
+    provider = {"name": "test", "model": "m", "base_url": "https://fixture.test",
+                "api_key_env": "REVIEW_FAKE_KEY"}
+    cfg = {"execution_policy": api_policy("decision", "test", "https://fixture.test/systemone", "m"),
+           "decision": {"providers": [provider]}}
+    monkeypatch.setattr(L, "load_routing", lambda: cfg)
+    monkeypatch.setenv("REVIEW_FAKE_KEY", "fake-no-secret")
+    calls = []
+
+    class Response:
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def read(self): return json.dumps({"answers": {"q": answer}}).encode()
+
+    def http_spy(*args):
+        calls.append(1)
+        return Response()
+
+    monkeypatch.setattr(P, "http_open", http_spy)
+    assert DC.main(["--project", str(project), "--provider", "test", "--ask", "Ready?",
+                    "--state", "fixture"]) == exit_code
+    assert len(calls) == 1
+    receipts = list((project / "state").rglob("*.receipt.json"))
+    assert len(receipts) == 1
+    receipt = json.loads(receipts[0].read_text())
+    assert receipt["result"] == outcome and receipt["exit_code"] == exit_code
+    assert receipt["started"] and receipt["transmitted"]["model"] == "m"
+    assert receipt["observed"]["model"] is None
+    assert log.read_text().count("decision:m") == 1
+
+
+@pytest.mark.parametrize("bad_type", [[], {}])
+def test_emulation_container_type_becomes_refusal(bad_type):
+    assert DC.from_labels({"q": {"type": bad_type}}, {"q": {"type": "noul"}}, "fixture") == {
+        "q": {"type": "refusal"}}
+
 ANSWERS = {
     "CLM-001.type": {"type": "choice", "choice": "fact", "confidence": 0.93,
                      "probabilities": {"fact": 0.93, "hypothesis": 0.05, "forecast": 0.01, "recommendation": 0.01}},
@@ -31,7 +80,7 @@ def server():
             got["path"] = self.path
             got["auth"] = self.headers.get("Authorization")
             got["body"] = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-            data = json.dumps({"id": "dec-1", "model": "jev-test", "answers": ANSWERS,
+            data = json.dumps({"id": "dec-1", "model": "kev-test", "answers": ANSWERS,
                                "usage": {"input_tokens": 120, "output_tokens": 0, "cost": 0.000005}}).encode()
             self.send_response(200)
             self.end_headers()
@@ -52,6 +101,11 @@ def setup(tmp_path, monkeypatch, server):
     loc.write_text("decision:\n  providers:\n"
                    f"    - {{name: kev-local, base_url: 'http://127.0.0.1:{srv.server_port}/v1', model: kev-test, "
                    "api_key_env: DEC_TEST_KEY}\n", encoding="utf-8")
+    from test_routing_policy import api_policy
+    import yaml
+    with loc.open("a") as f:
+        f.write(yaml.safe_dump({"execution_policy": api_policy("decision", "kev-local",
+            f"http://127.0.0.1:{srv.server_port}/v1/systemone", "kev-test")}))
     monkeypatch.setattr(L, "ROUTING_LOCAL_PATH", loc)
     monkeypatch.setenv("DEC_TEST_KEY", "k-dec")
     p = tmp_path / "p"
@@ -90,10 +144,10 @@ def test_no_provider_means_fallback_to_t1(tmp_path, monkeypatch):
     assert DC.main(["--project", str(p), "--questions", str(q), "--state", "сравнить 4 варианта", "--no-emulate"]) == 3
 
 
-def test_provider_with_key_in_env_is_picked(monkeypatch):
+def test_provider_key_alone_does_not_authorize(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "x")
     cfg = L.load_routing(Path("/nonexistent.yaml"))
-    assert DC.pick_provider(cfg)["model"] == "typesafe/jev-1.13"
+    assert DC.pick_provider(cfg) is None
 
 
 @pytest.mark.parametrize("ans,doubt", [

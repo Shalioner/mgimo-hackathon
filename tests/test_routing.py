@@ -63,14 +63,14 @@ def test_dry_run_builds_isolated_read_only_codex_call(proj, capsys, monkeypatch)
     monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b if b == "codex" else None)
     assert run(proj, "--task", "extract-claims", "--input", str(proj.parent / "data.md"), "--dry-run") == 0
     out = capsys.readouterr().out
-    assert "T1 · codex · gpt-6-luna" in out and "read-only" in out
-    assert str(ROOT) not in out.split("-C ")[1].split()[0]  # делегат не запускается в репозитории
+    assert json.loads(out)["status"] == "manual"
+    assert json.loads(out)["transmitted"]["model"] is None  # делегат не запускается в репозитории
 
 
-def test_backend_falls_back_in_configured_order(proj, capsys, monkeypatch):
+def test_backend_never_falls_back_to_installed_cli(proj, capsys, monkeypatch):
     monkeypatch.setattr(D.shutil, "which", lambda b: "/bin/" + b if b == "opencode" else None)
     assert run(proj, "--task", "classify", "--dry-run") == 0
-    assert "opencode/claude-haiku-5-5" in capsys.readouterr().out
+    assert json.loads(capsys.readouterr().out)["requested"]["host"] == "codex"
 
 
 def test_t0_and_t4_are_not_delegated(proj, monkeypatch):
@@ -81,7 +81,8 @@ def test_t0_and_t4_are_not_delegated(proj, monkeypatch):
 
 def test_no_cli_means_current_model(proj, monkeypatch):
     monkeypatch.setattr(D.shutil, "which", lambda b: None)
-    assert run(proj, "--task", "extract-claims", "--dry-run") == 3
+    assert run(proj, "--task", "extract-claims", "--dry-run") == 0
+    assert not (proj / "state/delegated").exists()
 
 
 def test_escalated_tier_picks_bigger_model(proj, capsys, monkeypatch):
@@ -106,10 +107,10 @@ def test_failed_call_is_logged_and_nonzero(proj, monkeypatch):
 
     class R:
         returncode, stdout, stderr = 1, "", "boom"
-    monkeypatch.setattr(D.subprocess, "run", lambda *a, **k: R())
-    assert run(proj, "--task", "extract-claims", "--step", "3") == 1
+    monkeypatch.setattr(D.subprocess, "run", lambda *a, **k: pytest.fail("unauthorized spawn"))
+    assert run(proj, "--task", "extract-claims", "--step", "3") == 3
     last = (proj / "state/run_log.md").read_text(encoding="utf-8").strip().splitlines()[-1]
-    assert "ошибка (код 1)" in last and "codex:gpt-6-luna" in last
+    assert "routing refusal" in last and "codex:gpt-6-luna" in last
 
 
 # ---------- локальные переопределения и новые среды ----------
@@ -133,7 +134,7 @@ def test_delegate_uses_local_family(tmp_path, monkeypatch, capsys):
     L.main(["init", str(p), "--title", "Д"])
     q = tmp_path / "q.md"
     q.write_text("x", encoding="utf-8")
-    assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "classify", "--dry-run"]) == 0
+    assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "classify", "--backend", "opencode", "--dry-run"]) == 0
     assert "deepseek-v4.1-flash-free" in capsys.readouterr().out
 
 

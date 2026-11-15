@@ -91,21 +91,26 @@ families:
 #   current  — выполнить текущей моделью и записать «рекомендован Tx, выполнен на <модель>».
 environments:
   claude-code:
+    capability: reviewed_subscription_profile
     family: claude
     switch: [subagent, cli, current]
-    how: "Субагенты .claude/agents/*.md с полем model (source-extractor, claim-verifier — haiku). Основной чат — модель, выбранная пользователем (/model). Если задан ANTHROPIC_BASE_URL (прокси), алиасы haiku/sonnet/opus разрешает прокси; CLAUDE_CODE_SUBAGENT_MODEL перекрывает модель всех субагентов — проверьте, что за ними стоит."
+    how: "Claude Code subscription: tools/delegate.py --host claude-code --preflight. Нужен отдельный reviewed CLAUDE_CONFIG_DIR с native claude.ai login, allowlist model/effort и подтверждённым отключением extra usage. API/env/прокси не наследуются; unknown profile — manual. Основной чат выбирает пользователь через /model."
   codex:
+    capability: reviewed_subscription_profile
     family: openai
     switch: [subagent, cli, current]
-    how: "Субагент Codex с моделью уровня (проверено 2026-11-10: claim-verifier запущен на gpt-6-luna). Запасной путь — tools/delegate.py --backend codex. Основной чат — модель из ~/.codex/config.toml или /model."
+    how: "Codex ChatGPT: tools/delegate.py --host codex --preflight. Исполнение через отдельный явно проверенный subscription profile; неизвестный профиль остаётся manual. Основной чат — модель из ~/.codex/config.toml или /model. Наличие CLI или API key не разрешает запуск."
   opencode:
     family: opencode
     switch: [cli, current]
     how: "tools/delegate.py --backend opencode (opencode run -m <provider/model>); можно описать агентов с моделью в конфиге OpenCode."
   cursor:
-    family: claude
-    switch: [picker, cli, current]
-    how: "Модель выбирается в интерфейсе чата Cursor; агент в начале шага подсказывает уровень. Если в терминале есть codex/claude/opencode — подзадачи через tools/delegate.py."
+    family: null
+    switch: [picker, current]
+    model_preferences: [Composer, Grok]
+    model_allowlist: []
+    capability: manual
+    how: "Только явный picker и подтверждённый allowlist точных моделей/плана/контекста; предпочтения Composer/Grok не подтверждают entitlement или бесплатность. Auto/Balance/Intelligence и чужой CLI не fallback. Unknown quota/overage — manual."
   copilot:
     family: openai
     switch: [picker, cli, current]
@@ -115,9 +120,40 @@ environments:
     switch: [picker, cli, current]
     how: "Выбор модели в интерфейсе Windsurf; подзадачи — через tools/delegate.py, если доступен CLI."
   zcode:
+    capability: manual
     family: glm
     switch: [picker, cli, current]
     how: "ZCode (Z.ai): модель выбирается в приложении. Модели видны только при активном провайдере: «Z.ai API» (оплата по токенам; модели выбираются в provider_config.json → personalModelIds), Start Plan (бесплатный, с дневной квотой — активируется пользователем в приложении) или Coding Plan. Проверено 2026-11-10: ZCode.app 0.17.1 содержит только безынтерфейсный CLI (glm/zcode.cjs: -p, app-server) без пакета @zcode/tui — через Orca ZCode не запускается — только в самом приложении ZCode (подтверждено пользователем); CLI вне приложения требует ELECTRON_RUN_AS_NODE=1 и ZCODE_BUILTIN_PROVIDER_CONFIG_FILE. T4 в линейке нет."
+  deepseek-harness:
+    family: null
+    switch: [picker, current]
+    capability: manual
+    how: "DeepSeek Harness (dsh): headless/auth/billing contract не проверен; подписка чата не разрешает inference."
+  kimi:
+    family: null
+    switch: [picker, current]
+    capability: manual
+    how: "Kimi Code OAuth отдельно от Moonshot API; API env может перекрыть настройки. Enforcement неизвестен."
+  qwen:
+    family: null
+    switch: [picker, current]
+    capability: manual
+    how: "Qwen Code: Qwen Account отдельно от API; version/auth/effort contract неизвестен."
+  gemini-cli:
+    family: null
+    switch: [picker, current]
+    capability: manual
+    how: "Google login отдельно от API/Vertex; нужна проверенная auth/config isolation, env autodetection не разрешает API."
+  antigravity:
+    family: null
+    switch: [picker, current]
+    capability: manual
+    how: "Antigravity App/CLI: отдельный host, не Gemini CLI; версия, auth и billing enforcement неизвестны."
+  antigravity-ide:
+    family: null
+    switch: [picker, current]
+    capability: manual
+    how: "Antigravity IDE: только ручной выбор после проверки плана, квоты и overage."
   gigacode:
     family: gigachat
     switch: [picker, current]
@@ -132,7 +168,7 @@ environments:
     how: "Как codex; дополнительно — воркер Orca: orca orchestration worker-start --agent codex --model <id> (оркестратор, необязателен)."
 
 # Модель решений (decision model): выбор из вариантов, шкала, да/нет с вероятностями, без генерации текста.
-# Протокол System One (POST {base_url}/systemone). Берётся первый провайдер с адресом и ключом в окружении;
+# Протокол System One (POST {base_url}/systemone). Выбор только после общего execution_policy gate;
 # ни одного — tools/decide.py вернёт код 3, и задача идёт на T1, как раньше. Ключи — только в переменных окружения.
 # Свой сервер с открытой моделью (Kev, Clef…) — в routing.local.yaml (см. пример). Ответы ниже min_confidence
 # и отказы уходят на проверку T1 — экономия получается на уверенных ответах, а не на всех.
@@ -152,8 +188,21 @@ decision:
     intent: intent
     source-intake: suspicious_command
 
-# Порядок, в котором tools/delegate.py ищет установленный CLI, если --backend не указан.
-delegate_backends: [codex, claude, opencode]
+# Первый host — рекомендация. Ошибка/квота не переключает account/provider.
+delegate_backends: [codex]
+
+# Наличие CLI, ключа, inventory или legacy local config не даёт права вызова.
+# Codex/Claude: явно проверенные subscription profiles; остальные CLI manual.
+execution_policy:
+  mode: subscription_only
+  max_input_bytes: 128000
+  codex_subscription:
+    enabled: false
+  claude_subscription:
+    enabled: false
+  api:
+    enabled: false
+    grants: []
 
 # Задача → стартовый уровень.
 tasks:
