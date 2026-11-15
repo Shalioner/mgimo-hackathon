@@ -38,8 +38,8 @@ def sha256(path):
     return digest.hexdigest()
 
 
-def verify_weights(directory):
-    manifest = json.loads(MANIFEST.read_text())
+def verify_weights(directory, manifest_path=None):
+    manifest = json.loads((manifest_path or MANIFEST).read_text())
     for name, expected in manifest.items():
         path = directory / name
         require(path.is_file() and not path.is_symlink(), f"Missing regular pinned file: {name}; run download")
@@ -47,10 +47,10 @@ def verify_weights(directory):
     require(not set(p.name for p in directory.iterdir()) - set(manifest), "Unreviewed file in weights")
 
 
-def download(directory):
+def download(directory, *, manifest_path=None, repo=REPO, revision=REVISION):
     """Explicit network action for official public artifacts only, never inference."""
     directory.mkdir(parents=True, exist_ok=True)
-    for name, expected in json.loads(MANIFEST.read_text()).items():
+    for name, expected in json.loads((manifest_path or MANIFEST).read_text()).items():
         target = directory / name
         if target.is_file() and not target.is_symlink() and sha256(target) == expected:
             continue
@@ -58,13 +58,13 @@ def download(directory):
         partial = target.with_name(name + ".partial")
         require(not partial.exists(), f"Incomplete download exists: {partial}; inspect before retry")
         print(f"Downloading {name}", file=sys.stderr, flush=True)
-        with urllib.request.urlopen(f"https://huggingface.co/{REPO}/resolve/{REVISION}/{name}", timeout=120) as response, partial.open("xb") as output:
+        with urllib.request.urlopen(f"https://huggingface.co/{repo}/resolve/{revision}/{name}", timeout=120) as response, partial.open("xb") as output:
             for block in iter(lambda: response.read(8 * 1024 * 1024), b""):
                 output.write(block)
         require(sha256(partial) == expected, f"Download SHA256 mismatch: {name}")
         partial.rename(target)
-    verify_weights(directory)
-    return {"status": "downloaded", "repo": REPO, "revision": REVISION, "weights": str(directory)}
+    verify_weights(directory, manifest_path)
+    return {"status": "downloaded", "repo": repo, "revision": revision, "weights": str(directory)}
 
 
 def validate_request(state, questions):
@@ -104,13 +104,26 @@ def validate_result(result, questions):
         require(type(probs) is dict and set(probs) == expected and all(probability(v) for v in probs.values()), "Invalid probabilities")
         if q.get("multiple", False):
             require(type(answer.get("choices")) is list and all(isinstance(c, str) and c in expected for c in answer["choices"]), "Invalid choices")
+            require(answer["choices"] == [k for k in q["criteria"] if probs[k] >= 0.5], "Choices disagree with probabilities")
         else:
             require(abs(sum(probs.values()) - 1) <= 0.01 and probability(answer.get("confidence")), "Invalid distribution/confidence")
             if q["type"] == "choice":
                 require(isinstance(answer.get("choice"), str) and answer["choice"] in expected, "Unknown choice")
+                require(answer["choice"] == max(q["criteria"], key=probs.__getitem__), "Choice disagrees with probabilities")
+                require(math.isclose(answer["confidence"], probs[answer["choice"]], abs_tol=1e-6), "Confidence disagrees with probabilities")
             else:
                 score = answer.get("score")
                 require(type(score) in (int, float) and math.isfinite(score) and 0 <= score < len(q["criteria"]), "Invalid score")
+                total = sum(probs.values())
+                mass = 0.0
+                median = len(q["criteria"]) - 1
+                for i in range(len(q["criteria"])):
+                    mass += probs[str(i)] / total
+                    if mass >= 0.5:
+                        median = i
+                        break
+                require(score == median, "Score disagrees with default median readout")
+                require(math.isclose(answer["confidence"], max(probs.values()), abs_tol=1e-6), "Confidence disagrees with probabilities")
     usage = result.get("usage")
     require(type(usage) is dict and type(usage.get("input_tokens")) is int and usage["input_tokens"] >= 0 and usage.get("output_tokens") == 0, "Invalid usage")
 
@@ -187,7 +200,7 @@ def worker(payload):
             "projection_fusion": False, "load_seconds": round(load_seconds, 3), "results": results}
 
 
-def execute(cases, directory, timeout):
+def execute(cases, directory, timeout, *, worker_script=None):
     import fcntl
     require(sys.platform == "darwin", "This optional lab launcher supports macOS only; no fallback")
     require(1 <= len(cases) <= 6 and 1 <= timeout <= 300, "At most 6 cases and timeout 1–300 seconds")
@@ -205,7 +218,7 @@ def execute(cases, directory, timeout):
                    "HF_MODULES_CACHE": str(Path(tmp)/"modules"), "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1",
                    "HF_HUB_DISABLE_TELEMETRY": "1", "TOKENIZERS_PARALLELISM": "false", "D1_VISION_MAX_PIXELS": str(MAX_PIXELS)}
             command = ["/usr/bin/sandbox-exec", "-p", "(version 1)(allow default)(deny network*)",
-                       sys.executable, str(Path(__file__).resolve()), "_worker"]
+                       sys.executable, str(Path(worker_script or __file__).resolve()), "_worker"]
             start = time.monotonic()
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                     text=True, cwd=tmp, env=env)

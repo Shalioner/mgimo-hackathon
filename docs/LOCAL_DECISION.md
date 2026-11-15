@@ -1,5 +1,8 @@
 # Локальная лаборатория LiquidAI d1-2B
 
+Отдельный последующий путь MLX 8bit и его фактическая проверка описаны в
+[LOCAL_DECISION_MLX.md](LOCAL_DECISION_MLX.md). Ниже — исходный bf16 runtime и история его memory blocker.
+
 Optional CLI: `tools/local_decision.py`. Он не подключён к автоматическому router,
 не меняет cloud grants, не использует API-ключи и не делает cloud/CPU fallback.
 Назначение — короткие локальные исследования System One на этом Mac, не production service.

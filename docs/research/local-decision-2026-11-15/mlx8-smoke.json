@@ -1,0 +1,28 @@
+{
+  "status": "blocked",
+  "reason": "Timeout or lab memory budget (RSS 6 GiB / swap growth 3 GiB / total swap 8 GiB / critical pressure) reached; no fallback",
+  "stderr": "",
+  "process_exit": -9,
+  "process_finished": true,
+  "elapsed_seconds": 5.557,
+  "memory_before": {
+    "swap_used_mib": 3517.62,
+    "pressure_level": 2,
+    "swap_raw": "vm.swapusage: total = 5120.00M  used = 3517.62M  free = 1602.38M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2"
+  },
+  "memory_after": {
+    "swap_used_mib": 4070.38,
+    "pressure_level": 2,
+    "swap_raw": "vm.swapusage: total = 5120.00M  used = 4070.38M  free = 1049.62M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2"
+  },
+  "memory_samples": [
+    {
+      "seconds": 5.4,
+      "rss_kib": 177952,
+      "swap_used_mib": 4029.19,
+      "pressure_level": 4,
+      "swap_raw": "vm.swapusage: total = 5120.00M  used = 4029.19M  free = 1090.81M  (encrypted)\nkern.memorystatus_vm_pressure_level: 4"
+    }
+  ],
+  "network": "OS sandbox deny network; HF offline"
+}

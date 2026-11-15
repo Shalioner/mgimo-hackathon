@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-11-15T14:21:28.111563+00:00",
+  "repo": "LiquidAI/d1-2B-MLX-8bit",
+  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+  "python": "/Users/shalioner/.cache/strategist/d1-2b-lab/mlx-venv/bin/python",
+  "weights": "/Users/shalioner/.cache/strategist/d1-2b-lab/mlx-weights/3247d0483b11e5da31fa10e7979c23252fbe3580",
+  "weights_bytes": 2216067578,
+  "weights_sha256": "b88f8e9e2c90597d9f913d52a9d2f9fff4d5338e47ea07ca8ab4e774f5ae4869",
+  "versions": "# Isolated MLX laboratory only; do not install in the primary .venv.\nannotated-doc==0.0.6\nannotated-types==0.8.0\nanyio==4.16.0\ncertifi==2026.10.23\ncffi==2.1.1\ncharset-normalizer==3.5.2\nclick==8.5.1\ncryptography==50.0.2\ndatasets==5.2.0\ndill==0.4.1\nfastapi==0.163.1\nfilelock==4.2.10\nfsspec==2026.9.0\nh11==0.16.0\nhf-xet==1.8.0\nhttpcore2==2.16.0\nhttpx2==2.16.0\nhuggingface_hub==2.4.0\nidna==3.20\nJinja2==3.1.6\nllguidance==1.9.1\nmarkdown-it-py==4.3.0\nMarkupSafe==3.0.4\nmdurl==0.1.2\nminiaudio==1.73\nmlx==0.32.4\nmlx-audio==0.6.5\nmlx-metal==0.32.4\nmlx-vlm==0.7.11\nmultiprocess==0.70.19\nnumpy==2.5.4\nopencv-python==5.0.0.93\nopentelemetry-api==1.45.2\npackaging==26.3\npandas==3.1.1\npillow==13.0.0\npyarrow==26.0.1\npycparser==3.12\npydantic==2.14.3\npydantic_core==2.50.4\nPygments==2.21.0\npython-dateutil==4.0.0\npython-multipart==0.0.33\nPyYAML==6.0.3\nregex==2026.11.9\nrequests==2.34.2\nrich==15.0.0\nsafetensors==0.8.0\nscipy==1.18.1\nsentencepiece==0.2.3\nshellingham==1.5.4\nsounddevice==0.5.6\nstarlette==1.10.0\ntokenizers==0.23.3\ntqdm==4.70.1\ntransformers==5.23.0\ntruststore==0.10.5\ntyper==0.29.1\ntyping-inspection==0.4.5\ntyping_extensions==4.16.0\ntzdata==2026.6\nurllib3==2.8.0\nuvicorn==0.54.0\nwebsockets==17.4\nxxhash==4.1.0\n",
+  "inference": "blocked critical system pressure before first answer; no image attempted",
+  "attempts": 1,
+  "answers": 0,
+  "model_process_stopped": true,
+  "memory_after": "vm.swapusage: total = 5120.00M  used = 4046.38M  free = 1073.62M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1\n",
+  "os": "ProductName:\t\tmacOS\nProductVersion:\t\t15.7.9\nBuildVersion:\t\t24G830\n"
+}

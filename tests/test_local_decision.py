@@ -130,3 +130,40 @@ def test_memory_guard_kills_only_own_process(tmp_path, monkeypatch, guard):
     monkeypatch.setattr(L.subprocess, "run", lambda *a, **kw: subprocess.CompletedProcess(a, 0, str(7*1024*1024 if guard == "rss" else 100), ""))
     r = L.execute([{"id": "test", "state": "x", "questions": Q}], tmp_path, 10)
     assert r["status"] == "blocked" and events == ["spawn", "kill-own"]
+
+
+@pytest.mark.parametrize('edit', [
+    lambda a: a.update(choice='T2'),
+    lambda a: a.update(confidence=0.7),
+])
+def test_inconsistent_choice_rejected(edit):
+    r = copy.deepcopy(RESULT)
+    edit(r['answers']['tier'])
+    with pytest.raises(ValueError, match='disagrees'):
+        L.validate_result(r, Q)
+
+
+def test_score_median_is_not_argmax():
+    q = {'s': {'type': 'score', 'instructions': '?', 'criteria': ['low', 'mid', 'high']}}
+    a = {'type': 'score', 'score': 1, 'confidence': .4,
+         'probabilities': {'0': .4, '1': .35, '2': .25}}
+    r = {'answers': {'s': a}, 'usage': RESULT['usage']}
+    L.validate_result(r, q)
+    a['score'] = 0
+    with pytest.raises(ValueError, match='median'):
+        L.validate_result(r, q)
+    a.update(score=1, confidence=.35)
+    with pytest.raises(ValueError, match='Confidence'):
+        L.validate_result(r, q)
+
+
+def test_multiple_independent_threshold_and_duplicates():
+    q = copy.deepcopy(Q)
+    q['tier']['multiple'] = True
+    a = {'type': 'choice', 'choices': ['T1', 'T2'], 'probabilities': {'T1': .5, 'T2': .8}}
+    r = {'answers': {'tier': a}, 'usage': RESULT['usage']}
+    L.validate_result(r, q)  # independent probabilities need not sum to one
+    for bad in [['T2'], ['T1', 'T2', 'T2']]:
+        a['choices'] = bad
+        with pytest.raises(ValueError, match='disagree'):
+            L.validate_result(r, q)

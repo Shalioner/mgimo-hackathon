@@ -1,0 +1,13 @@
+{
+  ".gitattributes": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930",
+  "LICENSE": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c",
+  "README.md": "1fbf23b33f8e430e96197aa3807e13441de21b15204d1e1dc5151a8030648f31",
+  "calibration.json": "e534464458f485d800fe6cc896ac241590bbc8cd54f5af08f7b3064b0d884d69",
+  "chat_template.jinja": "17f33d44f7bd01aa94623dd8bf8e4e0ef80580a725ef8b71dc6b78f6bcc11700",
+  "config.json": "17b7fcbf4aa7d64366979d439c9651aa71390785742f6ef53b49a5268dabb91e",
+  "model.safetensors": "b88f8e9e2c90597d9f913d52a9d2f9fff4d5338e47ea07ca8ab4e774f5ae4869",
+  "model.safetensors.index.json": "31fe8faaf68bfc2fbce07e9d97ff47c1abad234d783ed615f2d938392b7cf6f0",
+  "processor_config.json": "37396ef3370083a04381ef25f9e1b50dec184b8cdcf08cf718feb8944ad8f3bc",
+  "tokenizer.json": "a39eed58008cbcbc09e5b629b81338a654269c64cd13348aaa6090f4db75c7e7",
+  "tokenizer_config.json": "594a96e4caedd07536a595b48f5dc84655bd672b715b6ac891ca3d503d439f76"
+}

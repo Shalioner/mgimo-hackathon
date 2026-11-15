@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-11-15T14:19:37.153810+00:00",
+  "wheel_sha256": "927df3387cc1dd4e4e6158696dfb97abf2791ea67f6c77077213bb25c343ba0e",
+  "source_sha256": {
+    "utils.py": "d25c6c440221c146eba34fa554d9c275d0ba6b86fa3a9ba2a77447c145adf254",
+    "models/d1_lfm3_vl/d1.py": "301a008cff27646460f3ec2106c7d3c96197e25032fa811f28668fb06eaf0e36",
+    "models/d1_lfm3_vl/api.py": "4afbd910036952c93b0ebb0c1d8c3b7889784c6965772ca06a5d58b89ef4627c",
+    "models/d1_lfm3_vl/calibration.py": "839d1e733d16878e262fb244ad12d67304b7ba9d2b83aa656a4ea9fb8547d026",
+    "models/d1_lfm3_vl/media.py": "03ec38c4fca5c2500332fce08f41403098480940a25648357eb189b2264704aa",
+    "models/lfm3_vl/processing_lfm3_vl.py": "53886fe44145f4344494509a41e290de0449079f90e45bbbe590f553dd66face"
+  },
+  "versions_file": "requirements-local-decision-mlx.txt",
+  "original_bf16_repeated": false,
+  "quantized_inference_attempt_limit": 1,
+  "image_condition": "only after validated successful text",
+  "memory_guards_changed": false,
+  "processor_probe": "Official MLX adapter registration required; plain Transformers AutoProcessor lacks numpy image processor without torch; importing d1_lfm3_vl registers supported Lfm3VlProcessor successfully without model loading",
+  "license_note": "MIT package; adapted d1 modules LFM Open License, full text in model snapshot, missing per-directory LICENSE in wheel"
+}
