@@ -35,7 +35,7 @@
 #     - {name: openrouter, base_url: "https://openrouter.ai/api/v1", model: typesafe/jev-1.13, api_key_env: OPENROUTER_API_KEY}
 
 # 6) Исполнение отдельно от рекомендаций. Примеры выше НЕ разрешают вызов.
-# По умолчанию subscription_only; Codex требует reviewed profile ниже, остальные CLI manual.
+# По умолчанию subscription_only; Codex/Claude требуют reviewed profiles, остальные CLI manual.
 # API opt-in — только после отдельного решения оператора. Это НЕ настройка лимита
 # у провайдера: external_cap подтверждает уже установленный внешний лимит аккаунта.
 # Без такого лимита маршрут manual. Код не проверяет баланс/тариф и не обещает hard cap.
@@ -99,3 +99,32 @@
 # Preflight читает границы профиля без CLI/network/writes; runtime перед exec
 # проверяет fingerprint/version и login status == Logged in using ChatGPT.
 # Ошибка/квота завершает маршрут; API/account/model fallback отсутствует.
+# Одна попытка = один запуск wrapper; внутренние transport retries CLI неизвестны.
+
+# 8) Claude Code native subscription, без OAuth-token gateway и копирования ключей.
+# CLI contract должен включать --restricted и auth status.configDirectory (>=2.1.268).
+# execution_policy:
+#   mode: subscription_only
+#   claude_subscription:
+#     enabled: true
+#     binary: /absolute/path/to/reviewed/claude
+#     binary_sha256: <SHA256 reviewed executable>
+#     version: "<exact stdout of reviewed claude --version>"
+#     config_dir: /absolute/path/to/dedicated-claude-profile
+#     credential_store: file  # либо keychain на macOS; auth status проверяет directory
+#     entitlement_confirmed: true
+#     overage_disabled: true
+#     cli_contract_reviewed: true
+#     managed_config_absent: true
+#     cloud_managed_config_absent: true
+#     evidence_ref: local-claude-profile-review
+#     models: [exact-reviewed-model-id]
+#     efforts: [low, medium, high]
+#     context:
+#       model_limit: 32000
+#       plan_limit: 32000
+#       user_limit: 16000
+#       output_reserve: 2048
+#       system_reserve: 4096
+# Wrapper не выполняет login/update и не читает credential contents/Keychain.
+# --host claude и --host claude-code используют один контракт, без API fallback.

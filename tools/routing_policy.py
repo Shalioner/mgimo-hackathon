@@ -10,6 +10,7 @@ import datetime
 import json
 import math
 import os
+import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 import urllib.request
@@ -25,6 +26,48 @@ ENV_NAMES = {"PATH", "LANG", "LC_ALL", "LC_CTYPE", "SYSTEMROOT", "WINDIR", "TMPD
 # Known system sources; MDM/cloud absence additionally requires operator review.
 CODEX_SYSTEM_FILES = tuple(Path("/etc/codex") / name for name in
                            ("config.toml", "managed_config.toml", "requirements.toml"))
+CLAUDE_SYSTEM_DIRS = (Path("/etc/claude-code"), Path("/Library/Application Support/ClaudeCode"))
+
+
+def claude_profile(cfg):
+    """Dedicated native credential profile; auth contents/keychain are never read."""
+    profile = (cfg.get("execution_policy") or {}).get("claude_subscription") or {}
+    if profile.get("enabled") is not True:
+        return profile, "Нет явно включённого Claude subscription profile"
+    if os.name != "posix":
+        return profile, "Claude adapter v1 поддерживает POSIX boundary"
+    required = ("entitlement_confirmed", "overage_disabled", "cli_contract_reviewed",
+                "managed_config_absent", "cloud_managed_config_absent")
+    if any(profile.get(k) is not True for k in required) or not profile.get("evidence_ref"):
+        return profile, "Unknown Claude subscription/config enforcement"
+    try:
+        binary, home = Path(profile.get("binary") or ""), Path(profile.get("config_dir") or "")
+        if not binary.is_absolute() or not home.is_absolute() or not home.is_dir() or home.is_symlink():
+            return profile, "Нужны absolute executable и отдельный CLAUDE_CONFIG_DIR"
+        if home.resolve() == (Path.home() / ".claude").resolve():
+            return profile, "Общий ~/.claude не является dedicated profile"
+        if not binary.is_file() or not os.access(binary, os.X_OK) or not profile.get("version"):
+            return profile, "Неизвестны executable/version Claude"
+        if hashlib.sha256(binary.read_bytes()).hexdigest() != profile.get("binary_sha256"):
+            return profile, "Claude binary fingerprint изменился"
+        if home.stat().st_uid != os.getuid() or home.stat().st_mode & 0o077:
+            return profile, "Claude profile должен принадлежать текущему пользователю и иметь права 0700"
+        allowed = {".credentials.json", ".claude.json", "debug", "projects", "todos", "statsig",
+                   "cache", "session-env", "telemetry", "history.jsonl", "backups"}
+        if any(p.name not in allowed or p.is_symlink() for p in home.iterdir()):
+            return profile, "Claude profile содержит settings/extensions/symlink или неизвестный файл"
+        store = profile.get("credential_store")
+        if store == "file":
+            auth = home / ".credentials.json"
+            if not auth.is_file() or auth.is_symlink() or auth.stat().st_uid != os.getuid() or auth.stat().st_mode & 0o077:
+                return profile, "Нужен заранее настроенный private credential file (0600)"
+        elif store != "keychain" or sys.platform != "darwin":
+            return profile, "Неизвестный credential store; login/import автоматически не выполняется"
+        if any(p.exists() or p.is_symlink() for p in CLAUDE_SYSTEM_DIRS):
+            return profile, "Найдены Claude managed settings: нужна отдельная проверка"
+    except OSError:
+        return profile, "Невозможно проверить dedicated Claude profile"
+    return profile, None
 
 
 def codex_profile(cfg):
@@ -101,6 +144,10 @@ def audit_refusal(project, step, action, tier, receipt):
     receipt["transmitted"] = {"model": None, "effort": None}
     receipt["observed"] = {"provider": None, "model": None, "effort": None}
     receipt["result"] = "not_started"
+    receipt["started"] = False
+    receipt["process_exit_code"] = None
+    receipt["wrapper_invocations"] = 0
+    receipt["inference_calls"] = 0
     receipt["exit_code"] = 3
     directory = project / "state" / "delegated"
     directory.mkdir(parents=True, exist_ok=True)
@@ -143,6 +190,9 @@ def plan(cfg, *, host, provider, model, effort=None, tier="T1", endpoint=None,
     policy = cfg.get("execution_policy") or {}
     mode = policy.get("mode", "subscription_only")
     result = {"status": "denied", "reason": "", "max_attempts": 1,
+              "max_attempts_scope": "wrapper_invocations", "wrapper_invocations": 0,
+              "internal_transport_retries": "unknown_version_dependent" if host not in {"decision", "selfhosted"} else "disabled",
+              "started": False, "process_exit_code": None,
               "requested": {"host": host, "provider": provider, "model": model, "effort": effort},
               "transmitted": {"model": None, "effort": None},
               "observed": {"provider": None, "model": None, "effort": None},
@@ -179,8 +229,9 @@ def plan(cfg, *, host, provider, model, effort=None, tier="T1", endpoint=None,
         return stop("Вход превышает max_input_bytes; разделите материалы, усечения нет")
     if mode == "subscription_only":
         result["billing"]["auth"] = "subscription"
-        if host == "codex" and provider == "openai":
-            profile, error = codex_profile(cfg)
+        if (host == "codex" and provider == "openai") or (host in {"claude", "claude-code"} and provider == "anthropic"):
+            is_codex = host == "codex"
+            profile, error = codex_profile(cfg) if is_codex else claude_profile(cfg)
             if error:
                 return stop(error, "manual")
             if not valid_allowlist(profile.get("models")) or not valid_allowlist(profile.get("efforts"), efforts=True):
@@ -190,10 +241,10 @@ def plan(cfg, *, host, provider, model, effort=None, tier="T1", endpoint=None,
             error = context_check(result, profile.get("context") or {}, input_bytes)
             if error:
                 return stop(error)
-            result["billing"].update(auth="chatgpt", cap_verification="included_quota_operator_confirmed")
-            result["adapter"] = "codex-chatgpt-v1"
+            result["billing"].update(auth="chatgpt" if is_codex else "claude.ai", cap_verification="included_quota_operator_confirmed")
+            result["adapter"] = "codex-chatgpt-v1" if is_codex else "claude-subscription-v1"
             result["auth_check"] = "required_at_runtime"
-            return stop("Подтверждённый профиль; runtime проверит version и ChatGPT auth перед exec", "executable")
+            return stop("Подтверждённый профиль; runtime проверит version и subscription auth перед запуском", "executable")
         return stop("Не подтверждены изоляция account config, подписочное entitlement и запрет overage; "
                     "используйте проверенный вручную host. CLI/ключ не являются разрешением", "manual")
     if mode != "api_opt_in":

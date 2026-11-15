@@ -91,10 +91,10 @@ families:
 #   current  — выполнить текущей моделью и записать «рекомендован Tx, выполнен на <модель>».
 environments:
   claude-code:
-    capability: manual
+    capability: reviewed_subscription_profile
     family: claude
     switch: [subagent, cli, current]
-    how: "Субагенты .claude/agents/*.md с полем model (source-extractor, claim-verifier — haiku). Основной чат — модель, выбранная пользователем (/model). Автозапуск delegate пока manual до проверки account/config/overage enforcement. Если задан ANTHROPIC_BASE_URL (прокси), алиасы haiku/sonnet/opus разрешает прокси; CLAUDE_CODE_SUBAGENT_MODEL перекрывает модель всех субагентов — проверьте, что за ними стоит."
+    how: "Claude Code subscription: tools/delegate.py --host claude-code --preflight. Нужен отдельный reviewed CLAUDE_CONFIG_DIR с native claude.ai login, allowlist model/effort и подтверждённым отключением extra usage. API/env/прокси не наследуются; unknown profile — manual. Основной чат выбирает пользователь через /model."
   codex:
     capability: reviewed_subscription_profile
     family: openai
@@ -192,11 +192,13 @@ decision:
 delegate_backends: [codex]
 
 # Наличие CLI, ключа, inventory или legacy local config не даёт права вызова.
-# Codex: явно проверенный subscription profile; остальные CLI manual.
+# Codex/Claude: явно проверенные subscription profiles; остальные CLI manual.
 execution_policy:
   mode: subscription_only
   max_input_bytes: 128000
   codex_subscription:
+    enabled: false
+  claude_subscription:
     enabled: false
   api:
     enabled: false

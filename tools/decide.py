@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import math
 import os
 import re
 import sys
@@ -109,10 +110,10 @@ def decision_plan(cfg, provider, body):
                   key_present=bool(os.environ.get(provider.get("api_key_env") or "")))
 
 
-def call(provider: dict, body: dict, timeout: int, cfg=None) -> Tuple[int, dict, str]:
-    receipt = decision_plan(cfg if cfg is not None else L.load_routing(), provider, body)
-    if receipt["status"] != "executable":
-        return 3, {}, receipt["reason"]
+def call(provider: dict, body: dict, timeout: int, cfg=None, receipt=None) -> Tuple[int, dict, str]:
+    checked = decision_plan(cfg if cfg is not None else L.load_routing(), provider, body)
+    if checked["status"] != "executable":
+        return 3, {}, checked["reason"]
     req = urllib.request.Request(provider["base_url"].rstrip("/") + "/systemone",
                                  data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
                                  headers={"Content-Type": "application/json"})
@@ -120,6 +121,9 @@ def call(provider: dict, body: dict, timeout: int, cfg=None) -> Tuple[int, dict,
     if key:
         req.add_header("Authorization", f"Bearer {key}")
     try:
+        if receipt is not None:
+            receipt.update(started=True, wrapper_invocations=1)
+            receipt["transmitted"] = {"model": body["model"], "effort": None}
         with P.http_open(req, timeout) as r:
             data = json.loads(r.read().decode("utf-8"))
             return (0, data, "") if isinstance(data, dict) else (1, {}, "Invalid response object")
@@ -228,7 +232,27 @@ def parse_answers(text: str) -> dict:
         data = json.loads(t[s:e + 1])
     except ValueError:
         return {}
-    return data if isinstance(data.get("answers"), dict) else {}
+    return data if isinstance(data, dict) and isinstance(data.get("answers"), dict) else {}
+
+
+def valid_response(data, questions):
+    if not isinstance(data, dict) or not isinstance(data.get("answers"), dict):
+        return False
+    if not set(questions).issubset(data["answers"]):
+        return False
+    usage = data.get("usage", {})
+    if not isinstance(usage, dict):
+        return False
+    for key in ("input_tokens", "output_tokens", "cost"):
+        if key in usage and (type(usage[key]) not in {int, float} or not math.isfinite(usage[key]) or usage[key] < 0):
+            return False
+    for a in data["answers"].values():
+        if not isinstance(a, dict) or a.get("type") not in TYPES | {"refusal"}:
+            return False
+        for key in ("noul", "confidence", "score"):
+            if key in a and (type(a[key]) not in {int, float} or not math.isfinite(a[key])):
+                return False
+    return True
 
 
 def emulate(project: Path, questions: dict, state: str, step: str, timeout: int) -> Tuple[int, dict, str, str]:
@@ -420,13 +444,21 @@ def main(argv: Optional[List[str]] = None) -> int:
             print("Нет ни модели решений, ни CLI для дешёвой модели — выполните задачу текущей моделью.", file=sys.stderr)
             return 3
     else:
-        code, data, err = call(provider, body, args.timeout, cfg)
-        receipt["transmitted"] = {"model": body["model"], "effort": None}
-        if not P.observe(receipt, data):
-            code, data, err = 1, {}, "Response metadata mismatch; quarantined; no fallback"
+        code, data, err = call(provider, body, args.timeout, cfg, receipt)
+        receipt["transport_status_code"] = code
+        if code == 3 and not receipt["started"]:
+            receipt.update(status="manual", reason=err)
+            P.audit_refusal(project, args.step, "decide " + qname, "T1", receipt)
+            return 3
+    outcome = "failed" if code else "succeeded"
+    if code == 0 and not valid_response(data, ask_q):
+        code, data, err, outcome = 1, {}, "Invalid decision result/usage", "invalid_result"
+    if receipt and code == 0 and not P.observe(receipt, data):
+        code, data, err, outcome = 1, {}, "Response metadata mismatch; quarantined", "quarantined"
     if receipt:
-        receipt["exit_code"] = code
-        receipt["result"] = "quarantined" if receipt.get("integrity") == "mismatch" else "response_received" if code == 0 else "failed"
+        receipt["exit_code"] = 0 if code == 0 else 1
+        receipt["result"] = outcome
+        receipt["inference_calls"] = None if receipt["started"] else 0
         receipt_dir = project / "state" / "delegated"
         receipt_dir.mkdir(parents=True, exist_ok=True)
         receipt_file = receipt_dir / (datetime.datetime.now().strftime("%Y%m%d-%H%M%S%f") + "_decide.receipt.json")

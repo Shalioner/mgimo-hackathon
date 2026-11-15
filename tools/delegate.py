@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Plan a scoped delegation; execute only a policy-authorized adapter.
 
-Codex supports a dedicated, reviewed ChatGPT profile; unknown profiles are manual.
+Codex and Claude support dedicated reviewed subscription profiles; unknown profiles are manual.
 --dry-run/--preflight prints a side-effect-free JSON plan. Existing task tiers,
 model recommendations and effort approval gates remain independent of billing.
 """
@@ -62,40 +62,49 @@ def build_command(backend: str, model: str, prompt: str, out_file: Path, workdir
     raise ValueError(f"Неизвестный бэкенд {backend}")
 
 
+def parse_result(backend, stdout, answer=""):
+    """One structural parse before any final receipt or output is published."""
+    invalid = {"valid": False, "text": "", "usage": "", "events": [], "error": "Invalid JSON/result/usage"}
+    try:
+        if backend == "codex":
+            events = [json.loads(line) for line in stdout.splitlines() if line.strip()]
+            if not events or any(not isinstance(e, dict) or not isinstance(e.get("type"), str) for e in events):
+                return invalid
+            text = answer
+        else:
+            data = json.loads(stdout)
+            if not isinstance(data, dict):
+                return invalid
+            events = [data]
+            text = data["choices"][0]["message"]["content"] if backend == "selfhosted" else data.get("result")
+        usage_parts = []
+        for event in events:
+            if "usage" in event:
+                usage = event["usage"]
+                if not isinstance(usage, dict):
+                    return invalid
+                for key in ("input_tokens", "output_tokens", "cached_input_tokens", "prompt_tokens", "completion_tokens"):
+                    if key in usage and (type(usage[key]) is not int or usage[key] < 0):
+                        return invalid
+                usage_parts.append(f"вход {usage.get('input_tokens', usage.get('prompt_tokens', 0))} "
+                                   f"(кэш {usage.get('cached_input_tokens', 0)}), "
+                                   f"выход {usage.get('output_tokens', usage.get('completion_tokens', 0))} ток.")
+        error_event = any(e.get("type") in {"error", "turn.failed"} or e.get("is_error") is True for e in events)
+        if error_event:
+            return {"valid": True, "text": "", "usage": "; ".join(usage_parts), "events": events, "error": "CLI error event"}
+        if not isinstance(text, str) or not text.strip():
+            return invalid
+        return {"valid": True, "text": text, "usage": "; ".join(usage_parts), "events": events,
+                "error": ""}
+    except (ValueError, TypeError, KeyError, IndexError):
+        return invalid
+
+
 def parse_output(backend: str, stdout: str, out_file: Path) -> Tuple[str, str]:
-    """Возвращает (текст ответа, строка расхода)."""
-    if backend == "codex":
-        text = out_file.read_text(encoding="utf-8") if out_file.exists() else ""
-        usage = ""
-        for line in stdout.splitlines():
-            try:
-                ev = json.loads(line)
-            except ValueError:
-                continue
-            if ev.get("type") == "turn.completed" and ev.get("usage"):
-                u = ev["usage"]
-                usage = f"вход {u.get('input_tokens', 0)} (кэш {u.get('cached_input_tokens', 0)}), " \
-                        f"выход {u.get('output_tokens', 0)} ток."
-        return text, usage
-    if backend == "claude":
-        try:
-            data = json.loads(stdout)
-        except ValueError:
-            return stdout, ""
-        u = data.get("usage") or {}
-        usage = f"вход {u.get('input_tokens', 0)}, выход {u.get('output_tokens', 0)} ток."
-        if data.get("total_cost_usd") is not None:
-            usage += f", ${data['total_cost_usd']:.4f}"
-        return data.get("result", ""), usage
-    if backend == "selfhosted":
-        try:
-            data = json.loads(stdout)
-            text = data["choices"][0]["message"]["content"] or ""
-        except (ValueError, KeyError, IndexError, TypeError):
-            return "", ""
-        u = data.get("usage") or {}
-        return text, (f"вход {u.get('prompt_tokens', 0)}, выход {u.get('completion_tokens', 0)} ток." if u else "")
-    return stdout, ""
+    """Compatibility view; execution uses parse_result exactly once."""
+    answer = out_file.read_text(encoding="utf-8") if backend == "codex" and out_file.is_file() else ""
+    parsed = parse_result(backend, stdout, answer)
+    return parsed["text"], parsed["usage"]
 
 
 def selfhosted_plan(cfg, model, prompt, effort, human_approved=False):
@@ -162,7 +171,8 @@ def pick_backend(cfg: dict, requested: Optional[str]) -> Optional[str]:
 def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
     """One isolated subscription exec, with local version/auth probes beforehand.
 
-    Never login, copy credentials, inherit user config, retry, or fall back to API.
+    Never login, copy credentials, inherit user config, relaunch, or switch to API.
+    Internal CLI transport retries are unknown and depend on the reviewed version.
     Probe output is consumed as a predicate and never persisted (may contain keys).
     """
     checked = P.plan(cfg, host="codex", provider="openai", model=model, effort=effort,
@@ -211,12 +221,73 @@ def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=Fals
             command[0] = profile["binary"]
             command[1:1] = overrides
             receipt["transmitted"] = {"model": model, "effort": effort}
+            receipt["started"] = True
+            receipt["wrapper_invocations"] = 1
             proc = run(command, timeout)
+            receipt["process_exit_code"] = proc.returncode
             result = output.read_text(encoding="utf-8") if output.is_file() else ""
             # Do not return raw stderr: login/transport errors can include secrets.
-            return proc.returncode, proc.stdout, "CLI error; no retry/fallback" if proc.returncode else "", result
+            return proc.returncode, proc.stdout, "CLI error; no wrapper retry/fallback" if proc.returncode else "", result
         except (OSError, subprocess.TimeoutExpired):
-            return 1, "", "CLI failure/timeout; no retry/fallback", ""
+            return 1, "", "CLI failure/timeout; no wrapper retry/fallback", ""
+
+
+def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
+    """One wrapper invocation; internal CLI retries remain version-dependent."""
+    checked = P.plan(cfg, host=receipt["requested"]["host"], provider="anthropic", model=model,
+                     effort=effort, tier=receipt.get("tier", "T1"), input_bytes=len(prompt.encode("utf-8")),
+                     human_approved=human_approved)
+    if checked["status"] != "executable":
+        return 3, "", checked["reason"], ""
+    profile, error = P.claude_profile(cfg)
+    if error:
+        return 3, "", error, ""
+    # --restricted ignores user/project/local settings; managed layers are rejected
+    # by the profile boundary. Explicit settings disable hooks and require claude.ai.
+    settings = json.dumps({"forceLoginMethod": "claudeai", "disableAllHooks": True})
+    fixed = ["--restricted", "--settings", settings, "--disable-slash-commands",
+             "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}', "--tools", "",
+             "--disallowedTools", "*"]
+    with tempfile.TemporaryDirectory(prefix="strategist-claude-") as directory:
+        workdir = Path(directory)
+        if any((p / ".claude").exists() or (p / "CLAUDE.md").exists() or (p / "AGENTS.md").exists()
+               for p in workdir.parents):
+            return 3, "", "Ancestor configuration prevents Claude isolation", ""
+        home = workdir / "home"
+        home.mkdir(mode=0o700)
+        env = child_env()
+        env.update(HOME=str(home), CLAUDE_CONFIG_DIR=profile["config_dir"])
+
+        def run(argv, limit):
+            return subprocess.run(argv, cwd=str(workdir), env=env, stdin=subprocess.DEVNULL,
+                                  capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=limit)
+        try:
+            version = run([profile["binary"], "--version"], min(timeout, 10))
+            if version.returncode != 0 or version.stdout.strip() != profile["version"]:
+                return 3, "", "Claude version differs from reviewed contract", ""
+            auth = run([profile["binary"], *fixed, "auth", "status"], min(timeout, 10))
+            try:
+                status = json.loads(auth.stdout)
+            except ValueError:
+                status = None
+            if (auth.returncode != 0 or not isinstance(status, dict) or status.get("authMethod") != "claude.ai"
+                    or status.get("configDirectory") != str(Path(profile["config_dir"]).resolve())):
+                return 3, "", "Claude subscription auth/configDirectory not confirmed", ""
+            receipt["auth_check"] = "claude_ai_confirmed_by_cli"
+            _, error = P.claude_profile(cfg)
+            if error:
+                return 3, "", error, ""
+            command = [profile["binary"], *fixed, "-p", "--model", model, "--output-format", "json"]
+            if effort is not None:
+                command += ["--effort", effort]
+            command += [prompt]
+            receipt.update(started=True, wrapper_invocations=1)
+            receipt["transmitted"] = {"model": model, "effort": effort}
+            proc = run(command, timeout)
+            receipt["process_exit_code"] = proc.returncode
+            return proc.returncode, proc.stdout, "CLI error; no wrapper retry" if proc.returncode else "", ""
+        except (OSError, subprocess.TimeoutExpired):
+            return 1, "", "CLI failure/timeout; no wrapper retry", ""
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -310,7 +381,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
         print(f"{receipt['status']}: {receipt['reason']}", file=sys.stderr)
         return 3
-    if backend not in {"selfhosted", "codex"}:
+    if backend not in {"selfhosted", "codex", "claude", "claude-code"}:
         print("manual: CLI enforcement adapter absent", file=sys.stderr)
         return 3
     out_dir = project / "state" / "delegated"
@@ -319,65 +390,59 @@ def main(argv: Optional[List[str]] = None) -> int:
     out_file = out_dir / f"{stamp}_{args.task}.md"
     shown_model = f"{model}@{effort}" if effort else model
     t0 = time.monotonic()
-    codex_text = ""
+    answer = ""
     if backend == "codex":
-        code, stdout, stderr, codex_text = call_codex(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
-        events = []
-        for line in stdout.splitlines():
-            try:
-                event = json.loads(line)
-                if isinstance(event, dict):
-                    events.append(event)
-            except ValueError:
-                pass
-        if any(e.get("type") in {"error", "turn.failed"} for e in events):
-            code, codex_text, stderr = 1, "", "CLI error event; no retry/fallback"
-        integrity = True
-        # Only explicit machine events, never inferred from requested argv.
-        observed = {}
-        for event in events:
-            for key in ("provider", "model", "effort"):
-                if isinstance(event.get(key), str):
-                    observed[key] = event[key]
-            integrity = P.observe(receipt, observed) and integrity
-        P.observe(receipt, observed)
-        if not integrity:
-            receipt["integrity"] = "mismatch"
+        code, stdout, stderr, answer = call_codex(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
+    elif backend in {"claude", "claude-code"}:
+        code, stdout, stderr, answer = call_claude(cfg, model, prompt, effort, args.timeout, receipt, args.human_approved)
     else:
         receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
         code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout, args.human_approved)
-        try:
-            event = json.loads(stdout)
-        except ValueError:
-            event = {}
-        integrity = P.observe(receipt, event if isinstance(event, dict) else {})
-    if code == 3:
-        receipt["status"] = "manual"
-        receipt["reason"] = stderr
+        receipt["started"] = code != 3
+        receipt["wrapper_invocations"] = int(code != 3)
+        receipt["transport_status_code"] = code
+    if code == 3 and not receipt["started"]:
+        receipt.update(status="manual", reason=stderr)
         P.audit_refusal(project, args.step, "delegate " + args.task, tier, receipt)
         print(f"manual: {stderr}", file=sys.stderr)
         return 3
-    receipt["exit_code"] = code
-    receipt["result"] = "quarantined" if not integrity else "not_started" if code == 3 else "response_received" if code == 0 else "failed"
-    out_file.with_suffix(".receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    parsed = parse_result(backend, stdout, answer)
+    integrity = True
+    observed = {}
+    for event in parsed["events"]:
+        for key in ("provider", "model", "effort"):
+            if isinstance(event.get(key), str):
+                observed[key] = event[key]
+        integrity = P.observe(receipt, observed) and integrity
+    P.observe(receipt, observed)
+    event_failed = any(e.get("type") in {"error", "turn.failed"} or e.get("is_error") is True for e in parsed["events"])
     if not integrity:
-        code, stdout, stderr = 1, "", "Response metadata mismatch; quarantined; no fallback"
+        receipt["integrity"] = "mismatch"
+        outcome = "quarantined"
+    elif code != 0 or event_failed:
+        outcome = "failed"
+    elif not parsed["valid"]:
+        outcome = "invalid_result"
+    else:
+        outcome = "succeeded"
+    final_code = 0 if outcome == "succeeded" else 1
+    receipt.update(exit_code=final_code, result=outcome)
+    receipt["inference_calls"] = None if receipt["started"] else 0
+    out_file.with_suffix(".receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
+    if final_code == 0:
+        out_file.write_text(parsed["text"], encoding="utf-8")
     secs = round(time.monotonic() - t0)
-    text, usage = parse_output(backend, stdout, out_file)
-    if backend == "codex":
-        text = codex_text if integrity else ""
-    ok = code == 0 and text.strip() != ""
-    if ok:
-        out_file.write_text(text, encoding="utf-8")
     rel = out_file.relative_to(project)
+    usage = parsed["usage"]
     L.cmd_log(project, args.step, f"делегирование {args.task}", tier, f"{backend}:{shown_model}",
-              f"ok → {rel}" if ok else f"ошибка (код {code}): {stderr.strip()[-200:] or 'пустой ответ'}",
-              f"{secs} с; {usage or 'токены не отданы CLI'}")
-    if not ok:
-        print(f"Делегирование не удалось (код {code}). Выполните текущей моделью или эскалируйте.", file=sys.stderr)
-        return 3 if code == 3 else 1
+              f"ok → {rel}" if final_code == 0 else f"{outcome}: task exit {final_code}; process exit {receipt['process_exit_code']}",
+              f"{secs} с; {usage or 'токены не отданы CLI'}; wrapper invocations {receipt['wrapper_invocations']}; inference count unknown")
+    if final_code:
+        print(f"Делегирование: {outcome} (task exit {final_code}); автоматического повтора нет.", file=sys.stderr)
+        return final_code
     print(f"Ответ делегата: {rel} ({secs} с; {usage or 'токены неизвестны'})")
-    print("Проверьте результат перед внесением в реестр: делегат не должен быть последней инстанцией.")
+    print("Проверьте результат перед внесением в реестр.")
     return 0
 
 
