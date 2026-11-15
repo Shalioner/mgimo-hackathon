@@ -34,12 +34,13 @@ GraphQL запрос с невалидными русскими кавычкам
 
 - `hfuvoo-art/strateg-agent`: metadata, root contents, README, recursive tree (выборочно), projects, `esim-travel/brief.md`, `state.yaml`, `strategy.md`, `check-report.md`, export, HEAD.
 - `vladekds/mgimo_ai`: metadata, root contents, README, projects, `orbita-kino/README.md`, outputs, metadata HTML REPORT, HEAD.
-- `thai1311-fuk/product-strategist-agent`: metadata, root contents, README, projects, `esim-travel/README.md`, releases count.
-- `Fighter90/product-factory-strategist`: metadata, root contents, README, projects, demo strategy file, releases.
+- `thai1311-fuk/product-strategist-agent`: metadata, root contents, README, projects, `esim-travel/README.md`, releases count; `scripts/sa.py` прочитан: команды создания проекта, режимов, маршрутизации, поиска и чтения state делегируют проверки/стоимость/evidence отдельным `scripts/lib` модулям; не запускался.
+- `Fighter90/product-factory-strategist`: metadata, root contents, README, projects, demo strategy file, releases; `tools/pfs/cli.py` и `tools/pfs/check.py` прочитаны: CLI связывает команды проекта и этапов с модулями, quality gate содержит проверки структуры/фактов; не запускались.
 - `Andrewwqq200/mega-product-strategist`: metadata, root contents, README, recursive tree, `agent/instructions.md`, `task/state.md`, HEAD.
 - `hfuvoo-art/chellenge`: metadata, README, root contents, nested `01-ai-project/strateg-agent`, nested strategy, skills ZIP listing, recent commit messages.
 - `alexprotop302-tech/product-strategist-agent`: metadata, README, recursive tree.
 - `Fighter90/product-decision-skills`: API подтверждает fork и parent `MeFoDy/product-decision-skills`; прочитаны README обоих и содержимое skills каталога.
+- `Astero81/ai-product-factory`: текущие metadata и README прочитаны; README называет Codex Product Factory, в тексте не найдено `MGIMO`, `Challenge`, `МегаФон` или `хакатон`, основание исключения из текущего события подтверждено заново.
 - `MrYar07/dekanat-24-7`: README просмотрен; прямое заявление о MGIMO AI Challenge 2026 и «Вайб-кодинг». Только lead.
 
 ## Ошибки, пустые ответы и ограничения API
@@ -77,3 +78,19 @@ GraphQL запрос с невалидными русскими кавычкам
 Координатор передал `xWooshieL/interview_analysis_pipeline` как кандидат из отдельного `in:readme` поиска; параметры того внешнего поиска здесь неизвестны, поэтому он не прибавлен к счётчику собственных 11 запросов. Через GitHub API прочитаны repo metadata, README, README_ru-файла не потребовалось, root contents, recursive tree и ключевое дерево `data/output`; README заканчивается “For MGIMO GPT Challenge 2025” и описание называет второй тур MGIMO GPT Challenge. Репозиторий исключён из каталога текущего события, так как это хакатон 2025 года. Примечание: API отдал `updated_at=2026-11-24T00:34:14Z`, позже даты текущего среза 2026-11-15; timestamp противоречив и не используется как факт текущей активности. Владелец профиля не считается отдельной работой.
 
 Дополнительно по `alexprotop302-tech/product-strategist-agent` прочитаны `knowledge/routing.md` и `docs/model-eval.md`: последний содержит описанный протокол четырёх типов испытаний, но выполнение протокола или рабочий запуск не доказаны. Это изменило классификацию с неопределённой связи с событием на прямое упоминание MGIMO AI Challenge 2026 в README; точное соответствие заданию МегаФона осталось неподтверждённым.
+
+## Инцидент: ошибочная запись в продуктовый журнал
+
+Три строки ниже были добавлены этим исполнителем в `projects/esim-travel/state/run_log.md` по ошибке, вне назначенной области. Содержание сохранено дословно для аудита; после этого удалены только эти три строки, без checkout/reset. Сверка diff подтвердила, что в файле не было иных изменений этого исполнителя.
+
+```text
+| 2026-11-15T13:11:04+03:00 | 3 | проверены открытые GitHub-репозитории MGIMO×AI Challenge по зоне ИИ-агентов; созданы исследовательские артефакты | T1 | gpt-6-luna; GitHub API | 5 самостоятельных agent-проектов и 1 конкурсный workspace; 1 подтверждённый форк дедуплицирован; leads других номинаций отдельно; 11 Search-запросов; сайт организатора timeout; без запуска кода | 11 GitHub Search-запросов; 8 репозиториев-кандидатов + форк/оригинал; README/tree и ключевые файлы; платных вызовов нет |
+| 2026-11-15T13:13:36+03:00 | 3 | уточнена классификация результатов GitHub-поиска; отдельный кандидат MGIMO GPT Challenge 2025 исключён как другое событие | T1 | gpt-6-luna; GitHub API | текущий MGIMO×AI Challenge 2026: 3 агента с прямой связью с заданием МегаФона; workspace и неопределённые кандидаты указаны отдельно; xWooshieL исключён (README прямо указывает 2025) | повторный разбор 1 repo по просьбе координатора; без дополнительных поисковых вызовов |
+| 2026-11-15T13:17:57+03:00 | 3 | уточнён счётчик каталога после чтения docs/ПРОЕКТ.md и model-eval; уточнение исправляет предварительные числа в двух предыдущих записях | T1 | gpt-6-luna; GitHub API | каталог: 4 агентных репозитория с прямой связью с событием (3 явно по заданию МегаФона, 1 точно по Challenge, бриф не подтверждён), 1 конкурсный workspace с копией, 1 агентный кандидат без ссылки на событие, 1 смежный продуктовый агент и 2 связанных skills-репозитория вне зачёта; 5 leads других номинаций; xWooshieL исключён как Challenge 2025 | документный follow-up по двум кандидатам; дополнительных поисковых запросов не было |
+```
+
+## Сверка прежних A-карточек и лимита поиска
+
+Исходный набор A-карточек в `docs/night/research/cards/` содержит три записи. `A-hfuvoo-art-chellenge.md` сопоставлен с workspace в каталоге и отдельно исключён из счёта агента-дубликата; `A-fighter90-product-decision-skills.md` сопоставлен с fork и parent в разделе смежных skills; `A-astero81-ai-product-factory.md` повторно проверен по текущим README/API metadata и исключён как продуктовый Codex-фреймворк без связи с событием. Ни одна прежняя A-карточка не исчезла без причины.
+
+Собственные GitHub Search-запросы этого исполнителя: 11. Координатор передал одну отдельную находку второго исполнителя из запроса `in:readme` (`xWooshieL/interview_analysis_pipeline`); его точная строка запроса неизвестна. В follow-up по текущей задаче новых GitHub Search-запросов не выполнялось; только чтение API для файлов реализации и старых карточек. Общее количество запросов видео-исполнителя здесь недоступно, поэтому финальная проверка не расходует оставшийся глобальный лимит и не заявляет его исчерпывающий баланс.
