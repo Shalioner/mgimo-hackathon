@@ -1,0 +1,468 @@
+{
+  "rows": [
+    {
+      "case": "Q01",
+      "request_id": "4bbd0889b3144b3b9be726dc42c43a27",
+      "seconds": 5.274317499999999,
+      "preparation_seconds": 0.0003292080000001363,
+      "result": {
+        "status": "succeeded",
+        "id": "4bbd0889b3144b3b9be726dc42c43a27",
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T1",
+              "confidence": 0.986694281456123,
+              "probabilities": {
+                "T1": 0.986694281456123,
+                "T2": 0.010481614014698508,
+                "T3": 0.0028241045291785612
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9895190360952971,
+              "probabilities": {
+                "normal": 0.9895190360952971,
+                "deep": 0.010480963904702876
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.9656279079851288,
+              "probabilities": {
+                "text": 0.9656279079851288,
+                "tools": 0.03437209201487114
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 329,
+            "output_tokens": 0
+          }
+        },
+        "runtime": {
+          "worker_pid": 51376,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "inference_calls": 1,
+          "reuse": "bypass",
+          "elapsed_seconds": 1.5296,
+          "timing": {
+            "queue_wait_seconds": 3.741631,
+            "worker_setup_seconds": 4e-05,
+            "worker_roundtrip_seconds": 1.529532,
+            "worker_inference_seconds": 1.527956,
+            "server_total_seconds": 5.27132,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 5.274234
+          },
+          "phase": "complete"
+        }
+      }
+    },
+    {
+      "case": "Q07",
+      "request_id": "374816ca94054f6d9b41ec9e7021f10e",
+      "seconds": 7.208553541000001,
+      "preparation_seconds": 0.0002993750000008788,
+      "result": {
+        "status": "succeeded",
+        "id": "374816ca94054f6d9b41ec9e7021f10e",
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T1",
+              "confidence": 0.6751292627652093,
+              "probabilities": {
+                "T1": 0.6751292627652093,
+                "T2": 0.2778235758256362,
+                "T3": 0.04704716140915447
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9235386645869782,
+              "probabilities": {
+                "normal": 0.9235386645869782,
+                "deep": 0.07646133541302183
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.8492976788831786,
+              "probabilities": {
+                "text": 0.8492976788831786,
+                "tools": 0.1507023211168213
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 366,
+            "output_tokens": 0
+          }
+        },
+        "runtime": {
+          "worker_pid": 51376,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "inference_calls": 1,
+          "reuse": "bypass",
+          "elapsed_seconds": 1.9344,
+          "timing": {
+            "queue_wait_seconds": 5.27079,
+            "worker_setup_seconds": 0.000227,
+            "worker_roundtrip_seconds": 1.934186,
+            "worker_inference_seconds": 1.933368,
+            "server_total_seconds": 7.205302,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 7.208456
+          },
+          "phase": "complete"
+        }
+      }
+    },
+    {
+      "case": "Q13",
+      "request_id": "11586bbcaacc4e3cbc162b6d4b8d5d69",
+      "seconds": 11.227688917000002,
+      "preparation_seconds": 0.0002480419999990602,
+      "result": {
+        "status": "succeeded",
+        "id": "11586bbcaacc4e3cbc162b6d4b8d5d69",
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.9660566182077016,
+              "probabilities": {
+                "T1": 0.015267269572783897,
+                "T2": 0.01867611221951447,
+                "T3": 0.9660566182077016
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.6312129666214217,
+              "probabilities": {
+                "normal": 0.6312129666214217,
+                "deep": 0.36878703337857843
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.8237804167029087,
+              "probabilities": {
+                "text": 0.8237804167029087,
+                "tools": 0.17621958329709142
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 391,
+            "output_tokens": 0
+          }
+        },
+        "runtime": {
+          "worker_pid": 51376,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "inference_calls": 1,
+          "reuse": "bypass",
+          "elapsed_seconds": 1.9271,
+          "timing": {
+            "queue_wait_seconds": 9.27789,
+            "worker_setup_seconds": 0.000257,
+            "worker_roundtrip_seconds": 1.926908,
+            "worker_inference_seconds": 1.925806,
+            "server_total_seconds": 11.205211,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 11.227582
+          },
+          "phase": "complete"
+        }
+      }
+    },
+    {
+      "case": "Q16",
+      "request_id": "9f7f40b72efd4d5da2d4d792d81a7b7d",
+      "seconds": 3.7522057920000016,
+      "preparation_seconds": 0.001155791999998712,
+      "result": {
+        "status": "succeeded",
+        "id": "9f7f40b72efd4d5da2d4d792d81a7b7d",
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.6886371308414969,
+              "probabilities": {
+                "T1": 0.19843490793578158,
+                "T2": 0.11292796122272154,
+                "T3": 0.6886371308414969
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.7773162901247584,
+              "probabilities": {
+                "normal": 0.7773162901247584,
+                "deep": 0.2226837098752416
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.6022265580743177,
+              "probabilities": {
+                "text": 0.6022265580743177,
+                "tools": 0.3977734419256823
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 380,
+            "output_tokens": 0
+          }
+        },
+        "runtime": {
+          "worker_pid": 51376,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "inference_calls": 1,
+          "reuse": "bypass",
+          "elapsed_seconds": 3.7419,
+          "timing": {
+            "queue_wait_seconds": 0.000169,
+            "worker_setup_seconds": 4.3e-05,
+            "worker_roundtrip_seconds": 3.741901,
+            "worker_inference_seconds": 3.73906,
+            "server_total_seconds": 3.74229,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 3.752065
+          },
+          "phase": "complete"
+        }
+      }
+    },
+    {
+      "case": "Q20",
+      "request_id": "dec6a229249a488f8b2ef33b23eed71c",
+      "seconds": 9.300945459000001,
+      "preparation_seconds": 9.312499999936108e-05,
+      "result": {
+        "status": "succeeded",
+        "id": "dec6a229249a488f8b2ef33b23eed71c",
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.8939190182624981,
+              "probabilities": {
+                "T1": 0.035450966801579706,
+                "T2": 0.07063001493592223,
+                "T3": 0.8939190182624981
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "deep",
+              "confidence": 0.9897289700325744,
+              "probabilities": {
+                "normal": 0.01027102996742554,
+                "deep": 0.9897289700325744
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.704827505037217,
+              "probabilities": {
+                "text": 0.704827505037217,
+                "tools": 0.2951724949627829
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 430,
+            "output_tokens": 0
+          }
+        },
+        "runtime": {
+          "worker_pid": 51376,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "inference_calls": 1,
+          "reuse": "bypass",
+          "elapsed_seconds": 2.0916,
+          "timing": {
+            "queue_wait_seconds": 7.187309,
+            "worker_setup_seconds": 2.8e-05,
+            "worker_roundtrip_seconds": 2.091613,
+            "worker_inference_seconds": 2.089172,
+            "server_total_seconds": 9.279312,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 9.30083
+          },
+          "phase": "complete"
+        }
+      }
+    }
+  ],
+  "memory_samples": [
+    {
+      "swap_used_mib": 1796.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1796.88M  free = 1275.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 29552
+    },
+    {
+      "swap_used_mib": 1796.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1796.88M  free = 1275.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 17488
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 21824
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 14064
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 11296
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 11088
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 20080
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 22960
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 41248
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 46048
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 51312
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 51200
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 51264
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 2,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+      "rss_kib": 51264
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 54880
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 54912
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 54880
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 54880
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 56208
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 56304
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 56320
+    },
+    {
+      "swap_used_mib": 1788.88,
+      "pressure_level": 1,
+      "swap_raw": "vm.swapusage: total = 3072.00M  used = 1788.88M  free = 1283.12M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+      "rss_kib": 56336
+    }
+  ]
+}

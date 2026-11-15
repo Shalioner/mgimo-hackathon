@@ -1,13 +1,59 @@
 {
   "hooks": {
     "SessionStart": [
-      {"hooks": [{"type": "command", "command": "python3 tools/hooks/strategist_hook.py session-start", "timeout": 30, "additionalContextLimit": 4000}]}
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 tools/hooks/strategist_hook.py session-start",
+            "timeout": 30,
+            "additionalContextLimit": 4000
+          }
+        ]
+      }
     ],
     "UserPromptSubmit": [
-      {"hooks": [{"type": "command", "command": "python3 tools/hooks/strategist_hook.py user-prompt", "timeout": 10}]}
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 tools/hooks/strategist_hook.py user-prompt",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".venv/bin/python tools/hooks/host_prompt.py # strategist-host-routing:v1:host_prompt.py",
+            "timeout": 45
+          }
+        ]
+      }
     ],
     "PostToolUse": [
-      {"hooks": [{"type": "command", "command": "python3 tools/hooks/strategist_hook.py after-write", "timeout": 60}]}
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 tools/hooks/strategist_hook.py after-write",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".venv/bin/python tools/hooks/codex_routing.py # strategist-host-routing:v1:codex_routing.py",
+            "timeout": 45
+          }
+        ],
+        "matcher": "spawn_agent|collaborationspawn_agent|collaboration.spawn_agent|mcp__collaboration__spawn_agent"
+      }
     ]
   }
 }

@@ -36,6 +36,8 @@ python tools/ledger.py status
 
 **Windows (PowerShell).** Окружение — `python -m venv .venv; .venv\Scripts\pip install -r requirements.txt`, интерпретатор — `.venv\Scripts\python.exe`. Ограничения: хуки в `.claude/settings.json` и `.codex/hooks.json` вызывают `python3`, а в Windows это часто заглушка Microsoft Store — тогда хуки молча не работают (отключите псевдоним в «Параметры → Приложения → Псевдонимы выполнения приложений» или поставьте Python так, чтобы `python3` был в PATH). В `.mcp.json` указан `.venv/bin/python`; в Windows локально замените его на `.venv\Scripts\python.exe`. Агент работает и без хуков — проверки он запускает сам.
 
+**Локальная D1 на macOS:** установка MLX 8-bit, проверка и условия корпоративного использования — [инструкция](docs/D1_MACOS.md).
+
 Затем откройте папку в своей среде и напишите агенту задачу обычными словами, например:
 
 > Почему у нашего сервиса X падает удержание и что с этим делать? Вот материалы: …

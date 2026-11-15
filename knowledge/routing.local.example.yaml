@@ -26,6 +26,22 @@
 # 3) Свой лимит эскалаций:
 # budget: {max_t4_calls: 0}
 
+# Автоматический вход: локальная D1 MLX уже должна быть установлена отдельно.
+# Ни этот блок, ни согласие на T4 не подтверждают подписочный профиль/оплату.
+# automatic_routing:
+#   classifier: local-d1
+#   local_d1:
+#     mode: service              # default; lab только для явного лабораторного запуска
+#     reuse: true                # точный RAM-кэш; false для независимых замеров классификатора
+#     socket: /Users/your-user/.cache/strategist/d1-service/service.sock
+#   quality: {enabled: true, max_attempts: 6}
+#   t4:
+#     enabled: true                 # только после явного предварительного согласия
+#     approval_ref: user-approved-project-scope
+#     max_calls: 2
+#     usage_file: /absolute/existing/directory/project-t4-usage.json
+# Не удалять/обнулять usage_file для обхода лимита. Область общая для всех запросов проекта.
+
 # 4) Своя (self-hosted) модель: любой OpenAI-совместимый сервер — Ollama, vLLM, LM Studio, корпоративный шлюз.
 #    Удобно для массовых T1-задач (классификация, оценка по признакам) и когда данные нельзя отдавать в облако.
 #    Ключ — только в переменной окружения (имя в api_key_env), не в файле. Модели сервера попадут в инвентарь
@@ -139,3 +155,19 @@
 #       system_reserve: 4096
 # Wrapper не выполняет login/update и не читает credential contents/Keychain.
 # --host claude и --host claude-code используют один контракт, без API fallback.
+
+# 9) Native session hooks (не isolated delegate profile). Host сохраняет credentials,
+# endpoint/tools/permissions. Codex app-server helper отдельно подключается клиентом.
+# automatic_routing:
+#   classifier: local-d1
+#   host_routing:
+#     enabled_hosts: [codex, orca, claude-code]
+#     timeout_seconds: 120            # includes queue and cold model setup
+#     compact_questions: true         # native: tier+effort; false возвращает прежние 3 вопроса
+#     models:
+#       codex: [gpt-6-luna, gpt-6.1-terra, gpt-6.1-sol, gpt-6-astra]
+#       orca: [gpt-6-luna, gpt-6.1-terra, gpt-6.1-sol, gpt-6-astra]
+#       claude-code: [haiku, sonnet, opus, fable]
+# T4 всё равно требует automatic_routing.t4 standing approval+quota.
+# .venv/bin/python tools/install_host_routing.py --apply
+# Возможности/ограничения конкретных хостов: docs/NATIVE_HOST_ROUTING.md.

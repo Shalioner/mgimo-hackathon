@@ -1,0 +1,74 @@
+{
+  "case": "Q07",
+  "seconds": 10.125817208,
+  "preparation_seconds": 0.00021104200000365836,
+  "result": {
+    "status": "succeeded",
+    "id": "b9bba2371ba34edabcc5a4d4255ace49",
+    "response": {
+      "answers": {
+        "tier": {
+          "type": "choice",
+          "choice": "T1",
+          "confidence": 0.5392622930183806,
+          "probabilities": {
+            "T1": 0.5392622930183806,
+            "T2": 0.31322962147181854,
+            "T3": 0.043361275965066025,
+            "T4": 0.10414680954473496
+          }
+        },
+        "effort": {
+          "type": "choice",
+          "choice": "normal",
+          "confidence": 0.9212388049964508,
+          "probabilities": {
+            "normal": 0.9212388049964508,
+            "deep": 0.07876119500354904
+          }
+        },
+        "capability": {
+          "type": "choice",
+          "choice": "text",
+          "confidence": 0.8700532208355902,
+          "probabilities": {
+            "text": 0.8700532208355902,
+            "tools": 0.12994677916440966
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 416,
+        "output_tokens": 0
+      }
+    },
+    "runtime": {
+      "worker_pid": 55476,
+      "generation": 1,
+      "model": "LiquidAI/d1-2B-MLX-8bit",
+      "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+      "inference_calls": 1,
+      "reuse": "bypass",
+      "engine_timing": {
+        "preparation_seconds": 0.0024324170080944896,
+        "model_seconds": 1.997698416991625,
+        "validation_cleanup_seconds": 0.010288916004355997
+      },
+      "elapsed_seconds": 2.0116,
+      "timing": {
+        "queue_wait_seconds": 8.111047,
+        "worker_setup_seconds": 4e-05,
+        "worker_roundtrip_seconds": 2.011611,
+        "worker_inference_seconds": 2.010733,
+        "server_total_seconds": 10.122771,
+        "cold_start": false,
+        "completed": true,
+        "client_roundtrip_seconds": 10.125565
+      },
+      "phase": "complete"
+    }
+  },
+  "arm": "full",
+  "arrival": "burst",
+  "block": 1
+}

@@ -1,0 +1,1044 @@
+{
+  "tasks": 20,
+  "transport_success": 20,
+  "top1_route_matches": 17,
+  "field_matches": {
+    "tier": 17,
+    "effort": 20,
+    "capability": 20
+  },
+  "confident_routes": 8,
+  "confident_route_errors": 0,
+  "selected_routes": 8,
+  "selected_route_errors": 0,
+  "correct_but_uncertain": 9,
+  "rows": [
+    {
+      "id": "Q01",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9815591183707032
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.99118900882896
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9590835142773387
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6-luna",
+      "model_effort": "low",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.7791,
+        "timing": {
+          "queue_wait_seconds": 3.54572,
+          "worker_setup_seconds": 1.4e-05,
+          "worker_roundtrip_seconds": 1.779066,
+          "worker_inference_seconds": 1.778112,
+          "server_total_seconds": 5.32486,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 5.327723
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 5.415015791999998
+    },
+    {
+      "id": "Q02",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9577262683161528
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8799517852766835
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9227095672101985
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6-luna",
+      "model_effort": "low",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.7402,
+        "timing": {
+          "queue_wait_seconds": 0.000295,
+          "worker_setup_seconds": 2.8e-05,
+          "worker_roundtrip_seconds": 1.740211,
+          "worker_inference_seconds": 1.738931,
+          "server_total_seconds": 1.740656,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 1.743355
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 1.8409042080000013
+    },
+    {
+      "id": "Q03",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.757576635010924
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9784893707570735
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9602144523384908
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6-luna",
+      "model_effort": "low",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.9265,
+        "timing": {
+          "queue_wait_seconds": 8.946147,
+          "worker_setup_seconds": 7.1e-05,
+          "worker_roundtrip_seconds": 1.926436,
+          "worker_inference_seconds": 1.924904,
+          "server_total_seconds": 10.872741,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 10.877414
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 10.974021166
+    },
+    {
+      "id": "Q04",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9182423085363858
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.990193319412349
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8439889132684599
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6-luna",
+      "model_effort": "low",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.8031,
+        "timing": {
+          "queue_wait_seconds": 6.104279,
+          "worker_setup_seconds": 1.9e-05,
+          "worker_roundtrip_seconds": 1.803069,
+          "worker_inference_seconds": 1.801912,
+          "server_total_seconds": 7.907511,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 7.91418
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 8.010658874999997
+    },
+    {
+      "id": "Q05",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.8933398759849787
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9740348311232415
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.857338784155086
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6-luna",
+      "model_effort": "low",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.8112,
+        "timing": {
+          "queue_wait_seconds": 7.907204,
+          "worker_setup_seconds": 2.4e-05,
+          "worker_roundtrip_seconds": 1.811185,
+          "worker_inference_seconds": 1.810334,
+          "server_total_seconds": 9.718488,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 9.721077
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 9.821419375000001
+    },
+    {
+      "id": "Q06",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": false,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": false,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.49463560494734937
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9866050473968001
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.9283440525521938
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.6635,
+        "timing": {
+          "queue_wait_seconds": 0.000387,
+          "worker_setup_seconds": 1.8e-05,
+          "worker_roundtrip_seconds": 1.663533,
+          "worker_inference_seconds": 1.662499,
+          "server_total_seconds": 1.664049,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 1.667548
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 1.677242708999998
+    },
+    {
+      "id": "Q07",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": false,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": false,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.5392622930183806
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9212388049964508
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8700532208355902
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.8871,
+        "timing": {
+          "queue_wait_seconds": 20.466805,
+          "worker_setup_seconds": 4.5e-05,
+          "worker_roundtrip_seconds": 1.88709,
+          "worker_inference_seconds": 1.885639,
+          "server_total_seconds": 22.354079,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 22.362198
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 22.37645
+    },
+    {
+      "id": "Q08",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.8613494221270612
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8432181983887297
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9362623269775595
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6.1-terra",
+      "model_effort": "medium",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.1085,
+        "timing": {
+          "queue_wait_seconds": 4.66737,
+          "worker_setup_seconds": 1.9e-05,
+          "worker_roundtrip_seconds": 2.108547,
+          "worker_inference_seconds": 2.107646,
+          "server_total_seconds": 6.776501,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 6.779871
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 6.870142332999997
+    },
+    {
+      "id": "Q09",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5593252748915568
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9459544316886074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8462825330514214
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.9646,
+        "timing": {
+          "queue_wait_seconds": 1.740134,
+          "worker_setup_seconds": 3.8e-05,
+          "worker_roundtrip_seconds": 1.964536,
+          "worker_inference_seconds": 1.963561,
+          "server_total_seconds": 3.704775,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 3.707191
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 3.7275682089999975
+    },
+    {
+      "id": "Q10",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.6542504152897856
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9764315958020774
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6433647017198885
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.8828,
+        "timing": {
+          "queue_wait_seconds": 1.662964,
+          "worker_setup_seconds": 3.3e-05,
+          "worker_roundtrip_seconds": 1.882814,
+          "worker_inference_seconds": 1.881906,
+          "server_total_seconds": 3.545885,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 3.550278
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 3.560438542
+    },
+    {
+      "id": "Q11",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.4616614291527331
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8462825330514213
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.697483660141517
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.1711,
+        "timing": {
+          "queue_wait_seconds": 6.77525,
+          "worker_setup_seconds": 2.5e-05,
+          "worker_roundtrip_seconds": 2.171145,
+          "worker_inference_seconds": 2.168852,
+          "server_total_seconds": 8.946511,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 8.951515
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 8.963189
+    },
+    {
+      "id": "Q12",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5350631066828311
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.7930747643585097
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8329152009404159
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.1951,
+        "timing": {
+          "queue_wait_seconds": 7.415135,
+          "worker_setup_seconds": 2.2e-05,
+          "worker_roundtrip_seconds": 2.195069,
+          "worker_inference_seconds": 2.193982,
+          "server_total_seconds": 9.610286,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 9.611926
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 9.626926584000003
+    },
+    {
+      "id": "Q13",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6761581809048038
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.6566529080000585
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8385286918058753
+        }
+      },
+      "below_threshold": [
+        "tier",
+        "effort"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 18.0361,
+        "timing": {
+          "queue_wait_seconds": 0.000545,
+          "worker_setup_seconds": 14.628669,
+          "worker_roundtrip_seconds": 3.407431,
+          "worker_inference_seconds": 3.405043,
+          "server_total_seconds": 18.037965,
+          "cold_start": true,
+          "completed": true,
+          "client_roundtrip_seconds": 18.042018
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 18.055220625
+    },
+    {
+      "id": "Q14",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5974909604156742
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8401043183936286
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8911908721241296
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.2011,
+        "timing": {
+          "queue_wait_seconds": 0.000135,
+          "worker_setup_seconds": 2.3e-05,
+          "worker_roundtrip_seconds": 2.201087,
+          "worker_inference_seconds": 2.19954,
+          "server_total_seconds": 2.201362,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 2.202847
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 2.214419291000006
+    },
+    {
+      "id": "Q15",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8432674216976095
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5058412992322059
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7872638119456479
+        }
+      },
+      "below_threshold": [
+        "effort"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.6208,
+        "timing": {
+          "queue_wait_seconds": 24.522286,
+          "worker_setup_seconds": 3.3e-05,
+          "worker_roundtrip_seconds": 2.620877,
+          "worker_inference_seconds": 2.617782,
+          "server_total_seconds": 27.14375,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 27.157535
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 27.171648209
+    },
+    {
+      "id": "Q16",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": false,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": false,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.48282135796629105
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.752109973818074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6592821430066037
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.0906,
+        "timing": {
+          "queue_wait_seconds": 5.324714,
+          "worker_setup_seconds": 2.4e-05,
+          "worker_roundtrip_seconds": 2.090574,
+          "worker_inference_seconds": 2.08971,
+          "server_total_seconds": 7.415386,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 7.418365
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 7.429926999999999
+    },
+    {
+      "id": "Q17",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5511333181070177
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8768319681717824
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9298829358518595
+        }
+      },
+      "below_threshold": [
+        "tier"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.4349,
+        "timing": {
+          "queue_wait_seconds": 18.034712,
+          "worker_setup_seconds": 5.4e-05,
+          "worker_roundtrip_seconds": 2.434905,
+          "worker_inference_seconds": 2.432318,
+          "server_total_seconds": 20.469868,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 20.476046
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 20.488403834
+    },
+    {
+      "id": "Q18",
+      "status": "needs_review",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": false,
+      "selected": false,
+      "choices": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6993276251952312
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5567101876527129
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9144134445796595
+        }
+      },
+      "below_threshold": [
+        "tier",
+        "effort"
+      ],
+      "model": null,
+      "model_effort": null,
+      "reason": null,
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.468,
+        "timing": {
+          "queue_wait_seconds": 2.200746,
+          "worker_setup_seconds": 1.6e-05,
+          "worker_roundtrip_seconds": 2.468013,
+          "worker_inference_seconds": 2.467142,
+          "server_total_seconds": 4.668901,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 4.671319
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 4.682711374999997
+    },
+    {
+      "id": "Q19",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.8288503883223985
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9804272192356049
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6774065515442976
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6-astra",
+      "model_effort": "xhigh",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.3997,
+        "timing": {
+          "queue_wait_seconds": 3.704664,
+          "worker_setup_seconds": 1.8e-05,
+          "worker_roundtrip_seconds": 2.399684,
+          "worker_inference_seconds": 2.398687,
+          "server_total_seconds": 6.104427,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 6.106741
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 6.199946000000001
+    },
+    {
+      "id": "Q20",
+      "status": "selected",
+      "transport_ok": true,
+      "matches": {
+        "tier": true,
+        "effort": true,
+        "capability": true
+      },
+      "route_correct": true,
+      "confident_tier_effort": true,
+      "selected": true,
+      "choices": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.9259502588521585
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9876082228951698
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7108675031629312
+        }
+      },
+      "below_threshold": [],
+      "model": "gpt-6-astra",
+      "model_effort": "xhigh",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions",
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 2.1732,
+        "timing": {
+          "queue_wait_seconds": 22.350019,
+          "worker_setup_seconds": 1.8e-05,
+          "worker_roundtrip_seconds": 2.173303,
+          "worker_inference_seconds": 2.170388,
+          "server_total_seconds": 24.523729,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 24.536096
+        },
+        "phase": "complete"
+      },
+      "wall_seconds": 24.633730875
+    }
+  ],
+  "limitation": "Agreement with preregistered engineering labels, not measured minimum model capability. One diagnostic round; no threshold tuning."
+}

@@ -1,0 +1,71 @@
+{
+  "case": "Q01",
+  "seconds": 14.759324708000001,
+  "preparation_seconds": 3.779200000000871e-05,
+  "result": {
+    "status": "succeeded",
+    "id": "c83fa63dd3cc45e7a88a5c3041c56c91",
+    "response": {
+      "answers": {
+        "tier": {
+          "type": "choice",
+          "choice": "T1",
+          "confidence": 0.9815591183707032,
+          "probabilities": {
+            "T1": 0.9815591183707032,
+            "T2": 0.01134874729022489,
+            "T3": 0.0027126443712756523,
+            "T4": 0.004379489967796288
+          }
+        },
+        "effort": {
+          "type": "choice",
+          "choice": "normal",
+          "confidence": 0.99118900882896,
+          "probabilities": {
+            "normal": 0.99118900882896,
+            "deep": 0.008810991171040028
+          }
+        },
+        "capability": {
+          "type": "choice",
+          "choice": "text",
+          "confidence": 0.9590835142773387,
+          "probabilities": {
+            "text": 0.9590835142773387,
+            "tools": 0.04091648572266133
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 379,
+        "output_tokens": 0
+      }
+    },
+    "runtime": {
+      "worker_pid": 55476,
+      "generation": 1,
+      "model": "LiquidAI/d1-2B-MLX-8bit",
+      "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+      "inference_calls": 1,
+      "reuse": "bypass",
+      "engine_timing": {
+        "preparation_seconds": 0.011073625006247312,
+        "model_seconds": 2.240618792013265,
+        "validation_cleanup_seconds": 0.013868957990780473
+      },
+      "elapsed_seconds": 14.7551,
+      "timing": {
+        "queue_wait_seconds": 7.2e-05,
+        "worker_setup_seconds": 12.487726,
+        "worker_roundtrip_seconds": 2.267429,
+        "worker_inference_seconds": 2.265959,
+        "server_total_seconds": 14.75539,
+        "cold_start": true,
+        "completed": true,
+        "client_roundtrip_seconds": 14.758825
+      },
+      "phase": "complete"
+    }
+  }
+}

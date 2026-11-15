@@ -1,0 +1,72 @@
+{
+  "phases": [
+    {
+      "name": "baseline_unique",
+      "requests": 5,
+      "wall_seconds": 11.232315667000002,
+      "median_seconds": 7.208553541000001,
+      "max_seconds": 11.227688917000002,
+      "inference_calls": 5,
+      "input_tokens": 1896,
+      "rss_kib_max_observed": 56336,
+      "swap_mib_max_observed": 1796.88
+    },
+    {
+      "name": "reuse_unique",
+      "requests": 5,
+      "wall_seconds": 9.458344958000001,
+      "median_seconds": 5.708923500000001,
+      "max_seconds": 9.451386792000001,
+      "inference_calls": 5,
+      "input_tokens": 1896,
+      "rss_kib_max_observed": 57040,
+      "swap_mib_max_observed": 1788.88
+    },
+    {
+      "name": "baseline_duplicates",
+      "requests": 5,
+      "wall_seconds": 8.998342332999997,
+      "median_seconds": 5.0971996659999945,
+      "max_seconds": 8.993062166999998,
+      "inference_calls": 5,
+      "input_tokens": 1655,
+      "rss_kib_max_observed": 53632,
+      "swap_mib_max_observed": 1780.88
+    },
+    {
+      "name": "reuse_duplicates",
+      "requests": 5,
+      "wall_seconds": 1.6575256670000016,
+      "median_seconds": 1.6551817920000005,
+      "max_seconds": 1.6557131659999982,
+      "inference_calls": 1,
+      "input_tokens": 331,
+      "rss_kib_max_observed": 50384,
+      "swap_mib_max_observed": 1780.88
+    },
+    {
+      "name": "baseline_repeat",
+      "requests": 5,
+      "wall_seconds": 9.540197833,
+      "median_seconds": 5.522133208,
+      "max_seconds": 9.533787582999999,
+      "inference_calls": 5,
+      "input_tokens": 1896,
+      "rss_kib_max_observed": 53712,
+      "swap_mib_max_observed": 1780.88
+    },
+    {
+      "name": "reuse_repeat",
+      "requests": 5,
+      "wall_seconds": 0.01227020800000389,
+      "median_seconds": 0.0028777919999996016,
+      "max_seconds": 0.00765079199999974,
+      "inference_calls": 0,
+      "input_tokens": 0,
+      "rss_kib_max_observed": 50464,
+      "swap_mib_max_observed": 1780.88
+    }
+  ],
+  "answer_equality": true,
+  "limitations": "Five clients per phase, one run, synthetic reuse rate; no p95 or business-cost claim."
+}

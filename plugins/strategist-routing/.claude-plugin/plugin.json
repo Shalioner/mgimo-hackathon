@@ -1,0 +1,21 @@
+{
+  "name": "strategist-routing",
+  "version": "0.1.0",
+  "description": "Local decision routing for Claude turns and ordinary subagents",
+  "userConfig": {
+    "python": {
+      "type": "string",
+      "title": "Python",
+      "description": "Absolute project Python path; defaults to the repository venv"
+    },
+    "helper": {
+      "type": "string",
+      "title": "Routing helper",
+      "description": "Absolute host_routing.py path; defaults to the repository helper"
+    }
+  },
+  "author": {
+    "name": "Strategist project"
+  },
+  "license": "UNLICENSED"
+}

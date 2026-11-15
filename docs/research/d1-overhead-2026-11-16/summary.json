@@ -1,0 +1,38 @@
+{
+  "full": {
+    "cases": 20,
+    "correct": 17,
+    "selected": 8,
+    "selected_errors": 0,
+    "input_tokens": 8422,
+    "median": {
+      "queue_wait_seconds": 3.994711,
+      "worker_setup_seconds": 3.1e-05,
+      "worker_inference_seconds": 2.14765,
+      "server_total_seconds": 6.107216,
+      "engine_preparation_seconds": 0.0033079584827646613,
+      "engine_model_seconds": 2.134317228978034,
+      "engine_validation_cleanup_seconds": 0.011904687504284084,
+      "transport_residual_seconds": 0.004030000000000644
+    }
+  },
+  "native_two": {
+    "cases": 20,
+    "correct": 17,
+    "selected": 8,
+    "selected_errors": 0,
+    "input_tokens": 7142,
+    "median": {
+      "queue_wait_seconds": 3.354856,
+      "worker_setup_seconds": 2.9e-05,
+      "worker_inference_seconds": 1.759859,
+      "server_total_seconds": 5.038119999999999,
+      "engine_preparation_seconds": 0.002641812985530123,
+      "engine_model_seconds": 1.7471066875150427,
+      "engine_validation_cleanup_seconds": 0.010160728998016566,
+      "transport_residual_seconds": 0.003705999999999987
+    }
+  },
+  "changed_choices": [],
+  "limitations": "One paired exploratory run, 20 engineering-reference tasks, no p95 or end-to-end business metric."
+}

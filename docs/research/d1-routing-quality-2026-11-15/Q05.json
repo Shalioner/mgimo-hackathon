@@ -1,0 +1,111 @@
+{
+  "id": "Q05",
+  "report": {
+    "status": "selected",
+    "host": "codex",
+    "classification": {
+      "route": {
+        "status": "executable",
+        "reason": "Private service socket present; worker readiness checked at request",
+        "started": true,
+        "wrapper_invocations": 1,
+        "result": "succeeded",
+        "fallback": false,
+        "requested": {
+          "host": "local",
+          "provider": "local-d1",
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "effort": null
+        },
+        "transmitted": {
+          "host": "local",
+          "provider": "local-d1",
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "effort": null
+        },
+        "observed": {
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+        },
+        "network": "denied",
+        "transport": "unix-service",
+        "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+        "input_bytes": 365,
+        "timeout_seconds": 120,
+        "request_id": "fc530508422649318b0f4a29139b5bb9",
+        "worker_pid": 43173,
+        "generation": 3
+      },
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.8112,
+        "timing": {
+          "queue_wait_seconds": 7.907204,
+          "worker_setup_seconds": 2.4e-05,
+          "worker_roundtrip_seconds": 1.811185,
+          "worker_inference_seconds": 1.810334,
+          "server_total_seconds": 9.718488,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 9.721077
+        },
+        "phase": "complete"
+      },
+      "response": {
+        "answers": {
+          "tier": {
+            "type": "choice",
+            "choice": "T1",
+            "confidence": 0.8933398759849787,
+            "probabilities": {
+              "T1": 0.8933398759849787,
+              "T2": 0.020638488029585324,
+              "T3": 0.007381982570438551,
+              "T4": 0.07863965341499739
+            }
+          },
+          "effort": {
+            "type": "choice",
+            "choice": "normal",
+            "confidence": 0.9740348311232415,
+            "probabilities": {
+              "normal": 0.9740348311232415,
+              "deep": 0.025965168876758617
+            }
+          },
+          "capability": {
+            "type": "choice",
+            "choice": "tools",
+            "confidence": 0.857338784155086,
+            "probabilities": {
+              "text": 0.14266121584491406,
+              "tools": 0.857338784155086
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 381,
+          "output_tokens": 0
+        }
+      },
+      "status": "accepted",
+      "labels": {
+        "tier": "T1",
+        "effort": "normal"
+      },
+      "capability_gate": "not_applicable_native_host_retains_tools"
+    },
+    "execution": "host_owned",
+    "account_switch": false,
+    "tier": "T1",
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "reason": "D1 selected native host request; host retains credentials, tools and permissions"
+  },
+  "wall_seconds": 9.821419375000001
+}

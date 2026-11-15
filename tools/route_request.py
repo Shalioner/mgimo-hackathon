@@ -14,13 +14,17 @@ import ledger as L
 import routing_policy as P
 
 ADAPTERS = {"codex", "claude", "claude-code", "opencode"}
-TASKS = {"T1": "extract-claims", "T2": "problem-framing", "T3": "alternatives"}
+TASKS = {"T1": "extract-claims", "T2": "problem-framing", "T3": "alternatives", "T4": "alternatives"}
 
 
-def questions():
+def questions(cfg=None):
     # Extend the existing taxonomy; never let a model choose an endpoint or grant.
     result = C.load_questions(L.ROOT / "knowledge/decisions/route_tier.yaml")
     result = copy.deepcopy(result)
+    from adaptive_execution import t4_settings
+    if cfg and t4_settings(cfg):
+        result['tier']['criteria']['T4'] = ('Исключительно сложное решение: несколько взаимозависимых стратегий, '
+                                           'неразрешённые противоречия и высокая цена ошибки; обычная стратегия относится к T3')
     result["tier"]["instructions"] += " Учитывай весь запрос и контекст: зависимости, неопределённость, противоречия и цену ошибки, а не длину."
     result["effort"] = {"type": "choice", "instructions": "Какая глубина нужна внутри выбранного уровня?",
                         "criteria": {"normal": "обычная задача уровня", "deep": "сложные зависимости или противоречия требуют углублённой проверки"}}
@@ -73,49 +77,66 @@ def classified(data, qs, threshold):
     return result
 
 
-def run_request(request, context, hosts, *, execute=False, load_config=L.load_routing, timeout=600):
-    """Trusted caller supplies hosts/config; untrusted classifier supplies only labels.
-
-    execute=False performs no classification inference. execute=True authorizes at
-    most one classifier invocation and one task invocation through existing gates.
-    The returned object retains the original request and separate stage receipts.
-    """
+def classify_request(request, context="", *, execute=False, load_config=L.load_routing, timeout=600,
+                     question_scope='all'):
+    """Classify only. No task execution; pending preflight never performs inference."""
     if not isinstance(request, str) or not request.strip() or not isinstance(context, str):
         raise ValueError("Nonempty request and text context required")
-    if not hosts or any(h not in D.BACKEND_FAMILY for h in hosts):
-        raise ValueError("Explicit known hosts required")
     cfg = load_config()
     state = json.dumps({"request": request, "context": context}, ensure_ascii=False)
-    qs = questions()
+    qs = questions(cfg)
+    if question_scope not in {'all', 'native'}:
+        raise ValueError('question_scope must be all or native')
+    if question_scope == 'native':
+        qs = {key: qs[key] for key in ('tier', 'effort')}
     prompt = C.EMULATION_PROMPT.replace("{questions}", json.dumps(qs, ensure_ascii=False)).replace("{state}", state)
     options = cfg.get("automatic_routing") or {}
+    if not isinstance(options, dict):
+        return {"status": "unavailable", "reason": "Invalid automatic_routing configuration"}
+    classifier = options.get("classifier", "provider" if options.get("decision_provider") else "bootstrap")
+    if classifier == "local-d1":
+        if options.get("decision_provider"):
+            return {"status": "unavailable", "reason": "Choose local-d1 or decision_provider, not both"}
+        import decision_runtime as local
+        preflight = local.infer(state, qs, cfg, execute=False, timeout=timeout)
+        if not execute or preflight["route"]["status"] != "executable":
+            return {"status": "pending" if preflight["route"]["status"] == "executable" else "unavailable", **preflight}
+        fresh = load_config()
+        if fresh.get("automatic_routing") != cfg.get("automatic_routing"):
+            return {"status": "unavailable", "reason": "Classifier configuration changed", "route": preflight["route"]}
+        result = local.infer(state, qs, fresh, execute=True, timeout=timeout)
+        labels = classified(result.get("response"), qs, 0.75) if result["route"].get("result") == "succeeded" else None
+        return {**result, "status": "accepted" if labels else "needs_review", "labels": labels}
+    if classifier not in {"bootstrap", "provider"} or (classifier == "provider" and not options.get("decision_provider")):
+        return {"status": "unavailable", "reason": "Unknown or missing explicit classifier; no fallback"}
+    if classifier == "bootstrap" and options.get("decision_provider"):
+        return {"status": "unavailable", "reason": "Choose bootstrap or decision_provider, not both"}
     provider_name = options.get("decision_provider")
     provider = C.pick_provider(cfg, provider_name) if provider_name else None
     bootstrap_host = options.get("bootstrap_host", "codex")
-    report = {"schema": 1, "request": request, "context": context, "hosts": hosts,
-              "classification": {}, "plan": None, "start": None,
-              "result": {"status": "not_started", "text": None}, "status": "manual"}
     if provider_name:
         if not provider:
-            report["classification"] = {"status": "manual", "reason": "Explicit decision provider unavailable; no fallback"}
+            report = {"status": "manual", "reason": "Explicit decision provider unavailable; no fallback"}
             return report
         body = {"model": provider["model"], "state": state, "questions": qs}
         receipt = C.decision_plan(cfg, provider, body)
     else:
         receipt = route_plan(cfg, bootstrap_host, "T1", prompt, bootstrap=True)
-    report["classification"] = {"route": receipt, "status": "pending"}
+    report = {"route": receipt, "status": "pending"}
     if receipt["status"] != "executable":
-        report["classification"].update(status="unavailable", reason=receipt["reason"])
+        report.update(status="unavailable", reason=receipt["reason"])
         return report
     if not execute:
-        report["status"] = "awaiting_classification"
         return report
     # Reload policy before any inference; an earlier plan is not authorization.
     cfg = load_config()
+    if (cfg.get("automatic_routing") or {}) != options:
+        report.update(status="unavailable", reason="Classifier configuration changed")
+        return report
     if provider_name:
         fresh = C.pick_provider(cfg, provider_name)
         if fresh != provider:
-            report["classification"].update(status="unavailable", reason="Decision provider changed")
+            report.update(status="unavailable", reason="Decision provider changed")
             return report
         code, data, error = C.call(provider, body, timeout, cfg, receipt)
         if code:
@@ -132,9 +153,9 @@ def run_request(request, context, hosts, *, execute=False, load_config=L.load_ro
         threshold = 0.75
     else:
         receipt = route_plan(cfg, bootstrap_host, "T1", prompt, bootstrap=True)
-        report["classification"]["route"] = receipt
+        report["route"] = receipt
         if receipt["status"] != "executable":
-            report["classification"].update(status="unavailable", reason=receipt["reason"])
+            report.update(status="unavailable", reason=receipt["reason"])
             return report
         receipt, text, _ = D.execute_route(cfg, bootstrap_host, receipt["requested"]["model"], prompt,
                                          receipt["requested"]["effort"], timeout, receipt)
@@ -148,10 +169,43 @@ def run_request(request, context, hosts, *, execute=False, load_config=L.load_ro
         data = {"answers": C.from_labels(labels, qs, state)} if valid else {}
         threshold = 0.85
     labels = classified(data, qs, threshold) if valid else None
-    report["classification"].update(status="accepted" if labels else "needs_review", labels=labels)
+    report.update(status="accepted" if labels else "needs_review", labels=labels)
     if not labels:
-        report["classification"]["reason"] = "Unavailable, invalid or low-confidence classifier; no inferred default tier"
+        report["reason"] = "Unavailable, invalid or low-confidence classifier; no inferred default tier"
         return report
+    return report
+
+
+def run_request(request, context, hosts, *, execute=False, load_config=L.load_routing, timeout=600,
+                classify_only=False, classification_context=None):
+    """One classifier and optional text task; no hidden truncation or paid fallback.
+
+    classification_context is an explicit caller-prepared synopsis, never an implicit
+    truncation. Full context is retained for task execution and in the receipt.
+    """
+    if not hosts or any(h not in D.BACKEND_FAMILY for h in hosts):
+        raise ValueError("Explicit known hosts required")
+    if not isinstance(context, str) or (classification_context is not None and not isinstance(classification_context, str)):
+        raise ValueError("Text context required")
+    report = {"schema": 1, "request": request, "context": context, "hosts": hosts,
+              "classification_context": classification_context,
+              "classification": {}, "plan": None, "start": None,
+              "result": {"status": "not_started", "text": None}, "status": "manual"}
+    classification = classify_request(request, context if classification_context is None else classification_context,
+                                     execute=execute, load_config=load_config, timeout=timeout)
+    report["classification"] = classification
+    if classification["status"] == "pending":
+        report["status"] = "awaiting_classification"
+        return report
+    if classification["status"] != "accepted":
+        return report
+    if classify_only:
+        cfg = load_config()
+        report['recommendations'] = [route_plan(cfg, host, classification['labels']['tier'], request,
+                                               classification['labels']['effort'] == 'deep') for host in hosts]
+        report["status"] = "classified"
+        return report
+    labels = classification["labels"]
     if labels["capability"] != "text":
         report["plan"] = {"status": "manual", "reason": "Existing scoped adapters only return text; tool-capable host integration required"}
         return report
@@ -171,6 +225,18 @@ def run_request(request, context, hosts, *, execute=False, load_config=L.load_ro
     if rechecked["status"] != "executable" or rechecked["requested"] != selected["requested"]:
         report["start"] = {"status": "not_started", "reason": "Route changed or authorization expired", "route": rechecked}
         return report
+    quality = (cfg.get('automatic_routing') or {}).get('quality') or {}
+    if quality.get('enabled') is True or labels['tier'] == 'T4':
+        if quality.get('enabled') is not True:
+            report['result'] = {'status': 'manual', 'text': None, 'reason': 'T4 requires bounded quality execution'}
+            return report
+        import adaptive_execution as A
+        result = A.execute(request, context, rechecked, load_config=load_config, timeout=timeout)
+        report['result'] = result
+        report['status'] = result['status']
+        started = [a['route'] for a in result['attempts'] if a.get('route', {}).get('started')]
+        report['start'] = {'started': bool(started), 'route': started[0] if started else rechecked}
+        return report
     receipt, text, _ = D.execute_route(cfg, host, rechecked["requested"]["model"], prompt,
                                      rechecked["requested"]["effort"], timeout, rechecked)
     report["start"] = {"started": receipt["started"], "route": receipt}
@@ -185,6 +251,8 @@ def main(argv=None):
     parser.add_argument("--context-file", type=Path)
     parser.add_argument("--host", required=True, action="append", choices=sorted(D.BACKEND_FAMILY))
     parser.add_argument("--execute", action="store_true", help="Classify and execute once, subject to gates")
+    parser.add_argument("--classify-only", action="store_true", help="Run only the classifier; never execute the task")
+    parser.add_argument("--classification-context-file", type=Path, help="Explicit routing synopsis; full context still reaches the task")
     parser.add_argument("--receipt", type=Path, help="Save request/stage receipts locally; may contain private input")
     parser.add_argument("--timeout", type=int, default=600)
     args = parser.parse_args(argv)
@@ -195,7 +263,8 @@ def main(argv=None):
     try:
         result = run_request(args.prompt_file.read_text(encoding="utf-8"),
                              args.context_file.read_text(encoding="utf-8") if args.context_file else "",
-                             args.host, execute=args.execute, timeout=args.timeout)
+                             args.host, execute=args.execute, timeout=args.timeout, classify_only=args.classify_only,
+                             classification_context=args.classification_context_file.read_text(encoding="utf-8") if args.classification_context_file else None)
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
     text = json.dumps(result, ensure_ascii=False, indent=2)
@@ -203,7 +272,7 @@ def main(argv=None):
         with args.receipt.open("x", encoding="utf-8") as file:
             file.write(text)
     print(text)
-    return 0 if result["status"] in {"succeeded", "awaiting_classification"} or not args.execute else 3
+    return 0 if result["status"] in {"succeeded", "awaiting_classification", "classified"} or not args.execute else 3
 
 
 if __name__ == "__main__":

@@ -1,5 +1,8 @@
 # d1-2B: изолированный MLX 8bit runtime
 
+Для обычной работы используется [локальный сервис D1](D1_SERVICE.md) с повторным
+использованием модели. Ниже сохранены лабораторный CLI и история первоначальной проверки.
+
 **Статус: реальный короткий text + image smoke прошёл на этом M1 8 GiB.**
 Один русский запрос с готовым `route_tier.yaml` → T3 (0.96799248),
 синтетический красный квадрат → red (0.99939231); весь процесс21.58 s, exit0.
@@ -8,7 +11,8 @@
 История прежних остановок ниже сохранена.
 
 `tools/local_decision_mlx.py` использует официальный quantized **d1-2B**, его System One
-и calibration, не генеративный LFM3. Автоматический router пока этот CLI не вызывает.
+и calibration, не генеративный LFM3. Общий router теперь вызывает этот CLI при явном
+`automatic_routing.classifier: local-d1`; интеграция описана в [ADAPTIVE_ROUTING.md](ADAPTIVE_ROUTING.md).
 Cloud/API gates и defaults не изменены; fallback отсутствует.
 
 ## Запросы на этом Mac
@@ -145,7 +149,7 @@ python3.12 -m venv ~/.cache/strategist/d1-2b-lab/mlx-venv
 | Text probabilities на текущем M1 | Последующий реальный smoke: T3, P=0.96799248 |
 | Image inference | После успешного text: red, P=0.99939231 |
 | Несколько русских задач/доменная calibration | Не проверены, ограничение этой итерации — один text smoke |
-| Автоматический router/host triggers | Не подключены; gates не изменены |
+| Общий router / host triggers | D1 подключена через явный local-d1 config; GUI trigger отсутствует |
 | 4bit/GGUF inference | Не проверены; 4bit веса сохранены, GGUF не установлен |
 
 На момент первой остановки дальнейшим вариантом был новый ограниченный прогон после освобождения памяти пользователем

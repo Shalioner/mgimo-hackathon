@@ -1,0 +1,103 @@
+{
+  "id": "Q09",
+  "report": {
+    "status": "needs_review",
+    "host": "codex",
+    "classification": {
+      "route": {
+        "status": "executable",
+        "reason": "Private service socket present; worker readiness checked at request",
+        "started": true,
+        "wrapper_invocations": 1,
+        "result": "succeeded",
+        "fallback": false,
+        "requested": {
+          "host": "local",
+          "provider": "local-d1",
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "effort": null
+        },
+        "transmitted": {
+          "host": "local",
+          "provider": "local-d1",
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "effort": null
+        },
+        "observed": {
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+        },
+        "network": "denied",
+        "transport": "unix-service",
+        "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+        "input_bytes": 522,
+        "timeout_seconds": 120,
+        "request_id": "77cc201ffd81418b944bec7cc5aea6a9",
+        "worker_pid": 43173,
+        "generation": 3
+      },
+      "runtime": {
+        "worker_pid": 43173,
+        "generation": 3,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 1.9646,
+        "timing": {
+          "queue_wait_seconds": 1.740134,
+          "worker_setup_seconds": 3.8e-05,
+          "worker_roundtrip_seconds": 1.964536,
+          "worker_inference_seconds": 1.963561,
+          "server_total_seconds": 3.704775,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 3.707191
+        },
+        "phase": "complete"
+      },
+      "response": {
+        "answers": {
+          "tier": {
+            "type": "choice",
+            "choice": "T2",
+            "confidence": 0.5593252748915568,
+            "probabilities": {
+              "T1": 0.09471718305345696,
+              "T2": 0.5593252748915568,
+              "T3": 0.13137069645990532,
+              "T4": 0.21458684559508093
+            }
+          },
+          "effort": {
+            "type": "choice",
+            "choice": "normal",
+            "confidence": 0.9459544316886074,
+            "probabilities": {
+              "normal": 0.9459544316886074,
+              "deep": 0.05404556831139267
+            }
+          },
+          "capability": {
+            "type": "choice",
+            "choice": "text",
+            "confidence": 0.8462825330514214,
+            "probabilities": {
+              "text": 0.8462825330514214,
+              "tools": 0.15371746694857857
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 404,
+          "output_tokens": 0
+        }
+      },
+      "status": "needs_review",
+      "labels": null
+    },
+    "execution": "host_owned",
+    "account_switch": false
+  },
+  "wall_seconds": 3.7275682089999975
+}

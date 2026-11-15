@@ -204,8 +204,17 @@ def plan(cfg, *, host, provider, model, effort=None, tier="T1", endpoint=None,
         result.update(status=status, reason=reason)
         return result
 
-    if tier in {"T0", "T4"}:
-        return stop("T0 выполняется кодом; T4 не делегируется автоматически")
+    if tier == "T0":
+        return stop("T0 выполняется кодом; T4 не делегируется автоматически без standing approval")
+    if tier == "T4":
+        from adaptive_execution import t4_settings, t4_available
+        if not t4_settings(cfg):
+            return stop("T4 не делегируется автоматически без standing approval и общего лимита")
+        if host not in {'codex', 'claude', 'claude-code'}:
+            return stop('T4 bounded transport is implemented only for Codex/Claude')
+        if not t4_available(cfg):
+            return stop('T4 approved scope quota exhausted or usage record unavailable')
+        result['t4_approval_ref'] = t4_settings(cfg)['approval_ref']
     if effort not in EFFORTS or effort == "ultra":
         return stop("Неизвестный или запрещённый effort")
     if effort == "max" and not human_approved:

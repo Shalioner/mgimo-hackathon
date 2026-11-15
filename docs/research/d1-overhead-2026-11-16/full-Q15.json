@@ -1,0 +1,74 @@
+{
+  "case": "Q15",
+  "seconds": 10.460523792000004,
+  "preparation_seconds": 0.00018816700000456876,
+  "result": {
+    "status": "succeeded",
+    "id": "ae9dac4f1eb44492a46a61692c8ae52c",
+    "response": {
+      "answers": {
+        "tier": {
+          "type": "choice",
+          "choice": "T3",
+          "confidence": 0.8432674216976095,
+          "probabilities": {
+            "T1": 0.008351555289696585,
+            "T2": 0.0183226550724982,
+            "T3": 0.8432674216976095,
+            "T4": 0.13005836794019573
+          }
+        },
+        "effort": {
+          "type": "choice",
+          "choice": "deep",
+          "confidence": 0.5058412992322059,
+          "probabilities": {
+            "normal": 0.4941587007677941,
+            "deep": 0.5058412992322059
+          }
+        },
+        "capability": {
+          "type": "choice",
+          "choice": "text",
+          "confidence": 0.7872638119456479,
+          "probabilities": {
+            "text": 0.7872638119456479,
+            "tools": 0.21273618805435204
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 437,
+        "output_tokens": 0
+      }
+    },
+    "runtime": {
+      "worker_pid": 55476,
+      "generation": 1,
+      "model": "LiquidAI/d1-2B-MLX-8bit",
+      "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+      "inference_calls": 1,
+      "reuse": "bypass",
+      "engine_timing": {
+        "preparation_seconds": 0.0031183339888229966,
+        "model_seconds": 2.134579915960785,
+        "validation_cleanup_seconds": 0.006699459045194089
+      },
+      "elapsed_seconds": 2.146,
+      "timing": {
+        "queue_wait_seconds": 8.311957,
+        "worker_setup_seconds": 2.8e-05,
+        "worker_roundtrip_seconds": 2.146007,
+        "worker_inference_seconds": 2.144853,
+        "server_total_seconds": 10.458201,
+        "cold_start": false,
+        "completed": true,
+        "client_roundtrip_seconds": 10.460282
+      },
+      "phase": "complete"
+    }
+  },
+  "arm": "full",
+  "arrival": "staggered",
+  "block": 2
+}

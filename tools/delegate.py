@@ -263,6 +263,9 @@ def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=Fals
             command = build_command("codex", model, prompt, output, workdir, effort)
             command[0] = profile["binary"]
             command[1:1] = overrides
+            error = reserve_t4_attempt(cfg, receipt)
+            if error:
+                return 3, '', error, ''
             receipt["transmitted"] = {"model": model, "effort": effort}
             receipt["started"] = True
             receipt["wrapper_invocations"] = 1
@@ -324,6 +327,9 @@ def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=Fal
             if effort is not None:
                 command += ["--effort", effort]
             command += [prompt]
+            error = reserve_t4_attempt(cfg, receipt)
+            if error:
+                return 3, '', error, ''
             receipt.update(started=True, wrapper_invocations=1)
             receipt["transmitted"] = {"model": model, "effort": effort}
             proc = run(command, timeout)
@@ -331,6 +337,17 @@ def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=Fal
             return proc.returncode, proc.stdout, "CLI error; no wrapper retry" if proc.returncode else "", ""
         except (OSError, subprocess.TimeoutExpired):
             return 1, "", "CLI failure/timeout; no wrapper retry", ""
+
+
+def reserve_t4_attempt(cfg, receipt):
+    if receipt.get('tier') != 'T4':
+        return None
+    from adaptive_execution import reserve_t4
+    try:
+        receipt['t4_reservation'] = reserve_t4(cfg)
+    except (OSError, ValueError, ImportError) as exc:
+        return str(exc)
+    return None
 
 
 def select_route(cfg, backend, task, tier, explicit_model=None, explicit_effort=None):

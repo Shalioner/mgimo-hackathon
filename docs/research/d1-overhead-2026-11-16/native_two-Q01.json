@@ -1,0 +1,65 @@
+{
+  "case": "Q01",
+  "seconds": 1.4988680420000016,
+  "preparation_seconds": 0.00029633300000142526,
+  "result": {
+    "status": "succeeded",
+    "id": "bdd2ce2d6e4b4084a2ecc90ba233ba18",
+    "response": {
+      "answers": {
+        "tier": {
+          "type": "choice",
+          "choice": "T1",
+          "confidence": 0.978374421133963,
+          "probabilities": {
+            "T1": 0.978374421133963,
+            "T2": 0.014289430853253232,
+            "T3": 0.0028414868112554043,
+            "T4": 0.0044946612015284056
+          }
+        },
+        "effort": {
+          "type": "choice",
+          "choice": "normal",
+          "confidence": 0.9909039440618248,
+          "probabilities": {
+            "normal": 0.9909039440618248,
+            "deep": 0.009096055938175116
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 315,
+        "output_tokens": 0
+      }
+    },
+    "runtime": {
+      "worker_pid": 55476,
+      "generation": 1,
+      "model": "LiquidAI/d1-2B-MLX-8bit",
+      "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+      "inference_calls": 1,
+      "reuse": "bypass",
+      "engine_timing": {
+        "preparation_seconds": 0.0016537910560145974,
+        "model_seconds": 1.4807992089772597,
+        "validation_cleanup_seconds": 0.011937875009607524
+      },
+      "elapsed_seconds": 1.4956,
+      "timing": {
+        "queue_wait_seconds": 0.000297,
+        "worker_setup_seconds": 7.2e-05,
+        "worker_roundtrip_seconds": 1.495575,
+        "worker_inference_seconds": 1.494686,
+        "server_total_seconds": 1.496098,
+        "cold_start": false,
+        "completed": true,
+        "client_roundtrip_seconds": 1.498536
+      },
+      "phase": "complete"
+    }
+  },
+  "arm": "native_two",
+  "arrival": "burst",
+  "block": 0
+}

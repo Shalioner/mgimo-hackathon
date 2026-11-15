@@ -330,3 +330,267 @@
 - **Сделано:** правила R6 (оценочные слова, «я бы не стал», I would question / appears incomplete), явное «не согласен» не снимается подавителями, мнение («на мой взгляд») блокирует снятие как «задачи на будущее», согласие в начале снимает мягкие оценки; +1 тест (148 passed). Заморожено `61b72145` (`95d070a`). $0,60.
 - **Результат:** `dev` 72% → 93%; `test` 65% → 72,5% (26 → 29 из 40, нужно ≥ 30) — **критерий не выполнен на одно сообщение**; ложных на `test` 1 → 1; контроли в допуске (r3 ложных 24 → 25, на границе).
 - **Вывод:** второй раунд подряд +7,5 п. п. на свежих фразах; рекомендация — остановить доработку словаря. Решение — за пользователем. Worktree `o11-*` удалены. `evals/escalation/polite3/RESULTS.md`.
+
+
+## 2026-11-15 — интеграция D1 и маршрутизации по подзадачам
+- Среда: codex внутри Orca; baseline 99c2685. Запрос пользователя: шлифовка уже сделанного, Luna → Terra → Sol → Astra, рост effort перед сменой уровня, возврат вниз и последовательные сводки документов.
+- Подключён локальный D1 runtime к route_request, добавлены classification-only, document_flow с доказательными карточками и bounded quality execution. Пользовательское предварительное согласие на T4 отражено в локальной конфигурации, общий лимит два; API/подписочные профили не включались.
+- Две независимые реализации выполнялись в отдельных worktree. Ревью выявило переполнение D1 длинным quality context и обход quota при прямом transport; исправления покрыты регрессиями и повторно проверены ревьюером.
+- Проверки: полный suite 545 passed, 1 skipped; git diff --check чистый. Объединённый offline сценарий использует настоящий router и quality, fake только модельные transports.
+- Live D1 через новый вход остановлен до загрузки модели: memory pressure=2 при требуемом 1. Повторный read-only замер также 2; повтор inference не делался. Все Codex tiers выбирают ожидаемые модели, но manual: subscription profile не включён. GUI interception отсутствует; AGENTS предписывает явный вызов общего входа агентом.
+- Подробности и точка продолжения: docs/ADAPTIVE_ROUTING.md, раздел «Шлифовка сквозного маршрута». Следующее: normal-memory live D1, проверенный профиль Codex, затем живой document E2E и оценка качества маршрутизации. Продуктовые кейсы, CLAUDE.md/.claude и глобальная память не менялись.
+
+## 2026-11-15 — D1 как рабочий локальный сервис
+
+- Запрос: рабочий режим D1 вместо лабораторного. Среда: codex в Orca; прежний незакоммиченный routing diff сохранён.
+- Добавлены d1_service/d1_engine: private Unix IPC, один persistent MLX worker, bounded queue/deadlines, health/stop, idle unload, watchdog и восстановление. d1_control устанавливает только собственный local.strategist.d1 LaunchAgent; service выбран в локальной конфигурации, lab только явный.
+- Исполнитель работал в отдельном worktree; независимое ревью проверило ownership/status/limits. Исправлены ложный stopped при timeout, stop/start чужого job по одному label, отсутствовавший total swap cap и преждевременный idle. Live выявил HOME-derived weights path; исправлен explicit argv плюс регрессии.
+- Реально установлено и запущено. После корректного memory-critical отказа и восстановления ОС получены три настоящих ответа одним PID: 17.333/2.418/2.254 s. Реальный stop/start подтвердил исчезновение прежнего PID и успешный новый T1 запрос за 15.314 s; сервис оставлен running/ready. T1 принят, T2/T3 оставлены needs_review по исходным порогам.
+- Проверки: 586 passed, 1 skipped; финальное lifecycle review без новых блокеров. Веса, MLX memory limits, чужие приложения и cloud auth не менялись.
+- Запись журнала через shell stdin встретила encoding error; выполнена через apply_patch. Продуктовый run_log не затрагивался.
+- Эксплуатация: docs/D1_SERVICE.md; доказательства: docs/research/d1-service-2026-11-15/. Далее: репрезентативная оценка маршрутов и подтверждённый профиль исполнителей Codex.
+
+## 2026-11-15 — перенос community-паттернов выбора инструментов
+
+- Запрос: найти признанные сообществом GitHub решения и перенести полезное под требования пользователя. Среда: codex/Orca. Предыдущий dirty diff сохранён.
+- Проверены Semantic Router, fast-jev-compaction, jev-ultrafast, RouteLLM и LLMLingua: популярность, лицензии и точные исходники. Источники/commits и причины отбора в docs/research/community-routing-2026-11-15.md. Новых зависимостей и прямого копирования upstream-кода нет.
+- Добавлены tool_router (System One local/API transport, строгие вероятности, none/threshold, одноразовый dispatch), tool_context (парное сокращение, protected/recent/errors, сохранение прозы, bounded batches) и route_tools (настоящий read-only executor brief/stats/validate). AGENTS описывает явное применение; глобального Orca hook нет.
+- Реализация роутера в отдельном worktree, исследование и независимое read-only review. Выявленный при интеграции route=None в compaction исправлен и покрыт регрессией. Финальное ревью новых модулей и конкретного executor без замечаний.
+- Live D1: выбор stats 0.881319, 202 input/0 output tokens, затем настоящий ledger stats example exit0. Синтетическая compaction: 26462→455 байт, 333 input/0 output tokens, одна модельная оценка, проза сохранена; это не end-to-end benchmark экономии. JSON evidence в docs/research/community-*.json.
+- Проверки: полный suite 634 passed, 1 skipped (71.30s); после добавления usage в receipts дополнительно 19 compaction tests passed; git diff --check чистый. Платные/API inference не выполнялись; совместимость API проверена doubles, реальный альтернативный провайдер ещё не проверен.
+- Точка продолжения: docs/TOOL_ROUTING.md. Следующее — репрезентативная калибровка действий/сокращения и A/B с учётом повторных чтений; интеграция global host hooks остаётся отдельной задачей. Документный Luna-поток и прежняя многоуровневая модельная маршрутизация сохранены.
+
+## 2026-11-15 — автоматические входы Codex/Orca и Claude Code
+
+- Возражение пользователя: маршрутизация нужна не только Orca, но Codex и Claude, с реальным применением модели; отдельно поручен агенту поиск GitHub-мода Claude. Self-audit: сломано допущение о достаточности явного Python-входа/Orca-only формулировки. Класс — инструмент/охват интеграции; продуктовые SRC/CLM не затрагиваются.
+- Исследователь нашёл Oqura-ai/optim-jev, MIT, commit ad9135aa78bcbf1c247ac15d0dac1a0cabd7686e. Перенесён подход spawn/step своей реализацией без upstream-кода/зависимостей. Официальные контракты проверены Context7 и локальными CLI/types: Codex0.169.0, Claude2.1.311, Orca1.4.256.
+- Добавлены общий host_routing selector/authorize, автоматический UserPromptSubmit и PreToolUse для native Codex spawn; Claude мод turn.start/turn.step/agent.spawn; настоящий JSONL app-server middleware с model/effort overrides и обработкой collaborationMode. Именованные роли, полные forks, credentials и permissions сохраняются.
+- В текущем checkout установлены additive .codex/hooks.json и local Claude plugin env; прежние configs backed up private. Локально включены allowlists native hosts. Глобальные credentials/config, Codex binary и Orca.app не менялись; isolated delegate profile не включён. Installer check показывает current для обоих targets.
+- Независимое ревью выявило и исправило recursion child prompt, перекрытие inherited inline plugins, нестрогие config types и orphan appserver при SIGTERM. Регрессия lifecycle запускает реальные процессы и подтверждает исчезновение server PID. Дополнительно исправлен Claude alias→resolved ID при authorize.
+- Live smoke сначала заблокирован из-за ненужного для native host capability gate: T1=.948/effort=.986/capability=.592. Gate устранён только для native selection; confidence threshold .75 сохранён. После исправления D1→Luna/low→настоящий Codex appserver→completed, ответ17. Receipts в docs/research/native-host-routing-*.json, provider model echo отсутствует и обозначен null.
+- Claude plugin validate: success, ошибок0, четыре hooks распознаны; Node12tests passed. Нативный plugin test не начал тесты: sandbox_apply Operation not permitted, exit71/0tests. Sandbox не ослаблялся. Не выдавать это за живую Claude runtime acceptance.
+- Открытые границы: main Orca chat не имеет подтверждённого attachment к middleware; ordinary Codex prompt-hook задаёт делегирование, не меняет mainmodel. ClaudeT4spawn запрещён до per-request accounting; T4 Codex quota считает turns/attempts, не internal retries. Следующая точка: docs/NATIVE_HOST_ROUTING.md.
+- Итоговые gates: 705 passed, 1 skipped (47.47s), 12 Node tests passed, git diff --check чистый. Первый full suite выявил старую проверку «ровно три hooks»; обновлена под additive routing, сохранив точное наличие всех трёх legacy hooks, затем весь suite успешно повторён.
+
+## 2026-11-15 — первое знакомство и doctor для поставки
+
+- Запрос: короткое приветствие один раз, реальные skills и их назначение, начало обычным сообщением/исследование по файлам, честное различие Claude/Codex/непроверенных IDE.
+- tools/doctor.py: каталог 13 предметных skills из поставки, welcome/skills/doctor, read-only статусы configured_not_verified/needs_setup/unverified, список дальнейших проверок без inference/установок/ключей. SessionStart предлагает guide один раз на пользовательский профиль через атомарный offered-marker; AGENTS описывает fallback для сред без hook и повторный запрос гайда. Тесты изолируют marker во временном профиле.
+- Агент сверил local Codex0.169.0 и latest stable от2026-11-13. Main-model rewrite hook, аналогичный Claude turn.step, не найден. Уточнена поддержка Codex desktop hooks и необходимость доверия точному хэшу; наличие конфигурации не равно runtime verification. Cursor остаётся непроверенным. Источники и команды: docs/ONBOARDING.md.
+- Проверки: CLI skills показывает все13 с назначением; doctor cursor и codex-app возвращает различимые честные статусы; once/concurrency/preview/config regressions. Полный suite 711 passed,1 skipped (44.33s); после уточнения python_ready отдельные6 doctor tests passed; git diff --check чистый. Новых inference/API запросов и обновления CLI не выполнялось.
+
+
+## 2026-11-15 — обзор готовности тремя Sol-агентами
+
+- По запросу пользователя выполнены независимые read-only обзоры gpt-6.1-sol/high: продукт и методика, runtime и маршрутизация, поставка и пользовательский сценарий. Проверялось текущее рабочее дерево, включая новые файлы.
+- Найдены прежнее сравнение docs/COMPETITORS.md и более свежий обзор docs/research/mgimo-2026-11-15/SUMMARY.md. Сведения о конкурентах остаются датированными снимками; HTML-отчёт и datacheck уже реализованы.
+- Координатор независимо воспроизвёл offline: отсутствие запрета исходного Astra spawn при исчерпанной T4-квоте; дублирование собственных hooks при переносе checkout; отклонение корректной документной карточки с пустым findings. Рабочие квоты и модельные сервисы не изменялись, inference для воспроизведений не запускался.
+- Приоритеты, доказательства, ограничения и наблюдаемая приёмка сохранены в docs/research/readiness-review-2026-11-15.md. Также отмечены противоречия условий пилота, несоответствие доказательств обещаниям, незакрытый чистый межсредовой E2E и отсутствие сопоставимого end-to-end замера экономии.
+- Код и продуктовые реестры в этом обзоре не исправлялись. Полный suite повторно не запускался: изменения этого шага только документационные. Следующий шаг — устранение R1/R2, затем R3/R4/R5 и проверка чистой поставки R6.
+
+
+## 2026-11-15 — исправление первой очереди R1–R5
+
+- Среда: codex. Baseline root HEAD 99c2685 с сохранением прежнего dirty tree; изолированные worktree исполнителей содержали snapshot 74350d58049a72236bb8f2e90fdc7529d8d126df. Root не коммитился и не публиковался.
+- R1/R2 реализованы раздельно и проверены перекрёстным read-only review. Reviewer нашёл установленный alias вне TOOLS; исправлено с реальной temp-quota регрессией для каждого alias. Fail-closed распространяется на неопределённый исходный Astra и некорректный stdin; named roles/fullfork остаются host-owned.
+- R3: regression RED→GREEN, объяснённые пустые findings сохраняются, все пустые не вызывают дорогой синтез. R4/R5: сроки/ИЛИ восстановлены из EXP/DEC, PRM отозваны без удаления, HYP-006 добавлен; уточнения C3 не приняты за человека. После каждой записи реестра validate 0/0. HTML пересобран; визуальный UI не проверялся.
+- Усилены claim-verifier/validation-plan и вопросы decision gates. Добавлены 18 semantic cases, offline scorer и его регрессии, протокол сопоставимого routing benchmark. Качество модели/экономия этим не измерены.
+- Приёмка: full pytest 751 passed/1 skipped (46.27s), Node 12 passed; eSIM validate 0/0 (41 объект), verify 06/07 — 30 ok механически. Независимый продуктовый обзор принят после исправления точки продолжения.
+- Offline-перенос: 740 файлов без личного routing.local.yaml, изолированный HOME, первая установка installed, повторная current, зарегистрированная команда oversized Astra возвращает deny. Общая venv — явное ограничение, не чистая установка зависимостей. Первая попытка с symlink одного interpreter дала ModuleNotFoundError yaml; лаборатория исправлена на symlink всей venv, ошибок продукта не скрывали.
+- Точка продолжения: docs/research/readiness-review-2026-11-15.md, раздел «Исполнение после аудита». Открыты уточнения C3, живой recipient/cross-host E2E и trust, модельный semantic/cost benchmark, форматы и сдача/видео. Inference для smoke/benchmark, публикация и изменение рабочих квот не выполнялись.
+
+
+## 2026-11-15 — устранение замечаний повторного ревью
+
+- Исправлен custom-ID обход квоты: fallback использует model_for/tier_models/catalog; Astra pattern лишь backstop. Добавлены quota/exception/oversize/custom catalog и unreadable-policy регрессии. Явное disabled возвращает управление host, включая empty/oversize; транспортный malformed stdin остаётся fail-closed.
+- 08 приведён к progress: сначала повторный C3, затем эксперименты. HTML пересобран, событие записано ledger log; исторические DEC/EXP не переписаны.
+- Проверки: исходные 4 regression RED→GREEN; full suite 757 passed/1 skipped (45.36s); после последней узкой правки disabled ещё 80 hook/helper passed. Независимый reviewer подтвердил закрытие P1 и P2, включая найденный им пограничный disabled+oversize. Реестр validate 0/0, diff --check чистый.
+- Живой host trust и экономический/model benchmark этим шагом не подтверждались; API, рабочие квоты и профили не изменялись.
+
+
+## 2026-11-15 — повторные live checks против прежних receipts
+
+- По запросу пользователя повторены D1 tool routing, native Codex app-server, compaction, прямое выполнение hook с D1 и Claude native validate/test. Отдельный агент проверил Claude через штатный protected wrapper; proxy preflight допустим в пределах существующего транспорта, без обхода sandbox.
+- Codex routed/direct на одинаковом prompt: оба completed/17; routed Luna/low 10.345s и 27275 host tokens, direct Luna/low 5.409s и 27131. Локальные classifier tokens routed-turn не сохранены; это не полный замер денег/экономии, один простой сценарий и фиксированный порядок.
+- Tools: stats selected .933519, 193 input tokens, executed successfully. Compaction synthetic: 31008→1195 bytes, 540 D1 input tokens, prose/protected evidence preserved. Исторические входы не сохранены, проценты/вероятности не выдаются за улучшение качества.
+- Hook: реальная команда+живой D1 переписала Sol/high на Luna/low, 1.978s; actual spawn/trust не выполнялся. Claude strict validate success; native test снова sandbox_apply, CLI1/child71, zero executed test bodies. Codex version0.169.0/Claude2.1.311 не изменились.
+- document_flow preflight manual: isolated T1 route не разрешён; native transport не подменяет isolated grant. Codex.app/Cursor не найдены в проверенных Applications, UI/end-to-end gates остаются открыты.
+- Receipts, хэши кода, диагностический script и сравнение: docs/research/live-recheck-2026-11-15/README.md. Продуктовый код, настройки, профили и квоты не менялись; отдельный model benchmark/production ready не заявляются.
+
+## 2026-11-15T18:19:41.187355+00:00 — native document transport refinement
+
+Среда: codex. Задача: доработать незакрытые проверки после отдельного live recheck.
+Добавлен явный native Codex text-only transport с временным read-only thread,
+локальным отключением tools/MCP/skills/hooks и свежей авторизацией перед dispatch.
+Document flow использует последовательные T1-карточки и общую quality/effort лестницу;
+при неуверенном валидном D1 — один T1-review с цитатами, без обхода policy/quota.
+T4 запрещён. Isolated profile и настройки аккаунтов не менялись.
+
+Независимые проверки: transport, native integration, review точного изменения.
+Исправлены SIGTERM orphan, malformed notification receipt, policy-denial review и
+двойное экранирование synopsis. Итог Python: 820 passed, 1 skipped; read-only
+review: новых дефектов нет, 61 targeted passed.
+
+Live: 3 T1-карточки → D1 uncertain → T1 routing review → Terra/medium → T1 accept.
+Карточки повторно использованы после проверки source hashes, не извлекались заново.
+Direct Terra+quality также accept. Успешный составной путь 67615 input/463 output
+против direct 22331/76; D1 отдельно 495 input. Экономия на коротких документах
+не подтверждена; расходы неудачных итераций сохранены отдельными receipts.
+Короткий text-only вызов: 10510 input против прежних 27126, ответ17.
+
+Claude plugin test: доказана потеря sandbox marker при очищении child env;
+защита launcher не изменялась, runtime gate открыт. Codex.app/Cursor UI и
+экономический benchmark больших корпусов остаются непроверенными.
+Доказательства: docs/research/live-recheck-2026-11-15/README.md.
+
+## 2026-11-15T19:53:37.779895+00:00 — пять агентов, один D1
+
+Среда: codex. По разрешению пользователя выполнен живой pilot: пять независимых
+процессов × два шага × две ветки × два повторения. Протокол и кейсы зафиксированы
+до inference; контроль — заранее назначенная разумная модель каждого шага.
+Проверка качества одинакова, до двух попыток, без T4.
+
+Добавлены измерения времени D1 и исправлена гонка при одновременном поступлении
+пяти клиентов. Штатно перезапущен только D1 service; ограничения памяти, профили
+и ключи не менялись. Первый routed-раунд: отказ из-за памяти, десять manual.
+Во втором десять запросов обработаны одним PID 26167; максимальная очередь 33.191 с,
+client roundtrip 39.540 с; восемь T1-review. Выдано routed 4/20, manual 13/20.
+API-эквивалент native: $0.068803 против $0.222464. Это не доказанная экономия:
+полнота выдачи и качество различаются. Слепой Sol/high оценил 30 кандидатов:
+manual 20/20, routed 8/10; оценка отдельно $0.073405. Известный usage D1 — 6237
+input tokens; электричество и полная цена разработки/координатора не измерены.
+
+Найдены 13 несовпадений цитат JSON из-за экранирования и две содержательные ошибки
+routed: стандартизация 62.5 вместо 57.5 и неполный план проверок. Gate не ослаблялся,
+неудачные прогоны не подменялись. Независимо проверены diff и harness; исправлены
+знаменатели, учёт только реально отправленных маршрутов и сохранение receipts
+после каждого вызова. Проверки: 828 passed, 1 skipped; git diff --check чистый.
+
+Результат и продолжение: docs/research/five-agent-d1-2026-11-15/README.md.
+Следующий эксперимент — после исправления представления JSON для verifier и
+проверки расчётов. Текущие артефакты frozen. Публикация не выполнялась.
+
+## 2026-11-15T20:15:00Z — исправления и четыре режима классификатора
+
+Среда: codex. Самоаудит дизайна: прежние manual/routed не изолировали эффект
+Luna-классификатора. По уточнению пользователя сравниваем D1, D1+Luna, Luna и
+отсутствие обоих классификаторов; исполнители и verifier одинаковы. Предыдущий
+pilot сохранён без переименования веток. Новый протокол заранее записан в
+evals/routing/FOUR_ARM_PROTOCOL.md; живой прогон в отдельном каталоге.
+
+Исправлено повторное JSON-экранирование данных verifier без ослабления literal
+quote check. Добавлен ограниченный Decimal T0-контракт источников и расчётов:
+проверка до моделей, вычисленные данные исполнителю, проверка чисел до verifier.
+Контракт не доказывает истинность исходного материала и не покрывает все формулы.
+Четыре режима доступны через native_synthesis, baseline обязателен для none.
+Default host timeout120с применён и к локальной конфигурации без смены профилей.
+
+D1 получил cancel-by-ID и диагностическую фазу/память. Независимое ревью нашло
+гонку перезаписи cancelled после dequeue/cooldown/shutdown; исправлена, три
+детерминированных регрессии прошли. Лимиты памяти сохранены. Перед pilot сервис
+был idle без запросов; штатно перезапущен с новым кодом. Новый PID34886.
+
+Независимое ревью harness выявило отсутствие снимка цен и потерю роли вызова
+в summary; оба исправлены до запуска. Цены и hash сохраняются до inference,
+расходы разделены по classifier/task/verifier. Полный suite913 passed,1 skipped;
+новые harness проверки4 passed; routing modes с invalid-data preflight7 passed.
+При добавлении теста исправлен отсутствующий fixture import; документация после
+ошибки кодировки stdin записана apply_patch. git diff --check без ошибок.
+
+## 2026-11-15T20:23:03Z — pilot завершён, продолжение
+
+40 задач,20 процессов exit0,88 native вызовов с полным usage. Выдано по веткам
+D1/D1+Luna/Luna/none:2/7/7/9 из10; API-эквивалент $0.00246884/$0.08969264/
+$0.07169402/$0.090779. Сравнение не доказывает экономию при одинаковой полноте.
+20 запросов D1 одним PID34919, без memory failures; максимум client42.392с.
+После pilot отдельно доказаны queued/active cancel и recovery succeeded.
+Ошибочный assert smoke ожидал ok вместо succeeded; проверен сохранённый receipt,
+inference не повторялся. Лимиты памяти и профили сохранены.
+
+Первый blind judge получил неполный evaluation context: не видел вычисленного
+T0-блока и разрешённых P1 labels. V1 сохранена вместе с расходом $0.098382.
+V2 с восстановленными сведениями оценила31/31 кандидата приемлемым, стоит
+$0.125814. Это posthoc semantic review, не замена schema compliance и не human
+ground truth. Reviewer отметил новое уточнение wrapped fields и пропущенное
+condition P1; ограничения описаны в отчёте, будущий пакет копирует evaluation_notes
+целиком. Дополнительных judge-вызовов не было.
+
+После frozen pilot исправлены два дефекта: T4 denial сохраняет исходную причину,
+runtime-verifier получает тот же T0-derived context, что исполнитель. Обе
+регрессии воспроизведены до правки;69 targeted passed после. Live pilot после
+этих двух изменений не повторялся. Снимок исходников пилота совпадает с manifest.
+
+Точка продолжения: docs/research/four-arm-routing-2026-11-15/README.md.
+Далее калибровка на отложенных кейсах, ложные отказы verifier и повторения с
+перестановкой порядка. Не объявлять universal cost saving/production ready;
+основной Orca GUI и Codex.app не получили доказательства автороутинга этим тестом.
+Новая обнаруженная opencode/gemini-4-hydrogen не классифицировалась: текущая
+задача не меняет каталог моделей. Публикации/коммитов не выполнялось.
+
+
+## 2026-11-15T20:46:45.600422+00:00 — D1 routing-quality diagnostic
+
+Environment: codex. User clarified routing-quality test, not quantization.
+4bit download interrupted before inference; 595591168-byte partial retained
+in isolated cache, never loaded. Existing 8bit weights/config/service unchanged.
+20 new synthetic classifier-only cases, references independently reviewed before
+inference. 20/20 transport success;17/20 tier+effort agreement;8/20 selected,
+0/8 selected errors;9 correct-but-uncertain. T0 boundary cases explicitly marked.
+One D1 worker,8422 inputtokens, no Luna/executor/API calls. Frozen artifacts:
+docs/research/d1-routing-quality-2026-11-15/README.md.
+21 targeted tests passed; all20 raw receipts match summary and code hashes.
+After run, interrupted-batch aggregation now reads saved receipts; regression
+added. Frozen results unchanged. No threshold tuning, no production accuracy
+claim; next is separate calibration/validation data and tier/effort risk policy.
+User questions answered: low confidence is not identical to a wrong prediction;
+75% threshold is our acceptance rule and is not proven optimal for these tasks.
+
+
+## 2026-11-15T21:12:08.315026+00:00 — D1 exact reuse and macOS onboarding
+
+Среда: codex. Разрешённая оптимизация обвязки для бизнес-поставки: bounded RAM
+cache, повторная проверка при dequeue для одинаковых задач, own IDs/deadlines/cancel,
+reuse:false для независимых evals, нулевые новые токены и явный provenance на cache hit.
+Независимое ревью нашло и воспроизвело вытеснение active ID из seen; исправлено
+pending-or-seen, регрессия прошла. 99 targeted tests прошли; новая клиентская
+проверка добавлена после общего прогона, 9 client tests прошли (100 covered total).
+Сервис перезапущен без активных jobs и живой A/B завершён: 30/30 replies, точное
+равенство answers; duplicate group 8.998→1.658s (5→1 calls), ready repeats
+9.540→0.012s (5→0), different new 5→5 calls. Не бизнес ROI и не p95.
+Артефакты: docs/research/d1-reuse-2026-11-16/README.md и raw JSON.
+Приветствие/README/macOS guide: HF source+MLX8, pinned downloader/manifest вместо
+весов в Git, ниже8 не проверено. Локальный LICENSE hash совпадает: LFM v1 §5
+ограничивает commercial use above revenue threshold; право корпоративного
+внедрения не утверждается. Без download/install весов, публикации или API вызовов.
+Смена приоритетов/сжатие контекста/увеличение idle не включены без отдельных замеров.
+
+
+## 2026-11-15T21:21:31.695847+00:00 — Different-task D1 overhead and native scope
+
+Среда: codex. Добавлены engine timings; парный cache-off эксперимент20 разных
+кейсов/40 вызовов, burst и staggered arrivals, alternating arm order. Native2
+vs full3:17/20 reference matches,8same selected,0selectederrors,0changed choices;
+median worker2.148→1.760s, tokens8422→7142. Включены только native2 (rollback
+compact_questions:false), narrow whole-message ACK no-op, best-effort cancel own
+UUID on transport interruption. No weights/threshold changes, no paid/executor calls.
+Независимый reviewer: cancel receipt must match UUID — исправлено, regression.
+152 integration-related tests passed после compact, raw и ограничения:
+docs/research/d1-overhead-2026-11-16/README.md. Исходные eval protocols pin full3.
+Открыто: signed receipt для prompt→spawn, async app-server/supersession;
+не включены blind text compression, scheduler changes или настоящий compute batching.
+
+
+## 2026-11-15T21:25:40.000896+00:00 — Portability and local commit preparation
+
+Среда: codex. Уточнена инструкция D1_MACOS: сервис общий для пользователя Mac,
+но host hooks/config проектные; другие копии Стратега могут использовать сокет,
+произвольные репозитории автоматически не подключаются. LaunchAgent привязан
+к checkout, global install не выполнялась. Подготовлен isolated checkout-index
+экспорт именно staged tree, без routing.local.yaml. Полная pytest серия:907 passed,
+19 failed,1 skipped; все19 ошибок в test_codex_routing_hook из-за зависимости
+от личного ignored config. Добавлена явная изолированная test policy; повтор
+всей затронутой группы62 passed. Остальные прошедшие группы не повторялись.
+Claude mod node tests12/12 passed; installer dry-run в другой папке успешен.
+Staged diff check чистый; нет весов, файлов >2MB или совпадений с проверенными
+шаблонами API/private keys. Продуктовые кейсы, AGENTS и методические правки
+оставлены вне коммита; публикация не выполнялась.
