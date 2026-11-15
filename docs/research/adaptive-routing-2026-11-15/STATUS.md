@@ -26,3 +26,19 @@
 4. Проверить native/Orca transport отдельно: Python gate не контролирует произвольные внешние запуски. Не выдавать receipt одного транспорта за разрешение другого.
 
 Оригинальный Claude Model Selector Pack не получен из-за формы email. Открытый аналог CCR скачан только для чтения; SHA и лицензия в [provenance](providers/upstream.md). Чужие setup/hooks не исполнялись, OAuth gateway не переносился, глобальная память и продуктовые кейсы не менялись.
+
+## OpenCode free-only: интеграция 2026-11-15
+
+Интегрирован 09bee5224e80211194c43a4cba3b3aff9c098e72 после независимого [ревью](review-opencode-52f1e6f.md). Два блокера и partial-message обработка закрыты; неблокирующий malformed provider также исправлен строгой проверкой mapping с регрессиями. Объединённая сборка: **409 passed, 1 skipped**, 29.80 с. Исходный [review](review-opencode-390ff20.md) сохранён для истории.
+
+Локальный, исключённый из Git `knowledge/routing.local.yaml` включает только профиль `opencode_free`, не API. Каталог хранится в `/Users/shalioner/.cache/strategist/night-orchestrator/opencode-free-catalog.json`; получен 2026-11-15T13:13:14Z, выявлены 10 поддержанных exact-zero моделей. Остальные профили и пользовательские настройки OpenCode не менялись. Новые модели имеют `quality: not_evaluated`; предпочтения по уровням — рабочая политика, не сравнительный рейтинг.
+
+Реальные процессы preflight на временном синтетическом проекте дали executable: classify → DeepSeek V4.1 Flash Free; problem-framing → Big Pickle; product-strategy → MiniMax M3.1 Flash Free. Проверено отсутствие записи в state; inference не выполнялся. Это доказывает выбор разных маршрутов, не успешную генерацию. Две прежние live-попытки получили 429 free-limit; этот gate остаётся открытым.
+
+Обновление списка без редактирования кода (только публичные метаданные):
+
+```sh
+.venv/bin/python tools/opencode_free.py refresh --binary /Users/shalioner/.npm-global/bin/opencode --output /Users/shalioner/.cache/strategist/night-orchestrator/opencode-free-catalog.json --write-candidates knowledge/routing.local.yaml
+```
+
+Refresh показывает добавленные/удалённые/изменившие тариф модели и синхронизирует подходящие кандидаты, сохраняя остальные значения YAML. Он не запускается скрыто при preflight: snapshot старше 24 часов блокирует выполнение до явного обновления. TTL не гарантирует неизменность тарифа; signed-out отдельный OpenCode и одноэлементный каталог ограничивают маршрут без подключения платного аккаунта. При 429/timeout нет автоматического перебора моделей или платного fallback. Подробности: [инструкция](../../OPENCODE_FREE.md).
