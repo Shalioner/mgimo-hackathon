@@ -1,7 +1,11 @@
 # d1-2B: изолированный MLX 8bit runtime
 
-**Статус: установлен, реальный smoke BLOCKED системным memory pressure;
-работающий inference на этом занятом M1 8 GiB не подтверждён.**
+**Статус: реальный короткий text + image smoke прошёл на этом M1 8 GiB.**
+Один русский запрос с готовым `route_tier.yaml` → T3 (0.96799248),
+синтетический красный квадрат → red (0.99939231); весь процесс21.58 s, exit0.
+[Полный JSON с фазами и памятью](research/local-decision-2026-11-15/mlx8-phased-real.json).
+Модель завершена; это проверка двух случаев, не benchmark или гарантия любого контекста.
+История прежних остановок ниже сохранена.
 
 `tools/local_decision_mlx.py` использует официальный quantized **d1-2B**, его System One
 и calibration, не генеративный LFM3. Автоматический router пока этот CLI не вызывает.
@@ -106,7 +110,7 @@ python3.12 -m venv ~/.cache/strategist/d1-2b-lab/mlx-venv
 успешный короткий smoke не гарантирует выполнение на любом занятом Mac.
 
 
-## Реальная проверка 2026-11-15
+## Первая MLX попытка 2026-11-15 (история blocker)
 
 Команда (единственная попытка MLX inference в этой работе):
 
@@ -138,13 +142,13 @@ python3.12 -m venv ~/.cache/strategist/d1-2b-lab/mlx-venv
 |---|---|
 | Official d18bit + calibration + image implementation | Подтверждены карточкой и source wheel |
 | Lab venv, weights, CLI, offline process supervision | Установлены; offline/fake проверки прошли |
-| Text probabilities на текущем M1 | BLOCKED pressure, 0 ответов |
-| Image inference | Не запускался: text gate не пройден |
+| Text probabilities на текущем M1 | Последующий реальный smoke: T3, P=0.96799248 |
+| Image inference | После успешного text: red, P=0.99939231 |
 | Несколько русских задач/доменная calibration | Не проверены, ограничение этой итерации — один text smoke |
 | Автоматический router/host triggers | Не подключены; gates не изменены |
 | 4bit/GGUF inference | Не проверены; 4bit веса сохранены, GGUF не установлен |
 
-Дальше возможен новый ограниченный прогон после освобождения памяти пользователем
+На момент первой остановки дальнейшим вариантом был новый ограниченный прогон после освобождения памяти пользователем
 или на машине с большим запасом RAM, с теми же guards и дополнительными фазовыми
 метками. Бюджет дополнительных попыток задаёт координатор; повторное согласие пользователя
 для каждой уже разрешённой локальной попытки не требуется. Лимиты памяти сохраняются.
@@ -192,5 +196,64 @@ sandbox может быть недоступен: это теперь отдел
 41 targeted offline tests passed за0.25 s, включая regression sandbox denial,
 preflight nonnormal/unknown и изменение pressure после трёх нормальных замеров.
 Полного pytest в этой итерации не было. Повторного модельного запуска после исправления
-не выполнено: текущий лимит одной попытки исчерпан. Нужна следующая разрешённая
-координатором попытка, чтобы фазами локализовать исходный memory blocker.
+не выполнено: текущий лимит одной попытки исчерпан. На момент этого отчёта следующая попытка ещё не выполнялась;
+её результат приведён ниже.
+
+
+## Подтверждённый text + image результат
+
+После исправления pre-load диагностики координатор разрешил фактический запуск;
+код не менялся относительно `1c4c397`. Команда:
+
+```sh
+~/.cache/strategist/d1-2b-lab/mlx-venv/bin/python tools/local_decision_mlx.py smoke \
+  --timeout 240 --output docs/research/local-decision-2026-11-15/mlx8-phased-real.json
+```
+
+Три preflight pressure1, финальный pressure1; один экземпляр модели, без installs
+или full pytest параллельно, OS network deny. Text:
+«Сравни три стратегии запуска продукта и разреши противоречия источников.»
+Questions — неизменённый `knowledge/decisions/route_tier.yaml` (один вопрос).
+После успешного text последовал один image256×256 с красным квадратом и вопросом
+из `docs/examples/d1-image-questions.yaml`. Размер картинки не менялся.
+
+Фактические probabilities:
+
+```json
+{
+  "tier": {"T1": 0.012110230209451477, "T2": 0.01989729100903317, "T3": 0.9679924787815154},
+  "color": {"red": 0.9993923118729813, "blue": 0.00036170167228792344, "green": 0.0002459864547307116}
+}
+```
+
+| Фаза | Время | Metal allocation/peak, bytes |
+|---|---:|---:|
+| SHA256 всех файлов | 3.763 s | MLX ещё не импортирован |
+| Imports | 2.449 s | 1032 |
+| Load (включает processor) | 4.426 s | active=peak=2216144904 |
+| Processor внутри load | 2.570 s | active=2216144904 |
+| Text forward + validation | 5.138 s | peak=2374376067 |
+| Image forward + validation | 4.668 s | peak=2426620038 |
+| Весь child lifecycle | 21.580 s | exit0, process_finished=true |
+
+Text usage119 input tokens, image123; output_tokens=0 в обоих ответах.
+Максимальный `ru_maxrss`433324032 bytes (413.25 MiB); он не включает всю картину
+Metal allocations и не является оценкой общего расхода RAM моделью.
+Внешние process RSS samples:81200/348384/14560/40336 KiB.
+Swap до3486.38 MiB, максимум sampled5367.50 MiB (рост1881.12 MiB),
+после5255.50 MiB; pressure во время samples2, после1. Guards не повышались и
+не сработали. Последующая проверка: swap4575.31 MiB, pressure1, model/resource_tracker
+процессов нет — [cleanup receipt](research/local-decision-2026-11-15/mlx8-success-cleanup.json).
+
+В этом успешном запуске основной прирост Metal произошёл при загрузке весов
+(около2.216 GB), text forward добавил peak около158 MB, image поднял общий peak
+ещё примерно52 MB. Это измерение текущего запуска, а не доказательство причины
+прежних global-pressure failures. Точный источник прежнего давления задним числом
+не установлен. Short text/image на текущем M1 теперь **работает**, однако границы
+контекста, preflight, guards и отсутствие автоматического router подключения сохраняются.
+Доменная калибровка, много русских задач и надёжность при иной нагрузке не проверены.
+
+Проверка результата: JSON status/exit/process_finished, ожидаемые T3/red и отсутствие
+живых модельных процессов подтверждены отдельным read-only скриптом; `git diff --check`
+чистый. Повторного inference не выполнялось. Проверки кода остаются41 scoped tests
+предыдущего commit; в этой итерации изменены только документация и фактические receipts.

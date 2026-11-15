@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-11-15T14:26:48.361943+00:00",
+  "remaining_model_processes": [],
+  "memory": "vm.swapusage: total = 6144.00M  used = 4575.31M  free = 1568.69M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1\n",
+  "source_report": "mlx8-phased-real.json"
+}
