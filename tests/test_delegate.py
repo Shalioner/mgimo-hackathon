@@ -13,9 +13,9 @@ def test_child_env_drops_parent_session_vars():
     }
     env = D.child_env(parent)
     assert not [k for k in env if k.startswith("ORCA_")]
-    # всё остальное (путь, домашняя папка, доступы самой модели) сохраняется
-    assert env["PATH"] == "/usr/bin" and env["HOME"] == "/home/u"
-    assert env["OPENAI_API_KEY"] == "k" and env["CODEX_HOME"] == "/c"
+    # Только безопасный allowlist, ни account config, ни API credentials.
+    assert env == {"PATH": "/usr/bin"}
+
 
 
 def test_child_env_does_not_touch_parent(monkeypatch):

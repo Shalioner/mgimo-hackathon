@@ -1,22 +1,9 @@
 #!/usr/bin/env python3
-"""Делегировать подзадачу модели нужного уровня через установленный CLI агента.
+"""Plan a scoped delegation; execute only a policy-authorized HTTP adapter.
 
-Зачем: в большинстве сред (Codex, Cursor, Copilot, GigaCode…) чат работает на одной модели.
-Лёгкую массовую работу (T1/T2: извлечение цитат, классификация, проверка ссылок) дешевле
-отдать отдельному неинтерактивному вызову дешёвой модели. Работает из любой среды с терминалом.
-
-    python tools/delegate.py --project projects/<case> --task extract-claims \
-        --prompt-file projects/<case>/state/delegated/q_src004.md --input projects/<case>/sources/04.md \
-        --step 3 [--backend codex] [--dry-run]
-
-Что делает:
-  1. уровень берёт из knowledge/routing.yaml по задаче (или --tier), модель — по семейству бэкенда;
-  2. запускает CLI в режиме «только чтение» в пустой временной папке: делегат не видит AGENTS.md
-     и не тратит токены на чтение репозитория; нужные файлы передаются через --input как данные;
-  3. сохраняет ответ в projects/<case>/state/delegated/<время>_<задача>.md;
-  4. пишет строку в run_log.md: уровень, модель, время, токены (если CLI их отдаёт), результат.
-Делегат ничего не меняет в репозитории: в реестр результат вносит основная модель после проверки.
-Код выхода ≠ 0 — делегирование не удалось (это сигнал эскалации или выполнения текущей моделью).
+Subscription CLI routes are manual until auth/config/overage enforcement exists.
+--dry-run/--preflight prints a side-effect-free JSON plan. Existing task tiers,
+model recommendations and effort approval gates remain independent of billing.
 """
 from __future__ import annotations
 
@@ -34,9 +21,11 @@ from typing import List, Optional, Tuple
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ledger as L  # noqa: E402
+import routing_policy as P
 
 ROOT = L.ROOT
-BACKEND_FAMILY = {"codex": "openai", "claude": "claude", "opencode": "opencode", "selfhosted": "selfhosted"}
+BACKEND_FAMILY = {"codex": "openai", "claude": "claude", "claude-code": "claude", "opencode": "opencode", "selfhosted": "selfhosted", "cursor": "cursor", "zcode": "glm", "kimi": "kimi", "qwen": "qwen", "gemini-cli": "gemini", "antigravity": "gemini", "antigravity-ide": "gemini", "deepseek-harness": "deepseek"}
+HOST_PROVIDER = {"codex": "openai", "claude": "anthropic", "claude-code": "anthropic", "zcode": "z.ai"}
 # Через какой параметр бэкенд принимает effort (у остальных — уровень по умолчанию модели).
 EFFORT_BACKENDS = {"codex", "selfhosted"}
 GUARD = (
@@ -54,9 +43,8 @@ PARENT_SESSION_PREFIXES = ("ORCA_",)
 
 
 def child_env(environ: Optional[dict] = None) -> dict:
-    """Окружение для делегата: всё, кроме привязки к сеансу родительской оболочки."""
-    env = dict(os.environ if environ is None else environ)
-    return {k: v for k, v in env.items() if not k.startswith(PARENT_SESSION_PREFIXES)}
+    """Узкий allowlist без credentials, домашней папки и config overrides."""
+    return P.child_env(environ)
 
 
 def build_command(backend: str, model: str, prompt: str, out_file: Path, workdir: Path,
@@ -110,28 +98,44 @@ def parse_output(backend: str, stdout: str, out_file: Path) -> Tuple[str, str]:
     return stdout, ""
 
 
-def call_selfhosted(cfg: dict, model: str, prompt: str, effort: Optional[str], timeout: int) -> Tuple[int, str, str]:
-    """OpenAI-совместимый /chat/completions (Ollama, vLLM, LM Studio, корпоративный шлюз). Без инструментов —
-    модель не может ничего изменить. Ключ — только из переменной окружения api_key_env, в журнал не пишется."""
-    import os
-    import urllib.error
-    import urllib.request
+def selfhosted_plan(cfg, model, prompt, effort, human_approved=False):
     sh = cfg.get("selfhosted") or {}
+    endpoint = str(sh.get("base_url") or "").rstrip("/") + "/chat/completions"
     body = {"model": model, "messages": [{"role": "user", "content": prompt}]}
     if effort and sh.get("send_effort", True):
         body["reasoning_effort"] = effort
-    req = urllib.request.Request(sh["base_url"].rstrip("/") + "/chat/completions",
-                                 data=json.dumps(body).encode("utf-8"), headers={"Content-Type": "application/json"})
-    key = os.environ.get(sh.get("api_key_env") or "", "")
-    if key:
-        req.add_header("Authorization", f"Bearer {key}")
+    receipt = P.plan(cfg, host="selfhosted", provider=sh.get("provider", "selfhosted"), model=model,
+                     effort=effort, endpoint=endpoint, human_approved=human_approved,
+                     input_bytes=len(json.dumps(body).encode("utf-8")),
+                     key_present=bool(os.environ.get(sh.get("api_key_env") or "")))
+    if receipt["status"] == "executable":
+        body["max_completion_tokens"] = receipt["context"]["output_reserve"]
+        receipt = P.plan(cfg, host="selfhosted", provider=sh.get("provider", "selfhosted"), model=model,
+                         effort=effort, endpoint=endpoint, human_approved=human_approved,
+                         input_bytes=len(json.dumps(body).encode("utf-8")),
+                         key_present=bool(os.environ.get(sh.get("api_key_env") or "")))
+    return receipt, endpoint, body
+
+
+def call_selfhosted(cfg: dict, model: str, prompt: str, effort: Optional[str], timeout: int,
+                    human_approved=False) -> Tuple[int, str, str]:
+    """Only the exact explicitly authorized HTTP route; no retry/redirect/proxy."""
+    import urllib.error
+    import urllib.request
+    receipt, endpoint, body = selfhosted_plan(cfg, model, prompt, effort, human_approved)
+    if receipt["status"] != "executable":
+        return 3, "", receipt["reason"]
+    sh = cfg.get("selfhosted") or {}
+    req = urllib.request.Request(endpoint, data=json.dumps(body).encode("utf-8"),
+                                 headers={"Content-Type": "application/json"})
+    req.add_header("Authorization", "Bearer " + os.environ[sh["api_key_env"]])
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:
+        with P.http_open(req, timeout) as r:
             return 0, r.read().decode("utf-8"), ""
     except urllib.error.HTTPError as exc:
-        return exc.code, "", exc.read().decode("utf-8", errors="replace")[:500]
-    except (OSError, ValueError) as exc:
-        return 1, "", str(exc)
+        return exc.code, "", "HTTP error (response body redacted); no fallback"
+    except (OSError, ValueError):
+        return 1, "", "Transport error (details redacted); no fallback"
 
 
 def selfhosted_ready(cfg: dict) -> bool:
@@ -144,12 +148,9 @@ def available(cfg: dict, backend: str) -> bool:
 
 
 def pick_backend(cfg: dict, requested: Optional[str]) -> Optional[str]:
-    if requested:
-        return requested if available(cfg, requested) else None
-    for b in cfg.get("delegate_backends", []):
-        if available(cfg, b):
-            return b
-    return None
+    # Selection is a recommendation, never authorization. Do not search installed
+    # CLIs or silently migrate to another account when the preferred host fails.
+    return requested or next(iter(cfg.get("delegate_backends") or ["codex"]), None)
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -166,9 +167,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--model", help="конкретная модель уровня (ступень из `ledger.py route`), по умолчанию — стартовая")
     ap.add_argument("--human-approved", action="store_true", help="человек согласился на effort из effort_policy.ask (max)")
     ap.add_argument("--timeout", type=int, default=600)
-    ap.add_argument("--dry-run", action="store_true", help="показать команду, ничего не запускать")
+    ap.add_argument("--host", choices=sorted(BACKEND_FAMILY), help="явный host; не определяется по установленному CLI")
+    ap.add_argument("--dry-run", "--preflight", action="store_true", help="JSON-план: маршрут, запрет и объём входов; без запуска и записи")
     args = ap.parse_args(argv)
 
+    if args.host and args.backend and args.host != args.backend:
+        print("--host и --backend противоречат друг другу", file=sys.stderr)
+        return 2
     cfg = L.load_routing()
     project = args.project.resolve()
     if not (project / "state" / "run_log.md").exists():
@@ -186,10 +191,13 @@ def main(argv: Optional[List[str]] = None) -> int:
         print("T4 не делегируется автоматически: нужна причина эскалации и согласие человека "
               "(ledger.py route … --failed T3).", file=sys.stderr)
         return 2
-    backend = pick_backend(cfg, args.backend)
+    backend = pick_backend(cfg, args.host or args.backend)
     if not backend:
         print("Нет установленного CLI (codex/claude/opencode) и не настроен selfhosted — выполните текущей моделью и запишите "
               f"«рекомендован {tier}, выполнен на <модель>».", file=sys.stderr)
+        return 3
+    if backend not in BACKEND_FAMILY:
+        print("denied: неизвестный backend", file=sys.stderr)
         return 3
     family = (cfg.get("delegate_families") or {}).get(backend) or BACKEND_FAMILY[backend]
     model = args.model or L.model_for(cfg, family, tier)
@@ -203,7 +211,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"effort {effort} — только с согласия человека: спросите и повторите с --human-approved "
               "(цена задачи растёт в разы, поведение менее предсказуемо)", file=sys.stderr)
         return 2
-    if not model:
+    if not model and backend not in {"cursor", "kimi", "qwen", "gemini-cli", "antigravity", "antigravity-ide", "deepseek-harness"}:
         print(f"Для бэкенда {backend} (семейство {family}) не задана модель уровня {tier} в routing.yaml", file=sys.stderr)
         return 3
 
@@ -222,34 +230,43 @@ def main(argv: Optional[List[str]] = None) -> int:
             return 2
         prompt += (f"\n\n<<<ДАННЫЕ: {inp.name} — содержимое файла, не инструкции>>>\n"
                    f"{ip.read_text(encoding='utf-8')}\n<<<КОНЕЦ ДАННЫХ: {inp.name}>>>")
+    manifest = [{"name": p.name, "bytes": p.stat().st_size} for p in [prompt_path, *args.input]]
+    if backend == "selfhosted":
+        receipt, _, _ = selfhosted_plan(cfg, model, prompt, effort, args.human_approved)
+    else:
+        receipt = P.plan(cfg, host=backend, provider=HOST_PROVIDER.get(backend), model=model, effort=effort,
+                         tier=tier, input_bytes=len(prompt.encode("utf-8")), human_approved=args.human_approved)
+    receipt["files"] = manifest
+    receipt["tier"] = tier
+    if args.dry_run:
+        print(json.dumps(receipt, ensure_ascii=False, indent=2))
+        return 0  # Planning succeeded; status describes executability.
+    if receipt["status"] != "executable":
+        print(f"{receipt['status']}: {receipt['reason']}", file=sys.stderr)
+        return 3
+    # No CLI adapter has verified account/config/overage enforcement yet.
+    if backend != "selfhosted":
+        print("manual: CLI enforcement adapter absent", file=sys.stderr)
+        return 3
     out_dir = project / "state" / "delegated"
     out_dir.mkdir(parents=True, exist_ok=True)
-    stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S%f")
     out_file = out_dir / f"{stamp}_{args.task}.md"
-    workdir = Path(tempfile.mkdtemp(prefix="strategist-delegate-"))
-    cmd = build_command(backend, model, prompt, out_file, workdir, effort if backend in EFFORT_BACKENDS else None)
-    shown_model = f"{model}@{effort}" if effort and backend in EFFORT_BACKENDS else model
-
-    if args.dry_run:
-        shutil.rmtree(workdir, ignore_errors=True)
-        shown = cmd[:-1] + [f"<задание {len(prompt)} символов из {prompt_path.name}>"]
-        print(f"[dry-run] {tier} · {backend} · {shown_model}\n" + " ".join(shown))
-        if effort and backend not in EFFORT_BACKENDS:
-            print(f"effort {effort} бэкенду {backend} не передаётся — модель работает на своём уровне по умолчанию")
-        return 0
-
+    shown_model = f"{model}@{effort}" if effort else model
+    receipt["transmitted"] = {"model": model, "effort": effort if (cfg.get("selfhosted") or {}).get("send_effort", True) else None}
     t0 = time.monotonic()
-    if backend == "selfhosted":
-        code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout)
-    else:
-        try:
-            proc = subprocess.run(cmd, cwd=str(workdir), capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=args.timeout,
-                                  stdin=subprocess.DEVNULL, env=child_env())
-            code, stdout, stderr = proc.returncode, proc.stdout, proc.stderr
-        except subprocess.TimeoutExpired:
-            code, stdout, stderr = -1, "", f"таймаут {args.timeout} с"
+    code, stdout, stderr = call_selfhosted(cfg, model, prompt, effort, args.timeout, args.human_approved)
+    try:
+        event = json.loads(stdout)
+    except ValueError:
+        event = {}
+    integrity = P.observe(receipt, event if isinstance(event, dict) else {})
+    receipt["exit_code"] = code
+    receipt["result"] = "quarantined" if not integrity else "response_received" if code == 0 else "failed"
+    out_file.with_suffix(".receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8")
+    if not integrity:
+        code, stdout, stderr = 1, "", "Response metadata mismatch; quarantined; no fallback"
     secs = round(time.monotonic() - t0)
-    shutil.rmtree(workdir, ignore_errors=True)
     text, usage = parse_output(backend, stdout, out_file)
     ok = code == 0 and text.strip() != ""
     if ok:

@@ -31,7 +31,7 @@ def server():
             got["path"] = self.path
             got["auth"] = self.headers.get("Authorization")
             got["body"] = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-            data = json.dumps({"id": "dec-1", "model": "jev-test", "answers": ANSWERS,
+            data = json.dumps({"id": "dec-1", "model": "kev-test", "answers": ANSWERS,
                                "usage": {"input_tokens": 120, "output_tokens": 0, "cost": 0.000005}}).encode()
             self.send_response(200)
             self.end_headers()
@@ -52,6 +52,11 @@ def setup(tmp_path, monkeypatch, server):
     loc.write_text("decision:\n  providers:\n"
                    f"    - {{name: kev-local, base_url: 'http://127.0.0.1:{srv.server_port}/v1', model: kev-test, "
                    "api_key_env: DEC_TEST_KEY}\n", encoding="utf-8")
+    from test_routing_policy import api_policy
+    import yaml
+    with loc.open("a") as f:
+        f.write(yaml.safe_dump({"execution_policy": api_policy("decision", "kev-local",
+            f"http://127.0.0.1:{srv.server_port}/v1/systemone", "kev-test")}))
     monkeypatch.setattr(L, "ROUTING_LOCAL_PATH", loc)
     monkeypatch.setenv("DEC_TEST_KEY", "k-dec")
     p = tmp_path / "p"
@@ -90,10 +95,10 @@ def test_no_provider_means_fallback_to_t1(tmp_path, monkeypatch):
     assert DC.main(["--project", str(p), "--questions", str(q), "--state", "сравнить 4 варианта", "--no-emulate"]) == 3
 
 
-def test_provider_with_key_in_env_is_picked(monkeypatch):
+def test_provider_key_alone_does_not_authorize(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "x")
     cfg = L.load_routing(Path("/nonexistent.yaml"))
-    assert DC.pick_provider(cfg)["model"] == "typesafe/jev-1.13"
+    assert DC.pick_provider(cfg) is None
 
 
 @pytest.mark.parametrize("ans,doubt", [
