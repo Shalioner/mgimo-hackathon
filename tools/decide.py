@@ -169,7 +169,7 @@ def from_labels(raw: dict, questions: dict, state: str) -> dict:
     out = {}
     for qid, q in questions.items():
         a = raw.get(qid)
-        if not isinstance(a, dict):
+        if not isinstance(a, dict) or ("type" in a and type(a["type"]) is not str):
             out[qid] = {"type": "refusal"}
             continue
         if a.get("type") in TYPES | {"refusal"}:  # модель ответила уже в формате System One
@@ -247,7 +247,7 @@ def valid_response(data, questions):
         if key in usage and (type(usage[key]) not in {int, float} or not math.isfinite(usage[key]) or usage[key] < 0):
             return False
     for a in data["answers"].values():
-        if not isinstance(a, dict) or a.get("type") not in TYPES | {"refusal"}:
+        if not isinstance(a, dict) or type(a.get("type")) is not str or a["type"] not in TYPES | {"refusal"}:
             return False
         for key in ("noul", "confidence", "score"):
             if key in a and (type(a[key]) not in {int, float} or not math.isfinite(a[key])):
