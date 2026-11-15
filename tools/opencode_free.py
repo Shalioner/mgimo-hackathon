@@ -11,7 +11,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import pwd
 import re
 import subprocess
 import sys
@@ -101,8 +100,23 @@ separate cache tariff in this schema; input/output price must be explicit.
     return model
 
 
+def platform_error():
+    """Import-safe availability check; never relax the POSIX isolation boundary."""
+    if sys.platform not in {"darwin", "linux"}:
+        return "OpenCode adapter supports only reviewed POSIX platforms (macOS/Linux); Windows is manual"
+    try:
+        import pwd
+    except ModuleNotFoundError as exc:
+        if exc.name not in (None, "pwd"):
+            raise
+        return "OpenCode POSIX isolation requires the unavailable pwd module; use manual execution"
+    return None
+
+
 def system_boundary():
-    require(sys.platform in {"darwin", "linux"}, "Only reviewed POSIX platforms supported")
+    error = platform_error()
+    require(error is None, error)
+    import pwd
     paths = [Path("/etc/opencode"), Path("/Library/Application Support/opencode"),
              Path("/Library/Managed Preferences/ai.opencode.managed.plist"),
              Path("/Library/Managed Preferences") / pwd.getpwuid(os.getuid()).pw_name / "ai.opencode.managed.plist"]

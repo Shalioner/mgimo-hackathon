@@ -32,6 +32,14 @@ def questions():
 def route_plan(cfg, host, tier, prompt, deep=False, bootstrap=False):
     task = "classify" if bootstrap else TASKS[tier]
     requested_effort = "low" if bootstrap else "high" if deep and host == "opencode" else None
+    if host == "opencode":
+        import opencode_free as O
+        error = O.platform_error()
+        if error:
+            receipt = P.plan(cfg, host=host, provider=D.HOST_PROVIDER[host], model=None,
+                             effort=requested_effort, tier=tier, input_bytes=len(prompt.encode("utf-8")))
+            receipt.update(status="manual", reason=error, tier=tier)
+            return receipt
     family, model, effort, error = D.select_route(cfg, host, task, tier, explicit_effort=requested_effort)
     if bootstrap:
         # Fixed T1 route, never classified by this module. No escalation ladder.

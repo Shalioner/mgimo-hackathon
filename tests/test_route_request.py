@@ -1,7 +1,10 @@
 """Offline request routing: gate + real parser, fake transport, no live inference."""
 import copy
+import builtins
 import hashlib
+import importlib
 import json
+import sys
 
 import pytest
 
@@ -11,6 +14,50 @@ from test_codex_subscription import subscription
 from test_opencode_free import configured
 from test_claude_subscription import claude_profile
 from test_routing_policy import api_policy
+
+
+@pytest.mark.parametrize("execute", [False, True])
+@pytest.mark.parametrize("platform", ["missing_pwd", "win32"])
+def test_opencode_unsupported_platform_returns_manual(monkeypatch, execute, platform):
+    """Import/platform simulation on the current OS, not native Windows testing."""
+    original_import = builtins.__import__
+    monkeypatch.delitem(sys.modules, "opencode_free", raising=False)
+    if platform == "win32":
+        monkeypatch.setattr(sys, "platform", "win32")
+    def no_pwd(name, *args, **kwargs):
+        if name == "pwd":
+            raise ModuleNotFoundError("No module named 'pwd'", name="pwd")
+        return original_import(name, *args, **kwargs)
+    monkeypatch.setattr(builtins, "__import__", no_pwd)
+    monkeypatch.setattr(D, "execute_route", lambda *a, **kw: pytest.fail("No inference allowed"))
+    monkeypatch.setattr(D.subprocess, "run", lambda *a, **kw: pytest.fail("No subprocess allowed"))
+    monkeypatch.setattr(R.P, "http_open", lambda *a, **kw: pytest.fail("No HTTP allowed"))
+    cfg = {"automatic_routing": {"bootstrap_host": "opencode"}, "tasks": {"classify": {"tier": "T1"}}}
+    result = R.run_request("test request", "", ["opencode"], execute=execute, load_config=lambda: cfg)
+    result = json.loads(json.dumps(result))
+    assert result["status"] == "manual"
+    assert result["classification"]["status"] == "unavailable"
+    receipt = result["classification"]["route"]
+    assert receipt["status"] == "manual" and "POSIX" in receipt["reason"]
+    assert receipt["started"] is False and receipt["wrapper_invocations"] == 0
+    assert result["result"]["status"] == "not_started" and result["start"] is None
+    # The adapter's own boundary must refuse too, even when called directly.
+    adapter = importlib.import_module("opencode_free")
+    with pytest.raises(ValueError, match="POSIX"):
+        adapter.system_boundary()
+
+
+def test_opencode_platform_check_does_not_hide_unrelated_import(monkeypatch):
+    import opencode_free as O
+    original_import = builtins.__import__
+    def broken_dependency(name, *args, **kwargs):
+        if name == "pwd":
+            raise ModuleNotFoundError("Unrelated dependency failure", name="unrelated")
+        return original_import(name, *args, **kwargs)
+    monkeypatch.setattr(sys, "platform", "darwin")
+    monkeypatch.setattr(builtins, "__import__", broken_dependency)
+    with pytest.raises(ModuleNotFoundError, match="Unrelated dependency failure"):
+        O.platform_error()
 
 
 def labels(tier="T2", effort="normal", capability="text", sure=True):

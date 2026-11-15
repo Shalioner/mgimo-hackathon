@@ -67,9 +67,9 @@ manual/needs_review/ошибка выполнения, подробность в
 
 | Host | Общий request interface | Исполнение | Автоматический trigger в host |
 |---|---|---|---|
-| Codex | `--host codex` | Проверенный ChatGPT profile | Отсутствует; wrapper вызывается для каждого запроса |
-| Claude Code | `--host claude-code` (alias claude) | Проверенный claude.ai profile | Отсутствует; wrapper вызывается для каждого запроса |
-| OpenCode | `--host opencode` | Существующий fresh exact-zero adapter | Отсутствует; wrapper вызывается для каждого запроса |
+| Codex | `--host codex` | Проверенный ChatGPT profile на POSIX; Windows manual | Отсутствует; wrapper вызывается для каждого запроса |
+| Claude Code | `--host claude-code` (alias claude) | Проверенный claude.ai profile на POSIX; Windows manual | Отсутствует; wrapper вызывается для каждого запроса |
+| OpenCode | `--host opencode` | Fresh exact-zero adapter на macOS/Linux с pwd; Windows manual | Отсутствует; wrapper вызывается для каждого запроса |
 | ZCode | `--host zcode` | Manual: isolation/auth/billing contract не доказан | Отсутствует |
 | Cursor | `--host cursor` | Manual: picker/allowlist не execution adapter | Отсутствует |
 | Gemini CLI | `--host gemini-cli` | Manual: нет проверенного adapter | Отсутствует |
@@ -91,6 +91,22 @@ gate и отсутствие recursive classification/paid fallback. Live infere
 `rtk proxy git diff --check` — без ошибок. Реальный CLI preflight без inference:
 status manual, причина — отсутствует включённый Codex subscription profile, transmitted/observed null.
 Product projects, doctor.py и глобальные настройки не изменены.
+
+### Исправление review F1 к 42d715b
+
+Безусловный POSIX import `pwd` в OpenCode вызывал traceback ещё до policy gate.
+Четыре regression-сценария (preflight/execute, отсутствие pwd/симуляция win32)
+сначала воспроизвели ModuleNotFoundError. Теперь импорт адаптера переносим:
+`platform_error` проверяет платформу и доступность pwd, а общий router возвращает
+classification unavailable/manual и result not_started до selector/transport.
+Сам `system_boundary` сохраняет тот же запрет исполнения неподдерживаемой платформы.
+Отсутствие чужого модуля не маскируется как отсутствие pwd; платёжные gates и отсутствие
+fallback не менялись. Проверки — import/platform simulation на macOS, **не native Windows**.
+Native Windows smoke остаётся непроверенным; Windows adapter этим исправлением не добавлен.
+Финальная проверка: `rtk proxy .venv/bin/python -m pytest -q tests/test_route_request.py
+tests/test_opencode_free.py tests/test_delegate.py tests/test_execution_outcomes.py` —
+126 passed, 11.23 s; `rtk proxy git diff --check` — без ошибок. Все transport checks
+offline/fake; subprocess/HTTP/inference в новых platform-regressions запрещены spies.
 
 Среда разработки: codex внутри Orca. Baseline: `afd90c2cd712a23eb56557c9add43fe9fadd3028`.
 
