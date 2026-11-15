@@ -420,3 +420,22 @@ def test_refresh_malformed_previous_stops_before_network(tmp_path, monkeypatch, 
     path.write_text(json.dumps(bad))
     monkeypatch.setattr(O, "refresh", lambda *a: pytest.fail("refresh after malformed snapshot"))
     assert O.main(["refresh", "--binary", "/fake", "--output", str(path)]) == 3
+
+
+@pytest.mark.parametrize("payload", [{"opencode": None}, {"opencode": []}, {"opencode": "bad"},
+                                     None, [], "bad"])
+def test_refresh_malformed_remote_preserves_snapshot(configured, monkeypatch, payload):
+    _, path, old = configured
+    before = path.read_bytes()
+    calls = []
+    def fake_metadata(command, **kwargs):
+        calls.append(command)
+        if command[-1] == "--version":
+            return subprocess.CompletedProcess(command, 0, O.VERSION, "")
+        assert command[0] == "/usr/bin/curl" and command[-1] == O.SOURCE
+        return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
+    monkeypatch.setattr(subprocess, "run", fake_metadata)
+    monkeypatch.setattr(subprocess, "Popen", lambda *a, **kw: pytest.fail("inference"))
+    assert O.main(["refresh", "--binary", old["binary"], "--output", str(path)]) == 3
+    assert path.read_bytes() == before
+    assert len(calls) == 2
