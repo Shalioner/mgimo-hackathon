@@ -6,9 +6,9 @@
 
 | Источник / запрос | Результат | Ограничение |
 |---|---|---|
-| `https://challenge.mgimo.ai/` (прямой HTTPS GET через urllib, timeout 20 s) | TLS handshake timed out. | Не удалось напрямую получить HTML сайтом shell-средства. Публичную страницу прочитал через поисковый индекс web search; это не заменяет просмотр кабинета. |
+| `https://challenge.mgimo.ai/` (прямой HTTPS GET через urllib, timeout 20 s; follow-up `web.open` прямого URL) | Shell GET: timeout TLS handshake; direct open страницы и `/rules` позднее вернул полный открытый HTML-текст. | Открытые сайт и регламент прочитаны напрямую; закрытое партнёрское задание из личного кабинета не открывалось. |
 | `https://challenge.mgimo.ai/` (web search query `site:challenge.mgimo.ai MGIMO AI Challenge 2026 номинации видеоролик вайбкод`) | Главная страница: «ИИ-проект», «Вайб-кодинг», «ИИ-ролик»; задания опубликованы в кабинете; «ИИ-ролик» — генеративное видео по брифу партнёра. | Поисковая выдача индексирует открытую страницу; содержимое кабинета недоступно. |
-| `https://challenge.mgimo.ai/rules` (из результата сайта; [регламент](https://challenge.mgimo.ai/rules)) | Регламент, редакция 22.10.2026: 3 номинации, условия; регистрация/приём до 22.11.2026, итоги 28.11.2026. | Не устанавливает публично перечень поданных работ. |
+| `https://challenge.mgimo.ai/rules` (direct open; [регламент](https://challenge.mgimo.ai/rules)) | Полный публичный текст прочитан напрямую: редакция 22.10.2026; три категории, сроки, канал подачи и правила. | Не устанавливает публично перечень поданных работ или содержание закрытого брифа. |
 | Web query `site:challenge.mgimo.ai github AI challenge` | Официальный сайт и внешняя публикация МИФИ, повторяющая названия номинаций. | Другие хакатоны отфильтрованы; текст партнёрского задания в выдаче закрыт. |
 
 ## Поисковые запросы
@@ -53,14 +53,30 @@
 
 ## GitHub API: просмотр найденных репозиториев
 
-После поиска использованы `GET /repos/{owner}/{repo}`, `/readme`, `/git/trees/{default_branch}?recursive=1`, `/languages` и `GET /contents/{path}`. Были проверены описания, README, деревья и выбранные текстовые документы у кандидатов; точные URL файлов и их вывод приведены в `каталог.md`. Скрипты команд репозиториев не запускались.
+После поиска использованы `GET /repos/{owner}/{repo}`, `/readme`, `/git/trees/{default_branch}?recursive=1`, `/languages` и `GET /contents/{path}`. На исправительном проходе новые search-запросы не выполнялись: директ-reads GitHub API/raw URL и чтение официальных страниц. Были проверены описания, README, деревья и выбранные текстовые исходники; функции/наблюдения указаны в `каталог.md`. Скрипты и приложения репозиториев не запускались.
 
 Детальные repo API-данные собраны для кандидатов `MrYar07/dekanat-24-7`, `eth0-png/digital-dean`, `jeakmane/dekanat-future`, `Nek1yZakhar/dekanat`, `zabava204/dgtu-seychas`, `marksarandi2048-coder/digital-dekanat`, `Sh0wlk/site_for_studs`, `cleverratx/student-personal-account`, `hfuvoo-art/strateg-agent`, `hfuvoo-art/chellenge`, `alexprotop302-tech/product-strategist-agent`, `thai1311-fuk/product-strategist-agent`. Отдельно проверены открытые поля `GET /users/{login}` у 10 релевантных владельцев: `MrYar07`, `eth0-png`, `jeakmane`, `Nek1yZakhar`, `zabava204`, `marksarandi2048-coder`, `Sh0wlk`, `cleverratx`, `hfuvoo-art`, `alexprotop302-tech`; у большинства bio отсутствует. Профили дают только публичные имя/URL и число открытых репозиториев, не доказывают регистрацию/подачу. По метаданным проверенных репозиториев все кандидаты указывали `fork=false`; варианты не дедуплицировались только из-за сходства темы «цифровой деканат», поскольку это независимые репозитории разных владельцев.
 
+### Прямое чтение файлов реализации (исправительный проход, поисков не было)
+
+Использован только HTTP GET к уже найденным raw-файлам (`raw.githubusercontent.com`), без клонирования; ответы по указанным ниже файлам — HTTP 200. Для 8 проектных репозиториев прочитано по 1–2 ключевых файла реализации; в командной папке hfuvoo дополнительно прочитаны два брифа и черновик видео, чтобы установить названия кейсов и отличить сценарий демо агента от конкурсного ролика:
+
+| Репозиторий | Прочитанные файлы | Что непосредственно видно |
+|---|---|---|
+| MrYar07/dekanat-24-7 | `src/lib/auth/dal.ts`; `src/app/(student)/requests/actions.ts` | `getCurrentUser`/`requireRole`; `orderAction` проверяет форму и вызывает `orderDocument`. |
+| eth0-png/digital-dean | `src/lib/auth.ts`; `src/app/(student)/documents/actions.ts` | `getCurrentUser`/роли; `createApplication` валидирует и пишет заявку+event транзакцией, `sendMessage` обрабатывает переписку. |
+| zabava204/dgtu-seychas | `src/server.js`; `src/assistant.js` | `createApp` настраивает middleware/security; `intents(question,data)` маршрутизирует по локальным словам и данным. |
+| marksarandi2048-coder/digital-dekanat | `server.js`; `src/routes/assistant.js` | API middleware/маршруты; GET/POST ассистента проверяют доступ/ввод, вызывают `A.ask`, хранят историю в сессии. |
+| jeakmane/dekanat-future | `server.js`; `assistant.js` | auth/rate-limit; `answer()` ветвится по словам и SQLite-данным, может создать заявку на справку. |
+| Nek1yZakhar/dekanat | `app/api/ai/chat/route.ts`; `app/proxy.ts` | `POST` ищет совпадения с фиктивным локальным массивом правил, опционально вызывает LLM endpoint, иначе даёт fallback; session/role guards. |
+| cleverratx/student-personal-account | `backend/src/Dekanat.Api/Program.cs` | error/OpenAPI/health/DB setup, health endpoint, migrations; пользовательских маршрутов в прочитанном entrypoint нет, UI отсутствует в дереве. |
+| Sh0wlk/site_for_studs | `back/backk.py`; `front/frontend.html` | FastAPI register/login/me и bearer token; `confirm2FA` проверяет только длину кода и записывает токен в localStorage. |
+| hfuvoo-art/chellenge | `skills/ai-video-pipeline/SKILL.md`; `skills/remotion-montage/SKILL.md`; `01-ai-project/submission/scenarij-video-chernovik.md`; также `briefs/02-vaib-koding-cifrovoy-dekanat.md`, `briefs/03-ii-rolik-tonka.md` | Инструкции pipeline/монтажа; копии автором приписаны кабинету. Сценарий агентского демо ссылается на локальные OBS-файлы и прямо говорит, что кадры не просматривались и монтаж не завершён. |
+
 ### Ошибки и лимиты API
 
-- Прямой TLS GET официального сайта истёк по timeout; заменён просмотром доступной поисковой выдачи.
-- В `GET /repos/Sh0wlk/site_for_studs/contents/front/Text Document.txt` пробел в пути не был URL-кодирован, API-клиент вернул `InvalidURL`. Содержание этого файла оставлено непроверенным; запрос не повторялся.
+- Прямой TLS GET официального сайта истёк по timeout; затем обе открытые официальные страницы были успешно загружены через direct URL open в read-only web reader. Поисковых запросов при этом не добавлялось.
+- Первый API-вызов к `front/Text Document.txt` у Sh0wlk завершился `InvalidURL` из-за пробела. Исправительный проход успешно прочитал `back/backk.py` и `front/frontend.html` через URL-encoded raw URLs; сам `Text Document.txt` остался вне проверки и не нужен для описания наблюдённой реализации.
 - Прочие выбранные API-запросы вернули материалы без ошибок и без сообщения о rate limit. Отдельный профильный API лимит не выводился; search rate-limit headers не сохранялись.
 - В API могли не индексироваться закрытые/новые репозитории; поиск не доказывает отсутствия работы. Публичные видео вне GitHub не удалось идентифицировать и верифицировать в рамках ограниченного поиска.
 
