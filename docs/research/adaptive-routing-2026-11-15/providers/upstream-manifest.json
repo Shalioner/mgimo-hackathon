@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-15",
+  "repository": "https://github.com/musistudio/claude-code-router",
+  "commit": "057abaa1f95519ab8faf999e1ccef2b80ccdeb9e",
+  "license": "MIT",
+  "clone": "/tmp/strateg-routing-upstream/claude-code-router",
+  "method": "git clone --depth 1 --no-checkout; core.hooksPath=/dev/null; git show to regular files; no upstream execution",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "20e078455c0d684ded1ed410cbc48c59b9b1da14a3a72ba9ec6301db1fdc9bb4",
+      "bytes": 1067
+    },
+    {
+      "path": "docs/src/content/docs/en/configuration/routing.md",
+      "sha256": "c2dad56db380448cbe3024051f697434eabbb8cec3c4ea5ca96e4fbeacdacce2",
+      "bytes": 30339
+    },
+    {
+      "path": "packages/core/src/gateway/core-runtime/router-plugin-contract.ts",
+      "sha256": "7e336bd44d3bc136bfdbdda284ea9a81084948f6c2253e144c4fa199279f1540",
+      "bytes": 4267
+    },
+    {
+      "path": "packages/core/src/agents/local-providers/codex.ts",
+      "sha256": "b28cd85700039870d15663b662a2a75907b95dbb2ccc8e2a4821d89075c7cbe6",
+      "bytes": 29368
+    },
+    {
+      "path": "packages/core/src/agents/local-providers/shared.ts",
+      "sha256": "f4e474edb6aa2bced2566a37e94a544c5950f45c04196fa46cde4329791ed643",
+      "bytes": 10113
+    }
+  ]
+}

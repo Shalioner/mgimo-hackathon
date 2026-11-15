@@ -1,0 +1,65 @@
+{
+  "input_sha256": "933ce0582534f53d5f06934d875b080925ec10bf09c39ff96f66c0b9abde9f40",
+  "audio_duration_seconds": 1958.835375,
+  "asr_input_range": [
+    0,
+    1958.835375
+  ],
+  "input_processed_percent": 100,
+  "segment_count": 881,
+  "first_segment_start": 0.0,
+  "last_segment_end": 1945.0,
+  "asr_segment_union_seconds": 1926.0,
+  "asr_segment_union_percent": 98.32372973149926,
+  "untranscribed_intervals": [
+    {
+      "start": 68.0,
+      "end": 75.0,
+      "seconds": 7.0
+    },
+    {
+      "start": 205.0,
+      "end": 207.0,
+      "seconds": 2.0
+    },
+    {
+      "start": 303.0,
+      "end": 304.0,
+      "seconds": 1.0
+    },
+    {
+      "start": 322.0,
+      "end": 324.0,
+      "seconds": 2.0
+    },
+    {
+      "start": 330.0,
+      "end": 331.0,
+      "seconds": 1.0
+    },
+    {
+      "start": 524.0,
+      "end": 526.0,
+      "seconds": 2.0
+    },
+    {
+      "start": 619.0,
+      "end": 621.0,
+      "seconds": 2.0
+    },
+    {
+      "start": 1435.0,
+      "end": 1437.0,
+      "seconds": 2.0
+    },
+    {
+      "start": 1945.0,
+      "end": 1958.835375,
+      "seconds": 13.835375000000113
+    }
+  ],
+  "untranscribed_total_seconds": 32.83537500000011,
+  "vad_filter": false,
+  "asr_completion_marker": "DONE 623.7621529102325",
+  "low_logprob_segments": []
+}
