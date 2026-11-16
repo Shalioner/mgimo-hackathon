@@ -46,3 +46,72 @@ def classify(request, context, *, cfg, load_config, timeout, question_scope, hos
     return {**report, "status": "accepted" if labels else "needs_review", "labels": labels,
             "response": response, "threshold": .85,
             "reason": None if labels else "Uncertain subscription classifier; no inferred default"}
+
+
+def infer_questions(state, questions, *, cfg, load_config, execute=False, timeout=240):
+    """Generic label-with-evidence fallback. Scores are policy, not probabilities.
+
+    In particular, an unevidenced `no` can never delete exported tool context.
+    """
+    import delegate as D
+    options = cfg.get('automatic_routing') or {}
+    host = options.get('bootstrap_host', 'codex')
+    native = options.get('subscription_classifier') or {}
+    report = {'status': 'unavailable', 'route': None,
+              'method': 'labels_with_quotes_not_calibrated_probabilities'}
+    if load_config() != cfg:
+        return {**report, 'reason': 'Classifier configuration changed'}
+    if (cfg.get('execution_policy') or {}).get('mode') != 'subscription_only':
+        return {**report, 'reason': 'Generic subscription classifier requires subscription_only policy'}
+    prompt = C.EMULATION_PROMPT.replace('{questions}', json.dumps(questions, ensure_ascii=False)).replace('{state}', state)
+    prompt += '\nFor this safety-sensitive task, yes AND no require a supporting quote from STATE. Do not infer no from missing evidence.'
+    if host in ('codex', 'orca') and native.get('enabled') is True:
+        selection = N.plan('T1', cfg, effort='low')
+        if selection['status'] != 'selected':
+            return {**report, 'reason': selection.get('reason', 'T1 classifier not approved')}
+        route = {'status': 'executable', 'result': 'not_started', 'started': False,
+                 'transport': 'native-subscription', 'requested': {'host': host, 'model': selection['model'], 'effort': 'low'}}
+        if not execute:
+            return {**report, 'status': 'pending', 'route': route}
+        if load_config() != cfg:
+            return {**report, 'route': route, 'reason': 'Classifier configuration changed'}
+        receipt, text = N.execute(native.get('codex_binary'), prompt, selection,
+                                 load_config=load_config, timeout=timeout, require_subscription=True)
+        route.update(result=receipt['status'], started=receipt.get('transmitted_model') is not None,
+                     native_receipt=receipt)
+    else:
+        route = R.route_plan(cfg, host, 'T1', prompt, bootstrap=True)
+        if route['status'] != 'executable' or not execute:
+            return {**report, 'route': route, 'status': 'pending' if route['status'] == 'executable' else 'unavailable'}
+        if load_config() != cfg:
+            return {**report, 'route': route, 'reason': 'Classifier configuration changed'}
+        route, text, _ = D.execute_route(cfg, host, route['requested']['model'], prompt,
+                                         route['requested']['effort'], timeout, route)
+    route['method'] = report['method']
+    report.update(status='needs_review', route=route)
+    if route.get('result') != 'succeeded' or load_config() != cfg:
+        return {**report, 'reason': 'Subscription classifier unavailable or configuration changed'}
+    raw = C.parse_answers(text or '').get('answers', {})
+    if set(raw) != set(questions):
+        return {**report, 'reason': 'Missing or extra classifier labels'}
+    answers = {}
+    for key, question in questions.items():
+        label = raw[key]
+        if (not isinstance(label, dict) or 'type' in label
+                or not isinstance(label.get('quote'), str) or not C.quote_ok(label['quote'], state)):
+            return {**report, 'reason': 'Classifier label lacks quoted evidence'}
+        if question['type'] == 'noul':
+            if label.get('verdict') not in ('yes', 'no'):
+                return {**report, 'reason': 'Uncertain classifier label'}
+            answers[key] = {'type': 'noul', 'noul': .95 if label['verdict'] == 'yes' else .05,
+                            'quote_ok': True}
+        else:
+            keys = list(question['criteria'])
+            choice = label.get('choice')
+            if not isinstance(choice, str) or choice not in keys or label.get('sure') is not True:
+                return {**report, 'reason': 'Uncertain classifier label'}
+            score = .9 if len(keys) > 1 else 1.
+            answers[key] = {'type': 'choice', 'choice': choice, 'confidence': score, 'quote_ok': True,
+                            'probabilities': {k: score if k == choice else (1-score)/(len(keys)-1) for k in keys}}
+    return {**report, 'status': 'succeeded',
+            'response': {'answers': answers, 'method': report['method']}}

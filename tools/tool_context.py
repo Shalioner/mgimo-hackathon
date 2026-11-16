@@ -111,8 +111,14 @@ def compact(messages, goal, *, execute=False, preserve_recent=6, min_bytes=16000
         receipt = copy.deepcopy(answer.get('route') or {})
         if answer.get('response'):
             receipt['decision_response'] = copy.deepcopy(answer['response'])
+        attempts = answer.get('attempts')
+        if attempts:
+            receipt['classifier_attempts'] = copy.deepcopy(attempts)
+            report['stats']['classifier_requests'] += sum(
+                int(bool((attempt.get('route') or {}).get('started'))) for attempt in attempts)
+        else:
+            report['stats']['classifier_requests'] += int(bool(receipt.get('started')))
         report['receipts'].append(receipt)
-        report['stats']['classifier_requests'] += int(bool(receipt.get('started')))
         if not execute:
             report['status'] = 'pending' if answer.get('status') == 'pending' else 'unavailable'
             return report

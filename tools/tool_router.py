@@ -15,6 +15,7 @@ from pathlib import Path
 import re
 import secrets
 import threading
+import time
 
 import decide as C
 import ledger as L
@@ -57,7 +58,8 @@ def _valid_response(data, questions):
 def infer_questions(state, questions, *, execute=False, load_config=L.load_routing, timeout=240):
     """Shared choice/noul boundary for local d1 and explicit System One providers.
 
-    Preflight is pure. Never emulate, retry, change provider or truncate input.
+    Preflight is pure. Only explicit cascade permits ordered classifier failover.
+    Never retry a stage, execute a tool or truncate input.
     Caller must interpret valid probabilities for its own action-specific policy.
     """
     import local_decision as validation
@@ -74,6 +76,9 @@ def infer_questions(state, questions, *, execute=False, load_config=L.load_routi
     if not isinstance(options, dict):
         return {**unavailable, 'reason': 'Invalid automatic_routing'}
     classifier = options.get('classifier')
+    if classifier == 'cascade':
+        return _cascade_questions(state, questions, cfg, execute=execute,
+                                  load_config=load_config, timeout=timeout)
     provider_name = options.get('decision_provider')
     if classifier == 'local-d1' and not provider_name:
         import decision_runtime as local
@@ -109,6 +114,71 @@ def infer_questions(state, questions, *, execute=False, load_config=L.load_routi
         return {**report, 'status': 'needs_review'}
     route['result'] = 'succeeded'
     return {**report, 'status': 'succeeded', 'response': data}
+
+
+def _confident(data, questions):
+    """Action threshold and compaction's conservative yes/no retention boundary."""
+    if not _valid_response(data, questions):
+        return False
+    for key, question in questions.items():
+        answer = data['answers'][key]
+        if question['type'] == 'noul':
+            if .1 < answer['noul'] < .9:
+                return False
+        else:
+            scores = sorted(answer['probabilities'].values(), reverse=True)
+            if answer['confidence'] < MIN_CONFIDENCE or (len(scores) > 1 and scores[0] - scores[1] < MIN_MARGIN):
+                return False
+    return True
+
+
+def _cascade_questions(state, questions, cfg, *, execute, load_config, timeout):
+    """One bounded attempt per authorized classifier; no tool execution."""
+    attempts = []
+    deadline = time.monotonic() + timeout
+    result = {'status': 'unavailable', 'route': None}
+    for stage, name, limit in [('provider', 'api', 12), ('local-d1', 'local-decision', 30),
+                                ('subscription', 'subscription', timeout)]:
+        def stage_config():
+            fresh = load_config()
+            if fresh != cfg:
+                raise ValueError('Classifier cascade configuration changed')
+            staged = copy.deepcopy(fresh)
+            staged['automatic_routing']['classifier'] = stage
+            if stage != 'provider':
+                staged['automatic_routing'].pop('decision_provider', None)
+                staged.setdefault('execution_policy', {})['mode'] = 'subscription_only'
+            return staged
+        remaining = int(deadline - time.monotonic())
+        if remaining < 1:
+            return {'status': 'unavailable', 'route': None, 'attempts': attempts,
+                    'reason': 'Classifier cascade deadline exceeded'}
+        try:
+            staged = stage_config()
+            if stage == 'subscription':
+                import subscription_classifier as S
+                result = S.infer_questions(state, questions, cfg=staged, load_config=stage_config,
+                                           execute=execute, timeout=min(remaining, limit))
+            else:
+                result = infer_questions(state, questions, execute=execute, load_config=stage_config,
+                                         timeout=min(remaining, limit))
+        except (ValueError, OSError, TypeError, KeyError):
+            result = {'status': 'unavailable', 'route': None, 'reason': 'Classifier adapter failed'}
+        # Revocation while waiting invalidates even an otherwise valid answer.
+        if load_config() != cfg:
+            return {'status': 'unavailable', 'route': None, 'attempts': attempts,
+                    'reason': 'Classifier cascade configuration changed'}
+        if time.monotonic() >= deadline:
+            return {'status': 'unavailable', 'route': None, 'attempts': attempts,
+                    'reason': 'Classifier cascade deadline exceeded'}
+        if execute and result.get('status') == 'succeeded' and not _confident(result.get('response'), questions):
+            result = {**result, 'status': 'needs_review', 'reason': 'Uncertain classifier answers'}
+        attempts.append({'classifier': name, 'status': result.get('status'),
+                         'reason': result.get('reason'), 'route': result.get('route')})
+        if not execute or result.get('status') == 'succeeded':
+            return {**result, 'attempts': attempts, 'selected_classifier': name if execute else None}
+    return {**result, 'attempts': attempts, 'selected_classifier': None,
+            'reason': 'All classifiers unavailable or uncertain; no default action'}
 
 
 def _candidates(candidates):
