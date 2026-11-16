@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-11-16T09:45:15.001767+00:00",
+  "synthetic_only": true,
+  "network": "denied",
+  "memory_before": {
+    "swap_used_mib": 1893.94,
+    "pressure_level": 2,
+    "swap_raw": "vm.swapusage: total = 3072.00M  used = 1893.94M  free = 1178.06M  (encrypted)\nkern.memorystatus_vm_pressure_level: 2",
+    "rss_kib": null
+  },
+  "wall_seconds": 10.915,
+  "result": {
+    "route": {
+      "status": "executable",
+      "reason": "Critical system memory pressure",
+      "started": true,
+      "wrapper_invocations": 1,
+      "result": "blocked",
+      "fallback": false,
+      "requested": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "transmitted": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "observed": null,
+      "network": "denied",
+      "transport": "unix-service",
+      "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+      "input_bytes": 74,
+      "reuse": false,
+      "timeout_seconds": 90,
+      "request_id": "87bbbbec22e84668b38b168db25d589b"
+    },
+    "runtime": {
+      "memory": {
+        "pressure_level": 4,
+        "swap_used_mib": 3130.94,
+        "rss_kib": 338752
+      },
+      "timing": {
+        "queue_wait_seconds": 0.000278,
+        "worker_setup_seconds": null,
+        "worker_roundtrip_seconds": null,
+        "worker_inference_seconds": null,
+        "server_total_seconds": 10.905412,
+        "cold_start": true,
+        "completed": true,
+        "client_roundtrip_seconds": 10.909989
+      },
+      "phase": "setup"
+    }
+  },
+  "memory_after": {
+    "swap_used_mib": 3284.12,
+    "pressure_level": 1,
+    "swap_raw": "vm.swapusage: total = 4096.00M  used = 3284.12M  free = 811.88M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+    "rss_kib": null
+  }
+}

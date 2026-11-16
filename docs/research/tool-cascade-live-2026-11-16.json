@@ -1,0 +1,651 @@
+{
+  "timestamp": "2026-11-16T09:48:46.497440+00:00",
+  "synthetic_request": true,
+  "project": "projects/example",
+  "config_persisted": false,
+  "cases": [
+    {
+      "case": "normal",
+      "wall_seconds": 11.546,
+      "result": {
+        "selection": {
+          "status": "selected",
+          "route": {
+            "status": "executable",
+            "result": "succeeded",
+            "started": true,
+            "transport": "native-subscription",
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e3c1-f97b-7b20-8748-99cff36b2289",
+                    "turnId": "01a1e3c1-fd08-7831-b136-0529ceb2725e",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 10988,
+                        "inputTokens": 10948,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 40,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 10988,
+                        "inputTokens": 10948,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 40,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 5.682,
+              "turn_id": "01a1e3c1-fd08-7831-b136-0529ceb2725e",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+              "auth_check": "chatgpt_confirmed_by_app_server"
+            },
+            "method": "labels_with_quotes_not_calibrated_probabilities"
+          },
+          "method": "labels_with_quotes_not_calibrated_probabilities",
+          "response": {
+            "answers": {
+              "action": {
+                "type": "choice",
+                "choice": "stats",
+                "confidence": 0.9,
+                "quote_ok": true,
+                "probabilities": {
+                  "brief": 0.033333333333333326,
+                  "stats": 0.9,
+                  "validate": 0.033333333333333326,
+                  "none": 0.033333333333333326
+                }
+              }
+            },
+            "method": "labels_with_quotes_not_calibrated_probabilities"
+          },
+          "attempts": [
+            {
+              "classifier": "api",
+              "status": "needs_review",
+              "reason": null,
+              "route": {
+                "status": "executable",
+                "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+                "max_attempts": 1,
+                "max_attempts_scope": "wrapper_invocations",
+                "wrapper_invocations": 1,
+                "internal_transport_retries": "disabled",
+                "started": true,
+                "process_exit_code": null,
+                "requested": {
+                  "host": "decision",
+                  "provider": "openrouter",
+                  "model": "perplexity/pplx-decider-v1.3:free",
+                  "effort": null
+                },
+                "transmitted": {
+                  "model": "perplexity/pplx-decider-v1.3:free",
+                  "effort": null,
+                  "provider": "Perplexity"
+                },
+                "observed": {
+                  "provider": null,
+                  "model": null,
+                  "effort": null
+                },
+                "billing": {
+                  "mode": "api_opt_in",
+                  "auth": "api_key",
+                  "cap_verification": "openrouter_key_api_zero_limit",
+                  "budget_usd": 0
+                },
+                "input_bytes": 1310,
+                "endpoint": "https://openrouter.ai/api/alpha/decisions",
+                "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2",
+                "context": {
+                  "input_byte_upper_bound": 1310,
+                  "capacity": 20928,
+                  "model_limit": 262144,
+                  "plan_limit": 32000,
+                  "user_limit": 24000,
+                  "output_reserve": 1024,
+                  "system_reserve": 2048
+                },
+                "result": "invalid_result"
+              }
+            },
+            {
+              "classifier": "local-decision",
+              "status": "needs_review",
+              "reason": "Uncertain classifier answers",
+              "route": {
+                "status": "executable",
+                "reason": "Private service socket present; worker readiness checked at request",
+                "started": true,
+                "wrapper_invocations": 1,
+                "result": "succeeded",
+                "fallback": false,
+                "requested": {
+                  "host": "local",
+                  "provider": "local-d1",
+                  "model": "LiquidAI/d1-2B-MLX-8bit",
+                  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                  "effort": null
+                },
+                "transmitted": {
+                  "host": "local",
+                  "provider": "local-d1",
+                  "model": "LiquidAI/d1-2B-MLX-8bit",
+                  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                  "effort": null
+                },
+                "observed": {
+                  "model": "LiquidAI/d1-2B-MLX-8bit",
+                  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+                },
+                "network": "denied",
+                "transport": "unix-service",
+                "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+                "input_bytes": 242,
+                "reuse": false,
+                "timeout_seconds": 30,
+                "request_id": "13b7a23f74c34ffe8477650363bdf30e",
+                "inference_calls": 1,
+                "reuse_result": "bypass",
+                "worker_pid": 8952,
+                "generation": 5
+              }
+            },
+            {
+              "classifier": "subscription",
+              "status": "succeeded",
+              "reason": null,
+              "route": {
+                "status": "executable",
+                "result": "succeeded",
+                "started": true,
+                "transport": "native-subscription",
+                "requested": {
+                  "host": "codex",
+                  "model": "gpt-6-luna",
+                  "effort": "low"
+                },
+                "native_receipt": {
+                  "status": "succeeded",
+                  "host": "codex",
+                  "tier": "T1",
+                  "requested_model": "gpt-6-luna",
+                  "requested_effort": "low",
+                  "transmitted_model": "gpt-6-luna",
+                  "transmitted_effort": "low",
+                  "observed_model": null,
+                  "usage_events": [
+                    {
+                      "method": "thread/tokenUsage/updated",
+                      "params": {
+                        "threadId": "01a1e3c1-f97b-7b20-8748-99cff36b2289",
+                        "turnId": "01a1e3c1-fd08-7831-b136-0529ceb2725e",
+                        "tokenUsage": {
+                          "total": {
+                            "totalTokens": 10988,
+                            "inputTokens": 10948,
+                            "cachedInputTokens": 2048,
+                            "cacheWriteInputTokens": 0,
+                            "outputTokens": 40,
+                            "reasoningOutputTokens": 0
+                          },
+                          "last": {
+                            "totalTokens": 10988,
+                            "inputTokens": 10948,
+                            "cachedInputTokens": 2048,
+                            "cacheWriteInputTokens": 0,
+                            "outputTokens": 40,
+                            "reasoningOutputTokens": 0
+                          },
+                          "modelContextWindow": 258400
+                        }
+                      }
+                    }
+                  ],
+                  "elapsed_seconds": 5.682,
+                  "turn_id": "01a1e3c1-fd08-7831-b136-0529ceb2725e",
+                  "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+                  "auth_check": "chatgpt_confirmed_by_app_server"
+                },
+                "method": "labels_with_quotes_not_calibrated_probabilities"
+              }
+            }
+          ],
+          "selected_classifier": "subscription",
+          "selected": "stats",
+          "candidates_sha256": "3516a4c364d3c3876a323cb9555488bb1d31ba60a5368f38daa5af89f855d19a",
+          "confidence": 0.9,
+          "margin": 0.8666666666666667
+        },
+        "execution": {
+          "status": "succeeded",
+          "selected": "stats",
+          "result": {
+            "exit_code": 0,
+            "stdout": "# Сводка реестра\n\n- Источники: 5 (активных 5)\n- Утверждения: 6 (активных 6)\n- Гипотезы и допущения: 3 (активных 3)\n- Боли клиентов: 1 (активных 1)\n- Варианты: 4 (активных 4)\n- Решения: 1 (активных 1)\n- Коммуникационные обещания: 1 (активных 1)\n- Эксперименты: 1 (активных 1)\n- Новые сведения: 1 (активных 1)\n\nУтверждения по типу: {'fact': 4, 'interpretation': 2}\nУтверждения по уверенности: {'high': 2, 'medium': 3, 'low': 1}\nПротиворечий (пар): 1 — CLM-004↔CLM-006\nГипотез: 2, допущений: 1, способных изменить решение: 2\n",
+            "stderr": ""
+          }
+        }
+      }
+    },
+    {
+      "case": "api_unavailable",
+      "wall_seconds": 13.751,
+      "result": {
+        "selection": {
+          "status": "selected",
+          "route": {
+            "status": "executable",
+            "result": "succeeded",
+            "started": true,
+            "transport": "native-subscription",
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e3c2-2be5-7ba0-9a8e-1d8a07a89da6",
+                    "turnId": "01a1e3c2-2cb1-7080-a2e5-334a7b5d8402",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 10988,
+                        "inputTokens": 10948,
+                        "cachedInputTokens": 0,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 40,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 10988,
+                        "inputTokens": 10948,
+                        "cachedInputTokens": 0,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 40,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 6.545,
+              "turn_id": "01a1e3c2-2cb1-7080-a2e5-334a7b5d8402",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+              "auth_check": "chatgpt_confirmed_by_app_server"
+            },
+            "method": "labels_with_quotes_not_calibrated_probabilities"
+          },
+          "method": "labels_with_quotes_not_calibrated_probabilities",
+          "response": {
+            "answers": {
+              "action": {
+                "type": "choice",
+                "choice": "stats",
+                "confidence": 0.9,
+                "quote_ok": true,
+                "probabilities": {
+                  "brief": 0.033333333333333326,
+                  "stats": 0.9,
+                  "validate": 0.033333333333333326,
+                  "none": 0.033333333333333326
+                }
+              }
+            },
+            "method": "labels_with_quotes_not_calibrated_probabilities"
+          },
+          "attempts": [
+            {
+              "classifier": "api",
+              "status": "unavailable",
+              "reason": "Explicit provider unavailable; no fallback",
+              "route": null
+            },
+            {
+              "classifier": "local-decision",
+              "status": "needs_review",
+              "reason": "Uncertain classifier answers",
+              "route": {
+                "status": "executable",
+                "reason": "Private service socket present; worker readiness checked at request",
+                "started": true,
+                "wrapper_invocations": 1,
+                "result": "succeeded",
+                "fallback": false,
+                "requested": {
+                  "host": "local",
+                  "provider": "local-d1",
+                  "model": "LiquidAI/d1-2B-MLX-8bit",
+                  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                  "effort": null
+                },
+                "transmitted": {
+                  "host": "local",
+                  "provider": "local-d1",
+                  "model": "LiquidAI/d1-2B-MLX-8bit",
+                  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                  "effort": null
+                },
+                "observed": {
+                  "model": "LiquidAI/d1-2B-MLX-8bit",
+                  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+                },
+                "network": "denied",
+                "transport": "unix-service",
+                "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+                "input_bytes": 242,
+                "reuse": false,
+                "timeout_seconds": 30,
+                "request_id": "c5a4603b4ba446daa541638fc80d778b",
+                "inference_calls": 1,
+                "reuse_result": "bypass",
+                "worker_pid": 8952,
+                "generation": 5
+              }
+            },
+            {
+              "classifier": "subscription",
+              "status": "succeeded",
+              "reason": null,
+              "route": {
+                "status": "executable",
+                "result": "succeeded",
+                "started": true,
+                "transport": "native-subscription",
+                "requested": {
+                  "host": "codex",
+                  "model": "gpt-6-luna",
+                  "effort": "low"
+                },
+                "native_receipt": {
+                  "status": "succeeded",
+                  "host": "codex",
+                  "tier": "T1",
+                  "requested_model": "gpt-6-luna",
+                  "requested_effort": "low",
+                  "transmitted_model": "gpt-6-luna",
+                  "transmitted_effort": "low",
+                  "observed_model": null,
+                  "usage_events": [
+                    {
+                      "method": "thread/tokenUsage/updated",
+                      "params": {
+                        "threadId": "01a1e3c2-2be5-7ba0-9a8e-1d8a07a89da6",
+                        "turnId": "01a1e3c2-2cb1-7080-a2e5-334a7b5d8402",
+                        "tokenUsage": {
+                          "total": {
+                            "totalTokens": 10988,
+                            "inputTokens": 10948,
+                            "cachedInputTokens": 0,
+                            "cacheWriteInputTokens": 0,
+                            "outputTokens": 40,
+                            "reasoningOutputTokens": 0
+                          },
+                          "last": {
+                            "totalTokens": 10988,
+                            "inputTokens": 10948,
+                            "cachedInputTokens": 0,
+                            "cacheWriteInputTokens": 0,
+                            "outputTokens": 40,
+                            "reasoningOutputTokens": 0
+                          },
+                          "modelContextWindow": 258400
+                        }
+                      }
+                    }
+                  ],
+                  "elapsed_seconds": 6.545,
+                  "turn_id": "01a1e3c2-2cb1-7080-a2e5-334a7b5d8402",
+                  "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+                  "auth_check": "chatgpt_confirmed_by_app_server"
+                },
+                "method": "labels_with_quotes_not_calibrated_probabilities"
+              }
+            }
+          ],
+          "selected_classifier": "subscription",
+          "selected": "stats",
+          "candidates_sha256": "3516a4c364d3c3876a323cb9555488bb1d31ba60a5368f38daa5af89f855d19a",
+          "confidence": 0.9,
+          "margin": 0.8666666666666667
+        },
+        "execution": {
+          "status": "succeeded",
+          "selected": "stats",
+          "result": {
+            "exit_code": 0,
+            "stdout": "# Сводка реестра\n\n- Источники: 5 (активных 5)\n- Утверждения: 6 (активных 6)\n- Гипотезы и допущения: 3 (активных 3)\n- Боли клиентов: 1 (активных 1)\n- Варианты: 4 (активных 4)\n- Решения: 1 (активных 1)\n- Коммуникационные обещания: 1 (активных 1)\n- Эксперименты: 1 (активных 1)\n- Новые сведения: 1 (активных 1)\n\nУтверждения по типу: {'fact': 4, 'interpretation': 2}\nУтверждения по уверенности: {'high': 2, 'medium': 3, 'low': 1}\nПротиворечий (пар): 1 — CLM-004↔CLM-006\nГипотез: 2, допущений: 1, способных изменить решение: 2\n",
+            "stderr": ""
+          }
+        }
+      }
+    },
+    {
+      "case": "api_and_local_unavailable",
+      "wall_seconds": 5.089,
+      "result": {
+        "selection": {
+          "status": "selected",
+          "route": {
+            "status": "executable",
+            "result": "succeeded",
+            "started": true,
+            "transport": "native-subscription",
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e3c2-45da-7e32-9575-3e7ce883c81f",
+                    "turnId": "01a1e3c2-466e-74a3-823e-08ca57f27b5d",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 10986,
+                        "inputTokens": 10946,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 40,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 10986,
+                        "inputTokens": 10946,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 40,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 4.78,
+              "turn_id": "01a1e3c2-466e-74a3-823e-08ca57f27b5d",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+              "auth_check": "chatgpt_confirmed_by_app_server"
+            },
+            "method": "labels_with_quotes_not_calibrated_probabilities"
+          },
+          "method": "labels_with_quotes_not_calibrated_probabilities",
+          "response": {
+            "answers": {
+              "action": {
+                "type": "choice",
+                "choice": "stats",
+                "confidence": 0.9,
+                "quote_ok": true,
+                "probabilities": {
+                  "brief": 0.033333333333333326,
+                  "stats": 0.9,
+                  "validate": 0.033333333333333326,
+                  "none": 0.033333333333333326
+                }
+              }
+            },
+            "method": "labels_with_quotes_not_calibrated_probabilities"
+          },
+          "attempts": [
+            {
+              "classifier": "api",
+              "status": "unavailable",
+              "reason": "Explicit provider unavailable; no fallback",
+              "route": null
+            },
+            {
+              "classifier": "local-decision",
+              "status": "unavailable",
+              "reason": null,
+              "route": {
+                "status": "manual",
+                "reason": "[Errno 2] No such file or directory: '/tmp/strategist-intentionally-missing/service.sock'",
+                "started": false,
+                "wrapper_invocations": 0,
+                "result": "not_started",
+                "fallback": false,
+                "requested": {
+                  "host": "local",
+                  "provider": "local-d1",
+                  "model": "LiquidAI/d1-2B-MLX-8bit",
+                  "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                  "effort": null
+                },
+                "transmitted": null,
+                "observed": null,
+                "network": "denied"
+              }
+            },
+            {
+              "classifier": "subscription",
+              "status": "succeeded",
+              "reason": null,
+              "route": {
+                "status": "executable",
+                "result": "succeeded",
+                "started": true,
+                "transport": "native-subscription",
+                "requested": {
+                  "host": "codex",
+                  "model": "gpt-6-luna",
+                  "effort": "low"
+                },
+                "native_receipt": {
+                  "status": "succeeded",
+                  "host": "codex",
+                  "tier": "T1",
+                  "requested_model": "gpt-6-luna",
+                  "requested_effort": "low",
+                  "transmitted_model": "gpt-6-luna",
+                  "transmitted_effort": "low",
+                  "observed_model": null,
+                  "usage_events": [
+                    {
+                      "method": "thread/tokenUsage/updated",
+                      "params": {
+                        "threadId": "01a1e3c2-45da-7e32-9575-3e7ce883c81f",
+                        "turnId": "01a1e3c2-466e-74a3-823e-08ca57f27b5d",
+                        "tokenUsage": {
+                          "total": {
+                            "totalTokens": 10986,
+                            "inputTokens": 10946,
+                            "cachedInputTokens": 2048,
+                            "cacheWriteInputTokens": 0,
+                            "outputTokens": 40,
+                            "reasoningOutputTokens": 0
+                          },
+                          "last": {
+                            "totalTokens": 10986,
+                            "inputTokens": 10946,
+                            "cachedInputTokens": 2048,
+                            "cacheWriteInputTokens": 0,
+                            "outputTokens": 40,
+                            "reasoningOutputTokens": 0
+                          },
+                          "modelContextWindow": 258400
+                        }
+                      }
+                    }
+                  ],
+                  "elapsed_seconds": 4.78,
+                  "turn_id": "01a1e3c2-466e-74a3-823e-08ca57f27b5d",
+                  "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+                  "auth_check": "chatgpt_confirmed_by_app_server"
+                },
+                "method": "labels_with_quotes_not_calibrated_probabilities"
+              }
+            }
+          ],
+          "selected_classifier": "subscription",
+          "selected": "stats",
+          "candidates_sha256": "3516a4c364d3c3876a323cb9555488bb1d31ba60a5368f38daa5af89f855d19a",
+          "confidence": 0.9,
+          "margin": 0.8666666666666667
+        },
+        "execution": {
+          "status": "succeeded",
+          "selected": "stats",
+          "result": {
+            "exit_code": 0,
+            "stdout": "# Сводка реестра\n\n- Источники: 5 (активных 5)\n- Утверждения: 6 (активных 6)\n- Гипотезы и допущения: 3 (активных 3)\n- Боли клиентов: 1 (активных 1)\n- Варианты: 4 (активных 4)\n- Решения: 1 (активных 1)\n- Коммуникационные обещания: 1 (активных 1)\n- Эксперименты: 1 (активных 1)\n- Новые сведения: 1 (активных 1)\n\nУтверждения по типу: {'fact': 4, 'interpretation': 2}\nУтверждения по уверенности: {'high': 2, 'medium': 3, 'low': 1}\nПротиворечий (пар): 1 — CLM-004↔CLM-006\nГипотез: 2, допущений: 1, способных изменить решение: 2\n",
+            "stderr": ""
+          }
+        }
+      }
+    }
+  ],
+  "code_commit": "fe3a606",
+  "limitations": [
+    "Initial API response was rejected by an overly strict tool confidence validator; regression fix and final recheck tracked separately.",
+    "Native receipt pins requested/transmitted model; observed_model remains null.",
+    "Three synthetic cases are an integration smoke, not routing accuracy or p95 evidence."
+  ]
+}

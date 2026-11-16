@@ -1,0 +1,568 @@
+{
+  "timestamp": "2026-11-16T09:53:47.628399+00:00",
+  "code_commit": "2a0ab797f82f613f84f1b327411d93386953c344",
+  "synthetic_only": true,
+  "config_persisted": false,
+  "cases": [
+    {
+      "case": "normal",
+      "wall_seconds": 1.128,
+      "selection": {
+        "route": {
+          "status": "executable",
+          "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 1,
+          "internal_transport_retries": "disabled",
+          "started": true,
+          "process_exit_code": null,
+          "requested": {
+            "host": "decision",
+            "provider": "openrouter",
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null
+          },
+          "transmitted": {
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null,
+            "provider": "Perplexity"
+          },
+          "observed": {
+            "provider": "Perplexity",
+            "model": "perplexity/pplx-decider-v1.3-20261112",
+            "effort": null
+          },
+          "billing": {
+            "mode": "api_opt_in",
+            "auth": "api_key",
+            "cap_verification": "openrouter_key_api_zero_limit",
+            "budget_usd": 0
+          },
+          "input_bytes": 894,
+          "endpoint": "https://openrouter.ai/api/alpha/decisions",
+          "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2",
+          "context": {
+            "input_byte_upper_bound": 894,
+            "capacity": 20928,
+            "model_limit": 262144,
+            "plan_limit": 32000,
+            "user_limit": 24000,
+            "output_reserve": 1024,
+            "system_reserve": 2048
+          },
+          "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+          "request_satisfaction": {
+            "model": true,
+            "effort": null
+          },
+          "integrity": "reported",
+          "result": "succeeded"
+        },
+        "status": "selected",
+        "response": {
+          "model": "perplexity/pplx-decider-v1.3-20261112",
+          "answers": {
+            "action": {
+              "type": "choice",
+              "choice": "billing",
+              "probabilities": {
+                "billing": 0.9754763790080557,
+                "technical": 0.002688683791780476,
+                "none": 0.02183493720016377
+              },
+              "confidence": 0.9632145685120834
+            }
+          },
+          "usage": {
+            "input_tokens": 156,
+            "output_tokens": 1,
+            "cost": 0,
+            "is_byok": false,
+            "cost_details": {
+              "upstream_inference_cost": 0,
+              "upstream_inference_prompt_cost": 0,
+              "upstream_inference_completions_cost": 0
+            }
+          },
+          "id": "gen-dec-1794822811-roya6pHiFwQasL4roTxt",
+          "provider": "Perplexity"
+        },
+        "protocol": "openrouter-decisions",
+        "attempts": [
+          {
+            "classifier": "api",
+            "status": "succeeded",
+            "reason": null,
+            "route": {
+              "status": "executable",
+              "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+              "max_attempts": 1,
+              "max_attempts_scope": "wrapper_invocations",
+              "wrapper_invocations": 1,
+              "internal_transport_retries": "disabled",
+              "started": true,
+              "process_exit_code": null,
+              "requested": {
+                "host": "decision",
+                "provider": "openrouter",
+                "model": "perplexity/pplx-decider-v1.3:free",
+                "effort": null
+              },
+              "transmitted": {
+                "model": "perplexity/pplx-decider-v1.3:free",
+                "effort": null,
+                "provider": "Perplexity"
+              },
+              "observed": {
+                "provider": "Perplexity",
+                "model": "perplexity/pplx-decider-v1.3-20261112",
+                "effort": null
+              },
+              "billing": {
+                "mode": "api_opt_in",
+                "auth": "api_key",
+                "cap_verification": "openrouter_key_api_zero_limit",
+                "budget_usd": 0
+              },
+              "input_bytes": 894,
+              "endpoint": "https://openrouter.ai/api/alpha/decisions",
+              "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2",
+              "context": {
+                "input_byte_upper_bound": 894,
+                "capacity": 20928,
+                "model_limit": 262144,
+                "plan_limit": 32000,
+                "user_limit": 24000,
+                "output_reserve": 1024,
+                "system_reserve": 2048
+              },
+              "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+              "request_satisfaction": {
+                "model": true,
+                "effort": null
+              },
+              "integrity": "reported",
+              "result": "succeeded"
+            },
+            "wall_seconds": 1.126463833,
+            "usage": {
+              "input_tokens": 156,
+              "output_tokens": 1,
+              "cost": 0
+            }
+          }
+        ],
+        "selected_classifier": "api",
+        "selected": "billing",
+        "candidates_sha256": "6ed5e5df919b0f22e4687794cfbf5bdecf784673cad0d27ad9959b89cc01c50b",
+        "confidence": 0.9632145685120834,
+        "margin": 0.953641441807892
+      },
+      "execution": {
+        "status": "succeeded",
+        "selected": "billing",
+        "result": {
+          "synthetic_handler": "billing",
+          "writes": 0
+        }
+      }
+    },
+    {
+      "case": "api_unavailable",
+      "wall_seconds": 6.635,
+      "selection": {
+        "status": "selected",
+        "route": {
+          "status": "executable",
+          "result": "succeeded",
+          "started": true,
+          "transport": "native-subscription",
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e3c6-bb36-7ce3-a00f-67621170d5ca",
+                  "turnId": "01a1e3c6-bbd9-7013-bf7b-0cee2408d704",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 10935,
+                      "inputTokens": 10901,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 34,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 10935,
+                      "inputTokens": 10901,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 34,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 5.197,
+            "turn_id": "01a1e3c6-bbd9-7013-bf7b-0cee2408d704",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+            "auth_check": "chatgpt_confirmed_by_app_server"
+          },
+          "method": "labels_with_quotes_not_calibrated_probabilities"
+        },
+        "method": "labels_with_quotes_not_calibrated_probabilities",
+        "response": {
+          "answers": {
+            "action": {
+              "type": "choice",
+              "choice": "billing",
+              "confidence": 0.9,
+              "quote_ok": true,
+              "probabilities": {
+                "billing": 0.9,
+                "technical": 0.04999999999999999,
+                "none": 0.04999999999999999
+              }
+            }
+          },
+          "method": "labels_with_quotes_not_calibrated_probabilities"
+        },
+        "attempts": [
+          {
+            "classifier": "api",
+            "status": "unavailable",
+            "reason": "Explicit provider unavailable; no fallback",
+            "route": null,
+            "wall_seconds": 0.002059166000000001,
+            "usage": null
+          },
+          {
+            "classifier": "local-decision",
+            "status": "needs_review",
+            "reason": "Uncertain classifier answers",
+            "route": {
+              "status": "executable",
+              "reason": "Private service socket present; worker readiness checked at request",
+              "started": true,
+              "wrapper_invocations": 1,
+              "result": "succeeded",
+              "fallback": false,
+              "requested": {
+                "host": "local",
+                "provider": "local-d1",
+                "model": "LiquidAI/d1-2B-MLX-8bit",
+                "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                "effort": null
+              },
+              "transmitted": {
+                "host": "local",
+                "provider": "local-d1",
+                "model": "LiquidAI/d1-2B-MLX-8bit",
+                "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                "effort": null
+              },
+              "observed": {
+                "model": "LiquidAI/d1-2B-MLX-8bit",
+                "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+              },
+              "network": "denied",
+              "transport": "unix-service",
+              "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+              "input_bytes": 150,
+              "reuse": false,
+              "timeout_seconds": 30,
+              "request_id": "691b9d75896d4ffa8e84f3bab3ba6fcc",
+              "inference_calls": 1,
+              "reuse_result": "bypass",
+              "worker_pid": 8952,
+              "generation": 5
+            },
+            "wall_seconds": 1.373042084,
+            "usage": {
+              "input_tokens": 138,
+              "output_tokens": 0
+            }
+          },
+          {
+            "classifier": "subscription",
+            "status": "succeeded",
+            "reason": null,
+            "route": {
+              "status": "executable",
+              "result": "succeeded",
+              "started": true,
+              "transport": "native-subscription",
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e3c6-bb36-7ce3-a00f-67621170d5ca",
+                      "turnId": "01a1e3c6-bbd9-7013-bf7b-0cee2408d704",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 10935,
+                          "inputTokens": 10901,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 34,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 10935,
+                          "inputTokens": 10901,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 34,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.197,
+                "turn_id": "01a1e3c6-bbd9-7013-bf7b-0cee2408d704",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+                "auth_check": "chatgpt_confirmed_by_app_server"
+              },
+              "method": "labels_with_quotes_not_calibrated_probabilities"
+            },
+            "wall_seconds": 5.2592314170000005,
+            "usage": null
+          }
+        ],
+        "selected_classifier": "subscription",
+        "selected": "billing",
+        "candidates_sha256": "6ed5e5df919b0f22e4687794cfbf5bdecf784673cad0d27ad9959b89cc01c50b",
+        "confidence": 0.9,
+        "margin": 0.8500000000000001
+      },
+      "execution": {
+        "status": "succeeded",
+        "selected": "billing",
+        "result": {
+          "synthetic_handler": "billing",
+          "writes": 0
+        }
+      }
+    },
+    {
+      "case": "api_and_local_unavailable",
+      "wall_seconds": 9.028,
+      "selection": {
+        "status": "selected",
+        "route": {
+          "status": "executable",
+          "result": "succeeded",
+          "started": true,
+          "transport": "native-subscription",
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e3c6-cea7-7531-802e-2a8b291317a3",
+                  "turnId": "01a1e3c6-cf2c-7112-845d-0504baa8fe1b",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 10933,
+                      "inputTokens": 10899,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 34,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 10933,
+                      "inputTokens": 10899,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 34,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 8.963,
+            "turn_id": "01a1e3c6-cf2c-7112-845d-0504baa8fe1b",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+            "auth_check": "chatgpt_confirmed_by_app_server"
+          },
+          "method": "labels_with_quotes_not_calibrated_probabilities"
+        },
+        "method": "labels_with_quotes_not_calibrated_probabilities",
+        "response": {
+          "answers": {
+            "action": {
+              "type": "choice",
+              "choice": "billing",
+              "confidence": 0.9,
+              "quote_ok": true,
+              "probabilities": {
+                "billing": 0.9,
+                "technical": 0.04999999999999999,
+                "none": 0.04999999999999999
+              }
+            }
+          },
+          "method": "labels_with_quotes_not_calibrated_probabilities"
+        },
+        "attempts": [
+          {
+            "classifier": "api",
+            "status": "unavailable",
+            "reason": "Explicit provider unavailable; no fallback",
+            "route": null,
+            "wall_seconds": 0.002018999999999771,
+            "usage": null
+          },
+          {
+            "classifier": "local-decision",
+            "status": "unavailable",
+            "reason": null,
+            "route": {
+              "status": "manual",
+              "reason": "[Errno 2] No such file or directory: '/tmp/strategist-intentionally-missing/service.sock'",
+              "started": false,
+              "wrapper_invocations": 0,
+              "result": "not_started",
+              "fallback": false,
+              "requested": {
+                "host": "local",
+                "provider": "local-d1",
+                "model": "LiquidAI/d1-2B-MLX-8bit",
+                "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                "effort": null
+              },
+              "transmitted": null,
+              "observed": null,
+              "network": "denied"
+            },
+            "wall_seconds": 0.002117708000000107,
+            "usage": null
+          },
+          {
+            "classifier": "subscription",
+            "status": "succeeded",
+            "reason": null,
+            "route": {
+              "status": "executable",
+              "result": "succeeded",
+              "started": true,
+              "transport": "native-subscription",
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e3c6-cea7-7531-802e-2a8b291317a3",
+                      "turnId": "01a1e3c6-cf2c-7112-845d-0504baa8fe1b",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 10933,
+                          "inputTokens": 10899,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 34,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 10933,
+                          "inputTokens": 10899,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 34,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 8.963,
+                "turn_id": "01a1e3c6-cf2c-7112-845d-0504baa8fe1b",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+                "auth_check": "chatgpt_confirmed_by_app_server"
+              },
+              "method": "labels_with_quotes_not_calibrated_probabilities"
+            },
+            "wall_seconds": 9.023305334,
+            "usage": null
+          }
+        ],
+        "selected_classifier": "subscription",
+        "selected": "billing",
+        "candidates_sha256": "6ed5e5df919b0f22e4687794cfbf5bdecf784673cad0d27ad9959b89cc01c50b",
+        "confidence": 0.9,
+        "margin": 0.8500000000000001
+      },
+      "execution": {
+        "status": "succeeded",
+        "selected": "billing",
+        "result": {
+          "synthetic_handler": "billing",
+          "writes": 0
+        }
+      }
+    }
+  ]
+}
