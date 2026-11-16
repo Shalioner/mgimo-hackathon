@@ -64,7 +64,7 @@ export function register(on, options = {}) {
     }
     let authorization;
     try {
-      authorization = await call($, options, '--authorize', { model: route.model, effort: route.effort, tier: route.tier });
+      authorization = await call($, options, '--authorize', { model: route.model, effort: route.effort, tier: route.tier, classifier: route.classifier });
     } catch {
       authorization = { status: 'unavailable' };
     }
@@ -87,7 +87,7 @@ export function register(on, options = {}) {
     if (!route) return yield* next(e);
     let authorization;
     try {
-      authorization = await call($, options, '--authorize', { model: route.model, effort: route.effort, tier: route.tier });
+      authorization = await call($, options, '--authorize', { model: route.model, effort: route.effort, tier: route.tier, classifier: route.classifier });
     } catch {
       authorization = { status: 'unavailable' };
     }

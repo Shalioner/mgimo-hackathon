@@ -150,4 +150,27 @@ test('authorization revoked after selection prevents spawn', async ($, on) => {
   expect(seen.calls.length).toBe(2);
 });
 
+
+test('classifier consent revocation reaches authorization for main turn', async ($, on) => {
+  const seen = stubs(on,
+    () => ({status:'selected',model:'haiku',effort:'low',tier:'T1',classifier:'cascade'}),
+    p => ({status:p.classifier === 'cascade' ? 'needs_review' : 'authorized'}));
+  await $.turn.start({turnId:'revoked-cascade',text:'Task'});
+  await step($,'revoked-cascade');
+  expect(seen.calls[1].payload.classifier).toBe('cascade');
+  expect(seen.forwarded.length).toBe(0);
+});
+
+test('classifier consent revocation reaches authorization for subagent', async ($, on) => {
+  const seen = stubs(on,
+    () => ({status:'selected',model:'haiku',effort:'low',tier:'T1',classifier:'cascade'}),
+    p => ({status:p.classifier === 'cascade' ? 'needs_review' : 'authorized'}));
+  let started = 0;
+  on('agent.spawn', () => {started++; return {model:'haiku',agentId:'child'};});
+  const result = await $.agent.spawn({tool_use_id:'tool',prompt:'Task',description:'Task',subagentType:'general-purpose',provider:{plugin:'engine',tier:'core'},parentModel:'opus'});
+  expect(seen.calls[1].payload.classifier).toBe('cascade');
+  expect(started).toBe(0);
+  expect(result.deny).toContain('no longer authorized');
+});
+
 }
