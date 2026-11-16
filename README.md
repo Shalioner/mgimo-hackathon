@@ -142,7 +142,7 @@ MLX — конкретный runtime проверенной macOS-поставк
 |---|---|
 | Закреплённая D1 MLX 8-bit | Проверенный локальный сервис, очередь, кэш и native hooks |
 | Другой System One provider | `decide.py` / явный `route_request.py` имеют provider-путь; нужны конфигурация и разрешение endpoint/model |
-| Другая decision-модель в native Claude/Codex hooks | Прямого переключателя пока нет: `host_routing.py` требует `local-d1`; нужен проверенный совместимый адаптер |
+| Другая decision-модель в native Claude/Codex hooks | `host_routing.py` поддерживает `local-d1`, а с явным API opt-in — `provider` и `cascade`; нужен совместимый проверенный адаптер |
 | Обычная открытая LLM или модель другого протокола | Не прямая замена: нужен адаптер типизированных ответов и проверка вероятностей |
 
 **Автоматический каскад:** [API → локальная decision-модель → подписочный Luna/Haiku low](docs/CLASSIFIER_CASCADE.md).

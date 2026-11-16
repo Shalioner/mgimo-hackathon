@@ -37,12 +37,47 @@
   идентификаторов. Отказ не считается успешным функциональным smoke.
 - Запрос фиксирует `provider.only: [perplexity]`, `allow_fallbacks: false`.
   Нулевой бюджет разрешён только для указанного точного free-маршрута и подтверждённого
-  внешнего лимита $0. Общий API-адаптер доверяет подтверждению оператора;
-  smoke дополнительно проверяет лимит по API. Ненулевой или отсутствующий `usage.cost`
+  внешнего лимита $0. Общий API-адаптер проверяет лимит ключа по API перед каждым
+  zero-budget запросом; smoke также выполняет предварительную проверку. Ненулевой или отсутствующий `usage.cost`
   не проходит проверку результата. Сам по себе локальный бюджет не устанавливает лимит на сервере.
 
 Настройки провайдера приведены в `knowledge/routing.local.example.yaml`.
 Для других моделей нужны отдельные protocol/model/provider/grant и проверка совместимости.
+
+## Точный grant для бесплатного API
+
+Добавьте в игнорируемый `knowledge/routing.local.yaml` вместе с провайдером из
+[настройки каскада](CLASSIFIER_CASCADE.md). Поля дополняют конфигурацию проекта;
+не заменяйте ими allowlist хостов. Это явное разрешение отправлять классифицируемый
+текст указанному API. `confirmed_by_operator` ставится после настройки лимита ключа.
+
+```yaml
+execution_policy:
+  mode: api_opt_in
+  max_input_bytes: 32000
+  api:
+    enabled: true
+    grants:
+      - host: decision
+        provider: openrouter
+        endpoint: https://openrouter.ai/api/alpha/decisions
+        models: ["perplexity/pplx-decider-v1.3:free"]
+        efforts: [null]
+        budget_usd: 0
+        external_cap:
+          confirmed_by_operator: true
+          amount_usd: 0
+          evidence_ref: runtime-verified-GET-/api/v1/key
+        context:
+          model_limit: 262144
+          plan_limit: 32000
+          user_limit: 24000
+          output_reserve: 1024
+          system_reserve: 2048
+```
+
+Этот grant соответствует `configuration()` проверочного скрипта. Ключ, абсолютный
+путь к нему и настройки подписки пользователь задаёт сам; они не входят в Git.
 
 ## Результаты и ограничения
 
