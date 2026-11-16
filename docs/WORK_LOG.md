@@ -594,3 +594,17 @@ Claude mod node tests12/12 passed; installer dry-run в другой папке 
 Staged diff check чистый; нет весов, файлов >2MB или совпадений с проверенными
 шаблонами API/private keys. Продуктовые кейсы, AGENTS и методические правки
 оставлены вне коммита; публикация не выполнялась.
+
+
+## 2026-11-16T08:31:46.618311+00:00 - Jury quickstart
+
+Added docs/JURY_QUICKSTART.md and a fixed classifier-only example. README links
+to jury and team handoff. Checked 10 links, CLI help, example validate (0 errors,
+2 warnings), impact and hardware/runtime versions. Live smoke: classified,
+accepted T1/normal/text; 1 inference, 381 input tokens, cold roundtrip 16.265s,
+setup 14.004s, worker 2.222s; executor not_started, no API fallback. Used the
+existing local config (reuse true, cache miss), not a clean installation.
+Guide explicitly separates shared per-user service from project hooks, includes
+license/runtime limitations, and does not claim clean-machine installation or
+remote publication. Initial non-ASCII log append hit stdin encoding error;
+retried with ASCII text and explicit UTF-8 output.
