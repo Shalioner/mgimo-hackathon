@@ -110,3 +110,31 @@ def test_subscription_rejection_reason_is_safe_and_specific(cfg, subscription_se
         load_config=lambda: cfg, timeout=3, require_subscription=True)
     assert receipt["reason"] == "Subscription classifier requires the OpenAI provider"
     assert "turn/start" not in log.read_text()
+
+
+@pytest.mark.parametrize('generic', [False, True])
+def test_post_inference_reload_failure_preserves_receipt(cfg, monkeypatch, generic):
+    config = copy.deepcopy(cfg)
+    config.setdefault('execution_policy', {})['mode'] = 'subscription_only'
+    config.setdefault('automatic_routing', {}).update(
+        bootstrap_host='codex', subscription_classifier={'enabled': True})
+    completed = [False]
+    def load():
+        if completed[0]:
+            raise ValueError('cascade configuration revoked')
+        return config
+    def execute(*args, **kwargs):
+        completed[0] = True
+        return {'status': 'succeeded', 'transmitted_model': 'gpt-6-luna',
+                'usage': {'input_tokens': 20, 'output_tokens': 2}}, '{}'
+    monkeypatch.setattr(N, 'execute', execute)
+    if generic:
+        out = S.infer_questions('Count these records',
+            {'q': {'type': 'noul', 'instructions': 'Keep?'}},
+            cfg=config, load_config=load, execute=True)
+    else:
+        out = S.classify('Count these records', '', cfg=config, load_config=load,
+            timeout=3, question_scope='native', host='codex', binary='/fake')
+    assert out['status'] == 'needs_review'
+    assert out['route']['started'] is True
+    assert out['route']['native_receipt']['usage']['input_tokens'] == 20

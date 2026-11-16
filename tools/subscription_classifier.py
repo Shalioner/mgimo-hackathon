@@ -8,6 +8,14 @@ import native_codex as N
 import route_request as R
 
 
+def _configuration_unchanged(load_config, cfg):
+    """A failed reload revokes acceptance without discarding completed work."""
+    try:
+        return load_config() == cfg
+    except (ValueError, OSError, TypeError, KeyError):
+        return False
+
+
 def classify(request, context, *, cfg, load_config, timeout, question_scope, host, binary):
     """R-compatible result. Host/model permission and fresh auth stay fail-closed."""
     route = {"result": "not_started", "started": False, "purpose": "routing_classifier",
@@ -17,7 +25,7 @@ def classify(request, context, *, cfg, load_config, timeout, question_scope, hos
         return {**unavailable, "reason": "Claude subscription classifier requires a verified logged-in subscription adapter"}
     if question_scope not in ("all", "native"):
         return {**unavailable, "reason": "Unknown classifier question scope"}
-    if load_config() != cfg:
+    if not _configuration_unchanged(load_config, cfg):
         return {**unavailable, "reason": "Classifier configuration changed"}
     selection = N.plan("T1", cfg, effort="low")
     if selection["status"] != "selected":
@@ -35,7 +43,7 @@ def classify(request, context, *, cfg, load_config, timeout, question_scope, hos
                  native_receipt=receipt)
     report = {"status": "needs_review", "labels": None, "route": route,
               "method": "labels_with_quotes_not_calibrated_probabilities"}
-    if receipt["status"] != "succeeded" or load_config() != cfg:
+    if receipt["status"] != "succeeded" or not _configuration_unchanged(load_config, cfg):
         return {**report, "reason": "Subscription classifier unavailable or configuration changed"}
     raw = C.parse_answers(text).get("answers", {})
     if not all(isinstance(raw.get(key), dict) and "type" not in raw[key]
@@ -59,7 +67,7 @@ def infer_questions(state, questions, *, cfg, load_config, execute=False, timeou
     native = options.get('subscription_classifier') or {}
     report = {'status': 'unavailable', 'route': None,
               'method': 'labels_with_quotes_not_calibrated_probabilities'}
-    if load_config() != cfg:
+    if not _configuration_unchanged(load_config, cfg):
         return {**report, 'reason': 'Classifier configuration changed'}
     if (cfg.get('execution_policy') or {}).get('mode') != 'subscription_only':
         return {**report, 'reason': 'Generic subscription classifier requires subscription_only policy'}
@@ -73,7 +81,7 @@ def infer_questions(state, questions, *, cfg, load_config, execute=False, timeou
                  'transport': 'native-subscription', 'requested': {'host': host, 'model': selection['model'], 'effort': 'low'}}
         if not execute:
             return {**report, 'status': 'pending', 'route': route}
-        if load_config() != cfg:
+        if not _configuration_unchanged(load_config, cfg):
             return {**report, 'route': route, 'reason': 'Classifier configuration changed'}
         receipt, text = N.execute(native.get('codex_binary'), prompt, selection,
                                  load_config=load_config, timeout=timeout, require_subscription=True)
@@ -83,13 +91,13 @@ def infer_questions(state, questions, *, cfg, load_config, execute=False, timeou
         route = R.route_plan(cfg, host, 'T1', prompt, bootstrap=True)
         if route['status'] != 'executable' or not execute:
             return {**report, 'route': route, 'status': 'pending' if route['status'] == 'executable' else 'unavailable'}
-        if load_config() != cfg:
+        if not _configuration_unchanged(load_config, cfg):
             return {**report, 'route': route, 'reason': 'Classifier configuration changed'}
         route, text, _ = D.execute_route(cfg, host, route['requested']['model'], prompt,
-                                         route['requested']['effort'], timeout, route, revalidate=lambda: load_config() == cfg)
+                                         route['requested']['effort'], timeout, route, revalidate=lambda: _configuration_unchanged(load_config, cfg))
     route['method'] = report['method']
     report.update(status='needs_review', route=route)
-    if route.get('result') != 'succeeded' or load_config() != cfg:
+    if route.get('result') != 'succeeded' or not _configuration_unchanged(load_config, cfg):
         return {**report, 'reason': 'Subscription classifier unavailable or configuration changed'}
     raw = C.parse_answers(text or '').get('answers', {})
     if set(raw) != set(questions):
