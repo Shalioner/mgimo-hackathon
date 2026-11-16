@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T3",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T3",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T3",
+      "requested_model": "gpt-6.1-sol",
+      "requested_effort": "high",
+      "transmitted_model": "gpt-6.1-sol",
+      "transmitted_effort": "high",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0bd-9961-7712-b32b-3d6e8558e62d",
+            "turnId": "01a1e0bd-ae7f-7ef1-a006-11c2f8f019ed",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 12357,
+                "inputTokens": 11634,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 723,
+                "reasoningOutputTokens": 271
+              },
+              "last": {
+                "totalTokens": 12357,
+                "inputTokens": 11634,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 723,
+                "reasoningOutputTokens": 271
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 28.485,
+      "turn_id": "01a1e0bd-ae7f-7ef1-a006-11c2f8f019ed",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\n  \"case_id\": \"C4\",\n  \"step\": 1,\n  \"facts\": {\n    \"a_purchases\": 200,\n    \"a_result_rub\": 1000,\n    \"b_purchases\": 150,\n    \"b_result_rub\": 3000,\n    \"a_fixed_cost_rub\": 5000,\n    \"b_fixed_cost_rub\": 6000,\n    \"fixed_budget_rub\": 6000,\n    \"both_options_fit_budget\": true,\n    \"status_quo_result_rub\": 0,\n    \"kill_result_rub\": 0,\n    \"assumptions_not_observations\": true\n  },\n  \"conclusion\": \"По предоставленному контексту: A — 10000 × 0.02 = 200 покупок; результат 200 × (100 − 70) − 5000 = 1000 руб./месяц. B — 10000 × 0.015 = 150 покупок; результат 150 × (100 − 40) − 6000 = 3000 руб./месяц. При заданных предположениях рекомендую человеку выбрать B: преимущество перед A составляет 2000 руб., перед status quo и kill — 3000 руб. Status quo сохраняет возможность исследования; kill означает отказ от него, хотя текущий финансовый результат одинаков. Сильное возражение: преимущество B основано на непроверенной конверсии, а фиксированные расходы поглощают весь бюджет. Параметр переворота — конверсия B: при неизменных остальных условиях равенство с A наступает на 1⅙%; ниже выгоднее A, выше — B. Окончательный выбор остаётся за человеком.\",\n  \"unknowns\": [\n    \"Фактические конверсии A/B неизвестны: источник прямо называет их предположениями.\",\n    \"Источник не оценивает ценность дальнейшего исследования и основания для окончательного закрытия пилота; поэтому финансовое равенство status quo и kill не доказывает их стратегическую равноценность.\"\n  ]\n}"
+}

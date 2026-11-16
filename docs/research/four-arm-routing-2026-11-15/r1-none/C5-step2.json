@@ -1,0 +1,442 @@
+{
+  "case": "C5",
+  "step": 2,
+  "arm": "none",
+  "started_utc": "2026-11-15T20:18:16.528519+00:00",
+  "agent_pid": 37237,
+  "input": {
+    "step": 2,
+    "request": "Сделай безопасный черновик сообщения до 40 слов и план из двух проверок для неподтверждённых обещаний. У каждой проверки укажи наблюдение и условие, при котором допустима более узкая формулировка. Несуществующую функцию не предлагай подтвердить тестом.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: checks_count, automatic_activation_exists. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "checks_count": 2,
+      "automatic_activation_exists": false
+    },
+    "prohibitedclaims": [
+      "Автоактивацию достаточно подтвердить экспериментом без реализации",
+      "Универсальное превосходство цены доказано ограниченной выборкой",
+      "Успех 90% является гарантией"
+    ],
+    "blind_criteria": [
+      "Сообщение соответствует ручной активации и поддерживаемым устройствам",
+      "Проверки дают наблюдаемые результаты",
+      "Будущие обещания ограничены измеренной областью"
+    ],
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "routing_synopsis": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств»."
+  },
+  "report": {
+    "status": "succeeded",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "result": {
+      "status": "succeeded",
+      "text": "{\n  \"case_id\": \"C5\",\n  \"step\": 2,\n  \"facts\": {\n    \"checks_count\": 2,\n    \"automatic_activation_exists\": false\n  },\n  \"conclusion\": {\n    \"draft\": \"Подключите eSIM вручную через QR-код на поддерживаемом устройстве. В тесте подключение удалось на 18 из 20 поддерживаемых устройств.\",\n    \"checks\": [\n      {\n        \"observation\": \"В тесте подключение удалось на 18 из 20 поддерживаемых устройств; результаты по моделям не указаны (SRC-TEST).\",\n        \"condition\": \"Если результаты по конкретной модели подтверждены, допустимо сообщить об исходе теста для этой модели и указать условия тестирования.\"\n      },\n      {\n        \"observation\": \"Сравнение цен с агрегаторами запланировано, результатов пока нет (SRC-PLAN).\",\n        \"condition\": \"Если итоговая цена окажется ниже цены конкретного сопоставимого предложения агрегатора, допустимо назвать это предложение, агрегатор и условия сравнения.\"\n      }\n    ]\n  },\n  \"unknowns\": [\n    \"Модели протестированных устройств и результаты по каждой модели не указаны (SRC-TEST).\",\n    \"Результатов сравнения цен нет (SRC-PLAN).\",\n    \"Длительность покупки не измерялась (SRC-TEST).\",\n    \"Автоматического включения по прилёте нет; подключение выполняется вручную через QR-код (SRC-SPEC).\"\n  ]\n}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "purpose": "task"
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "purpose": "task",
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T2",
+              "requested_model": "gpt-6.1-terra",
+              "requested_effort": "medium",
+              "transmitted_model": "gpt-6.1-terra",
+              "transmitted_effort": "medium",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0dc-5269-7be3-a6a9-bc9f30c39b6f",
+                    "turnId": "01a1e0dc-542c-76e0-91b0-69625d8d3987",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11884,
+                        "inputTokens": 11542,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 342,
+                        "reasoningOutputTokens": 53
+                      },
+                      "last": {
+                        "totalTokens": 11884,
+                        "inputTokens": 11542,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 342,
+                        "reasoningOutputTokens": 53
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 10.747,
+              "turn_id": "01a1e0dc-542c-76e0-91b0-69625d8d3987",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0dc-5269-7be3-a6a9-bc9f30c39b6f",
+                "turnId": "01a1e0dc-542c-76e0-91b0-69625d8d3987",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11884,
+                    "inputTokens": 11542,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 342,
+                    "reasoningOutputTokens": 53
+                  },
+                  "last": {
+                    "totalTokens": 11884,
+                    "inputTokens": 11542,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 342,
+                    "reasoningOutputTokens": 53
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "calculation_check": {
+            "status": "not_applicable",
+            "checks": [],
+            "reason": "Context is not valid calculation JSON"
+          },
+          "quality": {
+            "status": "accepted",
+            "verdict": "revise",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "purpose": "quality_verifier",
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0dc-7c28-7fe0-a09d-1f964c1e8b1b",
+                      "turnId": "01a1e0dc-7cf4-7d60-a5b9-b4da87d6d873",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11565,
+                          "inputTokens": 11515,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 50,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11565,
+                          "inputTokens": 11515,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 50,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 4.563,
+                "turn_id": "01a1e0dc-7cf4-7d60-a5b9-b4da87d6d873",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "Сделай безопасный черновик сообщения до 40 слов и план из двух проверок для неподтверждённых обещаний.",
+            "method": "T1_labels_with_quote_not_calibrated_probability",
+            "verification_scope": "label_shape_and_literal_quote_presence_only"
+          },
+          "escalation_reason": "эскалация после неудачи на T2@medium: сначала глубже рассуждение на той же модели (medium → high), модель старше — только если и это не поможет"
+        },
+        {
+          "number": 2,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "high"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "high"
+            },
+            "purpose": "task"
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "high"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "high"
+            },
+            "purpose": "task",
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T2",
+              "requested_model": "gpt-6.1-terra",
+              "requested_effort": "high",
+              "transmitted_model": "gpt-6.1-terra",
+              "transmitted_effort": "high",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0dc-8f87-7d72-8628-f8284c830a90",
+                    "turnId": "01a1e0dc-9043-73e3-b1d3-99bb57ecd004",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 12245,
+                        "inputTokens": 11852,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 393,
+                        "reasoningOutputTokens": 62
+                      },
+                      "last": {
+                        "totalTokens": 12245,
+                        "inputTokens": 11852,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 393,
+                        "reasoningOutputTokens": 62
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 11.362,
+              "turn_id": "01a1e0dc-9043-73e3-b1d3-99bb57ecd004",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0dc-8f87-7d72-8628-f8284c830a90",
+                "turnId": "01a1e0dc-9043-73e3-b1d3-99bb57ecd004",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 12245,
+                    "inputTokens": 11852,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 393,
+                    "reasoningOutputTokens": 62
+                  },
+                  "last": {
+                    "totalTokens": 12245,
+                    "inputTokens": 11852,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 393,
+                    "reasoningOutputTokens": 62
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "calculation_check": {
+            "status": "not_applicable",
+            "checks": [],
+            "reason": "Context is not valid calculation JSON"
+          },
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "purpose": "quality_verifier",
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0dc-bc69-72b2-b0e0-d5884e2783ea",
+                      "turnId": "01a1e0dc-bd27-7143-a7ae-13ec9edbf26d",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11587,
+                          "inputTokens": 11557,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 30,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11587,
+                          "inputTokens": 11557,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 30,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 4.491,
+                "turn_id": "01a1e0dc-bd27-7143-a7ae-13ec9edbf26d",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "«Дешевле всех агрегаторов»",
+            "method": "T1_labels_with_quote_not_calibrated_probability",
+            "verification_scope": "label_shape_and_literal_quote_presence_only"
+          }
+        }
+      ]
+    },
+    "transport": "native-codex",
+    "routing_mode": "none",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T2",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T2",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "purpose": "task"
+    }
+  },
+  "elapsed_seconds": 32.752561
+}

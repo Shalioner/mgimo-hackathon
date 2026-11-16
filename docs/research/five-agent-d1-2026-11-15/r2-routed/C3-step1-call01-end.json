@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0bf-c8f6-72e1-8dd2-c70d3c9c7825",
+            "turnId": "01a1e0bf-cae4-7b03-899e-055f913ab081",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11446,
+                "inputTokens": 11295,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 151,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11446,
+                "inputTokens": 11295,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 151,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 6.732,
+      "turn_id": "01a1e0bf-cae4-7b03-899e-055f913ab081",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T3\",\"sure\":true,\"quote\":\"Разреши противоречие: агрегированное удержание упало, хотя внутри обоих сегментов выросло.\"},\"effort\":{\"choice\":\"deep\",\"sure\":true,\"quote\":\"Покажи расчёты, роль состава выборки и предложи, какую метрику использовать для решения об изменении продукта.\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180.\"}}}"
+}

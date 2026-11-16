@@ -1,0 +1,100 @@
+{
+  "request": "Сравни удержание по месяцам, сохрани различие периодов.",
+  "context": "{\"documents\": [{\"id\": \"DOC-001\", \"text\": \"Удержание в январе: 24%.\\n\"}, {\"id\": \"DOC-002\", \"text\": \"Инструкция по поливу комнатных растений.\\n\"}, {\"id\": \"DOC-003\", \"text\": \"Удержание в феврале: 18%.\\n\"}]}",
+  "selection": {
+    "status": "selected",
+    "host": "codex",
+    "tier": "T2",
+    "model": "gpt-6.1-terra",
+    "effort": "medium"
+  },
+  "receipt": {
+    "status": "succeeded",
+    "host": "codex",
+    "tier": "T2",
+    "requested_model": "gpt-6.1-terra",
+    "requested_effort": "medium",
+    "transmitted_model": "gpt-6.1-terra",
+    "transmitted_effort": "medium",
+    "observed_model": null,
+    "usage_events": [
+      {
+        "method": "thread/tokenUsage/updated",
+        "params": {
+          "threadId": "01a1e06e-4606-7453-9a71-0bc6e3c32282",
+          "turnId": "01a1e06e-468d-7d50-a65e-69a0f9847a74",
+          "tokenUsage": {
+            "total": {
+              "totalTokens": 11361,
+              "inputTokens": 11324,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 37,
+              "reasoningOutputTokens": 0
+            },
+            "last": {
+              "totalTokens": 11361,
+              "inputTokens": 11324,
+              "cachedInputTokens": 0,
+              "cacheWriteInputTokens": 0,
+              "outputTokens": 37,
+              "reasoningOutputTokens": 0
+            },
+            "modelContextWindow": 475000
+          }
+        }
+      }
+    ],
+    "elapsed_seconds": 5.831,
+    "turn_id": "01a1e06e-468d-7d50-a65e-69a0f9847a74",
+    "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+  },
+  "text": "В январе удержание составило 24%, в феврале — 18%. В феврале показатель снизился на 6 процентных пунктов относительно января.",
+  "quality": {
+    "status": "accepted",
+    "verdict": "accept",
+    "route": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e06e-5d2a-7930-a0ee-f50b44319b54",
+            "turnId": "01a1e06e-5da9-7520-a5fa-0d42904639f1",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11046,
+                "inputTokens": 11007,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 39,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11046,
+                "inputTokens": 11007,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 39,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 4.656,
+      "turn_id": "01a1e06e-5da9-7520-a5fa-0d42904639f1",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    },
+    "evidence": "В январе удержание составило 24%, в феврале — 18%.",
+    "method": "T1_labels_with_quote_not_calibrated_probability"
+  }
+}

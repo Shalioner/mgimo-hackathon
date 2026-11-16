@@ -1,0 +1,140 @@
+{
+  "case": "C5",
+  "step": 2,
+  "arm": "d1",
+  "started_utc": "2026-11-15T20:14:05.751517+00:00",
+  "agent_pid": 34917,
+  "input": {
+    "step": 2,
+    "request": "Сделай безопасный черновик сообщения до 40 слов и план из двух проверок для неподтверждённых обещаний. У каждой проверки укажи наблюдение и условие, при котором допустима более узкая формулировка. Несуществующую функцию не предлагай подтвердить тестом.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: checks_count, automatic_activation_exists. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "checks_count": 2,
+      "automatic_activation_exists": false
+    },
+    "prohibitedclaims": [
+      "Автоактивацию достаточно подтвердить экспериментом без реализации",
+      "Универсальное превосходство цены доказано ограниченной выборкой",
+      "Успех 90% является гарантией"
+    ],
+    "blind_criteria": [
+      "Сообщение соответствует ручной активации и поддерживаемым устройствам",
+      "Проверки дают наблюдаемые результаты",
+      "Будущие обещания ограничены измеренной областью"
+    ],
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "routing_synopsis": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств»."
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1925,
+          "timeout_seconds": 120,
+          "request_id": "7918b65b196e4e738eec940e9f50bdea",
+          "worker_pid": 34919,
+          "generation": 1
+        },
+        "runtime": {
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 6.2736,
+          "timing": {
+            "queue_wait_seconds": 0.000723,
+            "worker_setup_seconds": 2.6e-05,
+            "worker_roundtrip_seconds": 6.273567,
+            "worker_inference_seconds": 6.251781,
+            "server_total_seconds": 6.274827,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 6.291312
+          },
+          "phase": "complete"
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T2",
+              "confidence": 0.6250107060575031,
+              "probabilities": {
+                "T1": 0.19774542562001804,
+                "T2": 0.6250107060575031,
+                "T3": 0.09172680759442288,
+                "T4": 0.08551706072805597
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.8690593280764953,
+              "probabilities": {
+                "normal": 0.8690593280764953,
+                "deep": 0.1309406719235047
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.817329960996686,
+              "probabilities": {
+                "text": 0.817329960996686,
+                "tools": 0.18267003900331408
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 690,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex",
+    "routing_mode": "d1"
+  },
+  "elapsed_seconds": 6.52146
+}

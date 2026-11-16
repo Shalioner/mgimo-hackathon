@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "quality_verifier",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0dc-75e4-75a2-a821-1680b6141145",
+            "turnId": "01a1e0dc-76ba-7dc3-bc31-1c5784eade1b",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11541,
+                "inputTokens": 11472,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 69,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11541,
+                "inputTokens": 11472,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 69,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 5.42,
+      "turn_id": "01a1e0dc-76ba-7dc3-bc31-1c5784eade1b",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"quality\":{\"choice\":\"accept\",\"sure\":true,\"quote\":\"Для каждого проекта спросить владельца: 1. Что привело к приостановке? Собрать описание обстоятельств и подтверждающие записи; ответ поможет решить, возобновлять ли проект или сначала устранять препятствие.\"}}}"
+}

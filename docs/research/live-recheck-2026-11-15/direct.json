@@ -1,0 +1,39 @@
+{
+  "mode": "direct",
+  "prompt_sha256": "c7dc498693b389d868d889bb1b185110e0565e0e14d41389da529dd9cf5cf0b4",
+  "status": "completed",
+  "usage_events": [
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e05e-2fac-7a70-9919-73e1860323b6",
+        "turnId": "01a1e05e-302d-7740-a222-8d0ffeed5650",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 27131,
+            "inputTokens": 27126,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 5,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 27131,
+            "inputTokens": 27126,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 5,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      }
+    }
+  ],
+  "tool_items": [],
+  "routing": [],
+  "thread_model": "gpt-6-luna",
+  "text": "17",
+  "nonrouting_stderr_lines": 2,
+  "elapsed_seconds": 5.409
+}

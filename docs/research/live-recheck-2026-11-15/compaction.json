@@ -1,0 +1,146 @@
+{
+  "status": "compacted",
+  "messages": [
+    {
+      "role": "user",
+      "text": "Old directory listing was only for navigation and is no longer needed.",
+      "tool_calls": [],
+      "tool_results": []
+    },
+    {
+      "role": "assistant",
+      "text": "I listed the old directory.",
+      "tool_calls": [],
+      "tool_results": []
+    },
+    {
+      "role": "tool",
+      "text": "",
+      "tool_results": [],
+      "tool_calls": []
+    },
+    {
+      "role": "user",
+      "text": "The old listing is irrelevant to the current goal.",
+      "tool_calls": [],
+      "tool_results": []
+    },
+    {
+      "role": "assistant",
+      "text": "Current goal: return the already verified ledger statistics.",
+      "tool_calls": [],
+      "tool_results": []
+    },
+    {
+      "role": "user",
+      "text": "Preserve all prose and verified evidence.",
+      "tool_calls": [],
+      "tool_results": []
+    },
+    {
+      "role": "assistant",
+      "text": "Verified result follows.",
+      "tool_calls": [
+        {
+          "id": "evidence",
+          "name": "ledger_stats",
+          "arguments": {},
+          "protected": true
+        }
+      ],
+      "tool_results": []
+    },
+    {
+      "role": "tool",
+      "text": "",
+      "tool_results": [
+        {
+          "id": "evidence",
+          "text": "VERIFIED_EVIDENCE: 23 objects",
+          "protected": true
+        }
+      ],
+      "tool_calls": []
+    },
+    {
+      "role": "assistant",
+      "text": "No more file listing is required.",
+      "tool_calls": [],
+      "tool_results": []
+    },
+    {
+      "role": "user",
+      "text": "Summarize the verified count only.",
+      "tool_calls": [],
+      "tool_results": []
+    }
+  ],
+  "decisions": {
+    "old_listing": "drop"
+  },
+  "receipts": [
+    {
+      "status": "executable",
+      "reason": "Private service socket present; worker readiness checked at request",
+      "started": true,
+      "wrapper_invocations": 1,
+      "result": "succeeded",
+      "fallback": false,
+      "requested": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "transmitted": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "observed": {
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+      },
+      "network": "denied",
+      "transport": "unix-service",
+      "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+      "input_bytes": 1487,
+      "timeout_seconds": 240,
+      "request_id": "47d33dfcfebc47c3b35ca9cc72c8adb5",
+      "worker_pid": 98562,
+      "generation": 4,
+      "decision_response": {
+        "answers": {
+          "0_call": {
+            "type": "noul",
+            "noul": 0.03035266692961508
+          },
+          "0_result": {
+            "type": "noul",
+            "noul": 0.012902318067975626
+          }
+        },
+        "usage": {
+          "input_tokens": 540,
+          "output_tokens": 0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "before_bytes": 31008,
+    "after_bytes": 1195,
+    "removed_bytes": 29813,
+    "classifier_requests": 1,
+    "token_savings": null
+  },
+  "elapsed_seconds": 3.294,
+  "fixture_sha256": "5b528c6e73fc91f72ea957ed1213c44f92e2cc0edb15086eba3bc152964d506b",
+  "synthetic_fixture": true,
+  "prose_preserved": true,
+  "protected_evidence_preserved": true,
+  "fixture_hash_scope": "messages array only; json.dumps(messages, ensure_ascii=False), UTF-8, no trailing newline"
+}

@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T2",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T2",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "medium",
+      "transmitted_model": "gpt-6.1-terra",
+      "transmitted_effort": "medium",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-70a3-7941-b484-7a9e4f325e68",
+            "turnId": "01a1e0da-716c-7de2-acc5-aeacd62c2b7b",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 12135,
+                "inputTokens": 11824,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 311,
+                "reasoningOutputTokens": 32
+              },
+              "last": {
+                "totalTokens": 12135,
+                "inputTokens": 11824,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 311,
+                "reasoningOutputTokens": 32
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 11.204,
+      "turn_id": "01a1e0da-716c-7de2-acc5-aeacd62c2b7b",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик: «eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 поддерживаемых устройств». Проверка 1 — совместимость: наблюдение — SRC-SPEC ограничивает поддержку совместимыми устройствами, а SRC-TEST фиксирует 18 успешных подключений из 20. Формулировка «подключение удалось на проверенных моделях» допустима, если результаты позволяют определить эти модели и подключение на каждой из них удалось. Проверка 2 — цены: наблюдение — сравнение с агрегаторами запланировано, результатов нет (SRC-PLAN). Формулировка «дешевле указанных агрегаторов для указанных тарифов» допустима, если сравнение одинаковых предложений на конкретную дату подтвердит это для каждого названного агрегатора.\",\"unknowns\":\"Модели устройств и подробности теста не указаны; результаты сравнения цен отсутствуют. Длительность покупки не измерялась (SRC-TEST). Автоматического включения по прилёте нет (SRC-SPEC). Обращённых к исполнителю команд в материалах нет.\"}"
+}

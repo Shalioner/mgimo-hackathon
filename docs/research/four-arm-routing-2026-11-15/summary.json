@@ -1,0 +1,3007 @@
+{
+  "rows": [
+    {
+      "batch": "r1-d1",
+      "case": "C1",
+      "step": 1,
+      "arm": "d1",
+      "status": "succeeded",
+      "wall_seconds": 53.437999,
+      "tokens": {
+        "input": 22606,
+        "cached": 9600,
+        "output": 146,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11312,
+            "inputTokens": 11209,
+            "cachedInputTokens": 2048,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 103,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.924,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11440,
+            "inputTokens": 11397,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 43,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.108,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 3.626,
+        "timing": {
+          "queue_wait_seconds": 33.440428,
+          "worker_setup_seconds": 4.3e-05,
+          "worker_roundtrip_seconds": 3.626086,
+          "worker_inference_seconds": 3.620159,
+          "server_total_seconds": 37.06663,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 37.087285
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 532,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных. Источник: SRC-A. SRC-B не относится к проектам.\",\"unknowns\":[\"Год даты не указан.\",\"Причины приостановки не записаны в SRC-A.\"]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C1",
+      "step": 2,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 10.37239,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 3.8588,
+        "timing": {
+          "queue_wait_seconds": 6.261973,
+          "worker_setup_seconds": 3.3e-05,
+          "worker_roundtrip_seconds": 3.858843,
+          "worker_inference_seconds": 3.847915,
+          "server_total_seconds": 10.12236,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 10.13913
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 550,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C2",
+      "step": 1,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 26.066889,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 6.0873,
+        "timing": {
+          "queue_wait_seconds": 19.35292,
+          "worker_setup_seconds": 4.5e-05,
+          "worker_roundtrip_seconds": 6.087298,
+          "worker_inference_seconds": 6.083203,
+          "server_total_seconds": 25.440477,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 25.472435
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 542,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C2",
+      "step": 2,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 21.471974,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 4.5755,
+        "timing": {
+          "queue_wait_seconds": 16.618672,
+          "worker_setup_seconds": 3.1e-05,
+          "worker_roundtrip_seconds": 4.575501,
+          "worker_inference_seconds": 4.572122,
+          "server_total_seconds": 21.19825,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 21.215585
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 575,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C3",
+      "step": 1,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 19.936186,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 19.3567,
+        "timing": {
+          "queue_wait_seconds": 0.000129,
+          "worker_setup_seconds": 15.050259,
+          "worker_roundtrip_seconds": 4.306485,
+          "worker_inference_seconds": 4.303027,
+          "server_total_seconds": 19.357306,
+          "cold_start": true,
+          "completed": true,
+          "client_roundtrip_seconds": 19.365821
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 607,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C3",
+      "step": 2,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 26.735121,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.275,
+        "timing": {
+          "queue_wait_seconds": 21.171198,
+          "worker_setup_seconds": 3.1e-05,
+          "worker_roundtrip_seconds": 5.275023,
+          "worker_inference_seconds": 5.272394,
+          "server_total_seconds": 26.446408,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 26.485213
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 624,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C4",
+      "step": 1,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 34.056282,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 8.0002,
+        "timing": {
+          "queue_wait_seconds": 25.440203,
+          "worker_setup_seconds": 0.000193,
+          "worker_roundtrip_seconds": 8.000014,
+          "worker_inference_seconds": 7.996105,
+          "server_total_seconds": 33.440515,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 33.46833
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 719,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C4",
+      "step": 2,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 16.884776,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 6.5113,
+        "timing": {
+          "queue_wait_seconds": 10.112305,
+          "worker_setup_seconds": 5.6e-05,
+          "worker_roundtrip_seconds": 6.511263,
+          "worker_inference_seconds": 6.508677,
+          "server_total_seconds": 16.623814,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 16.643078
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 750,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C5",
+      "step": 1,
+      "arm": "d1",
+      "status": "succeeded",
+      "wall_seconds": 57.534187,
+      "tokens": {
+        "input": 22291,
+        "cached": 15104,
+        "output": 259,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11093,
+            "inputTokens": 10880,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 213,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.188,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11457,
+            "inputTokens": 11411,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 46,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.377,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.3185,
+        "timing": {
+          "queue_wait_seconds": 37.053855,
+          "worker_setup_seconds": 3.3e-05,
+          "worker_roundtrip_seconds": 5.318526,
+          "worker_inference_seconds": 5.315674,
+          "server_total_seconds": 42.372523,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 42.391908
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 648,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P2\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P3\":{\"status\":\"unsupported\",\"basis\":[\"SRC-PLAN\"]},\"P4\":{\"status\":\"supported\",\"basis\":[\"SRC-TEST\"]}},\"conclusion\":\"P1 contradicted: подключение доступно на поддерживаемых устройствах, а не на всех телефонах (SRC-SPEC). P2 contradicted: включение вручную через QR-код, автоматического включения по прилёте нет (SRC-SPEC). P3 unsupported: сравнение цен запланировано, результатов нет (SRC-PLAN). P4 supported: тест показал 18 успешных подключений из 20 поддерживаемых устройств (SRC-TEST).\",\"unknowns\":[\"SRC-TEST не сообщает, как именно отбирались 20 устройств.\",\"Длительность покупки не измерялась (SRC-TEST).\"]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C5",
+      "step": 2,
+      "arm": "d1",
+      "status": "manual",
+      "wall_seconds": 6.52146,
+      "tokens": {
+        "input": 0,
+        "cached": 0,
+        "output": 0,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 6.2736,
+        "timing": {
+          "queue_wait_seconds": 0.000723,
+          "worker_setup_seconds": 2.6e-05,
+          "worker_roundtrip_seconds": 6.273567,
+          "worker_inference_seconds": 6.251781,
+          "server_total_seconds": 6.274827,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 6.291312
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 690,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C1",
+      "step": 1,
+      "arm": "d1_luna",
+      "status": "succeeded",
+      "wall_seconds": 29.341673,
+      "tokens": {
+        "input": 22596,
+        "cached": 9600,
+        "output": 131,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11297,
+            "inputTokens": 11209,
+            "cachedInputTokens": 2048,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 88,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.553,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11430,
+            "inputTokens": 11387,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 43,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.3,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.2384,
+        "timing": {
+          "queue_wait_seconds": 4.517958,
+          "worker_setup_seconds": 5e-05,
+          "worker_roundtrip_seconds": 5.23835,
+          "worker_inference_seconds": 5.117381,
+          "server_total_seconds": 9.756432,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 9.822849
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 532,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных (SRC-A).\",\"unknowns\":\"Год не указан. Причины приостановки не записаны.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C1",
+      "step": 2,
+      "arm": "d1_luna",
+      "status": "succeeded",
+      "wall_seconds": 38.834517,
+      "tokens": {
+        "input": 33729,
+        "cached": 22656,
+        "output": 406,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11338,
+            "inputTokens": 11245,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 93,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.831,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11266,
+            "inputTokens": 11010,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 256,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 10.758,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11531,
+            "inputTokens": 11474,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 57,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.872,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 3.8167,
+        "timing": {
+          "queue_wait_seconds": 9.643348,
+          "worker_setup_seconds": 3.7e-05,
+          "worker_roundtrip_seconds": 3.816695,
+          "worker_inference_seconds": 3.813767,
+          "server_total_seconds": 13.460185,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 13.46402
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 550,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"Причины приостановки не записаны (SRC-A). Спросить владельцев: 1) Что привело к приостановке и какие данные подтверждают причину? Собрать хронологию и подтверждающие материалы; ответ поможет выбрать между устранением подтверждённого препятствия и дополнительным разбором. 2) Какие условия нужны для возобновления? Зафиксировать необходимые ресурсы, согласования или зависимости; ответ поможет решить, можно ли перезапустить проект и что для этого требуется. 3) Актуальны ли цель и ожидаемый результат проекта? Собрать текущую оценку ценности и изменений контекста; ответ поможет решить, возобновлять проект или закрыть его. Сроки и причины заранее неизвестны. SRC-B относится к переговорным комнатам, не к проектам.\",\"unknowns\":\"Источники не называют причины, условия возобновления, актуальность целей или сроки приостановки. Предложенные вопросы и возможные решения — план выяснения, а не установленные факты.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C2",
+      "step": 1,
+      "arm": "d1_luna",
+      "status": "succeeded",
+      "wall_seconds": 51.336588,
+      "tokens": {
+        "input": 34084,
+        "cached": 15104,
+        "output": 548,
+        "reasoning_output": 108
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11396,
+            "inputTokens": 11250,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 146,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.698,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11832,
+            "inputTokens": 11489,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 343,
+            "reasoningOutputTokens": 108
+          },
+          "seconds": 16.189,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11404,
+            "inputTokens": 11345,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 59,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.076,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.384,
+        "timing": {
+          "queue_wait_seconds": 9.756133,
+          "worker_setup_seconds": 2.8e-05,
+          "worker_roundtrip_seconds": 5.384039,
+          "worker_inference_seconds": 5.381748,
+          "server_total_seconds": 15.140284,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 15.144704
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 542,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":30,\"february_window\":7,\"january_retention_percent\":24,\"february_retention_percent\":18,\"january_retained_users\":240,\"february_retained_users\":180,\"january_cohort_size\":1000,\"february_cohort_size\":1000},\"conclusion\":\"Утверждать, что удержание снизилось на 6 процентных пунктов, нельзя. Разность значений составляет 6 п.п., но январский показатель измерен на D30 (SRC-A), а февральский — на D7 (SRC-B). Одинаковые продукт, сегмент и размер когорт не устраняют различие окон наблюдения.\",\"unknowns\":[\"Минимально необходимо измерить D30 retention февральской когорты после достижения ею 30-го дня, используя то же определение удержания, что и в SRC-A. Альтернатива — получить январский D7 для сравнения с SRC-B. Достаточно одного из этих дополнительных измерений.\"]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C2",
+      "step": 2,
+      "arm": "d1_luna",
+      "status": "succeeded",
+      "wall_seconds": 31.212552,
+      "tokens": {
+        "input": 34063,
+        "cached": 22656,
+        "output": 254,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11383,
+            "inputTokens": 11275,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 108,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.753,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11419,
+            "inputTokens": 11328,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 91,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.08,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11515,
+            "inputTokens": 11460,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 55,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.801,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 4.5479,
+        "timing": {
+          "queue_wait_seconds": 0.000371,
+          "worker_setup_seconds": 3.3e-05,
+          "worker_roundtrip_seconds": 4.547854,
+          "worker_inference_seconds": 4.545499,
+          "server_total_seconds": 4.548445,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 4.553493
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 575,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январский D30 retention — 24%, февральский — 20%; изменение составило −4 процентных пункта. Источники: SRC-A и SRC-C.\",\"unknowns\":[]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C3",
+      "step": 1,
+      "arm": "d1_luna",
+      "status": "manual",
+      "wall_seconds": 51.192345,
+      "tokens": {
+        "input": 37679,
+        "cached": 17024,
+        "output": 1167,
+        "reasoning_output": 403
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11454,
+            "inputTokens": 11295,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 159,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.975,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-sol",
+          "effort": "xhigh",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 14674,
+            "inputTokens": 13742,
+            "cachedInputTokens": 1920,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 932,
+            "reasoningOutputTokens": 403
+          },
+          "seconds": 28.024,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12718,
+            "inputTokens": 12642,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 76,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.549,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 4.5181,
+        "timing": {
+          "queue_wait_seconds": 0.000547,
+          "worker_setup_seconds": 3.2e-05,
+          "worker_roundtrip_seconds": 4.51811,
+          "worker_inference_seconds": 4.516326,
+          "server_total_seconds": 4.518834,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 4.523947
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 607,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "xhigh",
+          "quality": "revise",
+          "reason": "эскалация после неудачи на T3 (ровно на одну ступень)"
+        }
+      ],
+      "answer": null,
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C3",
+      "step": 2,
+      "arm": "d1_luna",
+      "status": "succeeded",
+      "wall_seconds": 41.034412,
+      "tokens": {
+        "input": 36538,
+        "cached": 17152,
+        "output": 336,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11418,
+            "inputTokens": 11311,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 107,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 7.394,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 13118,
+            "inputTokens": 12939,
+            "cachedInputTokens": 2048,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 179,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.932,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12338,
+            "inputTokens": 12288,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 50,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 12.422,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.1289,
+        "timing": {
+          "queue_wait_seconds": 4.533102,
+          "worker_setup_seconds": 2.8e-05,
+          "worker_roundtrip_seconds": 5.128884,
+          "worker_inference_seconds": 5.125483,
+          "server_total_seconds": 9.662132,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 9.669475
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 624,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5},\"conclusion\":\"Стандартизированное удержание при одинаковом весе сегментов выросло с 50% в январе до 57.5% в феврале, то есть на 7.5 п.п. Фактически наблюдавшийся агрегат февраля — 27.5%. Расчёты основаны на SRC-J и SRC-F; стандартизация использует веса 50%/50% из материала.\",\"unknowns\":\"Рандомизации не было, поэтому причинный вывод из сравнения не следует. Фактический агрегат января не запрашивался.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C4",
+      "step": 1,
+      "arm": "d1_luna",
+      "status": "needs_review",
+      "wall_seconds": 49.128929,
+      "tokens": {
+        "input": 35657,
+        "cached": 11648,
+        "output": 378,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11487,
+            "inputTokens": 11391,
+            "cachedInputTokens": 2048,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 96,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.916,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12457,
+            "inputTokens": 12216,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 241,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.911,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12091,
+            "inputTokens": 12050,
+            "cachedInputTokens": 2048,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 41,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.186,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.5082,
+        "timing": {
+          "queue_wait_seconds": 15.139916,
+          "worker_setup_seconds": 5.8e-05,
+          "worker_roundtrip_seconds": 5.508168,
+          "worker_inference_seconds": 5.506044,
+          "server_total_seconds": 20.648223,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 20.655072
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 719,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": null,
+          "reason": null
+        }
+      ],
+      "answer": null,
+      "candidate": "{\"case_id\":\"C4\",\"step\":1,\"facts\":{\"a_purchases\":200,\"a_result_rub\":1000,\"b_purchases\":150,\"b_result_rub\":3000,\"assumptions_not_observations\":true},\"conclusion\":\"За месяц B даёт расчетный добавочный результат 3000 руб. против 1000 руб. у A; status quo и kill — 0 руб. При предположении, что заданные конверсии реализуются и прочие параметры модели верны, условно рекомендую B. Сильное возражение: конверсии лишь предположения, поэтому преимущество может не реализоваться. Источник: предоставленный материал C4 и SRC-NUM; расчёты T0.\",\"unknowns\":\"Выбор меняется, если фактическая конверсия B опустится ниже 1% при неизменных остальных параметрах: тогда результат B станет ниже нуля, и status quo/kill окажутся предпочтительнее по финансовому результату. Неизвестны фактические конверсии и ценность дальнейшего исследования, от которой kill отличается по условию.\"}"
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C4",
+      "step": 2,
+      "arm": "d1_luna",
+      "status": "succeeded",
+      "wall_seconds": 48.091771,
+      "tokens": {
+        "input": 34794,
+        "cached": 22656,
+        "output": 299,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11531,
+            "inputTokens": 11420,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 111,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 7.912,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11769,
+            "inputTokens": 11628,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 141,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 7.75,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11793,
+            "inputTokens": 11746,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 47,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.751,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.9407,
+        "timing": {
+          "queue_wait_seconds": 18.583274,
+          "worker_setup_seconds": 0.00013,
+          "worker_roundtrip_seconds": 5.940035,
+          "worker_inference_seconds": 5.874472,
+          "server_total_seconds": 24.524127,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 24.531465
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 750,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Конверсия — 80 покупок из 10000 пользователей. Финансовый результат: 80 × (100 − 40) − 6000 = −1200 руб. Правило stop сработало по обеим частям: конверсия ниже 1% и отрицательный финансовый результат. Источник: материалы пилота B; расчёты conversion_pct и result_rub — T0 CALCULATIONS.\",\"unknowns\":[]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C5",
+      "step": 1,
+      "arm": "d1_luna",
+      "status": "succeeded",
+      "wall_seconds": 44.777952,
+      "tokens": {
+        "input": 22291,
+        "cached": 9600,
+        "output": 265,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11095,
+            "inputTokens": 10878,
+            "cachedInputTokens": 2048,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 217,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.343,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11461,
+            "inputTokens": 11413,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 48,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.027,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.5373,
+        "timing": {
+          "queue_wait_seconds": 20.648251,
+          "worker_setup_seconds": 6e-05,
+          "worker_roundtrip_seconds": 5.537315,
+          "worker_inference_seconds": 5.535073,
+          "server_total_seconds": 26.185713,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 26.189137
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 648,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P2\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P3\":{\"status\":\"unsupported\",\"basis\":[\"SRC-PLAN\"]},\"P4\":{\"status\":\"supported\",\"basis\":[\"SRC-TEST\"]}},\"conclusion\":\"P1 противоречит ограничению на поддерживаемые устройства (SRC-SPEC). P2 противоречит отсутствию автоматического включения (SRC-SPEC). P3 не подтверждено: сравнение цен лишь запланировано, результатов нет (SRC-PLAN). P4 подтверждено тестом: успешное подключение на 18 из 20 поддерживаемых устройств (SRC-TEST).\",\"unknowns\":[\"Не указано, какие модели входят в число поддерживаемых устройств (SRC-SPEC).\",\"Длительность покупки не измерялась (SRC-TEST); это не доказывает и не опровергает P4.\"]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C5",
+      "step": 2,
+      "arm": "d1_luna",
+      "status": "needs_review",
+      "wall_seconds": 67.866337,
+      "tokens": {
+        "input": 57096,
+        "cached": 30208,
+        "output": 756,
+        "reasoning_output": 32
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11443,
+            "inputTokens": 11363,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 80,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 10.618,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11174,
+            "inputTokens": 10913,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 261,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 12.381,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11535,
+            "inputTokens": 11493,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 42,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.63,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12135,
+            "inputTokens": 11824,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 311,
+            "reasoningOutputTokens": 32
+          },
+          "seconds": 11.204,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11565,
+            "inputTokens": 11503,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 62,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.695,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": {
+        "worker_pid": 34919,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 5.1264,
+        "timing": {
+          "queue_wait_seconds": 13.45838,
+          "worker_setup_seconds": 3.8e-05,
+          "worker_roundtrip_seconds": 5.126351,
+          "worker_inference_seconds": 5.123878,
+          "server_total_seconds": 18.584863,
+          "cold_start": false,
+          "completed": true,
+          "client_roundtrip_seconds": 18.5885
+        },
+        "phase": "complete"
+      },
+      "d1_usage": {
+        "input_tokens": 690,
+        "output_tokens": 0
+      },
+      "d1_status": "succeeded",
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "revise",
+          "reason": "эскалация после неудачи на T1 (ровно на одну ступень)"
+        },
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "quality": "revise",
+          "reason": null
+        }
+      ],
+      "answer": null,
+      "candidate": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик: «eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 поддерживаемых устройств». Проверка 1 — совместимость: наблюдение — SRC-SPEC ограничивает поддержку совместимыми устройствами, а SRC-TEST фиксирует 18 успешных подключений из 20. Формулировка «подключение удалось на проверенных моделях» допустима, если результаты позволяют определить эти модели и подключение на каждой из них удалось. Проверка 2 — цены: наблюдение — сравнение с агрегаторами запланировано, результатов нет (SRC-PLAN). Формулировка «дешевле указанных агрегаторов для указанных тарифов» допустима, если сравнение одинаковых предложений на конкретную дату подтвердит это для каждого названного агрегатора.\",\"unknowns\":\"Модели устройств и подробности теста не указаны; результаты сравнения цен отсутствуют. Длительность покупки не измерялась (SRC-TEST). Автоматического включения по прилёте нет (SRC-SPEC). Обращённых к исполнителю команд в материалах нет.\"}"
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C1",
+      "step": 1,
+      "arm": "luna",
+      "status": "succeeded",
+      "wall_seconds": 20.533894,
+      "tokens": {
+        "input": 33844,
+        "cached": 22656,
+        "output": 266,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11365,
+            "inputTokens": 11240,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 125,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 7.832,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11305,
+            "inputTokens": 11207,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 98,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.021,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11440,
+            "inputTokens": 11397,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 43,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.589,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных (SRC-A). SRC-B не относится к проектам.\",\"unknowns\":\"Год не указан. Причины приостановки не записаны (SRC-A).\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C1",
+      "step": 2,
+      "arm": "luna",
+      "status": "succeeded",
+      "wall_seconds": 22.838009,
+      "tokens": {
+        "input": 34359,
+        "cached": 23296,
+        "output": 417,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11364,
+            "inputTokens": 11245,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 119,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.115,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11898,
+            "inputTokens": 11637,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 261,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.101,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11514,
+            "inputTokens": 11477,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 37,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.76,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"На 1 ноября приостановлены пять проектов; причины не записаны (SRC-A; число подтверждено SRC-NUM). Для каждого проекта задать владельцу три вопроса и собрать подтверждающие данные: 1. Что привело к приостановке? Собрать решение о приостановке, переписку и описание препятствий; ответ поможет выбрать, какое препятствие устранять. 2. Что необходимо для возобновления? Собрать перечень необходимых ресурсов, согласований и зависимостей; ответ поможет решить, выделять ли ресурсы и какие действия согласовать. 3. Сохраняется ли ценность проекта и каковы последствия продолжения или закрытия? Собрать актуальные цели, ожидаемые результаты и оценки последствий; ответ поможет выбрать между возобновлением, сохранением паузы и закрытием.\",\"unknowns\":\"Причины приостановки, условия возобновления и актуальная ценность каждого проекта неизвестны; сроки в источниках не указаны. SRC-B содержит сведения о переговорных комнатах и не относится к проектам.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C2",
+      "step": 1,
+      "arm": "luna",
+      "status": "needs_review",
+      "wall_seconds": 20.584915,
+      "tokens": {
+        "input": 33304,
+        "cached": 22656,
+        "output": 345,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11405,
+            "inputTokens": 11248,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 157,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 7.836,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 10941,
+            "inputTokens": 10796,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 145,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.659,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11303,
+            "inputTokens": 11260,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 43,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.999,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": null,
+          "reason": null
+        }
+      ],
+      "answer": null,
+      "candidate": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\"},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: 24% (SRC-A) и 18% (SRC-B) измерены в разные периоды после привлечения. Разница между опубликованными значениями — 6 п.п., но она не устанавливает изменение сопоставимого retention.\",\"unknowns\":\"Минимально необходимо измерить февральский D30 retention, чтобы сравнить когорты на одинаковом окне. Источники: SRC-A, SRC-B.\"}"
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C2",
+      "step": 2,
+      "arm": "luna",
+      "status": "succeeded",
+      "wall_seconds": 17.505088,
+      "tokens": {
+        "input": 34069,
+        "cached": 17152,
+        "output": 254,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11379,
+            "inputTokens": 11279,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 100,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.509,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11423,
+            "inputTokens": 11324,
+            "cachedInputTokens": 2048,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 99,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.312,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11521,
+            "inputTokens": 11466,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 55,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.823,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январский D30 retention — 24%, февральский — 20%; разность февральского и январского значений — −4 процентных пункта. Источники: SRC-A и SRC-C.\",\"unknowns\":[]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C3",
+      "step": 1,
+      "arm": "luna",
+      "status": "succeeded",
+      "wall_seconds": 34.846657,
+      "tokens": {
+        "input": 37686,
+        "cached": 23296,
+        "output": 823,
+        "reasoning_output": 95
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11420,
+            "inputTokens": 11293,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 127,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.264,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 14377,
+            "inputTokens": 13742,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 635,
+            "reasoningOutputTokens": 95
+          },
+          "seconds": 19.184,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12712,
+            "inputTokens": 12651,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 61,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.859,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\n  \"case_id\": \"C3\",\n  \"step\": 1,\n  \"facts\": {\n    \"january_new_pct\": 90,\n    \"february_new_pct\": 95,\n    \"january_existing_pct\": 10,\n    \"february_existing_pct\": 20,\n    \"january_total_pct\": 50,\n    \"february_total_pct\": 27.5,\n    \"aggregate_delta_pp\": -22.5,\n    \"january_new_share_pct\": 50,\n    \"february_new_share_pct\": 10,\n    \"january_standardized_pct\": 50,\n    \"february_standardized_pct\": 57.5,\n    \"standardized_delta_pp\": 7.5,\n    \"randomization_present\": false\n  },\n  \"conclusion\": \"Это парадокс Симпсона: направление агрегированной динамики изменилось из-за состава выборки. По SRC-J и SRC-F (числа также в SRC-NUM): новые — 90/100×100=90% и 19/20×100=95%; действующие — 10/100×100=10% и 36/180×100=20%. Итого: январь (90+10)/(100+100)×100=50%; февраль (19+36)/(20+180)×100=27,5%; разница −22,5 п.п. Доля новых с высоким удержанием сократилась с 100/200=50% до 20/200=10%. Для сравнения месяцев при решении об изменении продукта используйте стандартизированное D30 с заранее фиксированными весами целевой аудитории, сопровождая его сегментными показателями. Например, при январских весах 50/50: январь 0,5×90+0,5×10=50%; февраль 0,5×95+0,5×20=57,5%, рост 7,5 п.п. Это описательная динамика, не причинный эффект продукта.\",\n  \"unknowns\": [\n    \"Материалы не определяют целевой состав аудитории: веса 50/50 — иллюстрация, их пригодность для продуктового решения требует обоснования.\",\n    \"Причины смены состава, сопутствующие изменения и сопоставимость условий наблюдения неизвестны. Согласно материалу, рандомизации нет; для причинного решения нужен корректно спланированный эксперимент. Представленных сравнений недостаточно, чтобы рекомендовать внедрение или откат.\"\n  ]\n}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C3",
+      "step": 2,
+      "arm": "luna",
+      "status": "succeeded",
+      "wall_seconds": 20.762194,
+      "tokens": {
+        "input": 36551,
+        "cached": 22656,
+        "output": 368,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11436,
+            "inputTokens": 11311,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 125,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.167,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 13129,
+            "inputTokens": 12937,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 192,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.147,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12354,
+            "inputTokens": 12303,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 51,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.599,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5},\"conclusion\":\"При одинаковом весе сегментов (50% новые, 50% действующие) D30 retention вырос с 50% в январе до 57.5% в феврале, на 7.5 п.п. Наблюдаемый агрегат февраля — 27.5% (55 из 200); стандартизированный показатель диагностический и не отражает фактический состав февраля. Источник: SRC-J, SRC-F; расчёт весов и значений — SRC-NUM.\",\"unknowns\":\"Нет данных для вывода о причинах изменения или его причинной интерпретации; рандомизации не было.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C4",
+      "step": 1,
+      "arm": "luna",
+      "status": "needs_review",
+      "wall_seconds": 31.365071,
+      "tokens": {
+        "input": 36544,
+        "cached": 17024,
+        "output": 671,
+        "reasoning_output": 123
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11473,
+            "inputTokens": 11393,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 80,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.568,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 13467,
+            "inputTokens": 12907,
+            "cachedInputTokens": 1920,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 560,
+            "reasoningOutputTokens": 123
+          },
+          "seconds": 19.074,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12275,
+            "inputTokens": 12244,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 31,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.716,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "quality": null,
+          "reason": null
+        }
+      ],
+      "answer": null,
+      "candidate": "{\n  \"case_id\": \"C4\",\n  \"step\": 1,\n  \"facts\": {\n    \"a_purchases\": 200,\n    \"a_result_rub\": 1000,\n    \"b_purchases\": 150,\n    \"b_result_rub\": 3000,\n    \"assumptions_not_observations\": true,\n    \"status_quo_result_rub\": 0,\n    \"kill_result_rub\": 0,\n    \"fixed_budget_rub\": 6000,\n    \"a_within_budget\": true,\n    \"b_within_budget\": true\n  },\n  \"conclusion\": \"При заданных предположениях рекомендую человеку выбрать B: месячный добавочный результат 3000 руб. против 1000 руб. у A и 0 у status quo и kill. Расчёт по SRC-NUM: A = 200 × (100 − 70) − 5000; B = 150 × (100 − 40) − 6000. Обе инициативы укладываются в бюджет, одновременно запустить их нельзя. Status quo сохраняет возможность дальнейшего исследования; kill означает отказ от него. Модель не показывает финансового преимущества kill перед status quo. Сильное возражение: конверсии заданы предположениями, поэтому преимущество B пока не подтверждено наблюдениями. Параметр, переворачивающий выбор, — конверсия B: при неизменных остальных параметрах ниже 7/600, то есть примерно 1,1667%, A выгоднее B; на пороге результаты равны. Это условная рекомендация, окончательный выбор остаётся за человеком.\",\n  \"unknowns\": [\n    \"Фактические конверсии A/B и степень их неопределённости неизвестны: material прямо обозначает все конверсии как предположения.\",\n    \"Ценность дальнейшего исследования не задана; поэтому оснований окончательно закрывать пилот вместо сохранения status quo недостаточно. Других расходов в учебную модель не добавлено.\"\n  ]\n}"
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C4",
+      "step": 2,
+      "arm": "luna",
+      "status": "succeeded",
+      "wall_seconds": 17.664761,
+      "tokens": {
+        "input": 34792,
+        "cached": 22656,
+        "output": 297,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11529,
+            "inputTokens": 11418,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 111,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.78,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11775,
+            "inputTokens": 11632,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 143,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.27,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11785,
+            "inputTokens": 11742,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 43,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.783,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Конверсия — 0,8% (80 из 10 000), ниже порога 1%. Финансовый результат: 80 × (100 − 40) − 6000 = −1200 руб., то есть отрицательный. Сработали обе части правила stop: конверсия менее 1% и отрицательный финансовый результат. Источник: предоставленные материалы пилота B и расчёты T0.\",\"unknowns\":[]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C5",
+      "step": 1,
+      "arm": "luna",
+      "status": "succeeded",
+      "wall_seconds": 22.27866,
+      "tokens": {
+        "input": 33558,
+        "cached": 22656,
+        "output": 265,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11417,
+            "inputTokens": 11330,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 87,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.204,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11029,
+            "inputTokens": 10882,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 147,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.775,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11377,
+            "inputTokens": 11346,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 31,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.683,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":\"contradicted\",\"P2\":\"contradicted\",\"P3\":\"unsupported\",\"P4\":\"supported\"},\"conclusion\":\"P1 contradicted by SRC-SPEC: eSIM works on supported devices, not all phones. P2 contradicted by SRC-SPEC: activation is manual via QR code, with no automatic arrival activation. P3 unsupported by SRC-PLAN: price comparison is planned, with no results. P4 supported by SRC-TEST: connection succeeded on 18 of 20 supported devices.\",\"unknowns\":\"SRC-TEST says purchase duration was not measured. It does not affect P1–P4.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C5",
+      "step": 2,
+      "arm": "luna",
+      "status": "needs_review",
+      "wall_seconds": 37.47155,
+      "tokens": {
+        "input": 57091,
+        "cached": 38400,
+        "output": 771,
+        "reasoning_output": 32
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "routing_classifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11481,
+            "inputTokens": 11361,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 120,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.861,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11184,
+            "inputTokens": 10911,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 273,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 8.58,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11554,
+            "inputTokens": 11501,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 53,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.965,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12124,
+            "inputTokens": 11834,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 290,
+            "reasoningOutputTokens": 32
+          },
+          "seconds": 9.688,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11519,
+            "inputTokens": 11484,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 35,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.925,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "revise",
+          "reason": "эскалация после неудачи на T1 (ровно на одну ступень)"
+        },
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "quality": "revise",
+          "reason": null
+        }
+      ],
+      "answer": null,
+      "candidate": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик: «eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 поддерживаемых устройств». Проверка 1 — совместимость: наблюдение — 18 успешных подключений из 20 в тесте; условие — при подтверждении результатов и перечня моделей можно сообщать об успешном подключении на конкретных протестированных моделях. Проверка 2 — цены: наблюдение — сравнение с агрегаторами запланировано, результатов нет; условие — если сравнение покажет преимущество, можно указать его для конкретных тарифов, агрегаторов и периода сравнения. Автоматического включения по прилёте нет; P4 уже подтверждено как ограниченный результат теста. Источники: SRC-SPEC, SRC-TEST, SRC-PLAN.\",\"unknowns\":\"Модели и результаты для каждого устройства, методика тестирования, цены и результаты сравнения с агрегаторами не указаны. Длительность покупки не измерялась (SRC-TEST).\"}"
+    },
+    {
+      "batch": "r1-none",
+      "case": "C1",
+      "step": 1,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 13.038462,
+      "tokens": {
+        "input": 22607,
+        "cached": 15104,
+        "output": 142,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11312,
+            "inputTokens": 11213,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 99,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 7.13,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11437,
+            "inputTokens": 11394,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 43,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.903,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных (SRC-A). SRC-B не относится к проектам и не использован.\",\"unknowns\":\"Год не указан. Причины приостановки не записаны.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C1",
+      "step": 2,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 15.679418,
+      "tokens": {
+        "input": 23109,
+        "cached": 15744,
+        "output": 325,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11893,
+            "inputTokens": 11637,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 256,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.178,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11541,
+            "inputTokens": 11472,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 69,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.42,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"На 1 ноября приостановлены 5 из 17 проектов; причины не записаны (SRC-A, SRC-NUM). Для каждого проекта спросить владельца: 1. Что привело к приостановке? Собрать описание обстоятельств и подтверждающие записи; ответ поможет решить, возобновлять ли проект или сначала устранять препятствие. 2. Что необходимо для возобновления? Собрать перечень потребностей и доступных ресурсов; ответ поможет решить, выделять ли ресурсы или пересматривать объём проекта. 3. Насколько проект сейчас актуален и каковы последствия его закрытия? Собрать цели, ожидаемые результаты и данные о последствиях; ответ поможет выбрать между возобновлением, сохранением паузы и закрытием.\",\"unknowns\":\"Причины приостановки, потребности, актуальность и последствия закрытия каждого проекта неизвестны; сроки в источниках не указаны. Сведений о проектах в SRC-B нет. Команд, обращённых к исполнителю, в материалах источников нет.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C2",
+      "step": 1,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 13.286123,
+      "tokens": {
+        "input": 22696,
+        "cached": 7552,
+        "output": 195,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11583,
+            "inputTokens": 11425,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 158,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 7.662,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11308,
+            "inputTokens": 11271,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 37,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.635,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\",\"january_retention_percent\":24,\"february_retention_percent\":18},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: разница между 24% и 18% относится к разным окнам наблюдения. Для сравнения необходимо измерить удержание обеих когорт на одном сроке (SRC-A, SRC-B).\",\"unknowns\":\"Минимально необходимо одно дополнительное измерение: D7 для январской когорты или D30 для февральской. Обращённых к ассистенту команд в материалах нет.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C2",
+      "step": 2,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 12.202581,
+      "tokens": {
+        "input": 22791,
+        "cached": 15104,
+        "output": 150,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11424,
+            "inputTokens": 11326,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 98,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 6.548,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11517,
+            "inputTokens": 11465,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 52,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.561,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январский D30 retention — 24%, февральский — 20%; разность (февраль минус январь) — −4 п.п. Источники: SRC-A и SRC-C.\",\"unknowns\":[]}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C3",
+      "step": 1,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 30.747856,
+      "tokens": {
+        "input": 26386,
+        "cached": 9472,
+        "output": 800,
+        "reasoning_output": 226
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 14501,
+            "inputTokens": 13740,
+            "cachedInputTokens": 1920,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 761,
+            "reasoningOutputTokens": 226
+          },
+          "seconds": 25.228,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12685,
+            "inputTokens": 12646,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 39,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.516,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\n  \"case_id\": \"C3\",\n  \"step\": 1,\n  \"facts\": {\n    \"january_new_pct\": 90,\n    \"february_new_pct\": 95,\n    \"january_existing_pct\": 10,\n    \"february_existing_pct\": 20,\n    \"january_total_pct\": 50,\n    \"february_total_pct\": 27.5,\n    \"aggregate_delta_pp\": -22.5,\n    \"january_new_share_pct\": 50,\n    \"february_new_share_pct\": 10,\n    \"january_existing_share_pct\": 50,\n    \"february_existing_share_pct\": 90,\n    \"new_delta_pp\": 5,\n    \"existing_delta_pp\": 10,\n    \"february_standardized_to_january_pct\": 57.5,\n    \"standardized_delta_pp\": 7.5,\n    \"randomized\": false\n  },\n  \"conclusion\": \"Это парадокс Симпсона: изменились веса сегментов. По SRC-J и SRC-F (числа также в SRC-NUM), удержание новых: 90/100×100=90% → 19/20×100=95%; действующих: 10/100×100=10% → 36/180×100=20%. Общее: (90+10)/(100+100)×100=50% → (19+36)/(20+180)×100=27,5%; разница −22,5 п.п. В феврале резко выросла доля действующих пользователей, у которых удержание ниже. Для оценки динамики при решении об изменении продукта используйте D30, стандартизированный по заранее фиксированным весам целевой аудитории, вместе с показателями сегментов. Например, при январских весах: 0,5×95%+0,5×20%=57,5%, рост на 7,5 п.п. Фактический агрегат сохраняйте как показатель удержания текущего состава аудитории. Эти сравнения не устанавливают причинный эффект продукта.\",\n  \"unknowns\": [\n    \"Причины изменения состава, сопутствующие изменения и сопоставимость пользователей внутри сегментов неизвестны; неизменность определений сегментов их не гарантирует.\",\n    \"Целевая структура аудитории не задана: январские веса — иллюстрация. Для причинного решения нужен рандомизированный эксперимент либо обоснованный причинный дизайн; рандомизации в источниках нет.\"\n  ]\n}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C3",
+      "step": 2,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 15.031602,
+      "tokens": {
+        "input": 25915,
+        "cached": 15744,
+        "output": 293,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 13806,
+            "inputTokens": 13568,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 238,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.317,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12402,
+            "inputTokens": 12347,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 55,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.633,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5,\"observed_january_pct\":50},\"conclusion\":\"Наблюдаемое D30-удержание снизилось с 50% в январе до 27,5% в феврале. При одинаковых весах сегментов 50/50 стандартизированный показатель вырос с 50% до 57,5%, на 7,5 п.п. Различие связано с изменением состава: доля новых пользователей снизилась с 50% до 10%. Внутри сегментов удержание выросло: среди новых с 90% до 95%, среди действующих с 10% до 20% (SRC-J, SRC-F, SRC-NUM).\",\"unknowns\":\"Рандомизации не было, поэтому причины изменений и причинный эффект установить нельзя. Неизвестны статистическая неопределённость и другие возможные различия между месяцами.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C4",
+      "step": 1,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 25.074591,
+      "tokens": {
+        "input": 25135,
+        "cached": 15744,
+        "output": 598,
+        "reasoning_output": 133
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 13463,
+            "inputTokens": 12907,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 556,
+            "reasoningOutputTokens": 133
+          },
+          "seconds": 19.309,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12270,
+            "inputTokens": 12228,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 42,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.762,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\n  \"case_id\": \"C4\",\n  \"step\": 1,\n  \"facts\": {\n    \"a_purchases\": 200,\n    \"a_result_rub\": 1000,\n    \"b_purchases\": 150,\n    \"b_result_rub\": 3000,\n    \"assumptions_not_observations\": true,\n    \"a_fixed_rub\": 5000,\n    \"b_fixed_rub\": 6000,\n    \"fixed_budget_rub\": 6000,\n    \"status_quo_result_rub\": 0,\n    \"kill_result_rub\": 0\n  },\n  \"conclusion\": \"При заданных предположениях и цели максимизировать месячный добавочный финансовый результат рекомендую B: 150 × (100 − 40) − 6000 = 3000 руб. Для A: 200 × (100 − 70) − 5000 = 1000 руб. Обе инициативы укладываются в бюджет. B превосходит A на 2000 руб., status quo и kill — на 3000 руб. Status quo сохраняет возможность исследования; kill означает отказ от него, хотя текущий финансовый результат одинаков. Сильное возражение: конверсии предположены, поэтому преимущество B не подтверждено наблюдениями, а фиксированный бюджет расходуется полностью. Параметр переворота выбора — конверсия B: при неизменных остальных вводных ниже 1⅙% A становится выгоднее B; на пороге результаты равны. Источник: material и SRC-NUM; числовые поля согласуются с T0. Окончательный выбор остаётся за человеком.\",\n  \"unknowns\": [\n    \"В material нет наблюдаемых конверсий и оценки их неопределённости; устойчивость преимущества B неизвестна.\",\n    \"Ценность дальнейшего исследования не задана: финансовые нули сами по себе не позволяют выбрать между status quo и kill.\"\n  ]\n}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C4",
+      "step": 2,
+      "arm": "none",
+      "status": "needs_review",
+      "wall_seconds": 11.126354,
+      "tokens": {
+        "input": 23354,
+        "cached": 15104,
+        "output": 161,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11755,
+            "inputTokens": 11630,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 125,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 5.933,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11760,
+            "inputTokens": 11724,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 36,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.116,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": null,
+          "reason": null
+        }
+      ],
+      "answer": null,
+      "candidate": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Конверсия составила 0,8% (80 из 10000), финансовый результат — −1200 руб. Правило stop сработало по обеим частям: конверсия ниже 1% и финансовый результат отрицательный. Источник: предоставленный учебный материал; расчётные значения — T0 CALCULATIONS.\",\"unknowns\":[]}"
+    },
+    {
+      "batch": "r1-none",
+      "case": "C5",
+      "step": 1,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 15.747987,
+      "tokens": {
+        "input": 22238,
+        "cached": 15104,
+        "output": 207,
+        "reasoning_output": 0
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11041,
+            "inputTokens": 10878,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 163,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 9.998,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11404,
+            "inputTokens": 11360,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 44,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.732,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":\"contradicted\",\"P2\":\"contradicted\",\"P3\":\"unsupported\",\"P4\":\"supported\"},\"conclusion\":\"P1 противоречит SRC-SPEC: подключение доступно на поддерживаемых устройствах, а не на всех телефонах. P2 противоречит SRC-SPEC: подключение выполняется вручную через QR-код. P3 не подтверждено: SRC-PLAN сообщает только о запланированном сравнении цен, результатов нет. P4 подтверждено SRC-TEST: подключение удалось на 18 из 20 поддерживаемых устройств.\",\"unknowns\":\"SRC-TEST не сообщает длительность покупки. Данных о ценах агрегаторов нет.\"}",
+      "candidate": null
+    },
+    {
+      "batch": "r1-none",
+      "case": "C5",
+      "step": 2,
+      "arm": "none",
+      "status": "succeeded",
+      "wall_seconds": 32.752561,
+      "tokens": {
+        "input": 46466,
+        "cached": 31488,
+        "output": 815,
+        "reasoning_output": 115
+      },
+      "missing_usage_calls": 0,
+      "calls": [
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11884,
+            "inputTokens": 11542,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 342,
+            "reasoningOutputTokens": 53
+          },
+          "seconds": 10.747,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11565,
+            "inputTokens": 11515,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 50,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.563,
+          "observed_model": null
+        },
+        {
+          "purpose": "task",
+          "model": "gpt-6.1-terra",
+          "effort": "high",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 12245,
+            "inputTokens": 11852,
+            "cachedInputTokens": 8192,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 393,
+            "reasoningOutputTokens": 62
+          },
+          "seconds": 11.362,
+          "observed_model": null
+        },
+        {
+          "purpose": "quality_verifier",
+          "model": "gpt-6-luna",
+          "effort": "low",
+          "status": "succeeded",
+          "usage": {
+            "totalTokens": 11587,
+            "inputTokens": 11557,
+            "cachedInputTokens": 7552,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 30,
+            "reasoningOutputTokens": 0
+          },
+          "seconds": 4.491,
+          "observed_model": null
+        }
+      ],
+      "accounting_complete": true,
+      "d1_runtime": null,
+      "d1_usage": null,
+      "d1_status": null,
+      "task_sequence": [
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "medium",
+          "quality": "revise",
+          "reason": "эскалация после неудачи на T2@medium: сначала глубже рассуждение на той же модели (medium → high), модель старше — только если и это не поможет"
+        },
+        {
+          "model": "gpt-6.1-terra",
+          "effort": "high",
+          "quality": "accept",
+          "reason": null
+        }
+      ],
+      "answer": "{\n  \"case_id\": \"C5\",\n  \"step\": 2,\n  \"facts\": {\n    \"checks_count\": 2,\n    \"automatic_activation_exists\": false\n  },\n  \"conclusion\": {\n    \"draft\": \"Подключите eSIM вручную через QR-код на поддерживаемом устройстве. В тесте подключение удалось на 18 из 20 поддерживаемых устройств.\",\n    \"checks\": [\n      {\n        \"observation\": \"В тесте подключение удалось на 18 из 20 поддерживаемых устройств; результаты по моделям не указаны (SRC-TEST).\",\n        \"condition\": \"Если результаты по конкретной модели подтверждены, допустимо сообщить об исходе теста для этой модели и указать условия тестирования.\"\n      },\n      {\n        \"observation\": \"Сравнение цен с агрегаторами запланировано, результатов пока нет (SRC-PLAN).\",\n        \"condition\": \"Если итоговая цена окажется ниже цены конкретного сопоставимого предложения агрегатора, допустимо назвать это предложение, агрегатор и условия сравнения.\"\n      }\n    ]\n  },\n  \"unknowns\": [\n    \"Модели протестированных устройств и результаты по каждой модели не указаны (SRC-TEST).\",\n    \"Результатов сравнения цен нет (SRC-PLAN).\",\n    \"Длительность покупки не измерялась (SRC-TEST).\",\n    \"Автоматического включения по прилёте нет; подключение выполняется вручную через QR-код (SRC-SPEC).\"\n  ]\n}",
+      "candidate": null
+    }
+  ],
+  "note": "Partial token totals if missing_usage_calls > 0. Reasoning is included in output, never added twice. Quality acceptance is a model label, not an independent benchmark verdict."
+}

@@ -1,0 +1,239 @@
+{
+  "case": "C4",
+  "step": 1,
+  "arm": "manual",
+  "started_utc": "2026-11-15T19:44:43.176173+00:00",
+  "agent_pid": 25774,
+  "input": {
+    "step": 1,
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T3",
+      "effort": "high"
+    },
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "context": "Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет."
+  },
+  "report": {
+    "status": "succeeded",
+    "result": {
+      "status": "succeeded",
+      "text": "{\n  \"case_id\": \"C4\",\n  \"step\": 1,\n  \"facts\": {\n    \"a_purchases\": 200,\n    \"a_result_rub\": 1000,\n    \"b_purchases\": 150,\n    \"b_result_rub\": 3000,\n    \"a_fixed_cost_rub\": 5000,\n    \"b_fixed_cost_rub\": 6000,\n    \"fixed_budget_rub\": 6000,\n    \"both_options_fit_budget\": true,\n    \"status_quo_result_rub\": 0,\n    \"kill_result_rub\": 0,\n    \"assumptions_not_observations\": true\n  },\n  \"conclusion\": \"По предоставленному контексту: A — 10000 × 0.02 = 200 покупок; результат 200 × (100 − 70) − 5000 = 1000 руб./месяц. B — 10000 × 0.015 = 150 покупок; результат 150 × (100 − 40) − 6000 = 3000 руб./месяц. При заданных предположениях рекомендую человеку выбрать B: преимущество перед A составляет 2000 руб., перед status quo и kill — 3000 руб. Status quo сохраняет возможность исследования; kill означает отказ от него, хотя текущий финансовый результат одинаков. Сильное возражение: преимущество B основано на непроверенной конверсии, а фиксированные расходы поглощают весь бюджет. Параметр переворота — конверсия B: при неизменных остальных условиях равенство с A наступает на 1⅙%; ниже выгоднее A, выше — B. Окончательный выбор остаётся за человеком.\",\n  \"unknowns\": [\n    \"Фактические конверсии A/B неизвестны: источник прямо называет их предположениями.\",\n    \"Источник не оценивает ценность дальнейшего исследования и основания для окончательного закрытия пилота; поэтому финансовое равенство status quo и kill не доказывает их стратегическую равноценность.\"\n  ]\n}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T3",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T3",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T3",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T3",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T3",
+              "requested_model": "gpt-6.1-sol",
+              "requested_effort": "high",
+              "transmitted_model": "gpt-6.1-sol",
+              "transmitted_effort": "high",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0bd-9961-7712-b32b-3d6e8558e62d",
+                    "turnId": "01a1e0bd-ae7f-7ef1-a006-11c2f8f019ed",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 12357,
+                        "inputTokens": 11634,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 723,
+                        "reasoningOutputTokens": 271
+                      },
+                      "last": {
+                        "totalTokens": 12357,
+                        "inputTokens": 11634,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 723,
+                        "reasoningOutputTokens": 271
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 28.485,
+              "turn_id": "01a1e0bd-ae7f-7ef1-a006-11c2f8f019ed",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0bd-9961-7712-b32b-3d6e8558e62d",
+                "turnId": "01a1e0bd-ae7f-7ef1-a006-11c2f8f019ed",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 12357,
+                    "inputTokens": 11634,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 723,
+                    "reasoningOutputTokens": 271
+                  },
+                  "last": {
+                    "totalTokens": 12357,
+                    "inputTokens": 11634,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 723,
+                    "reasoningOutputTokens": 271
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0be-07b8-7b42-901c-c7c4aa6eb0f5",
+                      "turnId": "01a1e0be-0888-7070-9540-8d8fb4e0ec37",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11740,
+                          "inputTokens": 11691,
+                          "cachedInputTokens": 0,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 49,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11740,
+                          "inputTokens": 11691,
+                          "cachedInputTokens": 0,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 49,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.906,
+                "turn_id": "01a1e0be-0888-7070-9540-8d8fb4e0ec37",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "при неизменных остальных условиях равенство с A наступает на 1⅙%; ниже выгоднее A, выше — B.",
+            "method": "T1_labels_with_quote_not_calibrated_probability"
+          }
+        }
+      ]
+    },
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T3",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T3",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      }
+    }
+  },
+  "elapsed_seconds": 35.211434
+}

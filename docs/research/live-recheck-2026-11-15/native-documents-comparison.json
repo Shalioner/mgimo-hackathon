@@ -1,0 +1,117 @@
+{
+  "scope": "Small synthetic three-document smoke; routed path resumed from verified cards after code fixes. Sum of successful path calls, not uninterrupted end-to-end wall time. Failed development calls excluded and listed separately. Single fixed order, no general savings claim.",
+  "sources": [
+    {
+      "id": "DOC-001",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/a.md",
+      "sha256": "92592d75ed118c3d52766bd63f07af92a5d846839d329b034193b3941d97e66f",
+      "bytes": 41
+    },
+    {
+      "id": "DOC-002",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/b.md",
+      "sha256": "0a935c1246c950c03c26aaf7d445d854e53a394b121b7507d58156b2cb87d40b",
+      "bytes": 76
+    },
+    {
+      "id": "DOC-003",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/c.md",
+      "sha256": "766a4504ecc20b556640d0534327c03f2664264e6b2a05e9317013397944ad16",
+      "bytes": 43
+    }
+  ],
+  "routed": {
+    "native_calls": 6,
+    "input_tokens": 67615,
+    "output_tokens": 463,
+    "cached_input_tokens": 10240,
+    "native_elapsed_seconds": 33.225,
+    "calls": [
+      {
+        "model": "gpt-6-luna",
+        "effort": "low",
+        "input": 10973,
+        "output": 85,
+        "seconds": 5.676
+      },
+      {
+        "model": "gpt-6-luna",
+        "effort": "low",
+        "input": 10978,
+        "output": 44,
+        "seconds": 5.376
+      },
+      {
+        "model": "gpt-6-luna",
+        "effort": "low",
+        "input": 10969,
+        "output": 86,
+        "seconds": 5.195
+      },
+      {
+        "model": "gpt-6-luna",
+        "effort": "low",
+        "input": 11206,
+        "output": 90,
+        "seconds": 5.91
+      },
+      {
+        "model": "gpt-6.1-terra",
+        "effort": "medium",
+        "input": 11864,
+        "output": 98,
+        "seconds": 6.604
+      },
+      {
+        "model": "gpt-6-luna",
+        "effort": "low",
+        "input": 11625,
+        "output": 60,
+        "seconds": 4.464
+      }
+    ]
+  },
+  "direct": {
+    "native_calls": 2,
+    "input_tokens": 22331,
+    "output_tokens": 76,
+    "cached_input_tokens": 2048,
+    "native_elapsed_seconds": 10.487,
+    "calls": [
+      {
+        "model": "gpt-6.1-terra",
+        "effort": "medium",
+        "input": 11324,
+        "output": 37,
+        "seconds": 5.831
+      },
+      {
+        "model": "gpt-6-luna",
+        "effort": "low",
+        "input": 11007,
+        "output": 39,
+        "seconds": 4.656
+      }
+    ]
+  },
+  "d1": {
+    "input_tokens": 495,
+    "output_tokens": 0
+  },
+  "d1_seconds": 1.9697,
+  "development_attempt_receipts": [
+    "native-documents.json (initial classifier)",
+    "native-documents-synthesis.json",
+    "native-classifier-diagnostic.json"
+  ],
+  "quality": {
+    "routed": "accept",
+    "direct": "accept"
+  },
+  "code_sha256": {
+    "tools/native_codex.py": "619b6843112875c944b331dbf0a74fd482267032e370d737c9f0a93365dfa836",
+    "tools/document_flow.py": "3948153022f07aae4f0a8961628561147b6c9c407547c931976b550c755b5454",
+    "tools/adaptive_execution.py": "00576417ec4e1676e56f235262d54149672769567eb8c646e99c8438bdd4c0d6"
+  },
+  "currency_cost": "No monetary savings claimed; native subscription usage plus separate local D1 tokens, not an API invoice."
+}

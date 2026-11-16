@@ -1,0 +1,51 @@
+{
+  "status": "needs_review",
+  "host": "codex",
+  "classification": {
+    "route": {
+      "status": "executable",
+      "reason": "Critical system memory pressure",
+      "started": true,
+      "wrapper_invocations": 1,
+      "result": "blocked",
+      "fallback": false,
+      "requested": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "transmitted": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "observed": null,
+      "network": "denied",
+      "transport": "unix-service",
+      "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+      "input_bytes": 1085,
+      "timeout_seconds": 120,
+      "request_id": "946bf014c22c4855ac3801b81aeaa7f5"
+    },
+    "runtime": {
+      "timing": {
+        "queue_wait_seconds": 12.488471,
+        "worker_setup_seconds": null,
+        "worker_roundtrip_seconds": null,
+        "worker_inference_seconds": null,
+        "server_total_seconds": 12.488744,
+        "cold_start": null,
+        "completed": true,
+        "client_roundtrip_seconds": 12.495332
+      }
+    },
+    "status": "needs_review",
+    "labels": null
+  },
+  "execution": "host_owned",
+  "account_switch": false
+}

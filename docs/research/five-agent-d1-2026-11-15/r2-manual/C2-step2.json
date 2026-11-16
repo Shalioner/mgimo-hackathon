@@ -1,0 +1,235 @@
+{
+  "case": "C2",
+  "step": 2,
+  "arm": "manual",
+  "started_utc": "2026-11-15T19:46:12.942256+00:00",
+  "agent_pid": 26019,
+  "input": {
+    "step": 2,
+    "new_context": "SRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.",
+    "request": "Укажи январское и февральское D30 retention, разность в процентных пунктах и источники. Не объясняй причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_d30, february_d30, delta_pp, sources. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "january_d30": 24,
+      "february_d30": 20,
+      "delta_pp": -4,
+      "sources": [
+        "SRC-A",
+        "SRC-C"
+      ]
+    },
+    "prohibitedclaims": [
+      "D7 и D30 смешаны",
+      "Падение вызвано конкретным изменением продукта"
+    ],
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.\n\nSRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.",
+    "blind_criteria": []
+  },
+  "report": {
+    "status": "needs_review",
+    "result": {
+      "status": "needs_review",
+      "text": null,
+      "candidate": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январский D30 retention — 24%, февральский — 20%. Разность (февральский минус январский) — −4 процентных пункта. Источники: SRC-A, SRC-C.\",\"unknowns\":[]}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0be-f6a3-77b0-ac6f-e5799d99708e",
+                    "turnId": "01a1e0be-f91c-7813-b738-0f7769bc6825",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 10926,
+                        "inputTokens": 10825,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 101,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 10926,
+                        "inputTokens": 10825,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 101,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 7.363,
+              "turn_id": "01a1e0be-f91c-7813-b738-0f7769bc6825",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0be-f6a3-77b0-ac6f-e5799d99708e",
+                "turnId": "01a1e0be-f91c-7813-b738-0f7769bc6825",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 10926,
+                    "inputTokens": 10825,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 101,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 10926,
+                    "inputTokens": 10825,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 101,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "needs_review",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0bf-1348-7c33-9a2d-e2a2cc71268a",
+                      "turnId": "01a1e0bf-1401-7091-b312-30f085b8d6fc",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11253,
+                          "inputTokens": 11201,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 52,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11253,
+                          "inputTokens": 11201,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 52,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.073,
+                "turn_id": "01a1e0bf-1401-7091-b312-30f085b8d6fc",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            }
+          }
+        }
+      ],
+      "reason": "Quality unconfirmed; no automatic escalation"
+    },
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T1",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T1",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      }
+    }
+  },
+  "elapsed_seconds": 13.124413
+}

@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-dfdb-7502-8533-aea59470c0ba",
+            "turnId": "01a1e0da-e197-7f40-8325-e42d83463093",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11029,
+                "inputTokens": 10882,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 147,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11029,
+                "inputTokens": 10882,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 147,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 6.775,
+      "turn_id": "01a1e0da-e197-7f40-8325-e42d83463093",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":\"contradicted\",\"P2\":\"contradicted\",\"P3\":\"unsupported\",\"P4\":\"supported\"},\"conclusion\":\"P1 contradicted by SRC-SPEC: eSIM works on supported devices, not all phones. P2 contradicted by SRC-SPEC: activation is manual via QR code, with no automatic arrival activation. P3 unsupported by SRC-PLAN: price comparison is planned, with no results. P4 supported by SRC-TEST: connection succeeded on 18 of 20 supported devices.\",\"unknowns\":\"SRC-TEST says purchase duration was not measured. It does not affect P1–P4.\"}"
+}

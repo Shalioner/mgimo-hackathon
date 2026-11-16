@@ -1,0 +1,370 @@
+{
+  "at": "2026-11-15T15:19:28.244573+00:00",
+  "requests": [
+    {
+      "schema": 1,
+      "request": "Составь краткий план исследования спроса по предоставленному описанию продукта.",
+      "context": "Продукт: приложение совместных семейных списков покупок. Нужен только текстовый план, без поиска.",
+      "hosts": [
+        "codex"
+      ],
+      "classification_context": null,
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 358,
+          "timeout_seconds": 90,
+          "request_id": "ca9b1b1c8efc4a8390d142e5ba9f0a0e",
+          "worker_pid": 58090,
+          "generation": 2
+        },
+        "runtime": {
+          "worker_pid": 58090,
+          "generation": 2,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 17.2041
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T2",
+              "confidence": 0.5432302214283246,
+              "probabilities": {
+                "T1": 0.3155343862031284,
+                "T2": 0.5432302214283246,
+                "T3": 0.0357076131846062,
+                "T4": 0.10552777918394088
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9654334943868254,
+              "probabilities": {
+                "normal": 0.9654334943868254,
+                "deep": 0.034566505613174585
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.9102082666201692,
+              "probabilities": {
+                "text": 0.9102082666201692,
+                "tools": 0.08979173337983079
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 369,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "plan": null,
+      "start": null,
+      "result": {
+        "status": "not_started",
+        "text": null
+      },
+      "status": "manual",
+      "expected_tier": "T2",
+      "measured_seconds": 17.333
+    },
+    {
+      "schema": 1,
+      "request": "Извлеки дату и число из текста.",
+      "context": "Дата запуска: 15 ноября 2026 года. Число участников: 120. Только выпиши два значения.",
+      "hosts": [
+        "codex"
+      ],
+      "classification_context": null,
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 230,
+          "timeout_seconds": 90,
+          "request_id": "a632626cd7ce4bada98738df8e213814",
+          "worker_pid": 58090,
+          "generation": 2
+        },
+        "runtime": {
+          "worker_pid": 58090,
+          "generation": 2,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 2.1509
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T1",
+              "confidence": 0.9506887480314318,
+              "probabilities": {
+                "T1": 0.9506887480314318,
+                "T2": 0.017084814016071165,
+                "T3": 0.007541121414534524,
+                "T4": 0.02468531653796246
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.988098805471335,
+              "probabilities": {
+                "normal": 0.988098805471335,
+                "deep": 0.011901194528665114
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.9602144523384908,
+              "probabilities": {
+                "text": 0.9602144523384908,
+                "tools": 0.03978554766150929
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 365,
+            "output_tokens": 0
+          }
+        },
+        "status": "accepted",
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "text"
+        }
+      },
+      "plan": null,
+      "start": null,
+      "result": {
+        "status": "not_started",
+        "text": null
+      },
+      "status": "classified",
+      "recommendations": [
+        {
+          "status": "manual",
+          "reason": "Нет явно включённого Codex subscription profile",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 0,
+          "internal_transport_retries": "unknown_version_dependent",
+          "started": false,
+          "process_exit_code": null,
+          "requested": {
+            "host": "codex",
+            "provider": "openai",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "transmitted": {
+            "model": null,
+            "effort": null
+          },
+          "observed": {
+            "provider": null,
+            "model": null,
+            "effort": null
+          },
+          "billing": {
+            "mode": "subscription_only",
+            "auth": "subscription",
+            "cap_verification": "unknown"
+          },
+          "input_bytes": 56,
+          "endpoint": null,
+          "policy_digest": "8cdcd3c3e030ae94a6f69fc748c8d9661d1e23ffa9770982f52c9d286efa500b",
+          "tier": "T1"
+        }
+      ],
+      "expected_tier": "T1",
+      "measured_seconds": 2.418
+    },
+    {
+      "schema": 1,
+      "request": "Сравни три стратегии запуска продукта и предложи обоснованный выбор с учётом рисков.",
+      "context": "A: быстрый запуск с ограниченными функциями. B: долгий запуск с полной функциональностью. C: закрыть инициативу. Внешнее исследование не требуется; укажи неизвестное.",
+      "hosts": [
+        "codex"
+      ],
+      "classification_context": null,
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 487,
+          "timeout_seconds": 90,
+          "request_id": "d4003c723c794ebda5b14556ade26fa0",
+          "worker_pid": 58090,
+          "generation": 2
+        },
+        "runtime": {
+          "worker_pid": 58090,
+          "generation": 2,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 2.1393
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.7790805034003631,
+              "probabilities": {
+                "T1": 0.010333140789468781,
+                "T2": 0.02107372939497894,
+                "T3": 0.7790805034003631,
+                "T4": 0.18951262641518926
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.6837558959310958,
+              "probabilities": {
+                "normal": 0.6837558959310958,
+                "deep": 0.3162441040689043
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.6950128447001087,
+              "probabilities": {
+                "text": 0.6950128447001087,
+                "tools": 0.30498715529989123
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 405,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "plan": null,
+      "start": null,
+      "result": {
+        "status": "not_started",
+        "text": null
+      },
+      "status": "manual",
+      "expected_tier": "T3",
+      "measured_seconds": 2.254
+    }
+  ],
+  "service": {
+    "status": "ok",
+    "service": "running",
+    "pid": 57117,
+    "model_state": "ready",
+    "model": "LiquidAI/d1-2B-MLX-8bit",
+    "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+    "worker_pid": 58090,
+    "generation": 2,
+    "completed": 3,
+    "failed": 1,
+    "queue_depth": 0,
+    "active_id": null,
+    "last_latency_seconds": 2.1393,
+    "reason": null,
+    "retry_after_seconds": 0,
+    "limits": {
+      "state_bytes": 32768,
+      "frame_bytes": 65536,
+      "text_tokens": 4096,
+      "packed_tokens": 8192,
+      "queue": 4,
+      "idle_seconds": 300.0
+    }
+  }
+}

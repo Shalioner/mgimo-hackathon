@@ -1,0 +1,53 @@
+{
+  "batches": {
+    "r1-routed": {
+      "tasks": 10,
+      "succeeded": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "api_equivalent_usd": 0,
+      "wall_seconds": 13.670636
+    },
+    "r1-manual": {
+      "tasks": 10,
+      "succeeded": 7,
+      "input_tokens": 226432,
+      "output_tokens": 3306,
+      "api_equivalent_usd": 0.10759772,
+      "wall_seconds": 51.806688
+    },
+    "r2-manual": {
+      "tasks": 10,
+      "succeeded": 6,
+      "input_tokens": 249684,
+      "output_tokens": 3959,
+      "api_equivalent_usd": 0.11486628,
+      "wall_seconds": 73.355647
+    },
+    "r2-routed": {
+      "tasks": 10,
+      "succeeded": 4,
+      "input_tokens": 314292,
+      "output_tokens": 4278,
+      "api_equivalent_usd": 0.06880314,
+      "wall_seconds": 118.926181
+    }
+  },
+  "blind_judge": {
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "api_equivalent_usd": 0.0734048,
+    "usage": {
+      "totalTokens": 31504,
+      "inputTokens": 29718,
+      "cachedInputTokens": 2048,
+      "cacheWriteInputTokens": 0,
+      "outputTokens": 1786,
+      "reasoningOutputTokens": 432
+    },
+    "seconds": 42.625
+  },
+  "development_and_orchestrator_cost": "Not included in operational arms; no complete accounting claimed for entire development session",
+  "rates_source": "https://developers.openai.com/api/docs/pricing",
+  "rates_checked": "2026-11-15"
+}

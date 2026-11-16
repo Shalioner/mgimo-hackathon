@@ -1,0 +1,10 @@
+{
+  "prompt": "Извлеки число из строки «Количество объектов: 17». Ответь только числом. Не используй инструменты.",
+  "same_cwd_and_settings": true,
+  "repetitions": 1,
+  "order": [
+    "routed",
+    "direct"
+  ],
+  "limits": "single simple extraction; not general quality/cost benchmark"
+}

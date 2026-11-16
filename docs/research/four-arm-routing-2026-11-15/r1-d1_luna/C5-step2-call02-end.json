@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-2484-7a50-9eb9-083c77879656",
+            "turnId": "01a1e0da-30fb-7352-bdab-4f46f62b8468",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11174,
+                "inputTokens": 10913,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 261,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11174,
+                "inputTokens": 10913,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 261,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 12.381,
+      "turn_id": "01a1e0da-30fb-7352-bdab-4f46f62b8468",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик сообщения (до 40 слов): «Подключение eSIM выполняется вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 устройств». Проверки неподтверждённых обещаний: 1) «Работает на всех телефонах». Наблюдение: спецификация ограничивает поддержку совместимыми устройствами. Более узко допустимо: «Работает на поддерживаемых устройствах». 2) «Дешевле всех агрегаторов». Наблюдение: сравнение цен только запланировано, результатов нет. Более узко допустимо: «Сравниваем цены с агрегаторами» — после подтверждения, что сравнение проводится. Источники: SRC-SPEC, SRC-TEST, SRC-PLAN.\",\"unknowns\":\"P2 опровергнуто SRC-SPEC: автоматического включения по прилёте нет, поэтому тест для подтверждения функции не предлагается. Длительность покупки не измерялась (SRC-TEST); результаты сравнения цен отсутствуют (SRC-PLAN).\"}"
+}

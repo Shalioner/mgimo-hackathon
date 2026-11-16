@@ -1,0 +1,350 @@
+{
+  "case": "C5",
+  "step": 1,
+  "arm": "luna",
+  "started_utc": "2026-11-15T20:16:33.072128+00:00",
+  "agent_pid": 36518,
+  "input": {
+    "step": 1,
+    "request": "Для P1–P4 укажи supported, unsupported или contradicted и ID основания. Не превращай план исследования в доказательство.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: P1, P2, P3, P4. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "P1": "unsupported",
+      "P2": "contradicted",
+      "P3": "unsupported",
+      "P4": "supported"
+    },
+    "prohibitedclaims": [
+      "Поддержка всех телефонов подтверждена",
+      "Сравнение цен уже проведено",
+      "18 из 20 означает гарантию для каждого"
+    ],
+    "evaluation_notes": {
+      "P1": {
+        "accepted_labels": [
+          "unsupported",
+          "contradicted"
+        ],
+        "condition": "При объяснении, что универсальное обещание не следует из ограниченной совместимости и теста; два отказа среди поддерживаемых устройств также позволяют contradicted. Само supported недопустимо."
+      }
+    },
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "blind_criteria": [],
+    "routing_synopsis": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств»."
+  },
+  "report": {
+    "status": "succeeded",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "luna_classification": {
+        "route": {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "purpose": "routing_classifier",
+          "result": "succeeded",
+          "started": true,
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e0da-bcc1-70c3-b3e0-1eca16425865",
+                  "turnId": "01a1e0da-bf5c-7db3-bcb0-950d39121a8e",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 11417,
+                      "inputTokens": 11330,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 87,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 11417,
+                      "inputTokens": 11330,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 87,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 8.204,
+            "turn_id": "01a1e0da-bf5c-7db3-bcb0-950d39121a8e",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+          }
+        },
+        "method": "labels_with_quote_not_calibrated_probability",
+        "answers": {
+          "tier": {
+            "choice": "T1",
+            "sure": true,
+            "quote": "Для P1–P4 укажи supported, unsupported или contradicted и ID основания."
+          },
+          "effort": {
+            "choice": "normal",
+            "sure": true,
+            "quote": "Значения выведи самостоятельно из материалов."
+          },
+          "capability": {
+            "choice": "text",
+            "sure": true,
+            "quote": "ROUTING SYNOPSIS (DATA):"
+          }
+        },
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "text"
+        }
+      },
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "reason": "Luna classifier selected route with source quotes"
+    },
+    "result": {
+      "status": "succeeded",
+      "text": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":\"contradicted\",\"P2\":\"contradicted\",\"P3\":\"unsupported\",\"P4\":\"supported\"},\"conclusion\":\"P1 contradicted by SRC-SPEC: eSIM works on supported devices, not all phones. P2 contradicted by SRC-SPEC: activation is manual via QR code, with no automatic arrival activation. P3 unsupported by SRC-PLAN: price comparison is planned, with no results. P4 supported by SRC-TEST: connection succeeded on 18 of 20 supported devices.\",\"unknowns\":\"SRC-TEST says purchase duration was not measured. It does not affect P1–P4.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "purpose": "task"
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "purpose": "task",
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0da-dfdb-7502-8533-aea59470c0ba",
+                    "turnId": "01a1e0da-e197-7f40-8325-e42d83463093",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11029,
+                        "inputTokens": 10882,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 147,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 11029,
+                        "inputTokens": 10882,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 147,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 6.775,
+              "turn_id": "01a1e0da-e197-7f40-8325-e42d83463093",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0da-dfdb-7502-8533-aea59470c0ba",
+                "turnId": "01a1e0da-e197-7f40-8325-e42d83463093",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11029,
+                    "inputTokens": 10882,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 147,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11029,
+                    "inputTokens": 10882,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 147,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "calculation_check": {
+            "status": "not_applicable",
+            "checks": [],
+            "reason": "Context is not valid calculation JSON"
+          },
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "purpose": "quality_verifier",
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0da-fad9-7202-bfe5-9d405911cd90",
+                      "turnId": "01a1e0da-fb98-75d2-ada1-fea7392e6bdf",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11377,
+                          "inputTokens": 11346,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 31,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11377,
+                          "inputTokens": 11346,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 31,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.683,
+                "turn_id": "01a1e0da-fb98-75d2-ada1-fea7392e6bdf",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "connection succeeded on 18 of 20 supported devices",
+            "method": "T1_labels_with_quote_not_calibrated_probability",
+            "verification_scope": "label_shape_and_literal_quote_presence_only"
+          }
+        }
+      ]
+    },
+    "transport": "native-codex",
+    "routing_mode": "luna",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T1",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T1",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "purpose": "task"
+    }
+  },
+  "elapsed_seconds": 22.27866
+}

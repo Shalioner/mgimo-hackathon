@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "routing_classifier",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-0fc2-7770-bb06-238008633dc8",
+            "turnId": "01a1e0da-107b-7161-9221-3109a1292fd5",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11531,
+                "inputTokens": 11420,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 111,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11531,
+                "inputTokens": 11420,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 111,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.912,
+      "turn_id": "01a1e0da-107b-7161-9221-3109a1292fd5",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T1\",\"sure\":true,\"quote\":\"Новый учебный результат пилота B: 80 покупок на 10000 пользователей.\"},\"effort\":{\"choice\":\"normal\",\"sure\":true,\"quote\":\"Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"Доход, переменные и фиксированные затраты совпали с исходной моделью.\"}}}"
+}

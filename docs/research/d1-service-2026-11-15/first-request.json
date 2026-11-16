@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "request": "Составь краткий план исследования спроса по предоставленному описанию продукта.",
+  "context": "Продукт: приложение совместных семейных списков покупок. Нужен только текстовый план, без поиска.",
+  "hosts": [
+    "codex"
+  ],
+  "classification_context": null,
+  "classification": {
+    "route": {
+      "status": "executable",
+      "reason": "Model worker protocol ended",
+      "started": true,
+      "wrapper_invocations": 1,
+      "result": "blocked",
+      "fallback": false,
+      "requested": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "transmitted": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "observed": null,
+      "network": "denied",
+      "transport": "unix-service",
+      "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+      "input_bytes": 358,
+      "timeout_seconds": 90,
+      "request_id": "2787581c067b4b94a9b7ad9e9623cd5e"
+    },
+    "runtime": {},
+    "status": "needs_review",
+    "labels": null
+  },
+  "plan": null,
+  "start": null,
+  "result": {
+    "status": "not_started",
+    "text": null
+  },
+  "status": "manual",
+  "measured_seconds": 0.52
+}

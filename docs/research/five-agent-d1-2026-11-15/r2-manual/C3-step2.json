@@ -1,0 +1,233 @@
+{
+  "case": "C3",
+  "step": 2,
+  "arm": "manual",
+  "started_utc": "2026-11-15T19:46:12.942344+00:00",
+  "agent_pid": 26020,
+  "input": {
+    "step": 2,
+    "new_context": "Для диагностического сравнения согласован одинаковый вес сегментов: 50% новые, 50% действующие в обоих месяцах. Это стандартизация, не реально наблюдавшийся состав февраля.",
+    "request": "Рассчитай стандартизированное удержание за оба месяца и изменение. Дай короткую карточку для руководителя, отделив наблюдаемый агрегат от стандартизированного показателя.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: standardized_january_pct, standardized_february_pct, standardized_delta_pp, observed_february_pct. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "standardized_january_pct": 50,
+      "standardized_february_pct": 57.5,
+      "standardized_delta_pp": 7.5,
+      "observed_february_pct": 27.5
+    },
+    "prohibitedclaims": [
+      "Реально наблюдавшееся удержание февраля равно 57.5%"
+    ],
+    "blind_criteria": [
+      "Стандартизация явно названа расчётным сравнением"
+    ],
+    "context": "Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет.\n\nДля диагностического сравнения согласован одинаковый вес сегментов: 50% новые, 50% действующие в обоих месяцах. Это стандартизация, не реально наблюдавшийся состав февраля."
+  },
+  "report": {
+    "status": "needs_review",
+    "result": {
+      "status": "needs_review",
+      "text": null,
+      "candidate": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5},\"conclusion\":\"При одинаковых весах сегментов 50/50 стандартизированное D30-удержание выросло с 50% в январе до 57,5% в феврале, на 7,5 п.п. Фактически наблюдавшееся удержание февраля — 27,5%: 55 из 200 пользователей. Оно отражает реальный состав февраля, а не состав 50/50. Источники: SRC-J, SRC-F и согласованные веса из контекста.\",\"unknowns\":\"Рандомизации не было, поэтому причинный эффект по этим данным определить нельзя.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T2",
+              "requested_model": "gpt-6.1-terra",
+              "requested_effort": "medium",
+              "transmitted_model": "gpt-6.1-terra",
+              "transmitted_effort": "medium",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0be-f6ba-7c61-8ee2-a1c5490e2efa",
+                    "turnId": "01a1e0be-f943-75b0-9342-7eaafb2ebe0a",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11723,
+                        "inputTokens": 11488,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 235,
+                        "reasoningOutputTokens": 47
+                      },
+                      "last": {
+                        "totalTokens": 11723,
+                        "inputTokens": 11488,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 235,
+                        "reasoningOutputTokens": 47
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 10.529,
+              "turn_id": "01a1e0be-f943-75b0-9342-7eaafb2ebe0a",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0be-f6ba-7c61-8ee2-a1c5490e2efa",
+                "turnId": "01a1e0be-f943-75b0-9342-7eaafb2ebe0a",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11723,
+                    "inputTokens": 11488,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 235,
+                    "reasoningOutputTokens": 47
+                  },
+                  "last": {
+                    "totalTokens": 11723,
+                    "inputTokens": 11488,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 235,
+                    "reasoningOutputTokens": 47
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "needs_review",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0bf-201a-7472-8bc0-f492d32e8970",
+                      "turnId": "01a1e0bf-212e-7573-ab1a-7d20a4511971",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11379,
+                          "inputTokens": 11319,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 60,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11379,
+                          "inputTokens": 11319,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 60,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 6.843,
+                "turn_id": "01a1e0bf-212e-7573-ab1a-7d20a4511971",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            }
+          }
+        }
+      ],
+      "reason": "Quality unconfirmed; no automatic escalation"
+    },
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T2",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T2",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      }
+    }
+  },
+  "elapsed_seconds": 18.076068
+}

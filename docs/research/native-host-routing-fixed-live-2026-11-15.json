@@ -1,0 +1,18 @@
+{
+  "exit_code": 0,
+  "routing": [
+    {
+      "event": "routing",
+      "status": "forwarded",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "tier": "T1",
+      "observed_model": null
+    }
+  ],
+  "result": {
+    "status": "completed",
+    "text": "17",
+    "turn_id": "01a1e005-c5a2-7d10-8154-d61d6eada68e"
+  }
+}

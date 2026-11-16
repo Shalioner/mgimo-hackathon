@@ -1,0 +1,144 @@
+{
+  "case": "C3",
+  "step": 1,
+  "arm": "d1",
+  "started_utc": "2026-11-15T20:13:08.199804+00:00",
+  "agent_pid": 34915,
+  "input": {
+    "step": 1,
+    "request": "Разреши противоречие: агрегированное удержание упало, хотя внутри обоих сегментов выросло. Покажи расчёты, роль состава выборки и предложи, какую метрику использовать для решения об изменении продукта. Не объявляй причинный эффект.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_new_pct, february_new_pct, january_existing_pct, february_existing_pct, january_total_pct, february_total_pct, aggregate_delta_pp. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T3",
+      "effort": "high"
+    },
+    "expectedfacts": {
+      "january_new_pct": 90,
+      "february_new_pct": 95,
+      "january_existing_pct": 10,
+      "february_existing_pct": 20,
+      "january_total_pct": 50,
+      "february_total_pct": 27.5,
+      "aggregate_delta_pp": -22.5
+    },
+    "prohibitedclaims": [
+      "Каждый сегмент ухудшился",
+      "Изменение продукта доказанно улучшило удержание"
+    ],
+    "blind_criteria": [
+      "Объяснён сдвиг весов сегментов",
+      "Агрегат отделён от сегментной динамики",
+      "Причинность ограничена"
+    ],
+    "context": "{\"material\": \"Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C3 supplied source counts/parameters; original prose in material\", \"values\": {\"jan_new_retained\": 90, \"jan_new_total\": 100, \"jan_existing_retained\": 10, \"jan_existing_total\": 100, \"feb_new_retained\": 19, \"feb_new_total\": 20, \"feb_existing_retained\": 36, \"feb_existing_total\": 180}}}, \"calculation_checks\": [{\"id\": \"january_new_pct\", \"answer_pointer\": \"/facts/january_new_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"january_existing_pct\", \"answer_pointer\": \"/facts/january_existing_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_new_pct\", \"answer_pointer\": \"/facts/february_new_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_existing_pct\", \"answer_pointer\": \"/facts/february_existing_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"january_total_pct\", \"answer_pointer\": \"/facts/january_total_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_total_pct\", \"answer_pointer\": \"/facts/february_total_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"aggregate_delta_pp\", \"answer_pointer\": \"/facts/aggregate_delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}]}]}, \"tolerance\": \"0.01\"}]}",
+    "routing_synopsis": "Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет."
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1402,
+          "timeout_seconds": 120,
+          "request_id": "9356feba32db4533a989f911f31efac1",
+          "worker_pid": 34919,
+          "generation": 1
+        },
+        "runtime": {
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 19.3567,
+          "timing": {
+            "queue_wait_seconds": 0.000129,
+            "worker_setup_seconds": 15.050259,
+            "worker_roundtrip_seconds": 4.306485,
+            "worker_inference_seconds": 4.303027,
+            "server_total_seconds": 19.357306,
+            "cold_start": true,
+            "completed": true,
+            "client_roundtrip_seconds": 19.365821
+          },
+          "phase": "complete"
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T4",
+              "confidence": 0.5442278248933134,
+              "probabilities": {
+                "T1": 0.04044210842296461,
+                "T2": 0.027503911745481464,
+                "T3": 0.38782615493824046,
+                "T4": 0.5442278248933134
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "deep",
+              "confidence": 0.8353398602963742,
+              "probabilities": {
+                "normal": 0.1646601397036259,
+                "deep": 0.8353398602963742
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.5552681095153557,
+              "probabilities": {
+                "text": 0.5552681095153557,
+                "tools": 0.4447318904846443
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 607,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex",
+    "routing_mode": "d1"
+  },
+  "elapsed_seconds": 19.936186
+}

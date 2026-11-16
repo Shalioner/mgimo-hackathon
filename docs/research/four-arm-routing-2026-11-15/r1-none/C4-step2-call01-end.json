@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0dc-522d-7a70-83da-5508d7205a1f",
+            "turnId": "01a1e0dc-53fa-7901-a08e-15693635cf66",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11755,
+                "inputTokens": 11630,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 125,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11755,
+                "inputTokens": 11630,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 125,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 5.933,
+      "turn_id": "01a1e0dc-53fa-7901-a08e-15693635cf66",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Конверсия составила 0,8% (80 из 10000), финансовый результат — −1200 руб. Правило stop сработало по обеим частям: конверсия ниже 1% и финансовый результат отрицательный. Источник: предоставленный учебный материал; расчётные значения — T0 CALCULATIONS.\",\"unknowns\":[]}"
+}

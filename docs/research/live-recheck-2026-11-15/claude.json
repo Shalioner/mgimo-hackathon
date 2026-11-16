@@ -1,0 +1,73 @@
+{
+  "checked_at": "2026-11-15T18:00:12.172203+00:00",
+  "status": "strict_validation_passed_native_test_blocked",
+  "scope": "Read-only local Claude mod recheck; no inference or external API calls",
+  "commands": [
+    {
+      "command": "rtk proxy /Users/shalioner/.local/bin/claude --version",
+      "executed": true,
+      "exit_code": 0,
+      "stdout": "2.1.311 (Claude Code)\n",
+      "stderr": "",
+      "duration_seconds": 1.089
+    },
+    {
+      "command": "rtk proxy /Users/shalioner/.local/bin/claude plugin validate --strict --json plugins/strategist-routing",
+      "executed": true,
+      "exit_code": 0,
+      "stdout": "{\n  \"success\": true,\n  \"strict\": true,\n  \"target\": \"/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/plugins/strategist-routing/.claude-plugin/plugin.json\",\n  \"manifest\": {\n    \"file\": \"/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/plugins/strategist-routing/.claude-plugin/plugin.json\",\n    \"type\": \"plugin\",\n    \"errors\": [],\n    \"warnings\": [],\n    \"notes\": [],\n    \"gatingHooks\": []\n  },\n  \"contents\": [\n    {\n      \"file\": \"/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/plugins/strategist-routing/hooks/hooks.json\",\n      \"type\": \"hooks\",\n      \"errors\": [],\n      \"warnings\": [],\n      \"notes\": [\n        \"./register.mjs hooks: turn.start, agent.spawn, turn.step, turn.complete\",\n        \"./register.mjs gating hook without .catch: agent.spawn\",\n        \"./register.mjs calls: $.process.run (via call), $.ui.log\"\n      ],\n      \"gatingHooks\": [\n        {\n          \"module\": \"./register.mjs\",\n          \"pattern\": \"agent.spawn\",\n          \"hook\": \"agent.spawn\",\n          \"hasCatch\": false\n        }\n      ]\n    }\n  ],\n  \"advice\": [\n    {\n      \"file\": \"/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/plugins/strategist-routing/README.md\",\n      \"message\": \"This README has no line that installs \\\"strategist-routing\\\" from a marketplace. Add the install line, which works in one step on Claude Code 2.1.275 or later. Validate the folder that holds its marketplace.json to have <owner>/<repo> filled in, and the name its marketplace lists it under.\",\n      \"installLine\": \"/plugin install strategist-routing --marketplace <owner>/<repo>\"\n    }\n  ],\n  \"directory\": {\n    \"profile\": null,\n    \"findings\": [\n      {\n        \"code\": \"ICON_MISSING\",\n        \"title\": \"No icon\",\n        \"severity\": \"warning\",\n        \"blocking\": false,\n        \"hold\": false,\n        \"file\": \".claude-plugin/plugin.json\",\n        \"field\": \"icon\",\n        \"message\": \"No icon found in the plugin. The validator looked for `icon` in plugin.json and for a file at .claude-plugin/icon.png or .svg, assets/icon.png or .svg, or a similar path.\",\n        \"fix\": \"Add a square PNG to the plugin folder at .claude-plugin/icon.png, or set `icon` in plugin.json to the path of a square PNG or JPEG in the plugin: 512 to 2048 px on each side, under 2 MB. SVG and WebP are not accepted. That file may become the listing icon only once: the first time the plugin is saved or submitted in the developer portal. Adding or changing it later does not change the icon.\"\n      }\n    ],\n    \"undecided\": [],\n    \"incomplete\": true,\n    \"failure\": null,\n    \"notes\": [\n      \"hooks/hooks.json names a hooks module (a code file listed under `modules`). The plugin directory has rules of its own for such code, and these checks apply none of them, so passing here does not mean the directory accepts the plugin. The developer portal's own validation applies those rules.\"\n    ]\n  }\n}\n",
+      "stderr": "OK: protected VPS proxy exit IP [redacted]\n",
+      "duration_seconds": 1.124
+    },
+    {
+      "command": "rtk proxy /Users/shalioner/.local/bin/claude plugin test --help",
+      "executed": true,
+      "exit_code": 0,
+      "stdout": "Usage: claude plugin test [dir]\n\nRun a mod's tests\n\nArguments:\n  dir         The mod's folder (default: the current folder)\n\nOptions:\n  -h, --help  Display help for command\n\nRuns every *.test.ts and *.test.tsx under dir, each file in a child of this\nbinary, in an environment like the one the mod's hooks run in. A test file\nimports its kit from 'claude-code/testing'. Exits 1 when a test fails.\n",
+      "stderr": "OK: protected VPS proxy exit IP [redacted]\n",
+      "duration_seconds": 0.908
+    },
+    {
+      "command": "rtk proxy /Users/shalioner/.local/bin/claude plugin test plugins/strategist-routing",
+      "executed": true,
+      "exit_code": 1,
+      "stdout": "\ntests/routing.test.ts:\n(fail) the file did not load\n  its run ended without a report (exit code 71)\n\n 0 pass\n 1 fail\nRan 1 test across 1 file. [0.16s]\n",
+      "stderr": "OK: protected VPS proxy exit IP [redacted]\nsandbox-exec: sandbox_apply: Operation not permitted\n",
+      "duration_seconds": 1.486
+    }
+  ],
+  "inspection": {
+    "wrapper": "/Users/shalioner/.local/bin/claude",
+    "delegates_to": "/Users/shalioner/VPS-AI-Proxy/claude-protected",
+    "native_path_from_marker": "/Users/shalioner/.local/share/claude/versions/2.1.311",
+    "native_version_runtime_verified": true,
+    "evidence": [
+      "claude-protected sources proxy-env.sh; non-help/version invocations call client-preflight.command",
+      "client-preflight.command checks /etc/hosts then invokes check-proxy.command",
+      "claude-process-launcher.py always verifies transport and opens socket.create_connection((PROXY_HOST, PROXY_PORT), timeout=1.0) before native binary execution",
+      "launcher invokes /usr/bin/sandbox-exec with proxy-only.sb unless already sandboxed"
+    ]
+  },
+  "comparison": {
+    "source": "docs/NATIVE_HOST_ROUTING.md",
+    "previous": {
+      "version_documented": "2.1.311",
+      "validate": "success, errors 0, four hooks",
+      "plugin_test": {
+        "error": "sandbox_apply: Operation not permitted",
+        "exit_code": 71,
+        "tests": 0
+      }
+    },
+    "current": "Claude 2.1.311 verified. Strict validation success, no manifest/hook errors/warnings; non-blocking icon warning and install-line advice. Same sandbox_apply Operation not permitted reproduced: child exit 71, CLI exit 1, test file did not load, 0 pass/1 file fail (no test bodies executed). Previous documentation exit 71 refers to child rather than top-level CLI."
+  },
+  "writes": [
+    "docs/research/live-recheck-2026-11-15/claude.json"
+  ],
+  "limitations": [
+    "Native mod engine behavior remains unverified when native test has zero executed tests",
+    "No inference, model calls, package installation, auth/profile/trust/sandbox changes",
+    "Protected wrapper transport readiness check was executed under confirmed scope; proxy address redacted"
+  ],
+  "authorization": "Parent confirmed existing configured transport preflight is within user-authorized repeated live checks"
+}

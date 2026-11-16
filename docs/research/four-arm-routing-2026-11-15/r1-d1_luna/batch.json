@@ -1,0 +1,63 @@
+{
+  "arm": "d1_luna",
+  "seconds": 119.859855,
+  "exitcodes": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "service_before": {
+    "status": "ok",
+    "service": "running",
+    "pid": 34886,
+    "model_state": "ready",
+    "model": "LiquidAI/d1-2B-MLX-8bit",
+    "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+    "worker_pid": 34919,
+    "generation": 1,
+    "completed": 10,
+    "failed": 0,
+    "cancelled": 0,
+    "queue_depth": 0,
+    "active_id": null,
+    "last_latency_seconds": 5.275,
+    "reason": null,
+    "retry_after_seconds": 0,
+    "limits": {
+      "state_bytes": 32768,
+      "frame_bytes": 65536,
+      "text_tokens": 4096,
+      "packed_tokens": 8192,
+      "queue": 4,
+      "idle_seconds": 300.0
+    }
+  },
+  "service_after": {
+    "status": "ok",
+    "service": "running",
+    "pid": 34886,
+    "model_state": "ready",
+    "model": "LiquidAI/d1-2B-MLX-8bit",
+    "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+    "worker_pid": 34919,
+    "generation": 1,
+    "completed": 20,
+    "failed": 0,
+    "cancelled": 0,
+    "queue_depth": 0,
+    "active_id": null,
+    "last_latency_seconds": 5.9407,
+    "reason": null,
+    "retry_after_seconds": 0,
+    "limits": {
+      "state_bytes": 32768,
+      "frame_bytes": 65536,
+      "text_tokens": 4096,
+      "packed_tokens": 8192,
+      "queue": 4,
+      "idle_seconds": 300.0
+    }
+  }
+}

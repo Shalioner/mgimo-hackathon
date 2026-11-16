@@ -1,0 +1,141 @@
+{
+  "case": "C2",
+  "step": 2,
+  "arm": "d1",
+  "started_utc": "2026-11-15T20:14:05.755567+00:00",
+  "agent_pid": 34914,
+  "input": {
+    "step": 2,
+    "new_context": "SRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.",
+    "request": "Укажи январское и февральское D30 retention, разность в процентных пунктах и источники. Не объясняй причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_d30, february_d30, delta_pp, sources. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "january_d30": 24,
+      "february_d30": 20,
+      "delta_pp": -4,
+      "sources": [
+        "SRC-A",
+        "SRC-C"
+      ]
+    },
+    "prohibitedclaims": [
+      "D7 и D30 смешаны",
+      "Падение вызвано конкретным изменением продукта"
+    ],
+    "context": "{\"material\": \"SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.\\n\\nSRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C2 supplied source counts/parameters; original prose in material\", \"values\": {\"jan\": 24, \"feb\": 20}}}, \"calculation_checks\": [{\"id\": \"january_d30\", \"answer_pointer\": \"/facts/january_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}, \"tolerance\": \"0.01\"}, {\"id\": \"february_d30\", \"answer_pointer\": \"/facts/february_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, \"tolerance\": \"0.01\"}, {\"id\": \"delta_pp\", \"answer_pointer\": \"/facts/delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}]}, \"tolerance\": \"0.01\"}]}",
+    "blind_criteria": [],
+    "routing_synopsis": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.\n\nSRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей."
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1196,
+          "timeout_seconds": 120,
+          "request_id": "6c13cb351d164835a50c7b5e66d68f0a",
+          "worker_pid": 34919,
+          "generation": 1
+        },
+        "runtime": {
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 4.5755,
+          "timing": {
+            "queue_wait_seconds": 16.618672,
+            "worker_setup_seconds": 3.1e-05,
+            "worker_roundtrip_seconds": 4.575501,
+            "worker_inference_seconds": 4.572122,
+            "server_total_seconds": 21.19825,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 21.215585
+          },
+          "phase": "complete"
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T2",
+              "confidence": 0.5220345402197578,
+              "probabilities": {
+                "T1": 0.19338203816029084,
+                "T2": 0.5220345402197578,
+                "T3": 0.1761265313153034,
+                "T4": 0.10845689030464799
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9025281502274096,
+              "probabilities": {
+                "normal": 0.9025281502274096,
+                "deep": 0.09747184977259034
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.9040589787951767,
+              "probabilities": {
+                "text": 0.9040589787951767,
+                "tools": 0.09594102120482334
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 575,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex",
+    "routing_mode": "d1"
+  },
+  "elapsed_seconds": 21.471974
+}

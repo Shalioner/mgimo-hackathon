@@ -1,0 +1,94 @@
+{
+  "case": "C3",
+  "step": 1,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:44:29.712701+00:00",
+  "agent_pid": 25714,
+  "input": {
+    "step": 1,
+    "request": "Разреши противоречие: агрегированное удержание упало, хотя внутри обоих сегментов выросло. Покажи расчёты, роль состава выборки и предложи, какую метрику использовать для решения об изменении продукта. Не объявляй причинный эффект.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_new_pct, february_new_pct, january_existing_pct, february_existing_pct, january_total_pct, february_total_pct, aggregate_delta_pp. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T3",
+      "effort": "high"
+    },
+    "expectedfacts": {
+      "january_new_pct": 90,
+      "february_new_pct": 95,
+      "january_existing_pct": 10,
+      "february_existing_pct": 20,
+      "january_total_pct": 50,
+      "february_total_pct": 27.5,
+      "aggregate_delta_pp": -22.5
+    },
+    "prohibitedclaims": [
+      "Каждый сегмент ухудшился",
+      "Изменение продукта доказанно улучшило удержание"
+    ],
+    "blind_criteria": [
+      "Объяснён сдвиг весов сегментов",
+      "Агрегат отделён от сегментной динамики",
+      "Причинность ограничена"
+    ],
+    "context": "Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет."
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Critical system memory pressure",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "blocked",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": null,
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1402,
+          "timeout_seconds": 120,
+          "request_id": "702426a193644728ad7d32b659e6ee92"
+        },
+        "runtime": {
+          "timing": {
+            "queue_wait_seconds": 12.485754,
+            "worker_setup_seconds": null,
+            "worker_roundtrip_seconds": null,
+            "worker_inference_seconds": null,
+            "server_total_seconds": 12.485893,
+            "cold_start": null,
+            "completed": true,
+            "client_roundtrip_seconds": 12.518829
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  },
+  "elapsed_seconds": 12.917421
+}

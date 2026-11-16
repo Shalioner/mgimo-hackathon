@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0c0-873b-7b61-a6ed-50ef4d95ac78",
+            "turnId": "01a1e0c0-8805-7452-80b8-3d103a7ba789",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11713,
+                "inputTokens": 11665,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 48,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11713,
+                "inputTokens": 11665,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 48,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 5.675,
+      "turn_id": "01a1e0c0-8805-7452-80b8-3d103a7ba789",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"quality\":{\"choice\":\"accept\",\"sure\":true,\"quote\":\"При заданных предположениях рекомендую человеку выбрать B: результат на 2000 руб. выше A, бюджет соблюдён.\"}}}"
+}

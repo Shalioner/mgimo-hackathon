@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T3",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T3",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T3",
+      "requested_model": "gpt-6.1-sol",
+      "requested_effort": "xhigh",
+      "transmitted_model": "gpt-6.1-sol",
+      "transmitted_effort": "xhigh",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0d9-2588-77c2-825c-a8135e2a3afb",
+            "turnId": "01a1e0d9-2ad0-7e02-9346-a5d4e17fcb2f",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 14674,
+                "inputTokens": 13742,
+                "cachedInputTokens": 1920,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 932,
+                "reasoningOutputTokens": 403
+              },
+              "last": {
+                "totalTokens": 14674,
+                "inputTokens": 13742,
+                "cachedInputTokens": 1920,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 932,
+                "reasoningOutputTokens": 403
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 28.024,
+      "turn_id": "01a1e0d9-2ad0-7e02-9346-a5d4e17fcb2f",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\n  \"case_id\": \"C3\",\n  \"step\": 1,\n  \"facts\": {\n    \"january_new_pct\": 90,\n    \"february_new_pct\": 95,\n    \"january_existing_pct\": 10,\n    \"february_existing_pct\": 20,\n    \"january_total_pct\": 50,\n    \"february_total_pct\": 27.5,\n    \"aggregate_delta_pp\": -22.5\n  },\n  \"conclusion\": \"По SRC-J, SRC-F и исходным числам SRC-NUM: новые — январь 90/100×100=90%, февраль 19/20×100=95%; действующие — 10/100×100=10% и 36/180×100=20%. Общий D30: январь (90+10)/(100+100)×100=50%; февраль (19+36)/(20+180)×100=27,5%; изменение 27,5−50=−22,5 п.п. Это парадокс Симпсона: доля новых с высоким удержанием уменьшилась со 100/200=50% до 20/200=10%, а доля действующих с низким удержанием выросла с 50% до 90%. Изменение состава перевесило рост внутри обоих сегментов. Для оценки динамики продукта используйте стандартизированный D30 с заранее фиксированными весами целевой аудитории и контролируйте оба сегмента отдельно. Например, при январских весах 50/50 январский показатель равен 0,5×90+0,5×10=50%, февральский — 0,5×95+0,5×20=57,5%: рост 7,5 п.п. Сырой агрегат сохраняйте для описания фактической аудитории.\",\n  \"unknowns\": [\n    \"Целевой состав аудитории не указан; веса 50/50 — иллюстрация, а не установленный продуктовый приоритет.\",\n    \"Рандомизации нет (исходный материал). Причины сегментных изменений и связь с изменением продукта неизвестны; стандартизация не доказывает причинный эффект. Решение об изменении продукта следует проверить рандомизированным экспериментом с заранее выбранной метрикой.\",\n    \"Статистическая неопределённость не оценена; февральский сегмент новых содержит лишь 20 наблюдений.\"\n  ]\n}"
+}

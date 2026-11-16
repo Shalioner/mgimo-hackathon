@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-11-15T18:02:45.073219+00:00",
+  "head": "99c2685c075a0254dd32ff77ec52afafa619b87d",
+  "dirty_worktree": true,
+  "files_sha256": {
+    "tools/hooks/codex_routing.py": "d226cb1f27b8f35d8c2e058a6cdb2b4367303b2509e24de50f44a065a169ae6e",
+    "tools/host_routing.py": "def43815ea2b20e1d213f91a6786f1a916cc1c8d97375c91a6951362f73694fb",
+    "tools/codex_routed.py": "5041b548b89da8b8bcc7a616bac4540c1a67b03a2641b8189a6142a9a0eb21f8",
+    "tools/tool_context.py": "608bc8f202230f6f5d6efdc47425641bf199c4fc2d7ad15b9a88d8b4821acd56",
+    "tools/route_tools.py": "c21193491c75939534b98500511492eaf591f8c6722d6ea97053cc0ebcdc2fcb",
+    "plugins/strategist-routing/hooks/register.mjs": "4eb270c079485e3d53a8b83bc602e4c071bad9e36c6987400dd0f0d8fa8a84c4"
+  },
+  "versions": {
+    "codex": "0.169.0",
+    "claude": "2.1.311"
+  },
+  "native_pair": {
+    "same_prompt": true,
+    "both_correct": true,
+    "routed_host_tokens": 27275,
+    "direct_host_tokens": 27131,
+    "host_token_delta": 144,
+    "host_token_savings_percent": -0.531,
+    "routed_seconds": 10.345,
+    "direct_seconds": 5.409,
+    "local_classifier_tokens_included": false,
+    "dollar_savings": null,
+    "limitations": [
+      "one pair only; routed first; session/system context and warmup can differ",
+      "control already uses the appropriate Luna/low; does not test savings against unnecessarily expensive models",
+      "native provider model echo absent",
+      "historical smoke did not record original prompt/timing/tokens; no quantitative historical performance comparison"
+    ]
+  },
+  "compaction": {
+    "before_bytes": 31008,
+    "after_bytes": 1195,
+    "reduction_percent": 96.15,
+    "local_d1_usage": {
+      "input_tokens": 540,
+      "output_tokens": 0
+    },
+    "prose_preserved": true,
+    "protected_evidence_preserved": true,
+    "same_historical_fixture": false
+  },
+  "unclosed_gates": [
+    "Claude native test sandbox blocks runtime",
+    "Codex desktop not installed in inspected Applications locations; host trust/actual spawn not exercised",
+    "document_flow isolated T1 route not authorized; preflight manual",
+    "full multi-document cost/quality benchmark not executed"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0c0-b136-7f81-9b08-af3320052045",
+            "turnId": "01a1e0c0-b29e-7b43-9bc5-34d3cad11f8d",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11418,
+                "inputTokens": 11311,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 107,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11418,
+                "inputTokens": 11311,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 107,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 6.38,
+      "turn_id": "01a1e0c0-b29e-7b43-9bc5-34d3cad11f8d",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T1\",\"sure\":true,\"quote\":\"Все показатели — D30 retention.\"},\"effort\":{\"choice\":\"normal\",\"sure\":true,\"quote\":\"Для диагностического сравнения согласован одинаковый вес сегментов: 50% новые, 50% действующие в обоих месяцах.\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"SRC-J: январь, новые — 90/100, действующие — 10/100.\"}}}"
+}

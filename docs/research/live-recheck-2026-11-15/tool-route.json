@@ -1,0 +1,82 @@
+{
+  "selection": {
+    "route": {
+      "status": "executable",
+      "reason": "Private service socket present; worker readiness checked at request",
+      "started": true,
+      "wrapper_invocations": 1,
+      "result": "succeeded",
+      "fallback": false,
+      "requested": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "transmitted": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "observed": {
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+      },
+      "network": "denied",
+      "transport": "unix-service",
+      "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+      "input_bytes": 213,
+      "timeout_seconds": 240,
+      "request_id": "736bc80015d2418c9aa0d329961bf75e",
+      "worker_pid": 98562,
+      "generation": 4
+    },
+    "runtime": {
+      "worker_pid": 98562,
+      "generation": 4,
+      "model": "LiquidAI/d1-2B-MLX-8bit",
+      "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+      "elapsed_seconds": 14.2015
+    },
+    "response": {
+      "answers": {
+        "action": {
+          "type": "choice",
+          "choice": "stats",
+          "confidence": 0.9335185827662436,
+          "probabilities": {
+            "brief": 0.007579985670195363,
+            "stats": 0.9335185827662436,
+            "validate": 0.006492903665018362,
+            "none": 0.052408527898542834
+          }
+        }
+      },
+      "usage": {
+        "input_tokens": 193,
+        "output_tokens": 0
+      }
+    },
+    "status": "selected",
+    "selected": "stats",
+    "candidates_sha256": "3516a4c364d3c3876a323cb9555488bb1d31ba60a5368f38daa5af89f855d19a",
+    "confidence": 0.9335185827662436,
+    "margin": 0.8811100548677007,
+    "dispatch_ticket": "pYTJVkqrWppNJcb80MRajtwiXnwMBjSh"
+  },
+  "execution": {
+    "status": "succeeded",
+    "selected": "stats",
+    "result": {
+      "exit_code": 0,
+      "stdout": "# Сводка реестра\n\n- Источники: 5 (активных 5)\n- Утверждения: 6 (активных 6)\n- Гипотезы и допущения: 3 (активных 3)\n- Боли клиентов: 1 (активных 1)\n- Варианты: 4 (активных 4)\n- Решения: 1 (активных 1)\n- Коммуникационные обещания: 1 (активных 1)\n- Эксперименты: 1 (активных 1)\n- Новые сведения: 1 (активных 1)\n\nУтверждения по типу: {'fact': 4, 'interpretation': 2}\nУтверждения по уверенности: {'high': 2, 'medium': 3, 'low': 1}\nПротиворечий (пар): 1 — CLM-004↔CLM-006\nГипотез: 2, допущений: 1, способных изменить решение: 2\n",
+      "stderr": ""
+    }
+  },
+  "elapsed_seconds": 14.492,
+  "request": "Посчитай статистику объектов реестра существующего проекта.",
+  "request_sha256": "6613e2bc9fb89ba4de51bf980d36d31a4bd27a38328aaa5de24907bc745b3f8e"
+}

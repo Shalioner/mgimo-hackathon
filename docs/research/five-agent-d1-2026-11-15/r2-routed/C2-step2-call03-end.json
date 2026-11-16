@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0c1-1431-7352-a3e4-22dba76e6f64",
+            "turnId": "01a1e0c1-14ef-7de3-bae7-6347edf58337",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11255,
+                "inputTokens": 11203,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 52,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11255,
+                "inputTokens": 11203,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 52,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 5.43,
+      "turn_id": "01a1e0c1-14ef-7de3-bae7-6347edf58337",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"quality\":{\"choice\":\"accept\",\"sure\":true,\"quote\":\"\\\"january_d30\\\":24,\\\"february_d30\\\":20,\\\"delta_pp\\\":-4,\\\"sources\\\":[\\\"SRC-A\\\",\\\"SRC-C\\\"]\"}}}"
+}

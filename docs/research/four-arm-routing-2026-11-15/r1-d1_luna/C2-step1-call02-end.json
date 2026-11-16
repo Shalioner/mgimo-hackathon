@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T3",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T3",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T3",
+      "requested_model": "gpt-6.1-sol",
+      "requested_effort": "high",
+      "transmitted_model": "gpt-6.1-sol",
+      "transmitted_effort": "high",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0d9-5578-7440-ab7f-200fc0972a75",
+            "turnId": "01a1e0d9-592f-7941-bfd0-e6249ac40c51",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11832,
+                "inputTokens": 11489,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 343,
+                "reasoningOutputTokens": 108
+              },
+              "last": {
+                "totalTokens": 11832,
+                "inputTokens": 11489,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 343,
+                "reasoningOutputTokens": 108
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 16.189,
+      "turn_id": "01a1e0d9-592f-7941-bfd0-e6249ac40c51",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":30,\"february_window\":7,\"january_retention_percent\":24,\"february_retention_percent\":18,\"january_retained_users\":240,\"february_retained_users\":180,\"january_cohort_size\":1000,\"february_cohort_size\":1000},\"conclusion\":\"Утверждать, что удержание снизилось на 6 процентных пунктов, нельзя. Разность значений составляет 6 п.п., но январский показатель измерен на D30 (SRC-A), а февральский — на D7 (SRC-B). Одинаковые продукт, сегмент и размер когорт не устраняют различие окон наблюдения.\",\"unknowns\":[\"Минимально необходимо измерить D30 retention февральской когорты после достижения ею 30-го дня, используя то же определение удержания, что и в SRC-A. Альтернатива — получить январский D7 для сравнения с SRC-B. Достаточно одного из этих дополнительных измерений.\"]}"
+}

@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0c1-3ce6-7c92-a8c2-956dbb90ab7d",
+            "turnId": "01a1e0c1-3d9f-7470-bf9f-a3c5f4a27c94",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11509,
+                "inputTokens": 11474,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 35,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11509,
+                "inputTokens": 11474,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 35,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 4.339,
+      "turn_id": "01a1e0c1-3d9f-7470-bf9f-a3c5f4a27c94",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"quality\":{\"choice\":\"accept\",\"sure\":true,\"quote\":\"\\\"facts\\\":{\\\"checks_count\\\":2,\\\"automatic_activation_exists\\\":false}\"}}}"
+}

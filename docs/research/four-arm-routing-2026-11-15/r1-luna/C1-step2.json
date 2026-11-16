@@ -1,0 +1,357 @@
+{
+  "case": "C1",
+  "step": 2,
+  "arm": "luna",
+  "started_utc": "2026-11-15T20:17:07.943852+00:00",
+  "agent_pid": 36514,
+  "input": {
+    "step": 2,
+    "request": "Составь краткий план выяснения причин приостановки пяти проектов: три вопроса владельцам, какие данные собрать и какое решение сможет изменить каждый ответ. Не выдумывай причины и сроки.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: paused, causes_known, questions_count. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "paused": 5,
+      "causes_known": false,
+      "questions_count": 3
+    },
+    "blind_criteria": [
+      "Вопросы не дублируются",
+      "Каждый вопрос связан с решением",
+      "Причины обозначены неизвестными"
+    ],
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "prohibitedclaims": [],
+    "routing_synopsis": "SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах."
+  },
+  "report": {
+    "status": "succeeded",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "luna_classification": {
+        "route": {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "purpose": "routing_classifier",
+          "result": "succeeded",
+          "started": true,
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e0db-430a-7641-b8b7-017c6c202c5b",
+                  "turnId": "01a1e0db-442b-7c63-90d4-b7be2c12021c",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 11364,
+                      "inputTokens": 11245,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 119,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 11364,
+                      "inputTokens": 11245,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 119,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 8.115,
+            "turn_id": "01a1e0db-442b-7c63-90d4-b7be2c12021c",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+          }
+        },
+        "method": "labels_with_quote_not_calibrated_probability",
+        "answers": {
+          "tier": {
+            "choice": "T2",
+            "sure": true,
+            "quote": "Составь краткий план выяснения причин приостановки пяти проектов"
+          },
+          "effort": {
+            "choice": "normal",
+            "sure": true,
+            "quote": "три вопроса владельцам, какие данные собрать и какое решение сможет изменить каждый ответ"
+          },
+          "capability": {
+            "choice": "text",
+            "sure": true,
+            "quote": "SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны."
+          }
+        },
+        "labels": {
+          "tier": "T2",
+          "effort": "normal",
+          "capability": "text"
+        }
+      },
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium",
+      "reason": "Luna classifier selected route with source quotes"
+    },
+    "result": {
+      "status": "succeeded",
+      "text": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"На 1 ноября приостановлены пять проектов; причины не записаны (SRC-A; число подтверждено SRC-NUM). Для каждого проекта задать владельцу три вопроса и собрать подтверждающие данные: 1. Что привело к приостановке? Собрать решение о приостановке, переписку и описание препятствий; ответ поможет выбрать, какое препятствие устранять. 2. Что необходимо для возобновления? Собрать перечень необходимых ресурсов, согласований и зависимостей; ответ поможет решить, выделять ли ресурсы и какие действия согласовать. 3. Сохраняется ли ценность проекта и каковы последствия продолжения или закрытия? Собрать актуальные цели, ожидаемые результаты и оценки последствий; ответ поможет выбрать между возобновлением, сохранением паузы и закрытием.\",\"unknowns\":\"Причины приостановки, условия возобновления и актуальная ценность каждого проекта неизвестны; сроки в источниках не указаны. SRC-B содержит сведения о переговорных комнатах и не относится к проектам.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "purpose": "task"
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "purpose": "task",
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T2",
+              "requested_model": "gpt-6.1-terra",
+              "requested_effort": "medium",
+              "transmitted_model": "gpt-6.1-terra",
+              "transmitted_effort": "medium",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0db-64a6-7cf0-86ef-fe64a4c6d2a5",
+                    "turnId": "01a1e0db-6564-73b3-9a92-4d5e5cd308a4",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11898,
+                        "inputTokens": 11637,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 261,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 11898,
+                        "inputTokens": 11637,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 261,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 9.101,
+              "turn_id": "01a1e0db-6564-73b3-9a92-4d5e5cd308a4",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0db-64a6-7cf0-86ef-fe64a4c6d2a5",
+                "turnId": "01a1e0db-6564-73b3-9a92-4d5e5cd308a4",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11898,
+                    "inputTokens": 11637,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 261,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11898,
+                    "inputTokens": 11637,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 261,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "calculation_check": {
+            "status": "verified",
+            "checks": [
+              {
+                "id": "paused",
+                "answer_pointer": "/facts/paused",
+                "expected": "5",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/paused",
+                    "locator": "Synthetic case C1 supplied source counts/parameters; original prose in material",
+                    "value": "5"
+                  }
+                ],
+                "actual": "5",
+                "status": "verified"
+              }
+            ],
+            "scope": "declared_numeric_fields_only"
+          },
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "purpose": "quality_verifier",
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0db-8887-7e22-9ff0-0133840ca6a5",
+                      "turnId": "01a1e0db-8948-7a93-bb28-ab81095dec76",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11514,
+                          "inputTokens": 11477,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 37,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11514,
+                          "inputTokens": 11477,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 37,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 4.76,
+                "turn_id": "01a1e0db-8948-7a93-bb28-ab81095dec76",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "Для каждого проекта задать владельцу три вопроса и собрать подтверждающие данные",
+            "method": "T1_labels_with_quote_not_calibrated_probability",
+            "verification_scope": "label_shape_and_literal_quote_presence_only"
+          }
+        }
+      ]
+    },
+    "transport": "native-codex",
+    "routing_mode": "luna",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T2",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T2",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "purpose": "task"
+    }
+  },
+  "elapsed_seconds": 22.838009
+}

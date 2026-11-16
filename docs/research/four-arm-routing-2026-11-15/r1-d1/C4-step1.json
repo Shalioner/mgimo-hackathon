@@ -1,0 +1,144 @@
+{
+  "case": "C4",
+  "step": 1,
+  "arm": "d1",
+  "started_utc": "2026-11-15T20:13:08.199855+00:00",
+  "agent_pid": 34916,
+  "input": {
+    "step": 1,
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T3",
+      "effort": "high"
+    },
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000}}}, \"calculation_checks\": [{\"id\": \"a_purchases\", \"answer_pointer\": \"/facts/a_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"a_result_rub\", \"answer_pointer\": \"/facts/a_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_fixed\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_purchases\", \"answer_pointer\": \"/facts/b_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_result_rub\", \"answer_pointer\": \"/facts/b_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "routing_synopsis": "Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет."
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 2057,
+          "timeout_seconds": 120,
+          "request_id": "8da4fb64e59f484c8e4ffe3178b60aa3",
+          "worker_pid": 34919,
+          "generation": 1
+        },
+        "runtime": {
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 8.0002,
+          "timing": {
+            "queue_wait_seconds": 25.440203,
+            "worker_setup_seconds": 0.000193,
+            "worker_roundtrip_seconds": 8.000014,
+            "worker_inference_seconds": 7.996105,
+            "server_total_seconds": 33.440515,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 33.46833
+          },
+          "phase": "complete"
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.7870256934318052,
+              "probabilities": {
+                "T1": 0.026657591719851454,
+                "T2": 0.013979347264636734,
+                "T3": 0.7870256934318052,
+                "T4": 0.17233736758370669
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.7168335614700326,
+              "probabilities": {
+                "normal": 0.7168335614700326,
+                "deep": 0.28316643852996737
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.8393180666582833,
+              "probabilities": {
+                "text": 0.8393180666582833,
+                "tools": 0.1606819333417166
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 719,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex",
+    "routing_mode": "d1"
+  },
+  "elapsed_seconds": 34.056282
+}

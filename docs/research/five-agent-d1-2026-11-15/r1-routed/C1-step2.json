@@ -1,0 +1,80 @@
+{
+  "case": "C1",
+  "step": 2,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:44:42.634327+00:00",
+  "agent_pid": 25712,
+  "input": {
+    "step": 2,
+    "request": "Составь краткий план выяснения причин приостановки пяти проектов: три вопроса владельцам, какие данные собрать и какое решение сможет изменить каждый ответ. Не выдумывай причины и сроки.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: paused, causes_known, questions_count. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "paused": 5,
+      "causes_known": false,
+      "questions_count": 3
+    },
+    "blind_criteria": [
+      "Вопросы не дублируются",
+      "Каждый вопрос связан с решением",
+      "Причины обозначены неизвестными"
+    ],
+    "context": "SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.",
+    "prohibitedclaims": []
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Critical system memory pressure",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "blocked",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": null,
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1231,
+          "timeout_seconds": 120,
+          "request_id": "42b219bf7c014c78b325ae282195db82"
+        },
+        "runtime": {
+          "timing": {
+            "client_roundtrip_seconds": 0.001369
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  },
+  "elapsed_seconds": 0.23452
+}

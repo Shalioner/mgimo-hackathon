@@ -1,0 +1,232 @@
+{
+  "case": "C1",
+  "step": 2,
+  "arm": "manual",
+  "started_utc": "2026-11-15T19:46:12.944472+00:00",
+  "agent_pid": 26018,
+  "input": {
+    "step": 2,
+    "request": "Составь краткий план выяснения причин приостановки пяти проектов: три вопроса владельцам, какие данные собрать и какое решение сможет изменить каждый ответ. Не выдумывай причины и сроки.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: paused, causes_known, questions_count. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "paused": 5,
+      "causes_known": false,
+      "questions_count": 3
+    },
+    "blind_criteria": [
+      "Вопросы не дублируются",
+      "Каждый вопрос связан с решением",
+      "Причины обозначены неизвестными"
+    ],
+    "context": "SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.",
+    "prohibitedclaims": []
+  },
+  "report": {
+    "status": "succeeded",
+    "result": {
+      "status": "succeeded",
+      "text": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"По SRC-A приостановлены пять проектов, причины не записаны. Для каждого проекта задать владельцу три вопроса: 1. Что непосредственно привело к приостановке? Собрать описание события и подтверждающие материалы; ответ поможет решить, какое препятствие устранять. 2. Что необходимо для возобновления и что из этого доступно? Собрать перечень потребностей и доступных ресурсов; ответ поможет решить, выделять ли ресурсы и какие. 3. Сохраняются ли цель и ожидаемая ценность проекта? Собрать актуальные цели, ожидаемые результаты и основания для их оценки; ответ поможет выбрать между возобновлением, пересмотром и закрытием проекта. SRC-B не содержит сведений о проектах.\",\"unknowns\":\"Причины приостановки, потребности, доступность ресурсов и актуальность целей всех пяти проектов неизвестны. Сроки и конкретные решения зависят от ответов владельцев. Обращённых к исполнителю команд в источниках SRC-A и SRC-B нет.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T2",
+              "requested_model": "gpt-6.1-terra",
+              "requested_effort": "medium",
+              "transmitted_model": "gpt-6.1-terra",
+              "transmitted_effort": "medium",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0be-f6c2-7df0-9117-9232d0602268",
+                    "turnId": "01a1e0be-f919-7053-b93f-ea4026d0dc72",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11677,
+                        "inputTokens": 11424,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 253,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 11677,
+                        "inputTokens": 11424,
+                        "cachedInputTokens": 8192,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 253,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 10.533,
+              "turn_id": "01a1e0be-f919-7053-b93f-ea4026d0dc72",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0be-f6c2-7df0-9117-9232d0602268",
+                "turnId": "01a1e0be-f919-7053-b93f-ea4026d0dc72",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11677,
+                    "inputTokens": 11424,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 253,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11677,
+                    "inputTokens": 11424,
+                    "cachedInputTokens": 8192,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 253,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0bf-2029-7b82-acd7-06bc13d85597",
+                      "turnId": "01a1e0bf-2135-73b3-b872-f47f8f037f4e",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11354,
+                          "inputTokens": 11322,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 32,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11354,
+                          "inputTokens": 11322,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 32,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 6.755,
+                "turn_id": "01a1e0bf-2135-73b3-b872-f47f8f037f4e",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "Для каждого проекта задать владельцу три вопроса:",
+            "method": "T1_labels_with_quote_not_calibrated_probability"
+          }
+        }
+      ]
+    },
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T2",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T2",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      }
+    }
+  },
+  "elapsed_seconds": 17.997894
+}

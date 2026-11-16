@@ -1,0 +1,23 @@
+{
+  "plan": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T3",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T3",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    "purpose": "task"
+  },
+  "prompt_sha256": "024c05227d9436af959888967eeddcd711bacbb3b0ba30edbc33a9bc23186ab9",
+  "started_utc": "2026-11-15T20:14:49.294841+00:00"
+}

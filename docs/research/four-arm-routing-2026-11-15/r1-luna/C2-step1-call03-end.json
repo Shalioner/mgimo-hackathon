@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "quality_verifier",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-f6fd-7a62-a7ff-38ee04ce1da0",
+            "turnId": "01a1e0da-f84a-7ae2-9566-4af3c163549c",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11303,
+                "inputTokens": 11260,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 43,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11303,
+                "inputTokens": 11260,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 43,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 4.999,
+      "turn_id": "01a1e0da-f84a-7ae2-9566-4af3c163549c",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"quality\":{\"choice\":\"revise\",\"sure\":true,\"quote\":\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\"}\"}}}"
+}

@@ -1,0 +1,97 @@
+{
+  "case": "C5",
+  "step": 1,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:44:29.712652+00:00",
+  "agent_pid": 25716,
+  "input": {
+    "step": 1,
+    "request": "Для P1–P4 укажи supported, unsupported или contradicted и ID основания. Не превращай план исследования в доказательство.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: P1, P2, P3, P4. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "P1": "unsupported",
+      "P2": "contradicted",
+      "P3": "unsupported",
+      "P4": "supported"
+    },
+    "prohibitedclaims": [
+      "Поддержка всех телефонов подтверждена",
+      "Сравнение цен уже проведено",
+      "18 из 20 означает гарантию для каждого"
+    ],
+    "evaluation_notes": {
+      "P1": {
+        "accepted_labels": [
+          "unsupported",
+          "contradicted"
+        ],
+        "condition": "При объяснении, что универсальное обещание не следует из ограниченной совместимости и теста; два отказа среди поддерживаемых устройств также позволяют contradicted. Само supported недопустимо."
+      }
+    },
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "blind_criteria": []
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Critical system memory pressure",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "blocked",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": null,
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1618,
+          "timeout_seconds": 120,
+          "request_id": "f750000e612e4c8dafc3e51a3ed43cbb"
+        },
+        "runtime": {
+          "timing": {
+            "queue_wait_seconds": 12.4812,
+            "worker_setup_seconds": null,
+            "worker_roundtrip_seconds": null,
+            "worker_inference_seconds": null,
+            "server_total_seconds": 12.481338,
+            "cold_start": null,
+            "completed": true,
+            "client_roundtrip_seconds": 12.491585
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  },
+  "elapsed_seconds": 12.90936
+}

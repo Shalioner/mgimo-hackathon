@@ -1,0 +1,13 @@
+{
+  "exit_code": 3,
+  "routing": [
+    {
+      "event": "routing",
+      "status": "not_forwarded",
+      "reason": "No authorized confident model selection"
+    }
+  ],
+  "result": {
+    "status": "no_json_response"
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "at": "2026-11-15T15:20:28.175579+00:00",
+  "before": {
+    "status": "ok",
+    "service": "running",
+    "pid": 57117,
+    "model_state": "ready",
+    "model": "LiquidAI/d1-2B-MLX-8bit",
+    "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+    "worker_pid": 58090,
+    "generation": 2,
+    "completed": 3,
+    "failed": 1,
+    "queue_depth": 0,
+    "active_id": null,
+    "last_latency_seconds": 2.1393,
+    "reason": null,
+    "retry_after_seconds": 0,
+    "limits": {
+      "state_bytes": 32768,
+      "frame_bytes": 65536,
+      "text_tokens": 4096,
+      "packed_tokens": 8192,
+      "queue": 4,
+      "idle_seconds": 300.0
+    }
+  },
+  "stopped": {
+    "status": "stopped",
+    "installed": true
+  },
+  "old_worker_gone": true,
+  "started": {
+    "status": "ok",
+    "service": "running",
+    "pid": 58642,
+    "model_state": "idle",
+    "model": "LiquidAI/d1-2B-MLX-8bit",
+    "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+    "worker_pid": null,
+    "generation": 0,
+    "completed": 0,
+    "failed": 0,
+    "queue_depth": 0,
+    "active_id": null,
+    "last_latency_seconds": null,
+    "reason": null,
+    "retry_after_seconds": 0,
+    "limits": {
+      "state_bytes": 32768,
+      "frame_bytes": 65536,
+      "text_tokens": 4096,
+      "packed_tokens": 8192,
+      "queue": 4,
+      "idle_seconds": 300.0
+    }
+  },
+  "request": {
+    "schema": 1,
+    "request": "Извлеки дату и число из текста.",
+    "context": "Дата запуска: 15 ноября 2026 года. Число участников: 120. Только выпиши два значения.",
+    "hosts": [
+      "codex"
+    ],
+    "classification_context": null,
+    "classification": {
+      "route": {
+        "status": "executable",
+        "reason": "Private service socket present; worker readiness checked at request",
+        "started": true,
+        "wrapper_invocations": 1,
+        "result": "succeeded",
+        "fallback": false,
+        "requested": {
+          "host": "local",
+          "provider": "local-d1",
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "effort": null
+        },
+        "transmitted": {
+          "host": "local",
+          "provider": "local-d1",
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "effort": null
+        },
+        "observed": {
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+        },
+        "network": "denied",
+        "transport": "unix-service",
+        "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+        "input_bytes": 230,
+        "timeout_seconds": 90,
+        "request_id": "c0f6a109641b49ef894c42714ac0e4f6",
+        "worker_pid": 58647,
+        "generation": 1
+      },
+      "runtime": {
+        "worker_pid": 58647,
+        "generation": 1,
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "elapsed_seconds": 15.0478
+      },
+      "response": {
+        "answers": {
+          "tier": {
+            "type": "choice",
+            "choice": "T1",
+            "confidence": 0.9506887480314318,
+            "probabilities": {
+              "T1": 0.9506887480314318,
+              "T2": 0.017084814016071165,
+              "T3": 0.007541121414534524,
+              "T4": 0.02468531653796246
+            }
+          },
+          "effort": {
+            "type": "choice",
+            "choice": "normal",
+            "confidence": 0.988098805471335,
+            "probabilities": {
+              "normal": 0.988098805471335,
+              "deep": 0.011901194528665114
+            }
+          },
+          "capability": {
+            "type": "choice",
+            "choice": "text",
+            "confidence": 0.9602144523384908,
+            "probabilities": {
+              "text": 0.9602144523384908,
+              "tools": 0.03978554766150929
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 365,
+          "output_tokens": 0
+        }
+      },
+      "status": "accepted",
+      "labels": {
+        "tier": "T1",
+        "effort": "normal",
+        "capability": "text"
+      }
+    },
+    "plan": null,
+    "start": null,
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "status": "classified",
+    "recommendations": [
+      {
+        "status": "manual",
+        "reason": "Нет явно включённого Codex subscription profile",
+        "max_attempts": 1,
+        "max_attempts_scope": "wrapper_invocations",
+        "wrapper_invocations": 0,
+        "internal_transport_retries": "unknown_version_dependent",
+        "started": false,
+        "process_exit_code": null,
+        "requested": {
+          "host": "codex",
+          "provider": "openai",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "transmitted": {
+          "model": null,
+          "effort": null
+        },
+        "observed": {
+          "provider": null,
+          "model": null,
+          "effort": null
+        },
+        "billing": {
+          "mode": "subscription_only",
+          "auth": "subscription",
+          "cap_verification": "unknown"
+        },
+        "input_bytes": 56,
+        "endpoint": null,
+        "policy_digest": "8cdcd3c3e030ae94a6f69fc748c8d9661d1e23ffa9770982f52c9d286efa500b",
+        "tier": "T1"
+      }
+    ]
+  },
+  "seconds": 15.314,
+  "after": {
+    "status": "ok",
+    "service": "running",
+    "pid": 58642,
+    "model_state": "ready",
+    "model": "LiquidAI/d1-2B-MLX-8bit",
+    "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+    "worker_pid": 58647,
+    "generation": 1,
+    "completed": 1,
+    "failed": 0,
+    "queue_depth": 0,
+    "active_id": null,
+    "last_latency_seconds": 15.0478,
+    "reason": null,
+    "retry_after_seconds": 0,
+    "limits": {
+      "state_bytes": 32768,
+      "frame_bytes": 65536,
+      "text_tokens": 4096,
+      "packed_tokens": 8192,
+      "queue": 4,
+      "idle_seconds": 300.0
+    }
+  }
+}

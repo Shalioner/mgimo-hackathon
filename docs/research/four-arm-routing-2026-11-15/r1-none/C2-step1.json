@@ -1,0 +1,253 @@
+{
+  "case": "C2",
+  "step": 1,
+  "arm": "none",
+  "started_utc": "2026-11-15T20:17:45.753164+00:00",
+  "agent_pid": 37234,
+  "input": {
+    "step": 1,
+    "request": "Можно ли утверждать, что удержание снизилось на 6 процентных пунктов? Объясни ограничение и назови минимально необходимое дополнительное измерение.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: comparable, january_window, february_window. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "comparable": false,
+      "january_window": "D30",
+      "february_window": "D7"
+    },
+    "prohibitedclaims": [
+      "Подтверждено снижение удержания на 6 п.п.",
+      "Известна причина изменения"
+    ],
+    "blind_criteria": [
+      "Запрошено одинаковое окно для обеих когорт"
+    ],
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.",
+    "routing_synopsis": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения."
+  },
+  "report": {
+    "status": "succeeded",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "result": {
+      "status": "succeeded",
+      "text": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\",\"january_retention_percent\":24,\"february_retention_percent\":18},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: разница между 24% и 18% относится к разным окнам наблюдения. Для сравнения необходимо измерить удержание обеих когорт на одном сроке (SRC-A, SRC-B).\",\"unknowns\":\"Минимально необходимо одно дополнительное измерение: D7 для январской когорты или D30 для февральской. Обращённых к ассистенту команд в материалах нет.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "purpose": "task"
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "purpose": "task",
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T2",
+              "requested_model": "gpt-6.1-terra",
+              "requested_effort": "medium",
+              "transmitted_model": "gpt-6.1-terra",
+              "transmitted_effort": "medium",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0db-d9b2-7581-8294-ee6a922f5a6c",
+                    "turnId": "01a1e0db-dbd4-7833-88d0-54b821d2106f",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11583,
+                        "inputTokens": 11425,
+                        "cachedInputTokens": 0,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 158,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 11583,
+                        "inputTokens": 11425,
+                        "cachedInputTokens": 0,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 158,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 7.662,
+              "turn_id": "01a1e0db-dbd4-7833-88d0-54b821d2106f",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0db-d9b2-7581-8294-ee6a922f5a6c",
+                "turnId": "01a1e0db-dbd4-7833-88d0-54b821d2106f",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11583,
+                    "inputTokens": 11425,
+                    "cachedInputTokens": 0,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 158,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11583,
+                    "inputTokens": 11425,
+                    "cachedInputTokens": 0,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 158,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "calculation_check": {
+            "status": "not_applicable",
+            "checks": [],
+            "reason": "Context is not valid calculation JSON"
+          },
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "purpose": "quality_verifier",
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0db-f779-73c1-94f5-3b9b3a23e176",
+                      "turnId": "01a1e0db-f836-7a53-9ef9-d3e6ba51e6c5",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11308,
+                          "inputTokens": 11271,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 37,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11308,
+                          "inputTokens": 11271,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 37,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 4.635,
+                "turn_id": "01a1e0db-f836-7a53-9ef9-d3e6ba51e6c5",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "Для сравнения необходимо измерить удержание обеих когорт на одном сроке",
+            "method": "T1_labels_with_quote_not_calibrated_probability",
+            "verification_scope": "label_shape_and_literal_quote_presence_only"
+          }
+        }
+      ]
+    },
+    "transport": "native-codex",
+    "routing_mode": "none",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T2",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T2",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "purpose": "task"
+    }
+  },
+  "elapsed_seconds": 13.286123
+}

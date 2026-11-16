@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "routing_classifier",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-bcb8-7a41-b56e-73fe6a51bcc3",
+            "turnId": "01a1e0da-bf57-7fb2-83dd-8be402802fa8",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11405,
+                "inputTokens": 11248,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 157,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11405,
+                "inputTokens": 11248,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 157,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.836,
+      "turn_id": "01a1e0da-bf57-7fb2-83dd-8be402802fa8",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T1\",\"sure\":true,\"quote\":\"SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000.\"},\"effort\":{\"choice\":\"normal\",\"sure\":true,\"quote\":\"Одинаковый продукт и сегмент, но разные окна наблюдения.\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000.\"}}}"
+}

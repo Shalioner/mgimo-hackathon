@@ -1,0 +1,94 @@
+{
+  "case": "C4",
+  "step": 1,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:44:29.712546+00:00",
+  "agent_pid": 25715,
+  "input": {
+    "step": 1,
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T3",
+      "effort": "high"
+    },
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "context": "Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет."
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Critical system memory pressure",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "blocked",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": null,
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 2057,
+          "timeout_seconds": 120,
+          "request_id": "fe4acb6e03254a41b69e59ab9a065202"
+        },
+        "runtime": {
+          "timing": {
+            "queue_wait_seconds": 5.4e-05,
+            "worker_setup_seconds": null,
+            "worker_roundtrip_seconds": null,
+            "worker_inference_seconds": null,
+            "server_total_seconds": 12.493114,
+            "cold_start": true,
+            "completed": true,
+            "client_roundtrip_seconds": 12.499264
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  },
+  "elapsed_seconds": 12.907286
+}

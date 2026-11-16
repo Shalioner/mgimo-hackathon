@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0d9-624d-71b0-9232-c1f52fa92bc0",
+            "turnId": "01a1e0d9-6359-7e13-a29e-68dca517e4ec",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 12457,
+                "inputTokens": 12216,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 241,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 12457,
+                "inputTokens": 12216,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 241,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 8.911,
+      "turn_id": "01a1e0d9-6359-7e13-a29e-68dca517e4ec",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C4\",\"step\":1,\"facts\":{\"a_purchases\":200,\"a_result_rub\":1000,\"b_purchases\":150,\"b_result_rub\":3000,\"assumptions_not_observations\":true},\"conclusion\":\"За месяц B даёт расчетный добавочный результат 3000 руб. против 1000 руб. у A; status quo и kill — 0 руб. При предположении, что заданные конверсии реализуются и прочие параметры модели верны, условно рекомендую B. Сильное возражение: конверсии лишь предположения, поэтому преимущество может не реализоваться. Источник: предоставленный материал C4 и SRC-NUM; расчёты T0.\",\"unknowns\":\"Выбор меняется, если фактическая конверсия B опустится ниже 1% при неизменных остальных параметрах: тогда результат B станет ниже нуля, и status quo/kill окажутся предпочтительнее по финансовому результату. Неизвестны фактические конверсии и ценность дальнейшего исследования, от которой kill отличается по условию.\"}"
+}

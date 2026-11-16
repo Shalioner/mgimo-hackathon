@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0bf-e4ac-7be3-a226-71b858c94f34",
+            "turnId": "01a1e0bf-e71f-7551-bea7-632c9ce9768c",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11370,
+                "inputTokens": 11248,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 122,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11370,
+                "inputTokens": 11248,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 122,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.455,
+      "turn_id": "01a1e0bf-e71f-7551-bea7-632c9ce9768c",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T1\",\"sure\":true,\"quote\":\"Для чисел используй JSON numbers, для да/нет — booleans.\"},\"effort\":{\"choice\":\"normal\",\"sure\":true,\"quote\":\"ROUTING SYNOPSIS (DATA):\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000.\"}}}"
+}

@@ -1,0 +1,88 @@
+{
+  "case": "C2",
+  "step": 1,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:44:29.712594+00:00",
+  "agent_pid": 25713,
+  "input": {
+    "step": 1,
+    "request": "Можно ли утверждать, что удержание снизилось на 6 процентных пунктов? Объясни ограничение и назови минимально необходимое дополнительное измерение.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: comparable, january_window, february_window. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "comparable": false,
+      "january_window": "D30",
+      "february_window": "D7"
+    },
+    "prohibitedclaims": [
+      "Подтверждено снижение удержания на 6 п.п.",
+      "Известна причина изменения"
+    ],
+    "blind_criteria": [
+      "Запрошено одинаковое окно для обеих когорт"
+    ],
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения."
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Critical system memory pressure",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "blocked",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": null,
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1142,
+          "timeout_seconds": 120,
+          "request_id": "f1943fe9e7ec45a5a8a40533131fa5ef"
+        },
+        "runtime": {
+          "timing": {
+            "queue_wait_seconds": 12.487273,
+            "worker_setup_seconds": null,
+            "worker_roundtrip_seconds": null,
+            "worker_inference_seconds": null,
+            "server_total_seconds": 12.487547,
+            "cold_start": null,
+            "completed": true,
+            "client_roundtrip_seconds": 12.493505
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  },
+  "elapsed_seconds": 12.904553
+}

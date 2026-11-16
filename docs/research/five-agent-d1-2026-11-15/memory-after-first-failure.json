@@ -1,0 +1,6 @@
+{
+  "swap_used_mib": 3744.0,
+  "pressure_level": 1,
+  "swap_raw": "vm.swapusage: total = 4096.00M  used = 3744.00M  free = 352.00M  (encrypted)\nkern.memorystatus_vm_pressure_level: 1",
+  "rss_kib": null
+}

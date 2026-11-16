@@ -1,0 +1,1456 @@
+{
+  "arms": {
+    "d1": {
+      "tasks": 10,
+      "status": {
+        "succeeded": 2,
+        "manual": 8
+      },
+      "input_tokens": 44897,
+      "cached_input_tokens": 24704,
+      "output_tokens": 405,
+      "native_calls": 4,
+      "api_equivalent_usd": 0.00246884,
+      "unknown_pricing_calls": 0,
+      "accounting_complete": true,
+      "mechanical_all_fields_pass_delivered": 1,
+      "mechanical_checks": [
+        {
+          "batch": "r1-d1",
+          "case": "C1",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "total": true,
+            "active": true,
+            "paused": true,
+            "source": true,
+            "date": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C1",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "paused": false,
+            "causes_known": false,
+            "questions_count": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C2",
+          "step": 1,
+          "delivered": false,
+          "checks": {
+            "comparable": false,
+            "january_window": false,
+            "february_window": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C2",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "january_d30": false,
+            "february_d30": false,
+            "delta_pp": false,
+            "sources": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C3",
+          "step": 1,
+          "delivered": false,
+          "checks": {
+            "january_new_pct": false,
+            "february_new_pct": false,
+            "january_existing_pct": false,
+            "february_existing_pct": false,
+            "january_total_pct": false,
+            "february_total_pct": false,
+            "aggregate_delta_pp": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C3",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "standardized_january_pct": false,
+            "standardized_february_pct": false,
+            "standardized_delta_pp": false,
+            "observed_february_pct": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C4",
+          "step": 1,
+          "delivered": false,
+          "checks": {
+            "a_purchases": false,
+            "a_result_rub": false,
+            "b_purchases": false,
+            "b_result_rub": false,
+            "assumptions_not_observations": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C4",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "conversion_pct": false,
+            "result_rub": false,
+            "stop": false,
+            "conversion_trigger": false,
+            "financial_trigger": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C5",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "P1": false,
+            "P2": false,
+            "P3": false,
+            "P4": false
+          },
+          "json_valid": true,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C5",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "checks_count": false,
+            "automatic_activation_exists": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        }
+      ],
+      "d1_requests": 10,
+      "d1_input_tokens_known": 6237,
+      "d1_unknown_usage_requests": 0,
+      "d1_timing": [
+        {
+          "batch": "r1-d1",
+          "case": "C1",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 3.626,
+          "timing": {
+            "queue_wait_seconds": 33.440428,
+            "worker_setup_seconds": 4.3e-05,
+            "worker_roundtrip_seconds": 3.626086,
+            "worker_inference_seconds": 3.620159,
+            "server_total_seconds": 37.06663,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 37.087285
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C1",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 3.8588,
+          "timing": {
+            "queue_wait_seconds": 6.261973,
+            "worker_setup_seconds": 3.3e-05,
+            "worker_roundtrip_seconds": 3.858843,
+            "worker_inference_seconds": 3.847915,
+            "server_total_seconds": 10.12236,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 10.13913
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C2",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 6.0873,
+          "timing": {
+            "queue_wait_seconds": 19.35292,
+            "worker_setup_seconds": 4.5e-05,
+            "worker_roundtrip_seconds": 6.087298,
+            "worker_inference_seconds": 6.083203,
+            "server_total_seconds": 25.440477,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 25.472435
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C2",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 4.5755,
+          "timing": {
+            "queue_wait_seconds": 16.618672,
+            "worker_setup_seconds": 3.1e-05,
+            "worker_roundtrip_seconds": 4.575501,
+            "worker_inference_seconds": 4.572122,
+            "server_total_seconds": 21.19825,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 21.215585
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C3",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 19.3567,
+          "timing": {
+            "queue_wait_seconds": 0.000129,
+            "worker_setup_seconds": 15.050259,
+            "worker_roundtrip_seconds": 4.306485,
+            "worker_inference_seconds": 4.303027,
+            "server_total_seconds": 19.357306,
+            "cold_start": true,
+            "completed": true,
+            "client_roundtrip_seconds": 19.365821
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C3",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.275,
+          "timing": {
+            "queue_wait_seconds": 21.171198,
+            "worker_setup_seconds": 3.1e-05,
+            "worker_roundtrip_seconds": 5.275023,
+            "worker_inference_seconds": 5.272394,
+            "server_total_seconds": 26.446408,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 26.485213
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C4",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 8.0002,
+          "timing": {
+            "queue_wait_seconds": 25.440203,
+            "worker_setup_seconds": 0.000193,
+            "worker_roundtrip_seconds": 8.000014,
+            "worker_inference_seconds": 7.996105,
+            "server_total_seconds": 33.440515,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 33.46833
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C4",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 6.5113,
+          "timing": {
+            "queue_wait_seconds": 10.112305,
+            "worker_setup_seconds": 5.6e-05,
+            "worker_roundtrip_seconds": 6.511263,
+            "worker_inference_seconds": 6.508677,
+            "server_total_seconds": 16.623814,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 16.643078
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C5",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.3185,
+          "timing": {
+            "queue_wait_seconds": 37.053855,
+            "worker_setup_seconds": 3.3e-05,
+            "worker_roundtrip_seconds": 5.318526,
+            "worker_inference_seconds": 5.315674,
+            "server_total_seconds": 42.372523,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 42.391908
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1",
+          "case": "C5",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 6.2736,
+          "timing": {
+            "queue_wait_seconds": 0.000723,
+            "worker_setup_seconds": 2.6e-05,
+            "worker_roundtrip_seconds": 6.273567,
+            "worker_inference_seconds": 6.251781,
+            "server_total_seconds": 6.274827,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 6.291312
+          },
+          "phase": "complete"
+        }
+      ],
+      "task_model_changes": 0,
+      "task_effort_only_changes": 0,
+      "sequences": {
+        "r1-d1/C1": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-d1/C2": [],
+        "r1-d1/C3": [],
+        "r1-d1/C4": [],
+        "r1-d1/C5": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ]
+      },
+      "roles": {
+        "task": {
+          "calls": 2,
+          "api_equivalent_usd": 0.0015029000000000002,
+          "unknown_pricing_calls": 0
+        },
+        "quality_verifier": {
+          "calls": 2,
+          "api_equivalent_usd": 0.00096594,
+          "unknown_pricing_calls": 0
+        }
+      }
+    },
+    "d1_luna": {
+      "tasks": 10,
+      "status": {
+        "succeeded": 7,
+        "manual": 1,
+        "needs_review": 2
+      },
+      "input_tokens": 348527,
+      "cached_input_tokens": 178304,
+      "output_tokens": 4540,
+      "native_calls": 30,
+      "api_equivalent_usd": 0.08969264,
+      "unknown_pricing_calls": 0,
+      "accounting_complete": true,
+      "mechanical_all_fields_pass_delivered": 5,
+      "mechanical_checks": [
+        {
+          "batch": "r1-d1_luna",
+          "case": "C1",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "total": true,
+            "active": true,
+            "paused": true,
+            "source": true,
+            "date": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C1",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "paused": true,
+            "causes_known": true,
+            "questions_count": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C2",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "comparable": true,
+            "january_window": false,
+            "february_window": false
+          },
+          "json_valid": true,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C2",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "january_d30": true,
+            "february_d30": true,
+            "delta_pp": true,
+            "sources": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C3",
+          "step": 1,
+          "delivered": false,
+          "checks": {
+            "january_new_pct": false,
+            "february_new_pct": false,
+            "january_existing_pct": false,
+            "february_existing_pct": false,
+            "january_total_pct": false,
+            "february_total_pct": false,
+            "aggregate_delta_pp": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C3",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "standardized_january_pct": true,
+            "standardized_february_pct": true,
+            "standardized_delta_pp": true,
+            "observed_february_pct": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C4",
+          "step": 1,
+          "delivered": false,
+          "checks": {
+            "a_purchases": false,
+            "a_result_rub": false,
+            "b_purchases": false,
+            "b_result_rub": false,
+            "assumptions_not_observations": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C4",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "conversion_pct": true,
+            "result_rub": true,
+            "stop": true,
+            "conversion_trigger": true,
+            "financial_trigger": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C5",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "P1": false,
+            "P2": false,
+            "P3": false,
+            "P4": false
+          },
+          "json_valid": true,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C5",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "checks_count": false,
+            "automatic_activation_exists": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        }
+      ],
+      "d1_requests": 10,
+      "d1_input_tokens_known": 6237,
+      "d1_unknown_usage_requests": 0,
+      "d1_timing": [
+        {
+          "batch": "r1-d1_luna",
+          "case": "C1",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.2384,
+          "timing": {
+            "queue_wait_seconds": 4.517958,
+            "worker_setup_seconds": 5e-05,
+            "worker_roundtrip_seconds": 5.23835,
+            "worker_inference_seconds": 5.117381,
+            "server_total_seconds": 9.756432,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 9.822849
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C1",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 3.8167,
+          "timing": {
+            "queue_wait_seconds": 9.643348,
+            "worker_setup_seconds": 3.7e-05,
+            "worker_roundtrip_seconds": 3.816695,
+            "worker_inference_seconds": 3.813767,
+            "server_total_seconds": 13.460185,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 13.46402
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C2",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.384,
+          "timing": {
+            "queue_wait_seconds": 9.756133,
+            "worker_setup_seconds": 2.8e-05,
+            "worker_roundtrip_seconds": 5.384039,
+            "worker_inference_seconds": 5.381748,
+            "server_total_seconds": 15.140284,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 15.144704
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C2",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 4.5479,
+          "timing": {
+            "queue_wait_seconds": 0.000371,
+            "worker_setup_seconds": 3.3e-05,
+            "worker_roundtrip_seconds": 4.547854,
+            "worker_inference_seconds": 4.545499,
+            "server_total_seconds": 4.548445,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 4.553493
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C3",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 4.5181,
+          "timing": {
+            "queue_wait_seconds": 0.000547,
+            "worker_setup_seconds": 3.2e-05,
+            "worker_roundtrip_seconds": 4.51811,
+            "worker_inference_seconds": 4.516326,
+            "server_total_seconds": 4.518834,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 4.523947
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C3",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.1289,
+          "timing": {
+            "queue_wait_seconds": 4.533102,
+            "worker_setup_seconds": 2.8e-05,
+            "worker_roundtrip_seconds": 5.128884,
+            "worker_inference_seconds": 5.125483,
+            "server_total_seconds": 9.662132,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 9.669475
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C4",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.5082,
+          "timing": {
+            "queue_wait_seconds": 15.139916,
+            "worker_setup_seconds": 5.8e-05,
+            "worker_roundtrip_seconds": 5.508168,
+            "worker_inference_seconds": 5.506044,
+            "server_total_seconds": 20.648223,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 20.655072
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C4",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.9407,
+          "timing": {
+            "queue_wait_seconds": 18.583274,
+            "worker_setup_seconds": 0.00013,
+            "worker_roundtrip_seconds": 5.940035,
+            "worker_inference_seconds": 5.874472,
+            "server_total_seconds": 24.524127,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 24.531465
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C5",
+          "step": 1,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.5373,
+          "timing": {
+            "queue_wait_seconds": 20.648251,
+            "worker_setup_seconds": 6e-05,
+            "worker_roundtrip_seconds": 5.537315,
+            "worker_inference_seconds": 5.535073,
+            "server_total_seconds": 26.185713,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 26.189137
+          },
+          "phase": "complete"
+        },
+        {
+          "batch": "r1-d1_luna",
+          "case": "C5",
+          "step": 2,
+          "status": "succeeded",
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.1264,
+          "timing": {
+            "queue_wait_seconds": 13.45838,
+            "worker_setup_seconds": 3.8e-05,
+            "worker_roundtrip_seconds": 5.126351,
+            "worker_inference_seconds": 5.123878,
+            "server_total_seconds": 18.584863,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 18.5885
+          },
+          "phase": "complete"
+        }
+      ],
+      "task_model_changes": 3,
+      "task_effort_only_changes": 0,
+      "sequences": {
+        "r1-d1_luna/C1": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-d1_luna/C2": [
+          {
+            "step": 1,
+            "model": "gpt-6.1-sol",
+            "effort": "high",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-d1_luna/C3": [
+          {
+            "step": 1,
+            "model": "gpt-6.1-sol",
+            "effort": "xhigh",
+            "quality": "revise",
+            "reason": "эскалация после неудачи на T3 (ровно на одну ступень)"
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-d1_luna/C4": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": null,
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-d1_luna/C5": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "revise",
+            "reason": "эскалация после неудачи на T1 (ровно на одну ступень)"
+          },
+          {
+            "step": 2,
+            "model": "gpt-6.1-terra",
+            "effort": "medium",
+            "quality": "revise",
+            "reason": null
+          }
+        ]
+      },
+      "roles": {
+        "task": {
+          "calls": 11,
+          "api_equivalent_usd": 0.07894074,
+          "unknown_pricing_calls": 0
+        },
+        "quality_verifier": {
+          "calls": 11,
+          "api_equivalent_usd": 0.006188980000000001,
+          "unknown_pricing_calls": 0
+        },
+        "routing_classifier": {
+          "calls": 8,
+          "api_equivalent_usd": 0.004562919999999999,
+          "unknown_pricing_calls": 0
+        }
+      }
+    },
+    "luna": {
+      "tasks": 10,
+      "status": {
+        "succeeded": 7,
+        "needs_review": 3
+      },
+      "input_tokens": 371798,
+      "cached_input_tokens": 232448,
+      "output_tokens": 4477,
+      "native_calls": 32,
+      "api_equivalent_usd": 0.07169402,
+      "unknown_pricing_calls": 0,
+      "accounting_complete": true,
+      "mechanical_all_fields_pass_delivered": 7,
+      "mechanical_checks": [
+        {
+          "batch": "r1-luna",
+          "case": "C1",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "total": true,
+            "active": true,
+            "paused": true,
+            "source": true,
+            "date": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C1",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "paused": true,
+            "causes_known": true,
+            "questions_count": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C2",
+          "step": 1,
+          "delivered": false,
+          "checks": {
+            "comparable": false,
+            "january_window": false,
+            "february_window": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C2",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "january_d30": true,
+            "february_d30": true,
+            "delta_pp": true,
+            "sources": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C3",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "january_new_pct": true,
+            "february_new_pct": true,
+            "january_existing_pct": true,
+            "february_existing_pct": true,
+            "january_total_pct": true,
+            "february_total_pct": true,
+            "aggregate_delta_pp": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C3",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "standardized_january_pct": true,
+            "standardized_february_pct": true,
+            "standardized_delta_pp": true,
+            "observed_february_pct": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C4",
+          "step": 1,
+          "delivered": false,
+          "checks": {
+            "a_purchases": false,
+            "a_result_rub": false,
+            "b_purchases": false,
+            "b_result_rub": false,
+            "assumptions_not_observations": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C4",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "conversion_pct": true,
+            "result_rub": true,
+            "stop": true,
+            "conversion_trigger": true,
+            "financial_trigger": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C5",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "P1": true,
+            "P2": true,
+            "P3": true,
+            "P4": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-luna",
+          "case": "C5",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "checks_count": false,
+            "automatic_activation_exists": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        }
+      ],
+      "d1_requests": 0,
+      "d1_input_tokens_known": 0,
+      "d1_unknown_usage_requests": 0,
+      "d1_timing": [],
+      "task_model_changes": 4,
+      "task_effort_only_changes": 0,
+      "sequences": {
+        "r1-luna/C1": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6.1-terra",
+            "effort": "medium",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-luna/C2": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": null,
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-luna/C3": [
+          {
+            "step": 1,
+            "model": "gpt-6.1-sol",
+            "effort": "high",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-luna/C4": [
+          {
+            "step": 1,
+            "model": "gpt-6.1-sol",
+            "effort": "high",
+            "quality": null,
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-luna/C5": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "revise",
+            "reason": "эскалация после неудачи на T1 (ровно на одну ступень)"
+          },
+          {
+            "step": 2,
+            "model": "gpt-6.1-terra",
+            "effort": "medium",
+            "quality": "revise",
+            "reason": null
+          }
+        ]
+      },
+      "roles": {
+        "routing_classifier": {
+          "calls": 10,
+          "api_equivalent_usd": 0.0050905,
+          "unknown_pricing_calls": 0
+        },
+        "task": {
+          "calls": 11,
+          "api_equivalent_usd": 0.0609514,
+          "unknown_pricing_calls": 0
+        },
+        "quality_verifier": {
+          "calls": 11,
+          "api_equivalent_usd": 0.00565212,
+          "unknown_pricing_calls": 0
+        }
+      }
+    },
+    "none": {
+      "tasks": 10,
+      "status": {
+        "succeeded": 9,
+        "needs_review": 1
+      },
+      "input_tokens": 260697,
+      "cached_input_tokens": 156160,
+      "output_tokens": 3686,
+      "native_calls": 22,
+      "api_equivalent_usd": 0.090779,
+      "unknown_pricing_calls": 0,
+      "accounting_complete": true,
+      "mechanical_all_fields_pass_delivered": 9,
+      "mechanical_checks": [
+        {
+          "batch": "r1-none",
+          "case": "C1",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "total": true,
+            "active": true,
+            "paused": true,
+            "source": true,
+            "date": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C1",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "paused": true,
+            "causes_known": true,
+            "questions_count": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C2",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "comparable": true,
+            "january_window": true,
+            "february_window": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C2",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "january_d30": true,
+            "february_d30": true,
+            "delta_pp": true,
+            "sources": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C3",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "january_new_pct": true,
+            "february_new_pct": true,
+            "january_existing_pct": true,
+            "february_existing_pct": true,
+            "january_total_pct": true,
+            "february_total_pct": true,
+            "aggregate_delta_pp": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C3",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "standardized_january_pct": true,
+            "standardized_february_pct": true,
+            "standardized_delta_pp": true,
+            "observed_february_pct": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C4",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "a_purchases": true,
+            "a_result_rub": true,
+            "b_purchases": true,
+            "b_result_rub": true,
+            "assumptions_not_observations": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C4",
+          "step": 2,
+          "delivered": false,
+          "checks": {
+            "conversion_pct": false,
+            "result_rub": false,
+            "stop": false,
+            "conversion_trigger": false,
+            "financial_trigger": false
+          },
+          "json_valid": false,
+          "all_fields_pass": false
+        },
+        {
+          "batch": "r1-none",
+          "case": "C5",
+          "step": 1,
+          "delivered": true,
+          "checks": {
+            "P1": true,
+            "P2": true,
+            "P3": true,
+            "P4": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        },
+        {
+          "batch": "r1-none",
+          "case": "C5",
+          "step": 2,
+          "delivered": true,
+          "checks": {
+            "checks_count": true,
+            "automatic_activation_exists": true
+          },
+          "json_valid": true,
+          "all_fields_pass": true
+        }
+      ],
+      "d1_requests": 0,
+      "d1_input_tokens_known": 0,
+      "d1_unknown_usage_requests": 0,
+      "d1_timing": [],
+      "task_model_changes": 5,
+      "task_effort_only_changes": 1,
+      "sequences": {
+        "r1-none/C1": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6.1-terra",
+            "effort": "medium",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-none/C2": [
+          {
+            "step": 1,
+            "model": "gpt-6.1-terra",
+            "effort": "medium",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-none/C3": [
+          {
+            "step": 1,
+            "model": "gpt-6.1-sol",
+            "effort": "high",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6.1-terra",
+            "effort": "medium",
+            "quality": "accept",
+            "reason": null
+          }
+        ],
+        "r1-none/C4": [
+          {
+            "step": 1,
+            "model": "gpt-6.1-sol",
+            "effort": "high",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": null,
+            "reason": null
+          }
+        ],
+        "r1-none/C5": [
+          {
+            "step": 1,
+            "model": "gpt-6-luna",
+            "effort": "low",
+            "quality": "accept",
+            "reason": null
+          },
+          {
+            "step": 2,
+            "model": "gpt-6.1-terra",
+            "effort": "medium",
+            "quality": "revise",
+            "reason": "эскалация после неудачи на T2@medium: сначала глубже рассуждение на той же модели (medium → high), модель старше — только если и это не поможет"
+          },
+          {
+            "step": 2,
+            "model": "gpt-6.1-terra",
+            "effort": "high",
+            "quality": "accept",
+            "reason": null
+          }
+        ]
+      },
+      "roles": {
+        "task": {
+          "calls": 11,
+          "api_equivalent_usd": 0.08510908,
+          "unknown_pricing_calls": 0
+        },
+        "quality_verifier": {
+          "calls": 11,
+          "api_equivalent_usd": 0.00566992,
+          "unknown_pricing_calls": 0
+        }
+      }
+    }
+  },
+  "limitations": "Mechanical fields are not semantic quality. API-equivalent is not subscription charges. No cost saving claim when delivered quality/coverage differs. D1 electricity unmeasured."
+}

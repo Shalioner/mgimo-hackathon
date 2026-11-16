@@ -1,0 +1,56 @@
+{
+  "scope": "offline relocated working-tree snapshot; shared installed Python dependencies, isolated HOME/environment; no model calls",
+  "snapshot_files": 740,
+  "tree_sha256": "9420ef56b0df03665c331d6bd821d8e819a6e20a11a72dd9bf8536815b95f2d4",
+  "export": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-recipient-y9duypxn/recipient space",
+  "doctor_before": {
+    "status": "needs_setup",
+    "registered": true,
+    "enabled": false,
+    "trust": "requires_host_review",
+    "mechanism": "Codex: D1 выбирает маршрут; hooks применяют модель субагента, app-server адаптер — основную модель.",
+    "limitation": "Основная модель обычного Codex/Orca chat через prompt-hook не переключается. Для Codex проверьте доверие hooks (Review hooks / Settings → Hooks в приложении)."
+  },
+  "first_install": [
+    {
+      "path": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-recipient-y9duypxn/recipient space/.codex/hooks.json",
+      "status": "installed"
+    },
+    {
+      "path": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-recipient-y9duypxn/recipient space/.claude/settings.local.json",
+      "status": "installed"
+    }
+  ],
+  "second_install": [
+    {
+      "path": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-recipient-y9duypxn/recipient space/.codex/hooks.json",
+      "status": "current"
+    },
+    {
+      "path": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-recipient-y9duypxn/recipient space/.claude/settings.local.json",
+      "status": "current"
+    }
+  ],
+  "doctor_after": {
+    "status": "needs_setup",
+    "registered": true,
+    "enabled": false,
+    "trust": "requires_host_review",
+    "mechanism": "Codex: D1 выбирает маршрут; hooks применяют модель субагента, app-server адаптер — основную модель.",
+    "limitation": "Основная модель обычного Codex/Orca chat через prompt-hook не переключается. Для Codex проверьте доверие hooks (Review hooks / Settings → Hooks в приложении)."
+  },
+  "ledger_validate": "Итог: ошибок 0, предупреждений 0, объектов 41",
+  "html_report": "rendered",
+  "harness_correction": "Interpreter-only symlink lacked venv site-packages; used explicit shared venv directory instead. This is not a dependency installation test.",
+  "limitations": [
+    "not a clean dependency installation",
+    "no native host trust or cross-host agent session exercised"
+  ],
+  "installed_command_smoke": {
+    "event": "PreToolUse oversized Astra payload",
+    "exit_code": 0,
+    "decision": "deny",
+    "inference_calls": 0,
+    "scope": "registered shell command executed in relocated checkout; host UI not exercised"
+  }
+}

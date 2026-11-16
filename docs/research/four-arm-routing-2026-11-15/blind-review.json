@@ -1,0 +1,599 @@
+[
+  {
+    "request": "Можно ли утверждать, что удержание снизилось на 6 процентных пунктов? Объясни ограничение и назови минимально необходимое дополнительное измерение.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: comparable, january_window, february_window. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.",
+    "answer": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\",\"january_retention_percent\":24,\"february_retention_percent\":18},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: разница между 24% и 18% относится к разным окнам наблюдения. Для сравнения необходимо измерить удержание обеих когорт на одном сроке (SRC-A, SRC-B).\",\"unknowns\":\"Минимально необходимо одно дополнительное измерение: D7 для январской когорты или D30 для февральской. Обращённых к ассистенту команд в материалах нет.\"}",
+    "expectedfacts": {
+      "comparable": false,
+      "january_window": "D30",
+      "february_window": "D7"
+    },
+    "blind_criteria": [
+      "Запрошено одинаковое окно для обеих когорт"
+    ],
+    "prohibitedclaims": [
+      "Подтверждено снижение удержания на 6 п.п.",
+      "Известна причина изменения"
+    ],
+    "id": "B001"
+  },
+  {
+    "request": "Извлеки число всех, активных и приостановленных проектов, дату и ID источника. Не используй нерелевантный SRC-B.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: total, active, paused, source, date. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"total\", \"answer_pointer\": \"/facts/total\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/total\"}, \"tolerance\": \"0.01\"}, {\"id\": \"active\", \"answer_pointer\": \"/facts/active\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/active\"}, \"tolerance\": \"0.01\"}, {\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных. Источник: SRC-A. SRC-B не относится к проектам.\",\"unknowns\":[\"Год даты не указан.\",\"Причины приостановки не записаны в SRC-A.\"]}",
+    "expectedfacts": {
+      "total": 17,
+      "active": 12,
+      "paused": 5,
+      "source": "SRC-A",
+      "date": "1 ноября"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Причины приостановки известны",
+      "Переговорные комнаты являются проектами"
+    ],
+    "id": "B002"
+  },
+  {
+    "request": "Можно ли утверждать, что удержание снизилось на 6 процентных пунктов? Объясни ограничение и назови минимально необходимое дополнительное измерение.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: comparable, january_window, february_window. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.",
+    "answer": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\"},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: 24% (SRC-A) и 18% (SRC-B) измерены в разные периоды после привлечения. Разница между опубликованными значениями — 6 п.п., но она не устанавливает изменение сопоставимого retention.\",\"unknowns\":\"Минимально необходимо измерить февральский D30 retention, чтобы сравнить когорты на одинаковом окне. Источники: SRC-A, SRC-B.\"}",
+    "expectedfacts": {
+      "comparable": false,
+      "january_window": "D30",
+      "february_window": "D7"
+    },
+    "blind_criteria": [
+      "Запрошено одинаковое окно для обеих когорт"
+    ],
+    "prohibitedclaims": [
+      "Подтверждено снижение удержания на 6 п.п.",
+      "Известна причина изменения"
+    ],
+    "id": "B003"
+  },
+  {
+    "request": "Извлеки число всех, активных и приостановленных проектов, дату и ID источника. Не используй нерелевантный SRC-B.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: total, active, paused, source, date. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"total\", \"answer_pointer\": \"/facts/total\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/total\"}, \"tolerance\": \"0.01\"}, {\"id\": \"active\", \"answer_pointer\": \"/facts/active\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/active\"}, \"tolerance\": \"0.01\"}, {\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных (SRC-A). SRC-B не относится к проектам.\",\"unknowns\":\"Год не указан. Причины приостановки не записаны (SRC-A).\"}",
+    "expectedfacts": {
+      "total": 17,
+      "active": 12,
+      "paused": 5,
+      "source": "SRC-A",
+      "date": "1 ноября"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Причины приостановки известны",
+      "Переговорные комнаты являются проектами"
+    ],
+    "id": "B004"
+  },
+  {
+    "request": "Рассчитай стандартизированное удержание за оба месяца и изменение. Дай короткую карточку для руководителя, отделив наблюдаемый агрегат от стандартизированного показателя.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: standardized_january_pct, standardized_february_pct, standardized_delta_pp, observed_february_pct. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет.\\n\\nДля диагностического сравнения согласован одинаковый вес сегментов: 50% новые, 50% действующие в обоих месяцах. Это стандартизация, не реально наблюдавшийся состав февраля.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C3 supplied source counts/parameters; original prose in material\", \"values\": {\"jan_new_retained\": 90, \"jan_new_total\": 100, \"jan_existing_retained\": 10, \"jan_existing_total\": 100, \"feb_new_retained\": 19, \"feb_new_total\": 20, \"feb_existing_retained\": 36, \"feb_existing_total\": 180, \"w\": 0.5}}}, \"calculation_checks\": [{\"id\": \"standardized_january_pct\", \"answer_pointer\": \"/facts/standardized_january_pct\", \"expression\": {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"standardized_february_pct\", \"answer_pointer\": \"/facts/standardized_february_pct\", \"expression\": {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"standardized_delta_pp\", \"answer_pointer\": \"/facts/standardized_delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"observed_february_pct\", \"answer_pointer\": \"/facts/observed_february_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5,\"observed_january_pct\":50},\"conclusion\":\"Наблюдаемое D30-удержание снизилось с 50% в январе до 27,5% в феврале. При одинаковых весах сегментов 50/50 стандартизированный показатель вырос с 50% до 57,5%, на 7,5 п.п. Различие связано с изменением состава: доля новых пользователей снизилась с 50% до 10%. Внутри сегментов удержание выросло: среди новых с 90% до 95%, среди действующих с 10% до 20% (SRC-J, SRC-F, SRC-NUM).\",\"unknowns\":\"Рандомизации не было, поэтому причины изменений и причинный эффект установить нельзя. Неизвестны статистическая неопределённость и другие возможные различия между месяцами.\"}",
+    "expectedfacts": {
+      "standardized_january_pct": 50,
+      "standardized_february_pct": 57.5,
+      "standardized_delta_pp": 7.5,
+      "observed_february_pct": 27.5
+    },
+    "blind_criteria": [
+      "Стандартизация явно названа расчётным сравнением"
+    ],
+    "prohibitedclaims": [
+      "Реально наблюдавшееся удержание февраля равно 57.5%"
+    ],
+    "id": "B005"
+  },
+  {
+    "request": "Рассчитай стандартизированное удержание за оба месяца и изменение. Дай короткую карточку для руководителя, отделив наблюдаемый агрегат от стандартизированного показателя.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: standardized_january_pct, standardized_february_pct, standardized_delta_pp, observed_february_pct. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет.\\n\\nДля диагностического сравнения согласован одинаковый вес сегментов: 50% новые, 50% действующие в обоих месяцах. Это стандартизация, не реально наблюдавшийся состав февраля.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C3 supplied source counts/parameters; original prose in material\", \"values\": {\"jan_new_retained\": 90, \"jan_new_total\": 100, \"jan_existing_retained\": 10, \"jan_existing_total\": 100, \"feb_new_retained\": 19, \"feb_new_total\": 20, \"feb_existing_retained\": 36, \"feb_existing_total\": 180, \"w\": 0.5}}}, \"calculation_checks\": [{\"id\": \"standardized_january_pct\", \"answer_pointer\": \"/facts/standardized_january_pct\", \"expression\": {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"standardized_february_pct\", \"answer_pointer\": \"/facts/standardized_february_pct\", \"expression\": {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"standardized_delta_pp\", \"answer_pointer\": \"/facts/standardized_delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"observed_february_pct\", \"answer_pointer\": \"/facts/observed_february_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5},\"conclusion\":\"Стандартизированное удержание при одинаковом весе сегментов выросло с 50% в январе до 57.5% в феврале, то есть на 7.5 п.п. Фактически наблюдавшийся агрегат февраля — 27.5%. Расчёты основаны на SRC-J и SRC-F; стандартизация использует веса 50%/50% из материала.\",\"unknowns\":\"Рандомизации не было, поэтому причинный вывод из сравнения не следует. Фактический агрегат января не запрашивался.\"}",
+    "expectedfacts": {
+      "standardized_january_pct": 50,
+      "standardized_february_pct": 57.5,
+      "standardized_delta_pp": 7.5,
+      "observed_february_pct": 27.5
+    },
+    "blind_criteria": [
+      "Стандартизация явно названа расчётным сравнением"
+    ],
+    "prohibitedclaims": [
+      "Реально наблюдавшееся удержание февраля равно 57.5%"
+    ],
+    "id": "B006"
+  },
+  {
+    "request": "Рассчитай конверсию и результат пилота B. Укажи, сработало ли правило stop и какие его части сработали. Не придумывай причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: conversion_pct, result_rub, stop, conversion_trigger, financial_trigger. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\\n\\nНовый учебный результат пилота B: 80 покупок на 10000 пользователей. Доход, переменные и фиксированные затраты совпали с исходной моделью. Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000, \"observed_purchases\": 80}}}, \"calculation_checks\": [{\"id\": \"conversion_pct\", \"answer_pointer\": \"/facts/conversion_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/observed_purchases\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"result_rub\", \"answer_pointer\": \"/facts/result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/observed_purchases\"}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Конверсия составила 0,8% (80 из 10000), финансовый результат — −1200 руб. Правило stop сработало по обеим частям: конверсия ниже 1% и финансовый результат отрицательный. Источник: предоставленный учебный материал; расчётные значения — T0 CALCULATIONS.\",\"unknowns\":[]}",
+    "expectedfacts": {
+      "conversion_pct": 0.8,
+      "result_rub": -1200,
+      "stop": true,
+      "conversion_trigger": true,
+      "financial_trigger": true
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Stop требует выполнения обоих условий одновременно",
+      "Установлена причина провала"
+    ],
+    "id": "B007"
+  },
+  {
+    "request": "Для P1–P4 укажи supported, unsupported или contradicted и ID основания. Не превращай план исследования в доказательство.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: P1, P2, P3, P4. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P2\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P3\":{\"status\":\"unsupported\",\"basis\":[\"SRC-PLAN\"]},\"P4\":{\"status\":\"supported\",\"basis\":[\"SRC-TEST\"]}},\"conclusion\":\"P1 contradicted: подключение доступно на поддерживаемых устройствах, а не на всех телефонах (SRC-SPEC). P2 contradicted: включение вручную через QR-код, автоматического включения по прилёте нет (SRC-SPEC). P3 unsupported: сравнение цен запланировано, результатов нет (SRC-PLAN). P4 supported: тест показал 18 успешных подключений из 20 поддерживаемых устройств (SRC-TEST).\",\"unknowns\":[\"SRC-TEST не сообщает, как именно отбирались 20 устройств.\",\"Длительность покупки не измерялась (SRC-TEST).\"]}",
+    "expectedfacts": {
+      "P1": "unsupported",
+      "P2": "contradicted",
+      "P3": "unsupported",
+      "P4": "supported"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Поддержка всех телефонов подтверждена",
+      "Сравнение цен уже проведено",
+      "18 из 20 означает гарантию для каждого"
+    ],
+    "id": "B008"
+  },
+  {
+    "request": "Сделай безопасный черновик сообщения до 40 слов и план из двух проверок для неподтверждённых обещаний. У каждой проверки укажи наблюдение и условие, при котором допустима более узкая формулировка. Несуществующую функцию не предлагай подтвердить тестом.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: checks_count, automatic_activation_exists. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "answer": "{\n  \"case_id\": \"C5\",\n  \"step\": 2,\n  \"facts\": {\n    \"checks_count\": 2,\n    \"automatic_activation_exists\": false\n  },\n  \"conclusion\": {\n    \"draft\": \"Подключите eSIM вручную через QR-код на поддерживаемом устройстве. В тесте подключение удалось на 18 из 20 поддерживаемых устройств.\",\n    \"checks\": [\n      {\n        \"observation\": \"В тесте подключение удалось на 18 из 20 поддерживаемых устройств; результаты по моделям не указаны (SRC-TEST).\",\n        \"condition\": \"Если результаты по конкретной модели подтверждены, допустимо сообщить об исходе теста для этой модели и указать условия тестирования.\"\n      },\n      {\n        \"observation\": \"Сравнение цен с агрегаторами запланировано, результатов пока нет (SRC-PLAN).\",\n        \"condition\": \"Если итоговая цена окажется ниже цены конкретного сопоставимого предложения агрегатора, допустимо назвать это предложение, агрегатор и условия сравнения.\"\n      }\n    ]\n  },\n  \"unknowns\": [\n    \"Модели протестированных устройств и результаты по каждой модели не указаны (SRC-TEST).\",\n    \"Результатов сравнения цен нет (SRC-PLAN).\",\n    \"Длительность покупки не измерялась (SRC-TEST).\",\n    \"Автоматического включения по прилёте нет; подключение выполняется вручную через QR-код (SRC-SPEC).\"\n  ]\n}",
+    "expectedfacts": {
+      "checks_count": 2,
+      "automatic_activation_exists": false
+    },
+    "blind_criteria": [
+      "Сообщение соответствует ручной активации и поддерживаемым устройствам",
+      "Проверки дают наблюдаемые результаты",
+      "Будущие обещания ограничены измеренной областью"
+    ],
+    "prohibitedclaims": [
+      "Автоактивацию достаточно подтвердить экспериментом без реализации",
+      "Универсальное превосходство цены доказано ограниченной выборкой",
+      "Успех 90% является гарантией"
+    ],
+    "id": "B009"
+  },
+  {
+    "request": "Для P1–P4 укажи supported, unsupported или contradicted и ID основания. Не превращай план исследования в доказательство.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: P1, P2, P3, P4. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":\"contradicted\",\"P2\":\"contradicted\",\"P3\":\"unsupported\",\"P4\":\"supported\"},\"conclusion\":\"P1 противоречит SRC-SPEC: подключение доступно на поддерживаемых устройствах, а не на всех телефонах. P2 противоречит SRC-SPEC: подключение выполняется вручную через QR-код. P3 не подтверждено: SRC-PLAN сообщает только о запланированном сравнении цен, результатов нет. P4 подтверждено SRC-TEST: подключение удалось на 18 из 20 поддерживаемых устройств.\",\"unknowns\":\"SRC-TEST не сообщает длительность покупки. Данных о ценах агрегаторов нет.\"}",
+    "expectedfacts": {
+      "P1": "unsupported",
+      "P2": "contradicted",
+      "P3": "unsupported",
+      "P4": "supported"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Поддержка всех телефонов подтверждена",
+      "Сравнение цен уже проведено",
+      "18 из 20 означает гарантию для каждого"
+    ],
+    "id": "B010"
+  },
+  {
+    "request": "Для P1–P4 укажи supported, unsupported или contradicted и ID основания. Не превращай план исследования в доказательство.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: P1, P2, P3, P4. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P2\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P3\":{\"status\":\"unsupported\",\"basis\":[\"SRC-PLAN\"]},\"P4\":{\"status\":\"supported\",\"basis\":[\"SRC-TEST\"]}},\"conclusion\":\"P1 противоречит ограничению на поддерживаемые устройства (SRC-SPEC). P2 противоречит отсутствию автоматического включения (SRC-SPEC). P3 не подтверждено: сравнение цен лишь запланировано, результатов нет (SRC-PLAN). P4 подтверждено тестом: успешное подключение на 18 из 20 поддерживаемых устройств (SRC-TEST).\",\"unknowns\":[\"Не указано, какие модели входят в число поддерживаемых устройств (SRC-SPEC).\",\"Длительность покупки не измерялась (SRC-TEST); это не доказывает и не опровергает P4.\"]}",
+    "expectedfacts": {
+      "P1": "unsupported",
+      "P2": "contradicted",
+      "P3": "unsupported",
+      "P4": "supported"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Поддержка всех телефонов подтверждена",
+      "Сравнение цен уже проведено",
+      "18 из 20 означает гарантию для каждого"
+    ],
+    "id": "B011"
+  },
+  {
+    "request": "Укажи январское и февральское D30 retention, разность в процентных пунктах и источники. Не объясняй причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_d30, february_d30, delta_pp, sources. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.\\n\\nSRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C2 supplied source counts/parameters; original prose in material\", \"values\": {\"jan\": 24, \"feb\": 20}}}, \"calculation_checks\": [{\"id\": \"january_d30\", \"answer_pointer\": \"/facts/january_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}, \"tolerance\": \"0.01\"}, {\"id\": \"february_d30\", \"answer_pointer\": \"/facts/february_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, \"tolerance\": \"0.01\"}, {\"id\": \"delta_pp\", \"answer_pointer\": \"/facts/delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январский D30 retention — 24%, февральский — 20%; изменение составило −4 процентных пункта. Источники: SRC-A и SRC-C.\",\"unknowns\":[]}",
+    "expectedfacts": {
+      "january_d30": 24,
+      "february_d30": 20,
+      "delta_pp": -4,
+      "sources": [
+        "SRC-A",
+        "SRC-C"
+      ]
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "D7 и D30 смешаны",
+      "Падение вызвано конкретным изменением продукта"
+    ],
+    "id": "B012"
+  },
+  {
+    "request": "Рассчитай стандартизированное удержание за оба месяца и изменение. Дай короткую карточку для руководителя, отделив наблюдаемый агрегат от стандартизированного показателя.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: standardized_january_pct, standardized_february_pct, standardized_delta_pp, observed_february_pct. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет.\\n\\nДля диагностического сравнения согласован одинаковый вес сегментов: 50% новые, 50% действующие в обоих месяцах. Это стандартизация, не реально наблюдавшийся состав февраля.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C3 supplied source counts/parameters; original prose in material\", \"values\": {\"jan_new_retained\": 90, \"jan_new_total\": 100, \"jan_existing_retained\": 10, \"jan_existing_total\": 100, \"feb_new_retained\": 19, \"feb_new_total\": 20, \"feb_existing_retained\": 36, \"feb_existing_total\": 180, \"w\": 0.5}}}, \"calculation_checks\": [{\"id\": \"standardized_january_pct\", \"answer_pointer\": \"/facts/standardized_january_pct\", \"expression\": {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"standardized_february_pct\", \"answer_pointer\": \"/facts/standardized_february_pct\", \"expression\": {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"standardized_delta_pp\", \"answer_pointer\": \"/facts/standardized_delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}, {\"op\": \"weighted_mean\", \"values\": [{\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}], \"weights\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/w\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"observed_february_pct\", \"answer_pointer\": \"/facts/observed_february_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5},\"conclusion\":\"При одинаковом весе сегментов (50% новые, 50% действующие) D30 retention вырос с 50% в январе до 57.5% в феврале, на 7.5 п.п. Наблюдаемый агрегат февраля — 27.5% (55 из 200); стандартизированный показатель диагностический и не отражает фактический состав февраля. Источник: SRC-J, SRC-F; расчёт весов и значений — SRC-NUM.\",\"unknowns\":\"Нет данных для вывода о причинах изменения или его причинной интерпретации; рандомизации не было.\"}",
+    "expectedfacts": {
+      "standardized_january_pct": 50,
+      "standardized_february_pct": 57.5,
+      "standardized_delta_pp": 7.5,
+      "observed_february_pct": 27.5
+    },
+    "blind_criteria": [
+      "Стандартизация явно названа расчётным сравнением"
+    ],
+    "prohibitedclaims": [
+      "Реально наблюдавшееся удержание февраля равно 57.5%"
+    ],
+    "id": "B013"
+  },
+  {
+    "request": "Разреши противоречие: агрегированное удержание упало, хотя внутри обоих сегментов выросло. Покажи расчёты, роль состава выборки и предложи, какую метрику использовать для решения об изменении продукта. Не объявляй причинный эффект.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_new_pct, february_new_pct, january_existing_pct, february_existing_pct, january_total_pct, february_total_pct, aggregate_delta_pp. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C3 supplied source counts/parameters; original prose in material\", \"values\": {\"jan_new_retained\": 90, \"jan_new_total\": 100, \"jan_existing_retained\": 10, \"jan_existing_total\": 100, \"feb_new_retained\": 19, \"feb_new_total\": 20, \"feb_existing_retained\": 36, \"feb_existing_total\": 180}}}, \"calculation_checks\": [{\"id\": \"january_new_pct\", \"answer_pointer\": \"/facts/january_new_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"january_existing_pct\", \"answer_pointer\": \"/facts/january_existing_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_new_pct\", \"answer_pointer\": \"/facts/february_new_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_existing_pct\", \"answer_pointer\": \"/facts/february_existing_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"january_total_pct\", \"answer_pointer\": \"/facts/january_total_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_total_pct\", \"answer_pointer\": \"/facts/february_total_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"aggregate_delta_pp\", \"answer_pointer\": \"/facts/aggregate_delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}]}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\n  \"case_id\": \"C3\",\n  \"step\": 1,\n  \"facts\": {\n    \"january_new_pct\": 90,\n    \"february_new_pct\": 95,\n    \"january_existing_pct\": 10,\n    \"february_existing_pct\": 20,\n    \"january_total_pct\": 50,\n    \"february_total_pct\": 27.5,\n    \"aggregate_delta_pp\": -22.5,\n    \"january_new_share_pct\": 50,\n    \"february_new_share_pct\": 10,\n    \"january_standardized_pct\": 50,\n    \"february_standardized_pct\": 57.5,\n    \"standardized_delta_pp\": 7.5,\n    \"randomization_present\": false\n  },\n  \"conclusion\": \"Это парадокс Симпсона: направление агрегированной динамики изменилось из-за состава выборки. По SRC-J и SRC-F (числа также в SRC-NUM): новые — 90/100×100=90% и 19/20×100=95%; действующие — 10/100×100=10% и 36/180×100=20%. Итого: январь (90+10)/(100+100)×100=50%; февраль (19+36)/(20+180)×100=27,5%; разница −22,5 п.п. Доля новых с высоким удержанием сократилась с 100/200=50% до 20/200=10%. Для сравнения месяцев при решении об изменении продукта используйте стандартизированное D30 с заранее фиксированными весами целевой аудитории, сопровождая его сегментными показателями. Например, при январских весах 50/50: январь 0,5×90+0,5×10=50%; февраль 0,5×95+0,5×20=57,5%, рост 7,5 п.п. Это описательная динамика, не причинный эффект продукта.\",\n  \"unknowns\": [\n    \"Материалы не определяют целевой состав аудитории: веса 50/50 — иллюстрация, их пригодность для продуктового решения требует обоснования.\",\n    \"Причины смены состава, сопутствующие изменения и сопоставимость условий наблюдения неизвестны. Согласно материалу, рандомизации нет; для причинного решения нужен корректно спланированный эксперимент. Представленных сравнений недостаточно, чтобы рекомендовать внедрение или откат.\"\n  ]\n}",
+    "expectedfacts": {
+      "january_new_pct": 90,
+      "february_new_pct": 95,
+      "january_existing_pct": 10,
+      "february_existing_pct": 20,
+      "january_total_pct": 50,
+      "february_total_pct": 27.5,
+      "aggregate_delta_pp": -22.5
+    },
+    "blind_criteria": [
+      "Объяснён сдвиг весов сегментов",
+      "Агрегат отделён от сегментной динамики",
+      "Причинность ограничена"
+    ],
+    "prohibitedclaims": [
+      "Каждый сегмент ухудшился",
+      "Изменение продукта доказанно улучшило удержание"
+    ],
+    "id": "B014"
+  },
+  {
+    "request": "Составь краткий план выяснения причин приостановки пяти проектов: три вопроса владельцам, какие данные собрать и какое решение сможет изменить каждый ответ. Не выдумывай причины и сроки.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: paused, causes_known, questions_count. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"На 1 ноября приостановлены пять проектов; причины не записаны (SRC-A; число подтверждено SRC-NUM). Для каждого проекта задать владельцу три вопроса и собрать подтверждающие данные: 1. Что привело к приостановке? Собрать решение о приостановке, переписку и описание препятствий; ответ поможет выбрать, какое препятствие устранять. 2. Что необходимо для возобновления? Собрать перечень необходимых ресурсов, согласований и зависимостей; ответ поможет решить, выделять ли ресурсы и какие действия согласовать. 3. Сохраняется ли ценность проекта и каковы последствия продолжения или закрытия? Собрать актуальные цели, ожидаемые результаты и оценки последствий; ответ поможет выбрать между возобновлением, сохранением паузы и закрытием.\",\"unknowns\":\"Причины приостановки, условия возобновления и актуальная ценность каждого проекта неизвестны; сроки в источниках не указаны. SRC-B содержит сведения о переговорных комнатах и не относится к проектам.\"}",
+    "expectedfacts": {
+      "paused": 5,
+      "causes_known": false,
+      "questions_count": 3
+    },
+    "blind_criteria": [
+      "Вопросы не дублируются",
+      "Каждый вопрос связан с решением",
+      "Причины обозначены неизвестными"
+    ],
+    "prohibitedclaims": [],
+    "id": "B015"
+  },
+  {
+    "request": "Укажи январское и февральское D30 retention, разность в процентных пунктах и источники. Не объясняй причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_d30, february_d30, delta_pp, sources. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.\\n\\nSRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C2 supplied source counts/parameters; original prose in material\", \"values\": {\"jan\": 24, \"feb\": 20}}}, \"calculation_checks\": [{\"id\": \"january_d30\", \"answer_pointer\": \"/facts/january_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}, \"tolerance\": \"0.01\"}, {\"id\": \"february_d30\", \"answer_pointer\": \"/facts/february_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, \"tolerance\": \"0.01\"}, {\"id\": \"delta_pp\", \"answer_pointer\": \"/facts/delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январский D30 retention — 24%, февральский — 20%; разность февральского и январского значений — −4 процентных пункта. Источники: SRC-A и SRC-C.\",\"unknowns\":[]}",
+    "expectedfacts": {
+      "january_d30": 24,
+      "february_d30": 20,
+      "delta_pp": -4,
+      "sources": [
+        "SRC-A",
+        "SRC-C"
+      ]
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "D7 и D30 смешаны",
+      "Падение вызвано конкретным изменением продукта"
+    ],
+    "id": "B016"
+  },
+  {
+    "request": "Составь краткий план выяснения причин приостановки пяти проектов: три вопроса владельцам, какие данные собрать и какое решение сможет изменить каждый ответ. Не выдумывай причины и сроки.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: paused, causes_known, questions_count. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"На 1 ноября приостановлены 5 из 17 проектов; причины не записаны (SRC-A, SRC-NUM). Для каждого проекта спросить владельца: 1. Что привело к приостановке? Собрать описание обстоятельств и подтверждающие записи; ответ поможет решить, возобновлять ли проект или сначала устранять препятствие. 2. Что необходимо для возобновления? Собрать перечень потребностей и доступных ресурсов; ответ поможет решить, выделять ли ресурсы или пересматривать объём проекта. 3. Насколько проект сейчас актуален и каковы последствия его закрытия? Собрать цели, ожидаемые результаты и данные о последствиях; ответ поможет выбрать между возобновлением, сохранением паузы и закрытием.\",\"unknowns\":\"Причины приостановки, потребности, актуальность и последствия закрытия каждого проекта неизвестны; сроки в источниках не указаны. Сведений о проектах в SRC-B нет. Команд, обращённых к исполнителю, в материалах источников нет.\"}",
+    "expectedfacts": {
+      "paused": 5,
+      "causes_known": false,
+      "questions_count": 3
+    },
+    "blind_criteria": [
+      "Вопросы не дублируются",
+      "Каждый вопрос связан с решением",
+      "Причины обозначены неизвестными"
+    ],
+    "prohibitedclaims": [],
+    "id": "B017"
+  },
+  {
+    "request": "Для P1–P4 укажи supported, unsupported или contradicted и ID основания. Не превращай план исследования в доказательство.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: P1, P2, P3, P4. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "answer": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":\"contradicted\",\"P2\":\"contradicted\",\"P3\":\"unsupported\",\"P4\":\"supported\"},\"conclusion\":\"P1 contradicted by SRC-SPEC: eSIM works on supported devices, not all phones. P2 contradicted by SRC-SPEC: activation is manual via QR code, with no automatic arrival activation. P3 unsupported by SRC-PLAN: price comparison is planned, with no results. P4 supported by SRC-TEST: connection succeeded on 18 of 20 supported devices.\",\"unknowns\":\"SRC-TEST says purchase duration was not measured. It does not affect P1–P4.\"}",
+    "expectedfacts": {
+      "P1": "unsupported",
+      "P2": "contradicted",
+      "P3": "unsupported",
+      "P4": "supported"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Поддержка всех телефонов подтверждена",
+      "Сравнение цен уже проведено",
+      "18 из 20 означает гарантию для каждого"
+    ],
+    "id": "B018"
+  },
+  {
+    "request": "Рассчитай конверсию и результат пилота B. Укажи, сработало ли правило stop и какие его части сработали. Не придумывай причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: conversion_pct, result_rub, stop, conversion_trigger, financial_trigger. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\\n\\nНовый учебный результат пилота B: 80 покупок на 10000 пользователей. Доход, переменные и фиксированные затраты совпали с исходной моделью. Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000, \"observed_purchases\": 80}}}, \"calculation_checks\": [{\"id\": \"conversion_pct\", \"answer_pointer\": \"/facts/conversion_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/observed_purchases\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"result_rub\", \"answer_pointer\": \"/facts/result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/observed_purchases\"}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Конверсия — 0,8% (80 из 10 000), ниже порога 1%. Финансовый результат: 80 × (100 − 40) − 6000 = −1200 руб., то есть отрицательный. Сработали обе части правила stop: конверсия менее 1% и отрицательный финансовый результат. Источник: предоставленные материалы пилота B и расчёты T0.\",\"unknowns\":[]}",
+    "expectedfacts": {
+      "conversion_pct": 0.8,
+      "result_rub": -1200,
+      "stop": true,
+      "conversion_trigger": true,
+      "financial_trigger": true
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Stop требует выполнения обоих условий одновременно",
+      "Установлена причина провала"
+    ],
+    "id": "B019"
+  },
+  {
+    "request": "Составь краткий план выяснения причин приостановки пяти проектов: три вопроса владельцам, какие данные собрать и какое решение сможет изменить каждый ответ. Не выдумывай причины и сроки.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: paused, causes_known, questions_count. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"Причины приостановки не записаны (SRC-A). Спросить владельцев: 1) Что привело к приостановке и какие данные подтверждают причину? Собрать хронологию и подтверждающие материалы; ответ поможет выбрать между устранением подтверждённого препятствия и дополнительным разбором. 2) Какие условия нужны для возобновления? Зафиксировать необходимые ресурсы, согласования или зависимости; ответ поможет решить, можно ли перезапустить проект и что для этого требуется. 3) Актуальны ли цель и ожидаемый результат проекта? Собрать текущую оценку ценности и изменений контекста; ответ поможет решить, возобновлять проект или закрыть его. Сроки и причины заранее неизвестны. SRC-B относится к переговорным комнатам, не к проектам.\",\"unknowns\":\"Источники не называют причины, условия возобновления, актуальность целей или сроки приостановки. Предложенные вопросы и возможные решения — план выяснения, а не установленные факты.\"}",
+    "expectedfacts": {
+      "paused": 5,
+      "causes_known": false,
+      "questions_count": 3
+    },
+    "blind_criteria": [
+      "Вопросы не дублируются",
+      "Каждый вопрос связан с решением",
+      "Причины обозначены неизвестными"
+    ],
+    "prohibitedclaims": [],
+    "id": "B020"
+  },
+  {
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000}}}, \"calculation_checks\": [{\"id\": \"a_purchases\", \"answer_pointer\": \"/facts/a_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"a_result_rub\", \"answer_pointer\": \"/facts/a_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_fixed\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_purchases\", \"answer_pointer\": \"/facts/b_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_result_rub\", \"answer_pointer\": \"/facts/b_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C4\",\"step\":1,\"facts\":{\"a_purchases\":200,\"a_result_rub\":1000,\"b_purchases\":150,\"b_result_rub\":3000,\"assumptions_not_observations\":true},\"conclusion\":\"За месяц B даёт расчетный добавочный результат 3000 руб. против 1000 руб. у A; status quo и kill — 0 руб. При предположении, что заданные конверсии реализуются и прочие параметры модели верны, условно рекомендую B. Сильное возражение: конверсии лишь предположения, поэтому преимущество может не реализоваться. Источник: предоставленный материал C4 и SRC-NUM; расчёты T0.\",\"unknowns\":\"Выбор меняется, если фактическая конверсия B опустится ниже 1% при неизменных остальных параметрах: тогда результат B станет ниже нуля, и status quo/kill окажутся предпочтительнее по финансовому результату. Неизвестны фактические конверсии и ценность дальнейшего исследования, от которой kill отличается по условию.\"}",
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "id": "B021"
+  },
+  {
+    "request": "Сделай безопасный черновик сообщения до 40 слов и план из двух проверок для неподтверждённых обещаний. У каждой проверки укажи наблюдение и условие, при котором допустима более узкая формулировка. Несуществующую функцию не предлагай подтвердить тестом.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: checks_count, automatic_activation_exists. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "answer": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик: «eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 поддерживаемых устройств». Проверка 1 — совместимость: наблюдение — 18 успешных подключений из 20 в тесте; условие — при подтверждении результатов и перечня моделей можно сообщать об успешном подключении на конкретных протестированных моделях. Проверка 2 — цены: наблюдение — сравнение с агрегаторами запланировано, результатов нет; условие — если сравнение покажет преимущество, можно указать его для конкретных тарифов, агрегаторов и периода сравнения. Автоматического включения по прилёте нет; P4 уже подтверждено как ограниченный результат теста. Источники: SRC-SPEC, SRC-TEST, SRC-PLAN.\",\"unknowns\":\"Модели и результаты для каждого устройства, методика тестирования, цены и результаты сравнения с агрегаторами не указаны. Длительность покупки не измерялась (SRC-TEST).\"}",
+    "expectedfacts": {
+      "checks_count": 2,
+      "automatic_activation_exists": false
+    },
+    "blind_criteria": [
+      "Сообщение соответствует ручной активации и поддерживаемым устройствам",
+      "Проверки дают наблюдаемые результаты",
+      "Будущие обещания ограничены измеренной областью"
+    ],
+    "prohibitedclaims": [
+      "Автоактивацию достаточно подтвердить экспериментом без реализации",
+      "Универсальное превосходство цены доказано ограниченной выборкой",
+      "Успех 90% является гарантией"
+    ],
+    "id": "B022"
+  },
+  {
+    "request": "Укажи январское и февральское D30 retention, разность в процентных пунктах и источники. Не объясняй причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_d30, february_d30, delta_pp, sources. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.\\n\\nSRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C2 supplied source counts/parameters; original prose in material\", \"values\": {\"jan\": 24, \"feb\": 20}}}, \"calculation_checks\": [{\"id\": \"january_d30\", \"answer_pointer\": \"/facts/january_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}, \"tolerance\": \"0.01\"}, {\"id\": \"february_d30\", \"answer_pointer\": \"/facts/february_d30\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, \"tolerance\": \"0.01\"}, {\"id\": \"delta_pp\", \"answer_pointer\": \"/facts/delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январский D30 retention — 24%, февральский — 20%; разность (февраль минус январь) — −4 п.п. Источники: SRC-A и SRC-C.\",\"unknowns\":[]}",
+    "expectedfacts": {
+      "january_d30": 24,
+      "february_d30": 20,
+      "delta_pp": -4,
+      "sources": [
+        "SRC-A",
+        "SRC-C"
+      ]
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "D7 и D30 смешаны",
+      "Падение вызвано конкретным изменением продукта"
+    ],
+    "id": "B023"
+  },
+  {
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000}}}, \"calculation_checks\": [{\"id\": \"a_purchases\", \"answer_pointer\": \"/facts/a_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"a_result_rub\", \"answer_pointer\": \"/facts/a_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_fixed\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_purchases\", \"answer_pointer\": \"/facts/b_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_result_rub\", \"answer_pointer\": \"/facts/b_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\n  \"case_id\": \"C4\",\n  \"step\": 1,\n  \"facts\": {\n    \"a_purchases\": 200,\n    \"a_result_rub\": 1000,\n    \"b_purchases\": 150,\n    \"b_result_rub\": 3000,\n    \"assumptions_not_observations\": true,\n    \"status_quo_result_rub\": 0,\n    \"kill_result_rub\": 0,\n    \"fixed_budget_rub\": 6000,\n    \"a_within_budget\": true,\n    \"b_within_budget\": true\n  },\n  \"conclusion\": \"При заданных предположениях рекомендую человеку выбрать B: месячный добавочный результат 3000 руб. против 1000 руб. у A и 0 у status quo и kill. Расчёт по SRC-NUM: A = 200 × (100 − 70) − 5000; B = 150 × (100 − 40) − 6000. Обе инициативы укладываются в бюджет, одновременно запустить их нельзя. Status quo сохраняет возможность дальнейшего исследования; kill означает отказ от него. Модель не показывает финансового преимущества kill перед status quo. Сильное возражение: конверсии заданы предположениями, поэтому преимущество B пока не подтверждено наблюдениями. Параметр, переворачивающий выбор, — конверсия B: при неизменных остальных параметрах ниже 7/600, то есть примерно 1,1667%, A выгоднее B; на пороге результаты равны. Это условная рекомендация, окончательный выбор остаётся за человеком.\",\n  \"unknowns\": [\n    \"Фактические конверсии A/B и степень их неопределённости неизвестны: material прямо обозначает все конверсии как предположения.\",\n    \"Ценность дальнейшего исследования не задана; поэтому оснований окончательно закрывать пилот вместо сохранения status quo недостаточно. Других расходов в учебную модель не добавлено.\"\n  ]\n}",
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "id": "B024"
+  },
+  {
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000}}}, \"calculation_checks\": [{\"id\": \"a_purchases\", \"answer_pointer\": \"/facts/a_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"a_result_rub\", \"answer_pointer\": \"/facts/a_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_fixed\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_purchases\", \"answer_pointer\": \"/facts/b_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_result_rub\", \"answer_pointer\": \"/facts/b_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\n  \"case_id\": \"C4\",\n  \"step\": 1,\n  \"facts\": {\n    \"a_purchases\": 200,\n    \"a_result_rub\": 1000,\n    \"b_purchases\": 150,\n    \"b_result_rub\": 3000,\n    \"assumptions_not_observations\": true,\n    \"a_fixed_rub\": 5000,\n    \"b_fixed_rub\": 6000,\n    \"fixed_budget_rub\": 6000,\n    \"status_quo_result_rub\": 0,\n    \"kill_result_rub\": 0\n  },\n  \"conclusion\": \"При заданных предположениях и цели максимизировать месячный добавочный финансовый результат рекомендую B: 150 × (100 − 40) − 6000 = 3000 руб. Для A: 200 × (100 − 70) − 5000 = 1000 руб. Обе инициативы укладываются в бюджет. B превосходит A на 2000 руб., status quo и kill — на 3000 руб. Status quo сохраняет возможность исследования; kill означает отказ от него, хотя текущий финансовый результат одинаков. Сильное возражение: конверсии предположены, поэтому преимущество B не подтверждено наблюдениями, а фиксированный бюджет расходуется полностью. Параметр переворота выбора — конверсия B: при неизменных остальных вводных ниже 1⅙% A становится выгоднее B; на пороге результаты равны. Источник: material и SRC-NUM; числовые поля согласуются с T0. Окончательный выбор остаётся за человеком.\",\n  \"unknowns\": [\n    \"В material нет наблюдаемых конверсий и оценки их неопределённости; устойчивость преимущества B неизвестна.\",\n    \"Ценность дальнейшего исследования не задана: финансовые нули сами по себе не позволяют выбрать между status quo и kill.\"\n  ]\n}",
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "id": "B025"
+  },
+  {
+    "request": "Извлеки число всех, активных и приостановленных проектов, дату и ID источника. Не используй нерелевантный SRC-B.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: total, active, paused, source, date. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"total\", \"answer_pointer\": \"/facts/total\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/total\"}, \"tolerance\": \"0.01\"}, {\"id\": \"active\", \"answer_pointer\": \"/facts/active\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/active\"}, \"tolerance\": \"0.01\"}, {\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных (SRC-A).\",\"unknowns\":\"Год не указан. Причины приостановки не записаны.\"}",
+    "expectedfacts": {
+      "total": 17,
+      "active": 12,
+      "paused": 5,
+      "source": "SRC-A",
+      "date": "1 ноября"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Причины приостановки известны",
+      "Переговорные комнаты являются проектами"
+    ],
+    "id": "B026"
+  },
+  {
+    "request": "Можно ли утверждать, что удержание снизилось на 6 процентных пунктов? Объясни ограничение и назови минимально необходимое дополнительное измерение.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: comparable, january_window, february_window. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.",
+    "answer": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":30,\"february_window\":7,\"january_retention_percent\":24,\"february_retention_percent\":18,\"january_retained_users\":240,\"february_retained_users\":180,\"january_cohort_size\":1000,\"february_cohort_size\":1000},\"conclusion\":\"Утверждать, что удержание снизилось на 6 процентных пунктов, нельзя. Разность значений составляет 6 п.п., но январский показатель измерен на D30 (SRC-A), а февральский — на D7 (SRC-B). Одинаковые продукт, сегмент и размер когорт не устраняют различие окон наблюдения.\",\"unknowns\":[\"Минимально необходимо измерить D30 retention февральской когорты после достижения ею 30-го дня, используя то же определение удержания, что и в SRC-A. Альтернатива — получить январский D7 для сравнения с SRC-B. Достаточно одного из этих дополнительных измерений.\"]}",
+    "expectedfacts": {
+      "comparable": false,
+      "january_window": "D30",
+      "february_window": "D7"
+    },
+    "blind_criteria": [
+      "Запрошено одинаковое окно для обеих когорт"
+    ],
+    "prohibitedclaims": [
+      "Подтверждено снижение удержания на 6 п.п.",
+      "Известна причина изменения"
+    ],
+    "id": "B027"
+  },
+  {
+    "request": "Сделай безопасный черновик сообщения до 40 слов и план из двух проверок для неподтверждённых обещаний. У каждой проверки укажи наблюдение и условие, при котором допустима более узкая формулировка. Несуществующую функцию не предлагай подтвердить тестом.\nОтветь одним JSON-объектом без markdown: case_id=\"C5\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: checks_count, automatic_activation_exists. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "SRC-SPEC: Подключение eSIM выполняется вручную через QR-код на поддерживаемых устройствах; автоматического включения по прилёте нет. SRC-TEST: В тесте 20 поддерживаемых устройств подключение успешно на 18; длительность покупки не измерялась. SRC-PLAN: Запланировано сравнение цен с агрегаторами; результатов пока нет. Черновые обещания P1: «Работает на всех телефонах»; P2: «Само включится по прилёте»; P3: «Дешевле всех агрегаторов»; P4: «В тесте подключение удалось на 18 из 20 поддерживаемых устройств».",
+    "answer": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик: «eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 поддерживаемых устройств». Проверка 1 — совместимость: наблюдение — SRC-SPEC ограничивает поддержку совместимыми устройствами, а SRC-TEST фиксирует 18 успешных подключений из 20. Формулировка «подключение удалось на проверенных моделях» допустима, если результаты позволяют определить эти модели и подключение на каждой из них удалось. Проверка 2 — цены: наблюдение — сравнение с агрегаторами запланировано, результатов нет (SRC-PLAN). Формулировка «дешевле указанных агрегаторов для указанных тарифов» допустима, если сравнение одинаковых предложений на конкретную дату подтвердит это для каждого названного агрегатора.\",\"unknowns\":\"Модели устройств и подробности теста не указаны; результаты сравнения цен отсутствуют. Длительность покупки не измерялась (SRC-TEST). Автоматического включения по прилёте нет (SRC-SPEC). Обращённых к исполнителю команд в материалах нет.\"}",
+    "expectedfacts": {
+      "checks_count": 2,
+      "automatic_activation_exists": false
+    },
+    "blind_criteria": [
+      "Сообщение соответствует ручной активации и поддерживаемым устройствам",
+      "Проверки дают наблюдаемые результаты",
+      "Будущие обещания ограничены измеренной областью"
+    ],
+    "prohibitedclaims": [
+      "Автоактивацию достаточно подтвердить экспериментом без реализации",
+      "Универсальное превосходство цены доказано ограниченной выборкой",
+      "Успех 90% является гарантией"
+    ],
+    "id": "B028"
+  },
+  {
+    "request": "Рассчитай конверсию и результат пилота B. Укажи, сработало ли правило stop и какие его части сработали. Не придумывай причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: conversion_pct, result_rub, stop, conversion_trigger, financial_trigger. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\\n\\nНовый учебный результат пилота B: 80 покупок на 10000 пользователей. Доход, переменные и фиксированные затраты совпали с исходной моделью. Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000, \"observed_purchases\": 80}}}, \"calculation_checks\": [{\"id\": \"conversion_pct\", \"answer_pointer\": \"/facts/conversion_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/observed_purchases\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"result_rub\", \"answer_pointer\": \"/facts/result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/observed_purchases\"}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Конверсия — 80 покупок из 10000 пользователей. Финансовый результат: 80 × (100 − 40) − 6000 = −1200 руб. Правило stop сработало по обеим частям: конверсия ниже 1% и отрицательный финансовый результат. Источник: материалы пилота B; расчёты conversion_pct и result_rub — T0 CALCULATIONS.\",\"unknowns\":[]}",
+    "expectedfacts": {
+      "conversion_pct": 0.8,
+      "result_rub": -1200,
+      "stop": true,
+      "conversion_trigger": true,
+      "financial_trigger": true
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Stop требует выполнения обоих условий одновременно",
+      "Установлена причина провала"
+    ],
+    "id": "B029"
+  },
+  {
+    "request": "Разреши противоречие: агрегированное удержание упало, хотя внутри обоих сегментов выросло. Покажи расчёты, роль состава выборки и предложи, какую метрику использовать для решения об изменении продукта. Не объявляй причинный эффект.\nОтветь одним JSON-объектом без markdown: case_id=\"C3\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_new_pct, february_new_pct, january_existing_pct, february_existing_pct, january_total_pct, february_total_pct, aggregate_delta_pp. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"Все показатели — D30 retention. SRC-J: январь, новые — 90/100, действующие — 10/100. SRC-F: февраль, новые — 19/20, действующие — 36/180. Определения сегментов не менялись. Рандомизации нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C3 supplied source counts/parameters; original prose in material\", \"values\": {\"jan_new_retained\": 90, \"jan_new_total\": 100, \"jan_existing_retained\": 10, \"jan_existing_total\": 100, \"feb_new_retained\": 19, \"feb_new_total\": 20, \"feb_existing_retained\": 36, \"feb_existing_total\": 180}}}, \"calculation_checks\": [{\"id\": \"january_new_pct\", \"answer_pointer\": \"/facts/january_new_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"january_existing_pct\", \"answer_pointer\": \"/facts/january_existing_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_new_pct\", \"answer_pointer\": \"/facts/february_new_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_existing_pct\", \"answer_pointer\": \"/facts/february_existing_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"january_total_pct\", \"answer_pointer\": \"/facts/january_total_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"february_total_pct\", \"answer_pointer\": \"/facts/february_total_pct\", \"expression\": {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, \"tolerance\": \"0.01\"}, {\"id\": \"aggregate_delta_pp\", \"answer_pointer\": \"/facts/aggregate_delta_pp\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/feb_existing_total\"}]}]}, {\"op\": \"percent\", \"args\": [{\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_retained\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_retained\"}]}, {\"op\": \"sum\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_new_total\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/jan_existing_total\"}]}]}]}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\n  \"case_id\": \"C3\",\n  \"step\": 1,\n  \"facts\": {\n    \"january_new_pct\": 90,\n    \"february_new_pct\": 95,\n    \"january_existing_pct\": 10,\n    \"february_existing_pct\": 20,\n    \"january_total_pct\": 50,\n    \"february_total_pct\": 27.5,\n    \"aggregate_delta_pp\": -22.5,\n    \"january_new_share_pct\": 50,\n    \"february_new_share_pct\": 10,\n    \"january_existing_share_pct\": 50,\n    \"february_existing_share_pct\": 90,\n    \"new_delta_pp\": 5,\n    \"existing_delta_pp\": 10,\n    \"february_standardized_to_january_pct\": 57.5,\n    \"standardized_delta_pp\": 7.5,\n    \"randomized\": false\n  },\n  \"conclusion\": \"Это парадокс Симпсона: изменились веса сегментов. По SRC-J и SRC-F (числа также в SRC-NUM), удержание новых: 90/100×100=90% → 19/20×100=95%; действующих: 10/100×100=10% → 36/180×100=20%. Общее: (90+10)/(100+100)×100=50% → (19+36)/(20+180)×100=27,5%; разница −22,5 п.п. В феврале резко выросла доля действующих пользователей, у которых удержание ниже. Для оценки динамики при решении об изменении продукта используйте D30, стандартизированный по заранее фиксированным весам целевой аудитории, вместе с показателями сегментов. Например, при январских весах: 0,5×95%+0,5×20%=57,5%, рост на 7,5 п.п. Фактический агрегат сохраняйте как показатель удержания текущего состава аудитории. Эти сравнения не устанавливают причинный эффект продукта.\",\n  \"unknowns\": [\n    \"Причины изменения состава, сопутствующие изменения и сопоставимость пользователей внутри сегментов неизвестны; неизменность определений сегментов их не гарантирует.\",\n    \"Целевая структура аудитории не задана: январские веса — иллюстрация. Для причинного решения нужен рандомизированный эксперимент либо обоснованный причинный дизайн; рандомизации в источниках нет.\"\n  ]\n}",
+    "expectedfacts": {
+      "january_new_pct": 90,
+      "february_new_pct": 95,
+      "january_existing_pct": 10,
+      "february_existing_pct": 20,
+      "january_total_pct": 50,
+      "february_total_pct": 27.5,
+      "aggregate_delta_pp": -22.5
+    },
+    "blind_criteria": [
+      "Объяснён сдвиг весов сегментов",
+      "Агрегат отделён от сегментной динамики",
+      "Причинность ограничена"
+    ],
+    "prohibitedclaims": [
+      "Каждый сегмент ухудшился",
+      "Изменение продукта доказанно улучшило удержание"
+    ],
+    "id": "B030"
+  },
+  {
+    "request": "Извлеки число всех, активных и приостановленных проектов, дату и ID источника. Не используй нерелевантный SRC-B.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: total, active, paused, source, date. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"total\", \"answer_pointer\": \"/facts/total\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/total\"}, \"tolerance\": \"0.01\"}, {\"id\": \"active\", \"answer_pointer\": \"/facts/active\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/active\"}, \"tolerance\": \"0.01\"}, {\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "answer": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных (SRC-A). SRC-B не относится к проектам и не использован.\",\"unknowns\":\"Год не указан. Причины приостановки не записаны.\"}",
+    "expectedfacts": {
+      "total": 17,
+      "active": 12,
+      "paused": 5,
+      "source": "SRC-A",
+      "date": "1 ноября"
+    },
+    "blind_criteria": [],
+    "prohibitedclaims": [
+      "Причины приостановки известны",
+      "Переговорные комнаты являются проектами"
+    ],
+    "id": "B031"
+  }
+]

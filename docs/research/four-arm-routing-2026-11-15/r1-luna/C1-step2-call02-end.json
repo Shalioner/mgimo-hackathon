@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T2",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T2",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "medium",
+      "transmitted_model": "gpt-6.1-terra",
+      "transmitted_effort": "medium",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0db-64a6-7cf0-86ef-fe64a4c6d2a5",
+            "turnId": "01a1e0db-6564-73b3-9a92-4d5e5cd308a4",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11898,
+                "inputTokens": 11637,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 261,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11898,
+                "inputTokens": 11637,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 261,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 9.101,
+      "turn_id": "01a1e0db-6564-73b3-9a92-4d5e5cd308a4",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"На 1 ноября приостановлены пять проектов; причины не записаны (SRC-A; число подтверждено SRC-NUM). Для каждого проекта задать владельцу три вопроса и собрать подтверждающие данные: 1. Что привело к приостановке? Собрать решение о приостановке, переписку и описание препятствий; ответ поможет выбрать, какое препятствие устранять. 2. Что необходимо для возобновления? Собрать перечень необходимых ресурсов, согласований и зависимостей; ответ поможет решить, выделять ли ресурсы и какие действия согласовать. 3. Сохраняется ли ценность проекта и каковы последствия продолжения или закрытия? Собрать актуальные цели, ожидаемые результаты и оценки последствий; ответ поможет выбрать между возобновлением, сохранением паузы и закрытием.\",\"unknowns\":\"Причины приостановки, условия возобновления и актуальная ценность каждого проекта неизвестны; сроки в источниках не указаны. SRC-B содержит сведения о переговорных комнатах и не относится к проектам.\"}"
+}

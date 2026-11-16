@@ -1,0 +1,233 @@
+{
+  "case": "C2",
+  "step": 1,
+  "arm": "manual",
+  "started_utc": "2026-11-15T19:44:43.176184+00:00",
+  "agent_pid": 25772,
+  "input": {
+    "step": 1,
+    "request": "Можно ли утверждать, что удержание снизилось на 6 процентных пунктов? Объясни ограничение и назови минимально необходимое дополнительное измерение.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: comparable, january_window, february_window. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "comparable": false,
+      "january_window": "D30",
+      "february_window": "D7"
+    },
+    "prohibitedclaims": [
+      "Подтверждено снижение удержания на 6 п.п.",
+      "Известна причина изменения"
+    ],
+    "blind_criteria": [
+      "Запрошено одинаковое окно для обеих когорт"
+    ],
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения."
+  },
+  "report": {
+    "status": "succeeded",
+    "result": {
+      "status": "succeeded",
+      "text": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\",\"january_retention_percent\":24,\"february_retention_percent\":18},\"conclusion\":\"Утверждать, что удержание снизилось на 6 процентных пунктов, нельзя: показатели измерены в разные дни после привлечения пользователей. Разница 24% − 18% составляет 6 процентных пунктов, но это разница между D30 и D7, а не сопоставимое изменение между когортами (SRC-A, SRC-B).\",\"unknowns\":\"Минимально нужно измерить удержание одной из когорт в том же окне, что и другой: D30 для февральской когорты или D7 для январской. Обращённых к исполнителю команд в источниках нет.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T2",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T2",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-terra",
+              "effort": "medium"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T2",
+              "requested_model": "gpt-6.1-terra",
+              "requested_effort": "medium",
+              "transmitted_model": "gpt-6.1-terra",
+              "transmitted_effort": "medium",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0bd-9961-7fb2-a7f4-92fd49e2e72f",
+                    "turnId": "01a1e0bd-ae7f-77d1-9954-9dec540e4ae1",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11675,
+                        "inputTokens": 11489,
+                        "cachedInputTokens": 0,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 186,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 11675,
+                        "inputTokens": 11489,
+                        "cachedInputTokens": 0,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 186,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 14.247,
+              "turn_id": "01a1e0bd-ae7f-77d1-9954-9dec540e4ae1",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0bd-9961-7fb2-a7f4-92fd49e2e72f",
+                "turnId": "01a1e0bd-ae7f-77d1-9954-9dec540e4ae1",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11675,
+                    "inputTokens": 11489,
+                    "cachedInputTokens": 0,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 186,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11675,
+                    "inputTokens": 11489,
+                    "cachedInputTokens": 0,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 186,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0bd-d02d-7c50-8ce3-b65049b0a813",
+                      "turnId": "01a1e0bd-d0ec-7dc2-b2fe-ecb879d97696",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11304,
+                          "inputTokens": 11252,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 52,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11304,
+                          "inputTokens": 11252,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 52,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.839,
+                "turn_id": "01a1e0bd-d0ec-7dc2-b2fe-ecb879d97696",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "Утверждать, что удержание снизилось на 6 процентных пунктов, нельзя: показатели измерены в разные дни после привлечения пользователей.",
+            "method": "T1_labels_with_quote_not_calibrated_probability"
+          }
+        }
+      ]
+    },
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T2",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T2",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-terra",
+        "effort": "medium"
+      }
+    }
+  },
+  "elapsed_seconds": 20.897521
+}

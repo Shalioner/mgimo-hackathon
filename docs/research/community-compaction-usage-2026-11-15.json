@@ -1,0 +1,67 @@
+{
+  "status": "compacted",
+  "decisions": {
+    "old_listing": "drop"
+  },
+  "receipts": [
+    {
+      "status": "executable",
+      "reason": "Private service socket present; worker readiness checked at request",
+      "started": true,
+      "wrapper_invocations": 1,
+      "result": "succeeded",
+      "fallback": false,
+      "requested": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "transmitted": {
+        "host": "local",
+        "provider": "local-d1",
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+        "effort": null
+      },
+      "observed": {
+        "model": "LiquidAI/d1-2B-MLX-8bit",
+        "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+      },
+      "network": "denied",
+      "transport": "unix-service",
+      "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+      "input_bytes": 749,
+      "timeout_seconds": 240,
+      "request_id": "6de9da4e61904fcf991cfe09573bb3e3",
+      "worker_pid": 63058,
+      "generation": 2,
+      "decision_response": {
+        "answers": {
+          "0_call": {
+            "type": "noul",
+            "noul": 0.011935590646023024
+          },
+          "0_result": {
+            "type": "noul",
+            "noul": 0.012427573241780305
+          }
+        },
+        "usage": {
+          "input_tokens": 333,
+          "output_tokens": 0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "before_bytes": 26462,
+    "after_bytes": 455,
+    "removed_bytes": 26007,
+    "classifier_requests": 1,
+    "token_savings": null
+  },
+  "synthetic_fixture": true,
+  "prose_preserved": true
+}

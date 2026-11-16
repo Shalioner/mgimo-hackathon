@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0d9-5944-77f2-b33b-1d141b3c8539",
+            "turnId": "01a1e0d9-5a87-73d2-ac0b-e0c134a5020a",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11095,
+                "inputTokens": 10878,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 217,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11095,
+                "inputTokens": 10878,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 217,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 9.343,
+      "turn_id": "01a1e0d9-5a87-73d2-ac0b-e0c134a5020a",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P2\":{\"status\":\"contradicted\",\"basis\":[\"SRC-SPEC\"]},\"P3\":{\"status\":\"unsupported\",\"basis\":[\"SRC-PLAN\"]},\"P4\":{\"status\":\"supported\",\"basis\":[\"SRC-TEST\"]}},\"conclusion\":\"P1 противоречит ограничению на поддерживаемые устройства (SRC-SPEC). P2 противоречит отсутствию автоматического включения (SRC-SPEC). P3 не подтверждено: сравнение цен лишь запланировано, результатов нет (SRC-PLAN). P4 подтверждено тестом: успешное подключение на 18 из 20 поддерживаемых устройств (SRC-TEST).\",\"unknowns\":[\"Не указано, какие модели входят в число поддерживаемых устройств (SRC-SPEC).\",\"Длительность покупки не измерялась (SRC-TEST); это не доказывает и не опровергает P4.\"]}"
+}

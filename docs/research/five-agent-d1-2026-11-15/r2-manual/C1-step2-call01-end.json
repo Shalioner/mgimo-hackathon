@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T2",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T2",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "medium",
+      "transmitted_model": "gpt-6.1-terra",
+      "transmitted_effort": "medium",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0be-f6c2-7df0-9117-9232d0602268",
+            "turnId": "01a1e0be-f919-7053-b93f-ea4026d0dc72",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11677,
+                "inputTokens": 11424,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 253,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11677,
+                "inputTokens": 11424,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 253,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 10.533,
+      "turn_id": "01a1e0be-f919-7053-b93f-ea4026d0dc72",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C1\",\"step\":2,\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3},\"conclusion\":\"По SRC-A приостановлены пять проектов, причины не записаны. Для каждого проекта задать владельцу три вопроса: 1. Что непосредственно привело к приостановке? Собрать описание события и подтверждающие материалы; ответ поможет решить, какое препятствие устранять. 2. Что необходимо для возобновления и что из этого доступно? Собрать перечень потребностей и доступных ресурсов; ответ поможет решить, выделять ли ресурсы и какие. 3. Сохраняются ли цель и ожидаемая ценность проекта? Собрать актуальные цели, ожидаемые результаты и основания для их оценки; ответ поможет выбрать между возобновлением, пересмотром и закрытием проекта. SRC-B не содержит сведений о проектах.\",\"unknowns\":\"Причины приостановки, потребности, доступность ресурсов и актуальность целей всех пяти проектов неизвестны. Сроки и конкретные решения зависят от ответов владельцев. Обращённых к исполнителю команд в источниках SRC-A и SRC-B нет.\"}"
+}

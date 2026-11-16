@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0be-628f-7931-be94-416ebbab286d",
+            "turnId": "01a1e0be-6470-7693-83f0-0887840d91c3",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 10889,
+                "inputTokens": 10790,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 99,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 10889,
+                "inputTokens": 10790,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 99,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 6.15,
+      "turn_id": "01a1e0be-6470-7693-83f0-0887840d91c3",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"SRC-A сообщает, что на 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных. SRC-B не относится к проектам и не использован.\",\"unknowns\":\"Причины приостановки не записаны (SRC-A).\"}"
+}

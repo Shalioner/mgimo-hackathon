@@ -1,0 +1,239 @@
+{
+  "case": "C4",
+  "step": 1,
+  "arm": "manual",
+  "started_utc": "2026-11-15T19:45:35.008847+00:00",
+  "agent_pid": 26021,
+  "input": {
+    "step": 1,
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T3",
+      "effort": "high"
+    },
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "context": "Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет."
+  },
+  "report": {
+    "status": "succeeded",
+    "result": {
+      "status": "succeeded",
+      "text": "{\n  \"case_id\": \"C4\",\n  \"step\": 1,\n  \"facts\": {\n    \"a_purchases\": 200,\n    \"a_result_rub\": 1000,\n    \"b_purchases\": 150,\n    \"b_result_rub\": 3000,\n    \"status_quo_result_rub\": 0,\n    \"kill_result_rub\": 0,\n    \"fixed_budget_rub\": 6000,\n    \"a_fixed_cost_rub\": 5000,\n    \"b_fixed_cost_rub\": 6000,\n    \"assumptions_not_observations\": true,\n    \"b_conversion_threshold_against_a\": 0.011666666666666667\n  },\n  \"conclusion\": \"Источник: предоставленный CONTEXT. Покупки рассчитаны как доступная аудитория × конверсия; месячный добавочный результат — покупки × (доход с покупки − переменные затраты) − фиксированные расходы. Обе инициативы укладываются в бюджет. Если вся аудитория доступна выбранной инициативе и предположения модели выполняются, рекомендую рассмотреть B: ожидаемый результат выше A, status quo и kill. Status quo сохраняет возможность исследования; kill прекращает исследование при таком же текущем финансовом результате. Сильное возражение: преимущество B целиком зависит от неподтверждённой конверсии, поэтому расчёт не доказывает фактическую доходность. Параметр переворота — конверсия B: при неизменных условиях A на указанном пороге результаты равны, ниже порога предпочтительнее A. Это условная рекомендация; окончательное решение остаётся за человеком.\",\n  \"unknowns\": [\n    \"Фактические конверсии и неопределённость прогнозов в CONTEXT не приведены.\",\n    \"Ценность продолжения исследования и основания окончательно закрыть пилот не заданы; финансовая модель не позволяет выбрать между status quo и kill.\"\n  ]\n}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T3",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T3",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T3",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T3",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T3",
+              "requested_model": "gpt-6.1-sol",
+              "requested_effort": "high",
+              "transmitted_model": "gpt-6.1-sol",
+              "transmitted_effort": "high",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0be-62a6-73e3-aa70-5dfd0370d1e8",
+                    "turnId": "01a1e0be-645f-7740-8a5e-8ad52fe29146",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 12490,
+                        "inputTokens": 11634,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 856,
+                        "reasoningOutputTokens": 430
+                      },
+                      "last": {
+                        "totalTokens": 12490,
+                        "inputTokens": 11634,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 856,
+                        "reasoningOutputTokens": 430
+                      },
+                      "modelContextWindow": 475000
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 32.074,
+              "turn_id": "01a1e0be-645f-7740-8a5e-8ad52fe29146",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0be-62a6-73e3-aa70-5dfd0370d1e8",
+                "turnId": "01a1e0be-645f-7740-8a5e-8ad52fe29146",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 12490,
+                    "inputTokens": 11634,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 856,
+                    "reasoningOutputTokens": 430
+                  },
+                  "last": {
+                    "totalTokens": 12490,
+                    "inputTokens": 11634,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 856,
+                    "reasoningOutputTokens": 430
+                  },
+                  "modelContextWindow": 475000
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0be-e00b-73d1-8447-e3d22c502b9c",
+                      "turnId": "01a1e0be-e0c6-73c0-bc18-c9b05ad5ab56",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11703,
+                          "inputTokens": 11663,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 40,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11703,
+                          "inputTokens": 11663,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 40,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.087,
+                "turn_id": "01a1e0be-e0c6-73c0-bc18-c9b05ad5ab56",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "рекомендую рассмотреть B: ожидаемый результат выше A, status quo и kill.",
+            "method": "T1_labels_with_quote_not_calibrated_probability"
+          }
+        }
+      ]
+    },
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T3",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T3",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      }
+    }
+  },
+  "elapsed_seconds": 37.906844
+}

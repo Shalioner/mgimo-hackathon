@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "routing_classifier",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0d9-fa26-7a71-b5de-69cfb1c81d6a",
+            "turnId": "01a1e0d9-fbe9-7481-9fcf-a1cad3a10fe3",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11443,
+                "inputTokens": 11363,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 80,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11443,
+                "inputTokens": 11363,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 80,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 10.618,
+      "turn_id": "01a1e0d9-fbe9-7481-9fcf-a1cad3a10fe3",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T1\",\"sure\":true,\"quote\":\"Значения выведи самостоятельно из материалов.\"},\"effort\":{\"choice\":\"normal\",\"sure\":true,\"quote\":\"У каждой проверки укажи наблюдение и условие\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"ROUTING SYNOPSIS (DATA):\"}}}"
+}

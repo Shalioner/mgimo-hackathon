@@ -1,0 +1,82 @@
+{
+  "case": "C4",
+  "step": 2,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:44:42.634301+00:00",
+  "agent_pid": 25715,
+  "input": {
+    "step": 2,
+    "new_context": "Новый учебный результат пилота B: 80 покупок на 10000 пользователей. Доход, переменные и фиксированные затраты совпали с исходной моделью. Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.",
+    "request": "Рассчитай конверсию и результат пилота B. Укажи, сработало ли правило stop и какие его части сработали. Не придумывай причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: conversion_pct, result_rub, stop, conversion_trigger, financial_trigger. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "conversion_pct": 0.8,
+      "result_rub": -1200,
+      "stop": true,
+      "conversion_trigger": true,
+      "financial_trigger": true
+    },
+    "prohibitedclaims": [
+      "Stop требует выполнения обоих условий одновременно",
+      "Установлена причина провала"
+    ],
+    "context": "Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\n\nНовый учебный результат пилота B: 80 покупок на 10000 пользователей. Доход, переменные и фиксированные затраты совпали с исходной моделью. Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.",
+    "blind_criteria": []
+  },
+  "report": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Critical system memory pressure",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "blocked",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": null,
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 2238,
+          "timeout_seconds": 120,
+          "request_id": "6439ac6bede744ee8be564a3f2b3ee81"
+        },
+        "runtime": {
+          "timing": {
+            "client_roundtrip_seconds": 0.000903
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  },
+  "elapsed_seconds": 0.250353
+}

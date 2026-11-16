@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0db-5fa1-74b0-ac9d-7b41a77a5d9d",
+            "turnId": "01a1e0db-605b-7261-a3bc-38f3bf62afc4",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11184,
+                "inputTokens": 10911,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 273,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11184,
+                "inputTokens": 10911,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 273,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 8.58,
+      "turn_id": "01a1e0db-605b-7261-a3bc-38f3bf62afc4",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик сообщения (22 слова): «eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 устройств. Сравнение цен ещё не завершено». Проверки: 1) Наблюдение: число успешных подключений в тесте — 18 из 20 поддерживаемых устройств. Условие для более узкой формулировки: описывать результат только для этих 20 устройств, не обещать совместимость со всеми телефонами. 2) Наблюдение: сравнительный анализ цен запланирован, результатов нет. Условие для более узкой формулировки: заявлять о цене только после получения результатов сравнения с агрегаторами. Источники: SRC-SPEC, SRC-TEST, SRC-PLAN. P2 противоречит SRC-SPEC; подтверждать эту несуществующую функцию тестом не предлагаю. P4 уже отражает ограниченный результат теста.\",\"unknowns\":\"Не указаны модели устройств, методика тестирования и результаты сравнения цен. Длительность покупки не измерялась (SRC-TEST).\"}"
+}

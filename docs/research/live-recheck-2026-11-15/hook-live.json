@@ -1,0 +1,30 @@
+{
+  "scope": "real hook command with live D1, no actual child spawn or host trust exercised",
+  "input": {
+    "hook_event_name": "PreToolUse",
+    "tool_name": "spawn_agent",
+    "tool_input": {
+      "task_name": "live_readonly_probe",
+      "fork_turns": "none",
+      "model": "gpt-6.1-sol",
+      "reasoning_effort": "high",
+      "message": "Извлеки число из строки «Количество объектов: 17». Ответь только числом. Не используй инструменты."
+    }
+  },
+  "exit_code": 0,
+  "elapsed_seconds": 1.978,
+  "output": {
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "updatedInput": {
+        "task_name": "live_readonly_probe",
+        "fork_turns": "none",
+        "model": "gpt-6-luna",
+        "reasoning_effort": "low",
+        "message": "Извлеки число из строки «Количество объектов: 17». Ответь только числом. Не используй инструменты."
+      },
+      "additionalContext": "Стратег: для этого субагента выбран gpt-6-luna, effort low."
+    }
+  },
+  "stderr": ""
+}

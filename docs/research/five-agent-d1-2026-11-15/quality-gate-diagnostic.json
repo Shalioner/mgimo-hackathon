@@ -1,0 +1,158 @@
+[
+  {
+    "batch": "r1-manual",
+    "case": "C1",
+    "step": 1,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\""
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r1-manual",
+    "case": "C3",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r1-manual",
+    "case": "C5",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"checks_count\": 2"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-manual",
+    "case": "C2",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-manual",
+    "case": "C3",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-manual",
+    "case": "C5",
+    "step": 1,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"P1\":{\"status\":\"contradicted\",\"evidence\":[\"SRC-SPEC\"]},\"P2\":{\"status\":\"contradicted\",\"evidence\":[\"SRC-SPEC\"]},\"P3\":{\"status\":\"unsupported\",\"evidence\":[\"SRC-PLAN\"]},\"P4\":{\"status\":\"supported\",\"evidence\":[\"SRC-TEST\"]}"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-manual",
+    "case": "C5",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"checks_count\": 2"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-routed",
+    "case": "C1",
+    "step": 1,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"}"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-routed",
+    "case": "C1",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"facts\":{\"paused\":5,\"causes_known\":false,\"questions_count\":3}"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-routed",
+    "case": "C2",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-routed",
+    "case": "C3",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"standardized_january_pct\":50,\"standardized_february_pct\":62.5,\"standardized_delta_pp\":12.5,\"observed_february_pct\":27.5"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-routed",
+    "case": "C4",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true}"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  },
+  {
+    "batch": "r2-routed",
+    "case": "C5",
+    "step": 2,
+    "quality_response": {
+      "choice": "accept",
+      "sure": true,
+      "quote": "\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false}"
+    },
+    "literal_quote_in_state": false,
+    "sure": true
+  }
+]

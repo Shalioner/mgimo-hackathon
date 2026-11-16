@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "routing_classifier",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-bcad-7ac1-878c-25d4464053f5",
+            "turnId": "01a1e0da-bf65-79d1-b54f-b9f3b5c99c13",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11365,
+                "inputTokens": 11240,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 125,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11365,
+                "inputTokens": 11240,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 125,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.832,
+      "turn_id": "01a1e0da-bf65-79d1-b54f-b9f3b5c99c13",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T1\",\"sure\":true,\"quote\":\"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных.\"},\"effort\":{\"choice\":\"normal\",\"sure\":true,\"quote\":\"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных.\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных.\"}}}"
+}

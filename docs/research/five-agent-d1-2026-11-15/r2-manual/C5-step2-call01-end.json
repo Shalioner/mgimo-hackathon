@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T2",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T2",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "medium",
+      "transmitted_model": "gpt-6.1-terra",
+      "transmitted_effort": "medium",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0be-f73c-7352-8e9b-11d8f06a7883",
+            "turnId": "01a1e0be-f95c-79e2-a6f8-f83ed06395a7",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11927,
+                "inputTokens": 11540,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 387,
+                "reasoningOutputTokens": 69
+              },
+              "last": {
+                "totalTokens": 11927,
+                "inputTokens": 11540,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 387,
+                "reasoningOutputTokens": 69
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 12.908,
+      "turn_id": "01a1e0be-f95c-79e2-a6f8-f83ed06395a7",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\n  \"case_id\": \"C5\",\n  \"step\": 2,\n  \"facts\": {\n    \"checks_count\": 2,\n    \"automatic_activation_exists\": false\n  },\n  \"conclusion\": {\n    \"draft\": \"eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 таких устройств. Автоматического включения по прилёте нет.\",\n    \"checks\": [\n      {\n        \"promise\": \"P1: «Работает на всех телефонах»\",\n        \"observation\": \"Проверить подтверждённый список совместимых устройств и результаты подключения для них.\",\n        \"condition\": \"Назвать конкретные модели, если их совместимость и успешное подключение подтверждены.\"\n      },\n      {\n        \"promise\": \"P3: «Дешевле всех агрегаторов»\",\n        \"observation\": \"Сравнить итоговые цены на сопоставимые тарифы у выбранных агрегаторов.\",\n        \"condition\": \"Утверждать, что цена ниже у конкретных агрегаторов, только для проверенных тарифов и даты сравнения.\"\n      }\n    ],\n    \"sources\": \"SRC-SPEC, SRC-TEST, SRC-PLAN\"\n  },\n  \"unknowns\": \"Полный список поддерживаемых устройств и результаты сравнения цен неизвестны. Длительность покупки не измерялась. P2 опровергается SRC-SPEC; P4 соответствует SRC-TEST.\"\n}"
+}

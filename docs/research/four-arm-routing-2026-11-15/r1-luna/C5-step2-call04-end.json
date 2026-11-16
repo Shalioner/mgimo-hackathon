@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T2",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T2",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "medium",
+      "transmitted_model": "gpt-6.1-terra",
+      "transmitted_effort": "medium",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0db-9af6-7c23-9221-000d7e48ce6b",
+            "turnId": "01a1e0db-9bb3-74a2-897a-5f769f5d214b",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 12124,
+                "inputTokens": 11834,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 290,
+                "reasoningOutputTokens": 32
+              },
+              "last": {
+                "totalTokens": 12124,
+                "inputTokens": 11834,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 290,
+                "reasoningOutputTokens": 32
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 9.688,
+      "turn_id": "01a1e0db-9bb3-74a2-897a-5f769f5d214b",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C5\",\"step\":2,\"facts\":{\"checks_count\":2,\"automatic_activation_exists\":false},\"conclusion\":\"Черновик: «eSIM подключается вручную по QR-коду на поддерживаемых устройствах. В тесте подключение удалось на 18 из 20 поддерживаемых устройств». Проверка 1 — совместимость: наблюдение — 18 успешных подключений из 20 в тесте; условие — при подтверждении результатов и перечня моделей можно сообщать об успешном подключении на конкретных протестированных моделях. Проверка 2 — цены: наблюдение — сравнение с агрегаторами запланировано, результатов нет; условие — если сравнение покажет преимущество, можно указать его для конкретных тарифов, агрегаторов и периода сравнения. Автоматического включения по прилёте нет; P4 уже подтверждено как ограниченный результат теста. Источники: SRC-SPEC, SRC-TEST, SRC-PLAN.\",\"unknowns\":\"Модели и результаты для каждого устройства, методика тестирования, цены и результаты сравнения с агрегаторами не указаны. Длительность покупки не измерялась (SRC-TEST).\"}"
+}

@@ -1,0 +1,424 @@
+{
+  "case": "C2",
+  "step": 2,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:48:01.728753+00:00",
+  "agent_pid": 26162,
+  "input": {
+    "step": 2,
+    "new_context": "SRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.",
+    "request": "Укажи январское и февральское D30 retention, разность в процентных пунктах и источники. Не объясняй причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: january_d30, february_d30, delta_pp, sources. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "january_d30": 24,
+      "february_d30": 20,
+      "delta_pp": -4,
+      "sources": [
+        "SRC-A",
+        "SRC-C"
+      ]
+    },
+    "prohibitedclaims": [
+      "D7 и D30 смешаны",
+      "Падение вызвано конкретным изменением продукта"
+    ],
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения.\n\nSRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей.",
+    "blind_criteria": []
+  },
+  "report": {
+    "status": "needs_review",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1196,
+          "timeout_seconds": 120,
+          "request_id": "df522f14209544c0a70d31f216ef5107",
+          "worker_pid": 26167,
+          "generation": 2
+        },
+        "runtime": {
+          "worker_pid": 26167,
+          "generation": 2,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 4.1946,
+          "timing": {
+            "queue_wait_seconds": 12.46849,
+            "worker_setup_seconds": 2.8e-05,
+            "worker_roundtrip_seconds": 4.194962,
+            "worker_inference_seconds": 4.190969,
+            "server_total_seconds": 16.663594,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 16.667719
+          }
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T2",
+              "confidence": 0.5220345402197578,
+              "probabilities": {
+                "T1": 0.19338203816029084,
+                "T2": 0.5220345402197578,
+                "T3": 0.1761265313153034,
+                "T4": 0.10845689030464799
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9025281502274096,
+              "probabilities": {
+                "normal": 0.9025281502274096,
+                "deep": 0.09747184977259034
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.9040589787951767,
+              "probabilities": {
+                "text": 0.9040589787951767,
+                "tools": 0.09594102120482334
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 575,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false,
+      "t1_review": {
+        "route": {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "result": "succeeded",
+          "started": true,
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e0c0-dfb8-7dc2-b70d-f8dd375c9f18",
+                  "turnId": "01a1e0c0-e0bb-76c3-ab33-65475c525ba7",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 11395,
+                      "inputTokens": 11271,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 124,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 11395,
+                      "inputTokens": 11271,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 124,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 6.534,
+            "turn_id": "01a1e0c0-e0bb-76c3-ab33-65475c525ba7",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+          }
+        },
+        "method": "labels_with_quote_not_calibrated_probability",
+        "answers": {
+          "tier": {
+            "choice": "T1",
+            "sure": true,
+            "quote": "SRC-C: Февральская когорта достигла D30: retention 20%, 200 из тех же 1000 пользователей."
+          },
+          "effort": {
+            "choice": "normal",
+            "sure": true,
+            "quote": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей."
+          },
+          "capability": {
+            "choice": "text",
+            "sure": true,
+            "quote": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей."
+          }
+        },
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "text"
+        }
+      },
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "reason": "Uncertain D1 labels reviewed by T1 with source quotes"
+    },
+    "result": {
+      "status": "needs_review",
+      "text": null,
+      "candidate": "{\"case_id\":\"C2\",\"step\":2,\"facts\":{\"january_d30\":24,\"february_d30\":20,\"delta_pp\":-4,\"sources\":[\"SRC-A\",\"SRC-C\"]},\"conclusion\":\"Январское D30 retention — 24%, февральское — 20%; разность (февральское минус январское) — −4 процентных пункта. Источники: SRC-A, SRC-C.\",\"unknowns\":[]}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0c0-fb57-79f2-b40f-0c6b041f135a",
+                    "turnId": "01a1e0c0-fc28-7072-bb24-d0093f75c1d1",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 10926,
+                        "inputTokens": 10825,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 101,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 10926,
+                        "inputTokens": 10825,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 101,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 6.241,
+              "turn_id": "01a1e0c0-fc28-7072-bb24-d0093f75c1d1",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0c0-fb57-79f2-b40f-0c6b041f135a",
+                "turnId": "01a1e0c0-fc28-7072-bb24-d0093f75c1d1",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 10926,
+                    "inputTokens": 10825,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 101,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 10926,
+                    "inputTokens": 10825,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 101,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "needs_review",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0c1-1431-7352-a3e4-22dba76e6f64",
+                      "turnId": "01a1e0c1-14ef-7de3-bae7-6347edf58337",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11255,
+                          "inputTokens": 11203,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 52,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11255,
+                          "inputTokens": 11203,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 52,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.43,
+                "turn_id": "01a1e0c1-14ef-7de3-bae7-6347edf58337",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            }
+          }
+        }
+      ],
+      "reason": "Quality unconfirmed; no automatic escalation"
+    },
+    "transport": "native-codex",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T1",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T1",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      }
+    }
+  },
+  "elapsed_seconds": 36.003061
+}

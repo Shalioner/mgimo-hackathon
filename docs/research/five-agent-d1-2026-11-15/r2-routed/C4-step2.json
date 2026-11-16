@@ -1,0 +1,422 @@
+{
+  "case": "C4",
+  "step": 2,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:48:01.727805+00:00",
+  "agent_pid": 26164,
+  "input": {
+    "step": 2,
+    "new_context": "Новый учебный результат пилота B: 80 покупок на 10000 пользователей. Доход, переменные и фиксированные затраты совпали с исходной моделью. Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.",
+    "request": "Рассчитай конверсию и результат пилота B. Укажи, сработало ли правило stop и какие его части сработали. Не придумывай причины.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=2, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: conversion_pct, result_rub, stop, conversion_trigger, financial_trigger. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "conversion_pct": 0.8,
+      "result_rub": -1200,
+      "stop": true,
+      "conversion_trigger": true,
+      "financial_trigger": true
+    },
+    "prohibitedclaims": [
+      "Stop требует выполнения обоих условий одновременно",
+      "Установлена причина провала"
+    ],
+    "context": "Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\n\nНовый учебный результат пилота B: 80 покупок на 10000 пользователей. Доход, переменные и фиксированные затраты совпали с исходной моделью. Заранее задано stop при конверсии менее 1% ИЛИ отрицательном финансовом результате.",
+    "blind_criteria": []
+  },
+  "report": {
+    "status": "needs_review",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 2238,
+          "timeout_seconds": 120,
+          "request_id": "633f24e7851841169c8358041aaf0a85",
+          "worker_pid": 26167,
+          "generation": 2
+        },
+        "runtime": {
+          "worker_pid": 26167,
+          "generation": 2,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 4.2024,
+          "timing": {
+            "queue_wait_seconds": 4.673833,
+            "worker_setup_seconds": 0.000297,
+            "worker_roundtrip_seconds": 4.202135,
+            "worker_inference_seconds": 4.199532,
+            "server_total_seconds": 8.876366,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 8.883175
+          }
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T1",
+              "confidence": 0.6887230591432266,
+              "probabilities": {
+                "T1": 0.6887230591432266,
+                "T2": 0.051179692322285114,
+                "T3": 0.09451014129710558,
+                "T4": 0.1655871072373827
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.8848014578371357,
+              "probabilities": {
+                "normal": 0.8848014578371357,
+                "deep": 0.11519854216286424
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.7911509133698467,
+              "probabilities": {
+                "text": 0.7911509133698467,
+                "tools": 0.20884908663015328
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 750,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false,
+      "t1_review": {
+        "route": {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "result": "succeeded",
+          "started": true,
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e0c0-c17a-7cb2-a745-d8b611626b31",
+                  "turnId": "01a1e0c0-c284-7641-85d9-ec219095831b",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 11512,
+                      "inputTokens": 11416,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 96,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 11512,
+                      "inputTokens": 11416,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 96,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 5.848,
+            "turn_id": "01a1e0c0-c284-7641-85d9-ec219095831b",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+          }
+        },
+        "method": "labels_with_quote_not_calibrated_probability",
+        "answers": {
+          "tier": {
+            "choice": "T1",
+            "sure": true,
+            "quote": "80 покупок на 10000 пользователей."
+          },
+          "effort": {
+            "choice": "normal",
+            "sure": true,
+            "quote": "Новый учебный результат пилота B: 80 покупок на 10000 пользователей."
+          },
+          "capability": {
+            "choice": "text",
+            "sure": true,
+            "quote": "Доход, переменные и фиксированные затраты совпали с исходной моделью."
+          }
+        },
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "text"
+        }
+      },
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "reason": "Uncertain D1 labels reviewed by T1 with source quotes"
+    },
+    "result": {
+      "status": "needs_review",
+      "text": null,
+      "candidate": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"80 / 10000 = 0,8%. Финансовый результат: 80 × (100 − 40) − 6000 = −1200 руб. Сработали обе части правила stop: конверсия ниже 1% и результат отрицательный. Источник: данные пилота B в предоставленном контексте.\",\"unknowns\":[]}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0c0-da87-7d82-b00b-87b6ed6577a0",
+                    "turnId": "01a1e0c0-dbf8-7802-9463-f3863056efcf",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11089,
+                        "inputTokens": 10966,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 123,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 11089,
+                        "inputTokens": 10966,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 123,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 6.417,
+              "turn_id": "01a1e0c0-dbf8-7802-9463-f3863056efcf",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0c0-da87-7d82-b00b-87b6ed6577a0",
+                "turnId": "01a1e0c0-dbf8-7802-9463-f3863056efcf",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11089,
+                    "inputTokens": 10966,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 123,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11089,
+                    "inputTokens": 10966,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 123,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "needs_review",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0c0-f3b6-7fc1-b470-e5de670c79c1",
+                      "turnId": "01a1e0c0-f47e-73f0-b571-b27cd47c0003",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11419,
+                          "inputTokens": 11366,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 53,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11419,
+                          "inputTokens": 11366,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 53,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 5.122,
+                "turn_id": "01a1e0c0-f47e-73f0-b571-b27cd47c0003",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            }
+          }
+        }
+      ],
+      "reason": "Quality unconfirmed; no automatic escalation"
+    },
+    "transport": "native-codex",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T1",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T1",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      }
+    }
+  },
+  "elapsed_seconds": 27.380124
+}

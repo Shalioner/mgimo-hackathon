@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T2",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T2",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "medium",
+      "transmitted_model": "gpt-6.1-terra",
+      "transmitted_effort": "medium",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0be-629d-76f3-8e6a-6c72aa49e6d8",
+            "turnId": "01a1e0be-6469-7252-a972-c73dbd9f55d9",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11595,
+                "inputTokens": 11423,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 172,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11595,
+                "inputTokens": 11423,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 172,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.221,
+      "turn_id": "01a1e0be-6469-7252-a972-c73dbd9f55d9",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":30,\"february_window\":7},\"conclusion\":\"Утверждать, что удержание снизилось на 6 процентных пунктов, нельзя: январские 24% измерены на D30, а февральские 18% — на D7. Разница между показателями составляет 6 процентных пунктов, но окна наблюдения различаются (SRC-A, SRC-B).\",\"unknowns\":\"Минимально необходимо измерить удержание февральской когорты на D30 и сравнить его с январскими 24% при одинаковом определении метрики. Альтернатива — измерить D7 для январской когорты и сравнить с февральскими 18%.\"}"
+}

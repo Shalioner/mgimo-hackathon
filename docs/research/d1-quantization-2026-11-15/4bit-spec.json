@@ -1,0 +1,6 @@
+{
+  "repo": "LiquidAI/d1-2B-MLX-4bit",
+  "revision": "afeb4a3141bf4040cbc312d0ccc14eac719024c5",
+  "manifest": "/Users/shalioner/orca/workspaces/\u041c\u0435\u0433\u0430\u0424\u043e\u043d-\u0421\u0442\u0440\u0430\u0442\u0435\u0433/night-orchestrator/docs/research/d1-quantization-2026-11-15/4bit-manifest.json",
+  "weights": "/Users/shalioner/.cache/strategist/d1-2b-lab/mlx-4bit-weights/afeb4a3141bf4040cbc312d0ccc14eac719024c5"
+}

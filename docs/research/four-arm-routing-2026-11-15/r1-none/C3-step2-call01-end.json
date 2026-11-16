@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T2",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T2",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-terra",
+      "effort": "medium"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T2",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "medium",
+      "transmitted_model": "gpt-6.1-terra",
+      "transmitted_effort": "medium",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0dc-5234-78d3-85f6-adf70191ff9c",
+            "turnId": "01a1e0dc-540a-7c32-8329-1737c5ea27d3",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 13806,
+                "inputTokens": 13568,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 238,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 13806,
+                "inputTokens": 13568,
+                "cachedInputTokens": 8192,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 238,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 9.317,
+      "turn_id": "01a1e0dc-540a-7c32-8329-1737c5ea27d3",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":57.5,\"standardized_delta_pp\":7.5,\"observed_february_pct\":27.5,\"observed_january_pct\":50},\"conclusion\":\"Наблюдаемое D30-удержание снизилось с 50% в январе до 27,5% в феврале. При одинаковых весах сегментов 50/50 стандартизированный показатель вырос с 50% до 57,5%, на 7,5 п.п. Различие связано с изменением состава: доля новых пользователей снизилась с 50% до 10%. Внутри сегментов удержание выросло: среди новых с 90% до 95%, среди действующих с 10% до 20% (SRC-J, SRC-F, SRC-NUM).\",\"unknowns\":\"Рандомизации не было, поэтому причины изменений и причинный эффект установить нельзя. Неизвестны статистическая неопределённость и другие возможные различия между месяцами.\"}"
+}

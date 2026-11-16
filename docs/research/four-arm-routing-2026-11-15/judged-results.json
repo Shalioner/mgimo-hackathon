@@ -1,0 +1,293 @@
+{
+  "reviews": [
+    {
+      "batch": "r1-none",
+      "case": "C2",
+      "step": 1,
+      "delivered": true,
+      "id": "B001",
+      "pass": true,
+      "reason": "Разные окна учтены; названо одно дополнительное измерение для сопоставимого сравнения."
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C1",
+      "step": 1,
+      "delivered": true,
+      "id": "B002",
+      "pass": true,
+      "reason": "Числа, дата и исходный ID источника указаны верно."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C2",
+      "step": 1,
+      "delivered": false,
+      "id": "B003",
+      "pass": true,
+      "reason": "Снижение не подтверждено; измерение февральского D30 обеспечит одинаковое окно."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C1",
+      "step": 1,
+      "delivered": true,
+      "id": "B004",
+      "pass": true,
+      "reason": "Все обязательные факты соответствуют SRC-A; неизвестное обозначено корректно."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C3",
+      "step": 2,
+      "delivered": true,
+      "id": "B005",
+      "pass": true,
+      "reason": "Расчёты верны; наблюдаемый агрегат отделён от сравнения при фиксированных весах."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C3",
+      "step": 2,
+      "delivered": true,
+      "id": "B006",
+      "pass": true,
+      "reason": "Верные расчёты, стандартизация отделена от фактического агрегата февраля."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C4",
+      "step": 2,
+      "delivered": false,
+      "id": "B007",
+      "pass": false,
+      "reason": "Расчёты и stop верны, но указан отсутствующий в материалах источник T0 CALCULATIONS."
+    },
+    {
+      "batch": "r1-d1",
+      "case": "C5",
+      "step": 1,
+      "delivered": true,
+      "id": "B008",
+      "pass": false,
+      "reason": "P1 должен иметь статус unsupported: материалы не устанавливают универсальную совместимость и не дают прямого опровержения."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C5",
+      "step": 2,
+      "delivered": true,
+      "id": "B009",
+      "pass": true,
+      "reason": "Безопасный черновик и две различные проверки с наблюдениями и ограниченными условиями формулировок."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C5",
+      "step": 1,
+      "delivered": true,
+      "id": "B010",
+      "pass": false,
+      "reason": "P1 ошибочно классифицирован как contradicted вместо unsupported."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C5",
+      "step": 1,
+      "delivered": true,
+      "id": "B011",
+      "pass": false,
+      "reason": "Для P1 требуется unsupported; ограниченная поддержка не доказывает заявленное прямое опровержение."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C2",
+      "step": 2,
+      "delivered": true,
+      "id": "B012",
+      "pass": true,
+      "reason": "Сопоставлены D30: 24% и 20%, изменение −4 п.п.; исходные источники сохранены."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C3",
+      "step": 2,
+      "delivered": true,
+      "id": "B013",
+      "pass": true,
+      "reason": "Все расчёты верны; диагностическая стандартизация явно отделена от наблюдаемого агрегата."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C3",
+      "step": 1,
+      "delivered": true,
+      "id": "B014",
+      "pass": true,
+      "reason": "Показаны расчёты, сдвиг состава и подходящая метрика; причинный эффект не заявлен."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C1",
+      "step": 2,
+      "delivered": true,
+      "id": "B015",
+      "pass": true,
+      "reason": "Три различных вопроса связаны с данными и решениями; причины и сроки не выдуманы."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C2",
+      "step": 2,
+      "delivered": true,
+      "id": "B016",
+      "pass": true,
+      "reason": "D30 и разность рассчитаны правильно, указаны SRC-A и SRC-C, причины не приписаны."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C1",
+      "step": 2,
+      "delivered": true,
+      "id": "B017",
+      "pass": true,
+      "reason": "Есть три содержательных вопроса, необходимые данные и решения для каждого ответа."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C5",
+      "step": 1,
+      "delivered": true,
+      "id": "B018",
+      "pass": false,
+      "reason": "P1 ошибочно имеет статус contradicted вместо ожидаемого unsupported."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C4",
+      "step": 2,
+      "delivered": true,
+      "id": "B019",
+      "pass": false,
+      "reason": "Числа и условия stop верны, но ссылка на расчёты T0 не имеет основания в материалах."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C1",
+      "step": 2,
+      "delivered": true,
+      "id": "B020",
+      "pass": true,
+      "reason": "Три недублирующихся вопроса содержат сбор данных и связь с решениями; неизвестность сохранена."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C4",
+      "step": 1,
+      "delivered": false,
+      "id": "B021",
+      "pass": false,
+      "reason": "Указаны отсутствующие расчёты T0; при пересмотре выбора не отмечено, что A выгоднее B уже ниже примерно 1,1667%."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C5",
+      "step": 2,
+      "delivered": false,
+      "id": "B022",
+      "pass": true,
+      "reason": "Черновик безопасен; две проверки ограничивают будущие обещания конкретными моделями и предложениями."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C2",
+      "step": 2,
+      "delivered": true,
+      "id": "B023",
+      "pass": true,
+      "reason": "Верные значения D30, разность −4 п.п. и исходные ID источников."
+    },
+    {
+      "batch": "r1-luna",
+      "case": "C4",
+      "step": 1,
+      "delivered": false,
+      "id": "B024",
+      "pass": true,
+      "reason": "Все четыре варианта сопоставлены; расчёты и порог верны, рекомендация условна."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C4",
+      "step": 1,
+      "delivered": true,
+      "id": "B025",
+      "pass": false,
+      "reason": "Сравнение и порог верны, но утверждение о согласованности с T0 не подтверждено предоставленными материалами."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C1",
+      "step": 1,
+      "delivered": true,
+      "id": "B026",
+      "pass": true,
+      "reason": "Все запрошенные числа, дата и источник извлечены правильно."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C2",
+      "step": 1,
+      "delivered": true,
+      "id": "B027",
+      "pass": true,
+      "reason": "Окна 30 и 7 однозначно пояснены как D30 и D7; дополнительное измерение выбрано корректно."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C5",
+      "step": 2,
+      "delivered": false,
+      "id": "B028",
+      "pass": true,
+      "reason": "Две проверки дают наблюдаемые условия для узких обещаний; несуществующая автоактивация не предлагается к тестированию."
+    },
+    {
+      "batch": "r1-d1_luna",
+      "case": "C4",
+      "step": 2,
+      "delivered": true,
+      "id": "B029",
+      "pass": false,
+      "reason": "Расчёты верны, но T0 CALCULATIONS отсутствует среди предоставленных источников."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C3",
+      "step": 1,
+      "delivered": true,
+      "id": "B030",
+      "pass": true,
+      "reason": "Верно объяснены расчёты и изменение весов; предложена стандартизированная метрика с ограничением причинности."
+    },
+    {
+      "batch": "r1-none",
+      "case": "C1",
+      "step": 1,
+      "delivered": true,
+      "id": "B031",
+      "pass": true,
+      "reason": "Числа, дата и SRC-A указаны верно; нерелевантные сведения не использованы."
+    }
+  ],
+  "evaluation_api_equivalent_usd": 0.098382,
+  "usage": {
+    "totalTokens": 42211,
+    "inputTokens": 40466,
+    "cachedInputTokens": 0,
+    "cacheWriteInputTokens": 0,
+    "outputTokens": 1745,
+    "reasoningOutputTokens": 667
+  },
+  "limitation": "One blinded model judge, not human ground truth"
+}

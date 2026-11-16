@@ -1,0 +1,23 @@
+{
+  "plan": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task"
+  },
+  "prompt_sha256": "ab5efb3ea3f050cea688845d774fe0b047434de2fdbc40be464bfbbbfbc0d612",
+  "started_utc": "2026-11-15T20:17:14.440551+00:00"
+}

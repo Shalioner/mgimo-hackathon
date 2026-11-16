@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0be-f71d-7e13-bd39-d1c880606f01",
+            "turnId": "01a1e0be-f923-7703-8d40-e9d4403a2578",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11110,
+                "inputTokens": 10970,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 140,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11110,
+                "inputTokens": 10970,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 140,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 6.928,
+      "turn_id": "01a1e0be-f923-7703-8d40-e9d4403a2578",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C4\",\"step\":2,\"facts\":{\"conversion_pct\":0.8,\"result_rub\":-1200,\"stop\":true,\"conversion_trigger\":true,\"financial_trigger\":true},\"conclusion\":\"Пилот B: 80 / 10000 = 0,8% конверсии. Результат: 80 × (100 − 40) − 6000 = −1200 руб. Правило stop сработало по обоим условиям: конверсия ниже 1% и финансовый результат отрицательный. Источник: данные пилота B и заданное правило stop в контексте.\",\"unknowns\":[]}"
+}

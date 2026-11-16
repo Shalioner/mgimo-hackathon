@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "request": "Сравни удержание по месяцам, сохрани различие периодов.",
+  "status": "manual",
+  "sources": [
+    {
+      "id": "DOC-001",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/a.md",
+      "sha256": "92592d75ed118c3d52766bd63f07af92a5d846839d329b034193b3941d97e66f",
+      "bytes": 41
+    },
+    {
+      "id": "DOC-002",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/b.md",
+      "sha256": "0a935c1246c950c03c26aaf7d445d854e53a394b121b7507d58156b2cb87d40b",
+      "bytes": 76
+    },
+    {
+      "id": "DOC-003",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/c.md",
+      "sha256": "766a4504ecc20b556640d0534327c03f2664264e6b2a05e9317013397944ad16",
+      "bytes": 43
+    }
+  ],
+  "extractions": [
+    {
+      "source_id": "DOC-001",
+      "candidates": [
+        {
+          "status": "manual",
+          "reason": "Нет явно включённого Codex subscription profile",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 0,
+          "internal_transport_retries": "unknown_version_dependent",
+          "started": false,
+          "process_exit_code": null,
+          "requested": {
+            "host": "codex",
+            "provider": "openai",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "transmitted": {
+            "model": null,
+            "effort": null
+          },
+          "observed": {
+            "provider": null,
+            "model": null,
+            "effort": null
+          },
+          "billing": {
+            "mode": "subscription_only",
+            "auth": "subscription",
+            "cap_verification": "unknown"
+          },
+          "input_bytes": 2537,
+          "endpoint": null,
+          "policy_digest": "8cdcd3c3e030ae94a6f69fc748c8d9661d1e23ffa9770982f52c9d286efa500b",
+          "tier": "T1"
+        }
+      ],
+      "plan": null,
+      "status": "unavailable",
+      "start": null
+    }
+  ],
+  "cards": [],
+  "synthesis": null,
+  "result": {
+    "status": "not_started",
+    "text": null
+  },
+  "limits": {
+    "documents": 15,
+    "card_bytes": 6000,
+    "quote_bytes": 2400,
+    "context_bytes": 48000
+  },
+  "reason": "No authorized T1 extraction route"
+}

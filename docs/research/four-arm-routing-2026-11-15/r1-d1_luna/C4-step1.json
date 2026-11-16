@@ -1,0 +1,565 @@
+{
+  "case": "C4",
+  "step": 1,
+  "arm": "d1_luna",
+  "started_utc": "2026-11-15T20:14:33.168867+00:00",
+  "agent_pid": 35685,
+  "input": {
+    "step": 1,
+    "request": "Сравни A, B, status quo и kill. Рассчитай месячный добавочный финансовый результат A/B, рекомендуй действие условно на заданных предположениях, дай сильное возражение и параметр, изменение которого перевернёт выбор. Решение человека не подменяй.\nОтветь одним JSON-объектом без markdown: case_id=\"C4\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: a_purchases, a_result_rub, b_purchases, b_result_rub, assumptions_not_observations. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T3",
+      "effort": "high"
+    },
+    "expectedfacts": {
+      "a_purchases": 200,
+      "a_result_rub": 1000,
+      "b_purchases": 150,
+      "b_result_rub": 3000,
+      "assumptions_not_observations": true
+    },
+    "prohibitedclaims": [
+      "Конверсии доказаны экспериментом",
+      "Вариант уже выбран человеком",
+      "Status quo и kill идентичны по дальнейшим действиям"
+    ],
+    "blind_criteria": [
+      "Выбор условен и обоснован",
+      "Есть содержательное возражение",
+      "Назван проверяемый порог пересмотра",
+      "Учтены все четыре варианта"
+    ],
+    "context": "{\"material\": \"Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C4 supplied source counts/parameters; original prose in material\", \"values\": {\"users\": 10000, \"a_conversion\": 0.02, \"b_conversion\": 0.015, \"revenue\": 100, \"a_variable\": 70, \"b_variable\": 40, \"a_fixed\": 5000, \"b_fixed\": 6000}}}, \"calculation_checks\": [{\"id\": \"a_purchases\", \"answer_pointer\": \"/facts/a_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"a_result_rub\", \"answer_pointer\": \"/facts/a_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/a_fixed\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_purchases\", \"answer_pointer\": \"/facts/b_purchases\", \"expression\": {\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, \"tolerance\": \"0.01\"}, {\"id\": \"b_result_rub\", \"answer_pointer\": \"/facts/b_result_rub\", \"expression\": {\"op\": \"subtract\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"op\": \"multiply\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/users\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_conversion\"}]}, {\"op\": \"subtract\", \"args\": [{\"source\": \"SRC-NUM\", \"pointer\": \"/values/revenue\"}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_variable\"}]}]}, {\"source\": \"SRC-NUM\", \"pointer\": \"/values/b_fixed\"}]}, \"tolerance\": \"0.01\"}]}",
+    "routing_synopsis": "Учебный пилот, 10000 доступных пользователей за месяц, можно запустить только одну инициативу. Все конверсии ниже — предположения. A: скидка, конверсия 2%, доход с покупки 100 руб., переменные затраты 70 руб., фиксированные 5000 руб. B: помощь с активацией, конверсия 1.5%, доход 100 руб., переменные затраты 40 руб., фиксированные 6000 руб. Status quo: ничего не запускать, добавочный результат 0. Kill: закрыть этот пилот, добавочный результат 0; от status quo отличается отказом от дальнейшего исследования. Бюджет фиксированных расходов 6000 руб. Других расходов в учебной модели нет."
+  },
+  "report": {
+    "status": "needs_review",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 2057,
+          "timeout_seconds": 120,
+          "request_id": "fd7bd17060cc48e2a71b66da0e3e7ee2",
+          "worker_pid": 34919,
+          "generation": 1
+        },
+        "runtime": {
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.5082,
+          "timing": {
+            "queue_wait_seconds": 15.139916,
+            "worker_setup_seconds": 5.8e-05,
+            "worker_roundtrip_seconds": 5.508168,
+            "worker_inference_seconds": 5.506044,
+            "server_total_seconds": 20.648223,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 20.655072
+          },
+          "phase": "complete"
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.7870256934318052,
+              "probabilities": {
+                "T1": 0.026657591719851454,
+                "T2": 0.013979347264636734,
+                "T3": 0.7870256934318052,
+                "T4": 0.17233736758370669
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.7168335614700326,
+              "probabilities": {
+                "normal": 0.7168335614700326,
+                "deep": 0.28316643852996737
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.8393180666582833,
+              "probabilities": {
+                "text": 0.8393180666582833,
+                "tools": 0.1606819333417166
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 719,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false,
+      "t1_review": {
+        "route": {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "purpose": "routing_classifier",
+          "result": "succeeded",
+          "started": true,
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e0d9-3d20-77e2-b0cd-0cd9a82aa30d",
+                  "turnId": "01a1e0d9-447a-79b0-9fc8-25ff15c63cea",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 11487,
+                      "inputTokens": 11391,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 96,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 11487,
+                      "inputTokens": 11391,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 96,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 9.916,
+            "turn_id": "01a1e0d9-447a-79b0-9fc8-25ff15c63cea",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+          }
+        },
+        "method": "labels_with_quote_not_calibrated_probability",
+        "answers": {
+          "tier": {
+            "choice": "T1",
+            "sure": true,
+            "quote": "Все конверсии ниже — предположения."
+          },
+          "effort": {
+            "choice": "normal",
+            "sure": true,
+            "quote": "Сравни A, B, status quo и kill."
+          },
+          "capability": {
+            "choice": "text",
+            "sure": true,
+            "quote": "ROUTING SYNOPSIS (DATA):\nУчебный пилот, 10000 доступных пользователей за месяц"
+          }
+        },
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "text"
+        }
+      },
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "reason": "Luna classifier selected route with source quotes"
+    },
+    "result": {
+      "status": "needs_review",
+      "text": null,
+      "candidate": "{\"case_id\":\"C4\",\"step\":1,\"facts\":{\"a_purchases\":200,\"a_result_rub\":1000,\"b_purchases\":150,\"b_result_rub\":3000,\"assumptions_not_observations\":true},\"conclusion\":\"За месяц B даёт расчетный добавочный результат 3000 руб. против 1000 руб. у A; status quo и kill — 0 руб. При предположении, что заданные конверсии реализуются и прочие параметры модели верны, условно рекомендую B. Сильное возражение: конверсии лишь предположения, поэтому преимущество может не реализоваться. Источник: предоставленный материал C4 и SRC-NUM; расчёты T0.\",\"unknowns\":\"Выбор меняется, если фактическая конверсия B опустится ниже 1% при неизменных остальных параметрах: тогда результат B станет ниже нуля, и status quo/kill окажутся предпочтительнее по финансовому результату. Неизвестны фактические конверсии и ценность дальнейшего исследования, от которой kill отличается по условию.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "purpose": "task"
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "purpose": "task",
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0d9-624d-71b0-9232-c1f52fa92bc0",
+                    "turnId": "01a1e0d9-6359-7e13-a29e-68dca517e4ec",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 12457,
+                        "inputTokens": 12216,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 241,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 12457,
+                        "inputTokens": 12216,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 241,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 8.911,
+              "turn_id": "01a1e0d9-6359-7e13-a29e-68dca517e4ec",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0d9-624d-71b0-9232-c1f52fa92bc0",
+                "turnId": "01a1e0d9-6359-7e13-a29e-68dca517e4ec",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 12457,
+                    "inputTokens": 12216,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 241,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 12457,
+                    "inputTokens": 12216,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 241,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "calculation_check": {
+            "status": "verified",
+            "checks": [
+              {
+                "id": "a_purchases",
+                "answer_pointer": "/facts/a_purchases",
+                "expected": "200.00",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/users",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "10000"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/a_conversion",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "0.02"
+                  }
+                ],
+                "actual": "200",
+                "status": "verified"
+              },
+              {
+                "id": "a_result_rub",
+                "answer_pointer": "/facts/a_result_rub",
+                "expected": "1000.00",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/users",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "10000"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/a_conversion",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "0.02"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/revenue",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "100"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/a_variable",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "70"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/a_fixed",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "5000"
+                  }
+                ],
+                "actual": "1000",
+                "status": "verified"
+              },
+              {
+                "id": "b_purchases",
+                "answer_pointer": "/facts/b_purchases",
+                "expected": "150.000",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/users",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "10000"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/b_conversion",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "0.015"
+                  }
+                ],
+                "actual": "150",
+                "status": "verified"
+              },
+              {
+                "id": "b_result_rub",
+                "answer_pointer": "/facts/b_result_rub",
+                "expected": "3000.000",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/users",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "10000"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/b_conversion",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "0.015"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/revenue",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "100"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/b_variable",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "40"
+                  },
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/b_fixed",
+                    "locator": "Synthetic case C4 supplied source counts/parameters; original prose in material",
+                    "value": "6000"
+                  }
+                ],
+                "actual": "3000",
+                "status": "verified"
+              }
+            ],
+            "scope": "declared_numeric_fields_only"
+          },
+          "quality": {
+            "status": "needs_review",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "purpose": "quality_verifier",
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0d9-85a5-7bd1-88f3-137fe7eceee9",
+                      "turnId": "01a1e0d9-8665-7ab2-b512-7efd47645944",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 12091,
+                          "inputTokens": 12050,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 41,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 12091,
+                          "inputTokens": 12050,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 41,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 8.186,
+                "turn_id": "01a1e0d9-8665-7ab2-b512-7efd47645944",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            }
+          }
+        }
+      ],
+      "reason": "Quality unconfirmed; no automatic escalation"
+    },
+    "transport": "native-codex",
+    "routing_mode": "d1_luna",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T1",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T1",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "purpose": "task"
+    }
+  },
+  "elapsed_seconds": 49.128929
+}

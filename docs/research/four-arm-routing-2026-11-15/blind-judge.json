@@ -1,0 +1,92 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T3",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T3",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T3",
+      "requested_model": "gpt-6.1-sol",
+      "requested_effort": "high",
+      "transmitted_model": "gpt-6.1-sol",
+      "transmitted_effort": "high",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0dd-2f63-7551-8bf0-5e58cd5d47e8",
+            "turnId": "01a1e0dd-3028-7141-809c-c1f6d2465e69",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 42211,
+                "inputTokens": 40466,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 1745,
+                "reasoningOutputTokens": 667
+              },
+              "last": {
+                "totalTokens": 42211,
+                "inputTokens": 40466,
+                "cachedInputTokens": 0,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 1745,
+                "reasoningOutputTokens": 667
+              },
+              "modelContextWindow": 475000
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 42.035,
+      "turn_id": "01a1e0dd-3028-7141-809c-c1f6d2465e69",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"reviews\":[{\"id\":\"B001\",\"pass\":true,\"reason\":\"Разные окна учтены; названо одно дополнительное измерение для сопоставимого сравнения.\"},{\"id\":\"B002\",\"pass\":true,\"reason\":\"Числа, дата и исходный ID источника указаны верно.\"},{\"id\":\"B003\",\"pass\":true,\"reason\":\"Снижение не подтверждено; измерение февральского D30 обеспечит одинаковое окно.\"},{\"id\":\"B004\",\"pass\":true,\"reason\":\"Все обязательные факты соответствуют SRC-A; неизвестное обозначено корректно.\"},{\"id\":\"B005\",\"pass\":true,\"reason\":\"Расчёты верны; наблюдаемый агрегат отделён от сравнения при фиксированных весах.\"},{\"id\":\"B006\",\"pass\":true,\"reason\":\"Верные расчёты, стандартизация отделена от фактического агрегата февраля.\"},{\"id\":\"B007\",\"pass\":false,\"reason\":\"Расчёты и stop верны, но указан отсутствующий в материалах источник T0 CALCULATIONS.\"},{\"id\":\"B008\",\"pass\":false,\"reason\":\"P1 должен иметь статус unsupported: материалы не устанавливают универсальную совместимость и не дают прямого опровержения.\"},{\"id\":\"B009\",\"pass\":true,\"reason\":\"Безопасный черновик и две различные проверки с наблюдениями и ограниченными условиями формулировок.\"},{\"id\":\"B010\",\"pass\":false,\"reason\":\"P1 ошибочно классифицирован как contradicted вместо unsupported.\"},{\"id\":\"B011\",\"pass\":false,\"reason\":\"Для P1 требуется unsupported; ограниченная поддержка не доказывает заявленное прямое опровержение.\"},{\"id\":\"B012\",\"pass\":true,\"reason\":\"Сопоставлены D30: 24% и 20%, изменение −4 п.п.; исходные источники сохранены.\"},{\"id\":\"B013\",\"pass\":true,\"reason\":\"Все расчёты верны; диагностическая стандартизация явно отделена от наблюдаемого агрегата.\"},{\"id\":\"B014\",\"pass\":true,\"reason\":\"Показаны расчёты, сдвиг состава и подходящая метрика; причинный эффект не заявлен.\"},{\"id\":\"B015\",\"pass\":true,\"reason\":\"Три различных вопроса связаны с данными и решениями; причины и сроки не выдуманы.\"},{\"id\":\"B016\",\"pass\":true,\"reason\":\"D30 и разность рассчитаны правильно, указаны SRC-A и SRC-C, причины не приписаны.\"},{\"id\":\"B017\",\"pass\":true,\"reason\":\"Есть три содержательных вопроса, необходимые данные и решения для каждого ответа.\"},{\"id\":\"B018\",\"pass\":false,\"reason\":\"P1 ошибочно имеет статус contradicted вместо ожидаемого unsupported.\"},{\"id\":\"B019\",\"pass\":false,\"reason\":\"Числа и условия stop верны, но ссылка на расчёты T0 не имеет основания в материалах.\"},{\"id\":\"B020\",\"pass\":true,\"reason\":\"Три недублирующихся вопроса содержат сбор данных и связь с решениями; неизвестность сохранена.\"},{\"id\":\"B021\",\"pass\":false,\"reason\":\"Указаны отсутствующие расчёты T0; при пересмотре выбора не отмечено, что A выгоднее B уже ниже примерно 1,1667%.\"},{\"id\":\"B022\",\"pass\":true,\"reason\":\"Черновик безопасен; две проверки ограничивают будущие обещания конкретными моделями и предложениями.\"},{\"id\":\"B023\",\"pass\":true,\"reason\":\"Верные значения D30, разность −4 п.п. и исходные ID источников.\"},{\"id\":\"B024\",\"pass\":true,\"reason\":\"Все четыре варианта сопоставлены; расчёты и порог верны, рекомендация условна.\"},{\"id\":\"B025\",\"pass\":false,\"reason\":\"Сравнение и порог верны, но утверждение о согласованности с T0 не подтверждено предоставленными материалами.\"},{\"id\":\"B026\",\"pass\":true,\"reason\":\"Все запрошенные числа, дата и источник извлечены правильно.\"},{\"id\":\"B027\",\"pass\":true,\"reason\":\"Окна 30 и 7 однозначно пояснены как D30 и D7; дополнительное измерение выбрано корректно.\"},{\"id\":\"B028\",\"pass\":true,\"reason\":\"Две проверки дают наблюдаемые условия для узких обещаний; несуществующая автоактивация не предлагается к тестированию.\"},{\"id\":\"B029\",\"pass\":false,\"reason\":\"Расчёты верны, но T0 CALCULATIONS отсутствует среди предоставленных источников.\"},{\"id\":\"B030\",\"pass\":true,\"reason\":\"Верно объяснены расчёты и изменение весов; предложена стандартизированная метрика с ограничением причинности.\"},{\"id\":\"B031\",\"pass\":true,\"reason\":\"Числа, дата и SRC-A указаны верно; нерелевантные сведения не использованы.\"}]}",
+  "usage": [
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e0dd-2f63-7551-8bf0-5e58cd5d47e8",
+        "turnId": "01a1e0dd-3028-7141-809c-c1f6d2465e69",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 42211,
+            "inputTokens": 40466,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1745,
+            "reasoningOutputTokens": 667
+          },
+          "last": {
+            "totalTokens": 42211,
+            "inputTokens": 40466,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1745,
+            "reasoningOutputTokens": 667
+          },
+          "modelContextWindow": 475000
+        }
+      }
+    }
+  ]
+}

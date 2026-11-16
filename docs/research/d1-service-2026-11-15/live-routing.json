@@ -1,0 +1,82 @@
+{
+  "at": "2026-11-15T15:17:02.070796+00:00",
+  "requests": [
+    {
+      "schema": 1,
+      "request": "Составь краткий план исследования спроса по предоставленному описанию продукта.",
+      "context": "Продукт: приложение совместных семейных списков покупок. Нужен только текстовый план, без поиска.",
+      "hosts": [
+        "codex"
+      ],
+      "classification_context": null,
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Critical system memory pressure",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "blocked",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": null,
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 358,
+          "timeout_seconds": 90,
+          "request_id": "0b250ee5c806421e9737c32828faec5b"
+        },
+        "runtime": {},
+        "status": "needs_review",
+        "labels": null
+      },
+      "plan": null,
+      "start": null,
+      "result": {
+        "status": "not_started",
+        "text": null
+      },
+      "status": "manual",
+      "expected_tier": "T2",
+      "measured_seconds": 11.919
+    }
+  ],
+  "service": {
+    "status": "ok",
+    "service": "running",
+    "pid": 57117,
+    "model_state": "blocked",
+    "model": "LiquidAI/d1-2B-MLX-8bit",
+    "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+    "worker_pid": null,
+    "generation": 1,
+    "completed": 0,
+    "failed": 1,
+    "queue_depth": 0,
+    "active_id": null,
+    "last_latency_seconds": null,
+    "reason": "Critical system memory pressure",
+    "retry_after_seconds": 29.9,
+    "limits": {
+      "state_bytes": 32768,
+      "frame_bytes": 65536,
+      "text_tokens": 4096,
+      "packed_tokens": 8192,
+      "queue": 4,
+      "idle_seconds": 300.0
+    }
+  }
+}

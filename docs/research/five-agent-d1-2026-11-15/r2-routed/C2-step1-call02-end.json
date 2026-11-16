@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0c0-0d70-7612-a4f6-f7706bd58155",
+            "turnId": "01a1e0c0-12c5-7c01-bd50-15d9188035eb",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 10936,
+                "inputTokens": 10796,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 140,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 10936,
+                "inputTokens": 10796,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 140,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 12.598,
+      "turn_id": "01a1e0c0-12c5-7c01-bd50-15d9188035eb",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":30,\"february_window\":7},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: 24% за D30 января и 18% за D7 февраля измерены на разных окнах наблюдения (SRC-A, SRC-B).\",\"unknowns\":\"Неизвестно удержание февральской когорты на D30. Минимально необходимо измерить D30 retention февраля, чтобы сопоставить его с январским D30 при прочих указанных одинаковых условиях (SRC-A, SRC-B).\"}"
+}

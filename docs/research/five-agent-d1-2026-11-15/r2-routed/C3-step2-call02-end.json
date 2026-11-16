@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0c0-cf0a-73d3-914d-c8c3e702d784",
+            "turnId": "01a1e0c0-d18a-7252-8a44-341dab1c7a68",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11032,
+                "inputTokens": 10861,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 171,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11032,
+                "inputTokens": 10861,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 171,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.444,
+      "turn_id": "01a1e0c0-d18a-7252-8a44-341dab1c7a68",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C3\",\"step\":2,\"facts\":{\"standardized_january_pct\":50,\"standardized_february_pct\":62.5,\"standardized_delta_pp\":12.5,\"observed_february_pct\":27.5},\"conclusion\":\"При одинаковом весе сегментов D30 retention вырос с 50% в январе до 62,5% в феврале: +12,5 п.п. Наблюдаемый агрегат февраля — 27,5% (55/200); стандартизированный показатель использует диагностический вес 50/50 и не отражает фактический состав февраля. Источники: SRC-J, SRC-F и контекст о весах сегментов.\",\"unknowns\":\"Рандомизации нет, поэтому причинный эффект не установлен.\"}"
+}

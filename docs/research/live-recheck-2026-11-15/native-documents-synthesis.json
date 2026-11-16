@@ -1,0 +1,164 @@
+{
+  "reuse": "Previously validated immutable cards; source hashes rechecked before and after synthesis",
+  "synthesis": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 675,
+          "timeout_seconds": 30,
+          "request_id": "031f55fe653a4cbe8765ec7e580dac91",
+          "worker_pid": 5140,
+          "generation": 5
+        },
+        "runtime": {
+          "worker_pid": 5140,
+          "generation": 5,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 13.2495
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.6774999492388362,
+              "probabilities": {
+                "T1": 0.1500975937872815,
+                "T2": 0.14324453256463626,
+                "T3": 0.6774999492388362,
+                "T4": 0.02915792440924605
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9596527790807943,
+              "probabilities": {
+                "normal": 0.9596527790807943,
+                "deep": 0.040347220919205715
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.6188924509823083,
+              "probabilities": {
+                "text": 0.6188924509823083,
+                "tools": 0.3811075490176917
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 495,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false,
+      "t1_review": {
+        "route": {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "result": "succeeded",
+          "started": true,
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e06c-3166-7f30-94e3-ae180b099b64",
+                  "turnId": "01a1e06c-36d9-78a2-9529-b67f4811f1a5",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 11310,
+                      "inputTokens": 11207,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 103,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 11310,
+                      "inputTokens": 11207,
+                      "cachedInputTokens": 2048,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 103,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 6.38,
+            "turn_id": "01a1e06c-36d9-78a2-9529-b67f4811f1a5",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+          }
+        },
+        "method": "labels_with_quote_not_calibrated_probability",
+        "labels": null
+      }
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  }
+}

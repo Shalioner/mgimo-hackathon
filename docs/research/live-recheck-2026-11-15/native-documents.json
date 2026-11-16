@@ -1,0 +1,506 @@
+{
+  "schema": 1,
+  "request": "Сравни удержание по месяцам, сохрани различие периодов.",
+  "status": "manual",
+  "sources": [
+    {
+      "id": "DOC-001",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/a.md",
+      "sha256": "92592d75ed118c3d52766bd63f07af92a5d846839d329b034193b3941d97e66f",
+      "bytes": 41
+    },
+    {
+      "id": "DOC-002",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/b.md",
+      "sha256": "0a935c1246c950c03c26aaf7d445d854e53a394b121b7507d58156b2cb87d40b",
+      "bytes": 76
+    },
+    {
+      "id": "DOC-003",
+      "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/c.md",
+      "sha256": "766a4504ecc20b556640d0534327c03f2664264e6b2a05e9317013397944ad16",
+      "bytes": 43
+    }
+  ],
+  "extractions": [
+    {
+      "source_id": "DOC-001",
+      "candidates": [
+        {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          }
+        }
+      ],
+      "plan": {
+        "status": "executable",
+        "reason": null,
+        "tier": "T1",
+        "transport": "native-codex",
+        "selection": {
+          "status": "selected",
+          "host": "codex",
+          "tier": "T1",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "requested": {
+          "host": "codex",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        }
+      },
+      "status": "verified_structure",
+      "start": {
+        "status": "executable",
+        "reason": null,
+        "tier": "T1",
+        "transport": "native-codex",
+        "selection": {
+          "status": "selected",
+          "host": "codex",
+          "tier": "T1",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "requested": {
+          "host": "codex",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "result": "succeeded",
+        "started": true,
+        "native_receipt": {
+          "status": "succeeded",
+          "host": "codex",
+          "tier": "T1",
+          "requested_model": "gpt-6-luna",
+          "requested_effort": "low",
+          "transmitted_model": "gpt-6-luna",
+          "transmitted_effort": "low",
+          "observed_model": null,
+          "usage_events": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e069-fab2-7ee3-9912-de27c8b87d9d",
+                "turnId": "01a1e069-fb39-74a3-8943-b82b5573f3ed",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11058,
+                    "inputTokens": 10973,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 85,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11058,
+                    "inputTokens": 10973,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 85,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "elapsed_seconds": 5.676,
+          "turn_id": "01a1e069-fb39-74a3-8943-b82b5573f3ed",
+          "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+        }
+      }
+    },
+    {
+      "source_id": "DOC-002",
+      "candidates": [
+        {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          }
+        }
+      ],
+      "plan": {
+        "status": "executable",
+        "reason": null,
+        "tier": "T1",
+        "transport": "native-codex",
+        "selection": {
+          "status": "selected",
+          "host": "codex",
+          "tier": "T1",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "requested": {
+          "host": "codex",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        }
+      },
+      "status": "verified_structure",
+      "start": {
+        "status": "executable",
+        "reason": null,
+        "tier": "T1",
+        "transport": "native-codex",
+        "selection": {
+          "status": "selected",
+          "host": "codex",
+          "tier": "T1",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "requested": {
+          "host": "codex",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "result": "succeeded",
+        "started": true,
+        "native_receipt": {
+          "status": "succeeded",
+          "host": "codex",
+          "tier": "T1",
+          "requested_model": "gpt-6-luna",
+          "requested_effort": "low",
+          "transmitted_model": "gpt-6-luna",
+          "transmitted_effort": "low",
+          "observed_model": null,
+          "usage_events": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e06a-1163-7411-bb80-24b1073dc31d",
+                "turnId": "01a1e06a-11e4-7731-8b41-117e50b7c503",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11022,
+                    "inputTokens": 10978,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 44,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11022,
+                    "inputTokens": 10978,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 44,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "elapsed_seconds": 5.376,
+          "turn_id": "01a1e06a-11e4-7731-8b41-117e50b7c503",
+          "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+        }
+      }
+    },
+    {
+      "source_id": "DOC-003",
+      "candidates": [
+        {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          }
+        }
+      ],
+      "plan": {
+        "status": "executable",
+        "reason": null,
+        "tier": "T1",
+        "transport": "native-codex",
+        "selection": {
+          "status": "selected",
+          "host": "codex",
+          "tier": "T1",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "requested": {
+          "host": "codex",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        }
+      },
+      "status": "verified_structure",
+      "start": {
+        "status": "executable",
+        "reason": null,
+        "tier": "T1",
+        "transport": "native-codex",
+        "selection": {
+          "status": "selected",
+          "host": "codex",
+          "tier": "T1",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "requested": {
+          "host": "codex",
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        "result": "succeeded",
+        "started": true,
+        "native_receipt": {
+          "status": "succeeded",
+          "host": "codex",
+          "tier": "T1",
+          "requested_model": "gpt-6-luna",
+          "requested_effort": "low",
+          "transmitted_model": "gpt-6-luna",
+          "transmitted_effort": "low",
+          "observed_model": null,
+          "usage_events": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e06a-2727-7b30-9da1-f4f09957438d",
+                "turnId": "01a1e06a-27a8-7840-bd7e-d85bf7bcb3eb",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11055,
+                    "inputTokens": 10969,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 86,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11055,
+                    "inputTokens": 10969,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 86,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "elapsed_seconds": 5.195,
+          "turn_id": "01a1e06a-27a8-7840-bd7e-d85bf7bcb3eb",
+          "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+        }
+      }
+    }
+  ],
+  "cards": [
+    {
+      "source": {
+        "id": "DOC-001",
+        "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/a.md",
+        "sha256": "92592d75ed118c3d52766bd63f07af92a5d846839d329b034193b3941d97e66f",
+        "bytes": 41
+      },
+      "topic": "Удержание в январе",
+      "findings": [
+        {
+          "kind": "fact",
+          "statement": "Удержание в январе составляет 24%.",
+          "quote": "Удержание в январе: 24%.",
+          "start_line": 1,
+          "end_line": 1
+        }
+      ],
+      "limitations": [
+        "Источник содержит данные только за январь; сравнить удержание между месяцами невозможно."
+      ],
+      "contradictions": [],
+      "verification": "exact_quotes_and_locators_only; semantic_support_not_verified"
+    },
+    {
+      "source": {
+        "id": "DOC-002",
+        "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/b.md",
+        "sha256": "0a935c1246c950c03c26aaf7d445d854e53a394b121b7507d58156b2cb87d40b",
+        "bytes": 76
+      },
+      "topic": "Инструкция по поливу комнатных растений",
+      "findings": [],
+      "limitations": [
+        "В документе нет сведений об удержании или сравнении по месяцам."
+      ],
+      "contradictions": [],
+      "verification": "exact_quotes_and_locators_only; semantic_support_not_verified"
+    },
+    {
+      "source": {
+        "id": "DOC-003",
+        "path": "/Users/shalioner/orca/workspaces/МегаФон-Стратег/night-orchestrator/docs/research/live-recheck-2026-11-15/documents/c.md",
+        "sha256": "766a4504ecc20b556640d0534327c03f2664264e6b2a05e9317013397944ad16",
+        "bytes": 43
+      },
+      "topic": "Удержание в феврале",
+      "findings": [
+        {
+          "kind": "fact",
+          "statement": "Удержание в феврале составило 18%.",
+          "quote": "Удержание в феврале: 18%.",
+          "start_line": 1,
+          "end_line": 1
+        }
+      ],
+      "limitations": [
+        "Источник содержит данные только за февраль; сравнить удержание по месяцам нельзя."
+      ],
+      "contradictions": [],
+      "verification": "exact_quotes_and_locators_only; semantic_support_not_verified"
+    }
+  ],
+  "synthesis": {
+    "status": "manual",
+    "classification": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 675,
+          "timeout_seconds": 30,
+          "request_id": "d26c450067ad4879a3ce9f0ba352af18",
+          "worker_pid": 5140,
+          "generation": 5
+        },
+        "runtime": {
+          "worker_pid": 5140,
+          "generation": 5,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 18.8413
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.6774999492388362,
+              "probabilities": {
+                "T1": 0.1500975937872815,
+                "T2": 0.14324453256463626,
+                "T3": 0.6774999492388362,
+                "T4": 0.02915792440924605
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9596527790807943,
+              "probabilities": {
+                "normal": 0.9596527790807943,
+                "deep": 0.040347220919205715
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.6188924509823083,
+              "probabilities": {
+                "text": 0.6188924509823083,
+                "tools": 0.3811075490176917
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 495,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false
+    },
+    "result": {
+      "status": "not_started",
+      "text": null
+    },
+    "transport": "native-codex"
+  },
+  "result": {
+    "status": "not_started",
+    "text": null
+  },
+  "transport": "native-codex",
+  "limits": {
+    "documents": 15,
+    "card_bytes": 6000,
+    "quote_bytes": 2400,
+    "context_bytes": 48000
+  }
+}

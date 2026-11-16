@@ -1,0 +1,402 @@
+{
+  "case": "C1",
+  "step": 1,
+  "arm": "d1_luna",
+  "started_utc": "2026-11-15T20:14:33.168871+00:00",
+  "agent_pid": 35682,
+  "input": {
+    "step": 1,
+    "request": "Извлеки число всех, активных и приостановленных проектов, дату и ID источника. Не используй нерелевантный SRC-B.\nОтветь одним JSON-объектом без markdown: case_id=\"C1\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: total, active, paused, source, date. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T1",
+      "effort": "low"
+    },
+    "expectedfacts": {
+      "total": 17,
+      "active": 12,
+      "paused": 5,
+      "source": "SRC-A",
+      "date": "1 ноября"
+    },
+    "prohibitedclaims": [
+      "Причины приостановки известны",
+      "Переговорные комнаты являются проектами"
+    ],
+    "context": "{\"material\": \"SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах.\", \"calculation_sources\": {\"SRC-NUM\": {\"locator\": \"Synthetic case C1 supplied source counts/parameters; original prose in material\", \"values\": {\"total\": 17, \"active\": 12, \"paused\": 5}}}, \"calculation_checks\": [{\"id\": \"total\", \"answer_pointer\": \"/facts/total\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/total\"}, \"tolerance\": \"0.01\"}, {\"id\": \"active\", \"answer_pointer\": \"/facts/active\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/active\"}, \"tolerance\": \"0.01\"}, {\"id\": \"paused\", \"answer_pointer\": \"/facts/paused\", \"expression\": {\"source\": \"SRC-NUM\", \"pointer\": \"/values/paused\"}, \"tolerance\": \"0.01\"}]}",
+    "blind_criteria": [],
+    "routing_synopsis": "SRC-A: На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных. Причины приостановки не записаны. SRC-B: В отделе 4 переговорные комнаты; это не сведения о проектах."
+  },
+  "report": {
+    "status": "succeeded",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1085,
+          "timeout_seconds": 120,
+          "request_id": "fa92afdb31004cac810649252a7fb8b5",
+          "worker_pid": 34919,
+          "generation": 1
+        },
+        "runtime": {
+          "worker_pid": 34919,
+          "generation": 1,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 5.2384,
+          "timing": {
+            "queue_wait_seconds": 4.517958,
+            "worker_setup_seconds": 5e-05,
+            "worker_roundtrip_seconds": 5.23835,
+            "worker_inference_seconds": 5.117381,
+            "server_total_seconds": 9.756432,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 9.822849
+          },
+          "phase": "complete"
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T1",
+              "confidence": 0.8669460165811873,
+              "probabilities": {
+                "T1": 0.8669460165811873,
+                "T2": 0.0745536805451921,
+                "T3": 0.015948204463904242,
+                "T4": 0.04255209840971644
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.9649428110229319,
+              "probabilities": {
+                "normal": 0.9649428110229319,
+                "deep": 0.03505718897706806
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.9478630946369152,
+              "probabilities": {
+                "text": 0.9478630946369152,
+                "tools": 0.05213690536308477
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 532,
+            "output_tokens": 0
+          }
+        },
+        "status": "accepted",
+        "labels": {
+          "tier": "T1",
+          "effort": "normal"
+        },
+        "capability_gate": "not_applicable_native_host_retains_tools"
+      },
+      "execution": "host_owned",
+      "account_switch": false,
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "reason": "D1 selected native host request; host retains credentials, tools and permissions"
+    },
+    "result": {
+      "status": "succeeded",
+      "text": "{\"case_id\":\"C1\",\"step\":1,\"facts\":{\"total\":17,\"active\":12,\"paused\":5,\"source\":\"SRC-A\",\"date\":\"1 ноября\"},\"conclusion\":\"На 1 ноября зарегистрировано 17 проектов: 12 активных и 5 приостановленных (SRC-A).\",\"unknowns\":\"Год не указан. Причины приостановки не записаны.\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "purpose": "task"
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "purpose": "task",
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0d9-107a-72e0-ae81-f7bd994043ab",
+                    "turnId": "01a1e0d9-117c-79e1-8ddf-63e365995f79",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 11297,
+                        "inputTokens": 11209,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 88,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 11297,
+                        "inputTokens": 11209,
+                        "cachedInputTokens": 2048,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 88,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 9.553,
+              "turn_id": "01a1e0d9-117c-79e1-8ddf-63e365995f79",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0d9-107a-72e0-ae81-f7bd994043ab",
+                "turnId": "01a1e0d9-117c-79e1-8ddf-63e365995f79",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 11297,
+                    "inputTokens": 11209,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 88,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 11297,
+                    "inputTokens": 11209,
+                    "cachedInputTokens": 2048,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 88,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "calculation_check": {
+            "status": "verified",
+            "checks": [
+              {
+                "id": "total",
+                "answer_pointer": "/facts/total",
+                "expected": "17",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/total",
+                    "locator": "Synthetic case C1 supplied source counts/parameters; original prose in material",
+                    "value": "17"
+                  }
+                ],
+                "actual": "17",
+                "status": "verified"
+              },
+              {
+                "id": "active",
+                "answer_pointer": "/facts/active",
+                "expected": "12",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/active",
+                    "locator": "Synthetic case C1 supplied source counts/parameters; original prose in material",
+                    "value": "12"
+                  }
+                ],
+                "actual": "12",
+                "status": "verified"
+              },
+              {
+                "id": "paused",
+                "answer_pointer": "/facts/paused",
+                "expected": "5",
+                "tolerance": "0.01",
+                "sources": [
+                  {
+                    "source": "SRC-NUM",
+                    "pointer": "/values/paused",
+                    "locator": "Synthetic case C1 supplied source counts/parameters; original prose in material",
+                    "value": "5"
+                  }
+                ],
+                "actual": "5",
+                "status": "verified"
+              }
+            ],
+            "scope": "declared_numeric_fields_only"
+          },
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "purpose": "quality_verifier",
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0d9-3869-7970-a191-5879eb44a1a9",
+                      "turnId": "01a1e0d9-3c97-73e1-a327-e83b2509e1b8",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11430,
+                          "inputTokens": 11387,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 43,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11430,
+                          "inputTokens": 11387,
+                          "cachedInputTokens": 7552,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 43,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 8.3,
+                "turn_id": "01a1e0d9-3c97-73e1-a327-e83b2509e1b8",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "На 1 ноября зарегистрировано 17 проектов: 12 активных, 5 приостановленных.",
+            "method": "T1_labels_with_quote_not_calibrated_probability",
+            "verification_scope": "label_shape_and_literal_quote_presence_only"
+          }
+        }
+      ]
+    },
+    "transport": "native-codex",
+    "routing_mode": "d1_luna",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T1",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T1",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "purpose": "task"
+    }
+  },
+  "elapsed_seconds": 29.341673
+}

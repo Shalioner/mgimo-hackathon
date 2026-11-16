@@ -1,0 +1,64 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0c0-01b0-7493-87db-7f7e3ecd1303",
+            "turnId": "01a1e0c0-0302-7bc1-90a6-ccef628fd115",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11207,
+                "inputTokens": 11160,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 47,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11207,
+                "inputTokens": 11160,
+                "cachedInputTokens": 2048,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 47,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 8.254,
+      "turn_id": "01a1e0c0-0302-7bc1-90a6-ccef628fd115",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"quality\":{\"choice\":\"accept\",\"sure\":true,\"quote\":\"\\\"facts\\\":{\\\"total\\\":17,\\\"active\\\":12,\\\"paused\\\":5,\\\"source\\\":\\\"SRC-A\\\",\\\"date\\\":\\\"1 ноября\\\"}\"}}}"
+}

@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0db-d9da-7a02-b335-15ccc35eeb55",
+            "turnId": "01a1e0db-dbd6-7fd1-ba4e-85d0e0c2970e",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11041,
+                "inputTokens": 10878,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 163,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11041,
+                "inputTokens": 10878,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 163,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 9.998,
+      "turn_id": "01a1e0db-dbd6-7fd1-ba4e-85d0e0c2970e",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C5\",\"step\":1,\"facts\":{\"P1\":\"contradicted\",\"P2\":\"contradicted\",\"P3\":\"unsupported\",\"P4\":\"supported\"},\"conclusion\":\"P1 противоречит SRC-SPEC: подключение доступно на поддерживаемых устройствах, а не на всех телефонах. P2 противоречит SRC-SPEC: подключение выполняется вручную через QR-код. P3 не подтверждено: SRC-PLAN сообщает только о запланированном сравнении цен, результатов нет. P4 подтверждено SRC-TEST: подключение удалось на 18 из 20 поддерживаемых устройств.\",\"unknowns\":\"SRC-TEST не сообщает длительность покупки. Данных о ценах агрегаторов нет.\"}"
+}

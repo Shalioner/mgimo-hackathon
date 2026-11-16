@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "task",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-dce0-75b2-b104-3190570e7931",
+            "turnId": "01a1e0da-de9c-7f71-aa0f-1906657adac4",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 10941,
+                "inputTokens": 10796,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 145,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 10941,
+                "inputTokens": 10796,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 145,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 6.659,
+      "turn_id": "01a1e0da-de9c-7f71-aa0f-1906657adac4",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":\"D30\",\"february_window\":\"D7\"},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: 24% (SRC-A) и 18% (SRC-B) измерены в разные периоды после привлечения. Разница между опубликованными значениями — 6 п.п., но она не устанавливает изменение сопоставимого retention.\",\"unknowns\":\"Минимально необходимо измерить февральский D30 retention, чтобы сравнить когорты на одинаковом окне. Источники: SRC-A, SRC-B.\"}"
+}

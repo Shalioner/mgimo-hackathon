@@ -1,0 +1,422 @@
+{
+  "case": "C2",
+  "step": 1,
+  "arm": "routed",
+  "started_utc": "2026-11-15T19:46:48.377121+00:00",
+  "agent_pid": 26162,
+  "input": {
+    "step": 1,
+    "request": "Можно ли утверждать, что удержание снизилось на 6 процентных пунктов? Объясни ограничение и назови минимально необходимое дополнительное измерение.\nОтветь одним JSON-объектом без markdown: case_id=\"C2\", step=1, facts (объект), conclusion, unknowns. В facts обязательно заполни ключи: comparable, january_window, february_window. Значения выведи самостоятельно из материалов. Для чисел используй JSON numbers, для да/нет — booleans. Общий ответ до 250 слов; пояснения и ссылки на источники помести в conclusion и unknowns.",
+    "baseline": {
+      "tier": "T2",
+      "effort": "medium"
+    },
+    "expectedfacts": {
+      "comparable": false,
+      "january_window": "D30",
+      "february_window": "D7"
+    },
+    "prohibitedclaims": [
+      "Подтверждено снижение удержания на 6 п.п.",
+      "Известна причина изменения"
+    ],
+    "blind_criteria": [
+      "Запрошено одинаковое окно для обеих когорт"
+    ],
+    "context": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000. Одинаковый продукт и сегмент, но разные окна наблюдения."
+  },
+  "report": {
+    "status": "succeeded",
+    "classification": {
+      "status": "selected",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Private service socket present; worker readiness checked at request",
+          "started": true,
+          "wrapper_invocations": 1,
+          "result": "succeeded",
+          "fallback": false,
+          "requested": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "transmitted": {
+            "host": "local",
+            "provider": "local-d1",
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+            "effort": null
+          },
+          "observed": {
+            "model": "LiquidAI/d1-2B-MLX-8bit",
+            "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580"
+          },
+          "network": "denied",
+          "transport": "unix-service",
+          "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+          "input_bytes": 1142,
+          "timeout_seconds": 120,
+          "request_id": "031fb5bbc21e4aaea5db663d4d6f8cfb",
+          "worker_pid": 26167,
+          "generation": 2
+        },
+        "runtime": {
+          "worker_pid": 26167,
+          "generation": 2,
+          "model": "LiquidAI/d1-2B-MLX-8bit",
+          "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+          "elapsed_seconds": 3.5291,
+          "timing": {
+            "queue_wait_seconds": 21.730914,
+            "worker_setup_seconds": 7e-05,
+            "worker_roundtrip_seconds": 3.52906,
+            "worker_inference_seconds": 3.520408,
+            "server_total_seconds": 25.26024,
+            "cold_start": false,
+            "completed": true,
+            "client_roundtrip_seconds": 25.265985
+          }
+        },
+        "response": {
+          "answers": {
+            "tier": {
+              "type": "choice",
+              "choice": "T3",
+              "confidence": 0.3463556709107805,
+              "probabilities": {
+                "T1": 0.0602147585032516,
+                "T2": 0.30104767402816796,
+                "T3": 0.3463556709107805,
+                "T4": 0.29238189655779995
+              }
+            },
+            "effort": {
+              "type": "choice",
+              "choice": "normal",
+              "confidence": 0.7722196222389318,
+              "probabilities": {
+                "normal": 0.7722196222389318,
+                "deep": 0.22778037776106813
+              }
+            },
+            "capability": {
+              "type": "choice",
+              "choice": "text",
+              "confidence": 0.7072522997379309,
+              "probabilities": {
+                "text": 0.7072522997379309,
+                "tools": 0.29274770026206914
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 542,
+            "output_tokens": 0
+          }
+        },
+        "status": "needs_review",
+        "labels": null
+      },
+      "execution": "host_owned",
+      "account_switch": false,
+      "t1_review": {
+        "route": {
+          "status": "executable",
+          "reason": null,
+          "tier": "T1",
+          "transport": "native-codex",
+          "selection": {
+            "status": "selected",
+            "host": "codex",
+            "tier": "T1",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "requested": {
+            "host": "codex",
+            "model": "gpt-6-luna",
+            "effort": "low"
+          },
+          "result": "succeeded",
+          "started": true,
+          "native_receipt": {
+            "status": "succeeded",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": "gpt-6-luna",
+            "transmitted_effort": "low",
+            "observed_model": null,
+            "usage_events": [
+              {
+                "method": "thread/tokenUsage/updated",
+                "params": {
+                  "threadId": "01a1e0bf-e4ac-7be3-a226-71b858c94f34",
+                  "turnId": "01a1e0bf-e71f-7551-bea7-632c9ce9768c",
+                  "tokenUsage": {
+                    "total": {
+                      "totalTokens": 11370,
+                      "inputTokens": 11248,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 122,
+                      "reasoningOutputTokens": 0
+                    },
+                    "last": {
+                      "totalTokens": 11370,
+                      "inputTokens": 11248,
+                      "cachedInputTokens": 7552,
+                      "cacheWriteInputTokens": 0,
+                      "outputTokens": 122,
+                      "reasoningOutputTokens": 0
+                    },
+                    "modelContextWindow": 258400
+                  }
+                }
+              }
+            ],
+            "elapsed_seconds": 7.455,
+            "turn_id": "01a1e0bf-e71f-7551-bea7-632c9ce9768c",
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+          }
+        },
+        "method": "labels_with_quote_not_calibrated_probability",
+        "answers": {
+          "tier": {
+            "choice": "T1",
+            "sure": true,
+            "quote": "Для чисел используй JSON numbers, для да/нет — booleans."
+          },
+          "effort": {
+            "choice": "normal",
+            "sure": true,
+            "quote": "ROUTING SYNOPSIS (DATA):"
+          },
+          "capability": {
+            "choice": "text",
+            "sure": true,
+            "quote": "SRC-A: Январская когорта — D30 retention 24%, 240 из 1000 пользователей. SRC-B: Февральская когорта — D7 retention 18%, 180 из 1000."
+          }
+        },
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "text"
+        }
+      },
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "reason": "Uncertain D1 labels reviewed by T1 with source quotes"
+    },
+    "result": {
+      "status": "succeeded",
+      "text": "{\"case_id\":\"C2\",\"step\":1,\"facts\":{\"comparable\":false,\"january_window\":30,\"february_window\":7},\"conclusion\":\"Утверждать снижение удержания на 6 процентных пунктов нельзя: 24% за D30 января и 18% за D7 февраля измерены на разных окнах наблюдения (SRC-A, SRC-B).\",\"unknowns\":\"Неизвестно удержание февральской когорты на D30. Минимально необходимо измерить D30 retention февраля, чтобы сопоставить его с январским D30 при прочих указанных одинаковых условиях (SRC-A, SRC-B).\"}",
+      "attempts": [
+        {
+          "number": 1,
+          "plan": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            }
+          },
+          "route": {
+            "status": "executable",
+            "reason": null,
+            "tier": "T1",
+            "transport": "native-codex",
+            "selection": {
+              "status": "selected",
+              "host": "codex",
+              "tier": "T1",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "requested": {
+              "host": "codex",
+              "model": "gpt-6-luna",
+              "effort": "low"
+            },
+            "result": "succeeded",
+            "started": true,
+            "native_receipt": {
+              "status": "succeeded",
+              "host": "codex",
+              "tier": "T1",
+              "requested_model": "gpt-6-luna",
+              "requested_effort": "low",
+              "transmitted_model": "gpt-6-luna",
+              "transmitted_effort": "low",
+              "observed_model": null,
+              "usage_events": [
+                {
+                  "method": "thread/tokenUsage/updated",
+                  "params": {
+                    "threadId": "01a1e0c0-0d70-7612-a4f6-f7706bd58155",
+                    "turnId": "01a1e0c0-12c5-7c01-bd50-15d9188035eb",
+                    "tokenUsage": {
+                      "total": {
+                        "totalTokens": 10936,
+                        "inputTokens": 10796,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 140,
+                        "reasoningOutputTokens": 0
+                      },
+                      "last": {
+                        "totalTokens": 10936,
+                        "inputTokens": 10796,
+                        "cachedInputTokens": 7552,
+                        "cacheWriteInputTokens": 0,
+                        "outputTokens": 140,
+                        "reasoningOutputTokens": 0
+                      },
+                      "modelContextWindow": 258400
+                    }
+                  }
+                }
+              ],
+              "elapsed_seconds": 12.598,
+              "turn_id": "01a1e0c0-12c5-7c01-bd50-15d9188035eb",
+              "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+            }
+          },
+          "usage": [
+            {
+              "method": "thread/tokenUsage/updated",
+              "params": {
+                "threadId": "01a1e0c0-0d70-7612-a4f6-f7706bd58155",
+                "turnId": "01a1e0c0-12c5-7c01-bd50-15d9188035eb",
+                "tokenUsage": {
+                  "total": {
+                    "totalTokens": 10936,
+                    "inputTokens": 10796,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 140,
+                    "reasoningOutputTokens": 0
+                  },
+                  "last": {
+                    "totalTokens": 10936,
+                    "inputTokens": 10796,
+                    "cachedInputTokens": 7552,
+                    "cacheWriteInputTokens": 0,
+                    "outputTokens": 140,
+                    "reasoningOutputTokens": 0
+                  },
+                  "modelContextWindow": 258400
+                }
+              }
+            }
+          ],
+          "quality": {
+            "status": "accepted",
+            "verdict": "accept",
+            "route": {
+              "status": "executable",
+              "reason": null,
+              "tier": "T1",
+              "transport": "native-codex",
+              "selection": {
+                "status": "selected",
+                "host": "codex",
+                "tier": "T1",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "requested": {
+                "host": "codex",
+                "model": "gpt-6-luna",
+                "effort": "low"
+              },
+              "result": "succeeded",
+              "started": true,
+              "native_receipt": {
+                "status": "succeeded",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": "gpt-6-luna",
+                "transmitted_effort": "low",
+                "observed_model": null,
+                "usage_events": [
+                  {
+                    "method": "thread/tokenUsage/updated",
+                    "params": {
+                      "threadId": "01a1e0c0-3707-7b03-bedb-a745975f451b",
+                      "turnId": "01a1e0c0-37c6-7ac2-909e-4858c31d2be9",
+                      "tokenUsage": {
+                        "total": {
+                          "totalTokens": 11240,
+                          "inputTokens": 11209,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 31,
+                          "reasoningOutputTokens": 0
+                        },
+                        "last": {
+                          "totalTokens": 11240,
+                          "inputTokens": 11209,
+                          "cachedInputTokens": 2048,
+                          "cacheWriteInputTokens": 0,
+                          "outputTokens": 31,
+                          "reasoningOutputTokens": 0
+                        },
+                        "modelContextWindow": 258400
+                      }
+                    }
+                  }
+                ],
+                "elapsed_seconds": 10.933,
+                "turn_id": "01a1e0c0-37c6-7ac2-909e-4858c31d2be9",
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+              }
+            },
+            "evidence": "Минимально необходимо измерить D30 retention февраля",
+            "method": "T1_labels_with_quote_not_calibrated_probability"
+          }
+        }
+      ]
+    },
+    "transport": "native-codex",
+    "plan": {
+      "status": "executable",
+      "reason": null,
+      "tier": "T1",
+      "transport": "native-codex",
+      "selection": {
+        "status": "selected",
+        "host": "codex",
+        "tier": "T1",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      },
+      "requested": {
+        "host": "codex",
+        "model": "gpt-6-luna",
+        "effort": "low"
+      }
+    }
+  },
+  "elapsed_seconds": 58.166236
+}

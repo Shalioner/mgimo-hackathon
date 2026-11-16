@@ -1,0 +1,65 @@
+{
+  "route": {
+    "status": "executable",
+    "reason": null,
+    "tier": "T1",
+    "transport": "native-codex",
+    "selection": {
+      "status": "selected",
+      "host": "codex",
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "requested": {
+      "host": "codex",
+      "model": "gpt-6-luna",
+      "effort": "low"
+    },
+    "purpose": "routing_classifier",
+    "result": "succeeded",
+    "started": true,
+    "native_receipt": {
+      "status": "succeeded",
+      "host": "codex",
+      "tier": "T1",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "transmitted_model": "gpt-6-luna",
+      "transmitted_effort": "low",
+      "observed_model": null,
+      "usage_events": [
+        {
+          "method": "thread/tokenUsage/updated",
+          "params": {
+            "threadId": "01a1e0da-bcc1-70c3-b3e0-1eca16425865",
+            "turnId": "01a1e0da-bf5c-7db3-bcb0-950d39121a8e",
+            "tokenUsage": {
+              "total": {
+                "totalTokens": 11417,
+                "inputTokens": 11330,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 87,
+                "reasoningOutputTokens": 0
+              },
+              "last": {
+                "totalTokens": 11417,
+                "inputTokens": 11330,
+                "cachedInputTokens": 7552,
+                "cacheWriteInputTokens": 0,
+                "outputTokens": 87,
+                "reasoningOutputTokens": 0
+              },
+              "modelContextWindow": 258400
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 8.204,
+      "turn_id": "01a1e0da-bf5c-7db3-bcb0-950d39121a8e",
+      "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items"
+    }
+  },
+  "text": "{\"answers\":{\"tier\":{\"choice\":\"T1\",\"sure\":true,\"quote\":\"Для P1–P4 укажи supported, unsupported или contradicted и ID основания.\"},\"effort\":{\"choice\":\"normal\",\"sure\":true,\"quote\":\"Значения выведи самостоятельно из материалов.\"},\"capability\":{\"choice\":\"text\",\"sure\":true,\"quote\":\"ROUTING SYNOPSIS (DATA):\"}}}"
+}
