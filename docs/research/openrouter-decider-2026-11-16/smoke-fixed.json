@@ -1,0 +1,114 @@
+{
+  "timestamp": "2026-11-16T08:55:29.077305+00:00",
+  "model": "perplexity/pplx-decider-v1.3:free",
+  "endpoint": "https://openrouter.ai/api/alpha/decisions",
+  "synthetic_only": true,
+  "executor_calls": 0,
+  "key_cap": {
+    "limit": 0,
+    "limit_remaining": 0,
+    "usage": 0,
+    "expires_at": "2026-11-17T08:50:00.003Z",
+    "is_free_tier": true
+  },
+  "wall_seconds": 0.641555625,
+  "code": 0,
+  "error": "",
+  "response": {
+    "model": "perplexity/pplx-decider-v1.3-20261112",
+    "answers": {
+      "billing": {
+        "type": "noul",
+        "noul": 0.9972063527715345
+      },
+      "team": {
+        "type": "choice",
+        "choice": "billing",
+        "probabilities": {
+          "billing": 0.9942264142501878,
+          "technical": 0.005773585749812254
+        },
+        "confidence": 0.9884528285003755
+      },
+      "urgency": {
+        "type": "score",
+        "score": 0.8204082505077094,
+        "legend": {
+          "0": "No issue",
+          "1": "Individual customer blocked",
+          "2": "Global outage"
+        },
+        "probabilities": {
+          "0": 0.18829182990046964,
+          "1": 0.8030080896913513,
+          "2": 0.008700080408179038
+        },
+        "confidence": 0.7045121345370269
+      }
+    },
+    "usage": {
+      "input_tokens": 135,
+      "output_tokens": 3,
+      "cost": 0,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0,
+        "upstream_inference_completions_cost": 0
+      }
+    },
+    "id": "gen-dec-1794819329-3L3AMwjOBSNmYWKDx7hK",
+    "provider": "Perplexity"
+  },
+  "receipt": {
+    "status": "executable",
+    "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+    "max_attempts": 1,
+    "max_attempts_scope": "wrapper_invocations",
+    "wrapper_invocations": 1,
+    "internal_transport_retries": "disabled",
+    "started": true,
+    "process_exit_code": null,
+    "requested": {
+      "host": "decision",
+      "provider": "openrouter",
+      "model": "perplexity/pplx-decider-v1.3:free",
+      "effort": null
+    },
+    "transmitted": {
+      "model": "perplexity/pplx-decider-v1.3:free",
+      "effort": null,
+      "provider": "Perplexity"
+    },
+    "observed": {
+      "provider": "Perplexity",
+      "model": "perplexity/pplx-decider-v1.3-20261112",
+      "effort": null
+    },
+    "billing": {
+      "mode": "api_opt_in",
+      "auth": "api_key",
+      "cap_verification": "operator_attestation_not_locally_verified",
+      "budget_usd": 0
+    },
+    "input_bytes": 564,
+    "endpoint": "https://openrouter.ai/api/alpha/decisions",
+    "policy_digest": "6ae84f17ef4dbbad6cc0e2527056451268b206e981870e2279d7263633f5da37",
+    "context": {
+      "input_byte_upper_bound": 564,
+      "capacity": 20928,
+      "model_limit": 262144,
+      "plan_limit": 32000,
+      "user_limit": 24000,
+      "output_reserve": 1024,
+      "system_reserve": 2048
+    },
+    "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+    "request_satisfaction": {
+      "model": true,
+      "effort": null
+    },
+    "integrity": "reported"
+  },
+  "status": "passed"
+}

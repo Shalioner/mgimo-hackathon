@@ -198,3 +198,34 @@ def test_code_only_gate_works_without_entitlement(tmp_path, monkeypatch):
     monkeypatch.setattr(P, "http_open", lambda *a: pytest.fail("network"))
     monkeypatch.setattr(D, "main", lambda *a: pytest.fail("LLM fallback"))
     assert DC.main(["--project", str(project), "--gate", str(art), "--no-emulate"]) == 0
+
+
+def test_openrouter_gateway_and_upstream_are_distinct():
+    r = request({}, provider="openrouter")
+    r["transmitted"] = {"model": "m", "effort": None, "provider": "Perplexity"}
+    assert P.observe(r, {"model": "m", "provider": "Perplexity"})
+    assert not P.observe(r, {"model": "m", "provider": "other"})
+    assert not P.observe(r, {"model": "other", "provider": "Perplexity"})
+
+
+def test_free_decider_requires_exact_grant_and_real_zero_cap():
+    endpoint = "https://openrouter.ai/api/alpha/decisions"
+    model = "perplexity/pplx-decider-v1.3:free"
+    cfg = {"execution_policy": api_policy("decision", "openrouter", endpoint, model)}
+    grant = cfg["execution_policy"]["api"]["grants"][0]
+    grant["budget_usd"] = grant["external_cap"]["amount_usd"] = 0
+    args = dict(host="decision", provider="openrouter", model=model, endpoint=endpoint)
+    r = request(cfg, **args)
+    assert r["status"] == "executable"
+    assert P.observe(r, {"usage": {"cost": 0}})
+    for usage in ({}, {"cost": 0.01}, {"cost": False}, {"cost": float("nan")}):
+        assert not P.observe(r, {"usage": usage})
+    for field, val in (("budget_usd", False), ("budget_usd", -1), ("external_cap", {})):
+        changed = copy.deepcopy(cfg)
+        changed["execution_policy"]["api"]["grants"][0][field] = val
+        assert request(changed, **args)["status"] != "executable"
+    for field, val in (("models", ["paid"]), ("provider", "other"), ("endpoint", "https://other.test")):
+        changed = copy.deepcopy(cfg)
+        changed["execution_policy"]["api"]["grants"][0][field] = val
+        overrides = {"model" if field == "models" else field: val[0] if field == "models" else val}
+        assert request(changed, **{**args, **overrides})["status"] != "executable"

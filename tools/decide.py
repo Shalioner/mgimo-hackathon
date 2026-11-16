@@ -163,6 +163,8 @@ def call(provider: dict, body: dict, timeout: int, cfg=None, receipt=None) -> Tu
                 receipt["transmitted"]["provider"] = provider["response_provider"]
         with P.http_open(req, timeout) as r:
             data = json.loads(r.read().decode("utf-8"))
+            if provider.get("protocol") == "openrouter-decisions" and not valid_openrouter_response(data, body["questions"]):
+                return 1, {}, "Invalid OpenRouter Decisions response; no fallback"
             return (0, data, "") if isinstance(data, dict) else (1, {}, "Invalid response object")
     except urllib.error.HTTPError as exc:
         return exc.code, {}, "HTTP error (details redacted); no fallback"
@@ -289,6 +291,44 @@ def valid_response(data, questions):
         for key in ("noul", "confidence", "score"):
             if key in a and (type(a[key]) not in {int, float} or not math.isfinite(a[key])):
                 return False
+    return True
+
+
+
+def valid_openrouter_response(data, questions, *, allow_refusal=True):
+    """Validate typed transport; functional smoke can require non-refused answers."""
+    if (not valid_response(data, questions) or not isinstance(data.get("provider"), str)
+            or not data["provider"] or not isinstance(data.get("model"), str) or not data["model"]
+            or set(data["answers"]) != set(questions)):
+        return False
+    def number(value, low, high):
+        return type(value) in {int, float} and math.isfinite(value) and low <= value <= high
+    for qid, question in questions.items():
+        answer = data["answers"][qid]
+        kind = question["type"]
+        if allow_refusal and answer.get("type") == "refusal":
+            continue
+        if answer.get("type") != kind:
+            return False
+        if "confidence" in answer and not number(answer["confidence"], 0, 1):
+            return False
+        if kind == "noul":
+            if not number(answer.get("noul"), 0, 1):
+                return False
+            continue
+        keys = set(question["criteria"]) if kind == "choice" else set(map(str, range(len(question["criteria"]))))
+        probabilities = answer.get("probabilities")
+        if (not isinstance(probabilities, dict) or set(probabilities) != keys
+                or not all(number(v, 0, 1) for v in probabilities.values())
+                or abs(sum(probabilities.values()) - 1) > 0.0001
+                or not number(answer.get("confidence"), 0, 1)):
+            return False
+        if kind == "choice":
+            choice = answer.get("choice")
+            if not isinstance(choice, str) or choice not in keys or probabilities[choice] != max(probabilities.values()):
+                return False
+        elif not number(answer.get("score"), 0, len(keys) - 1):
+            return False
     return True
 
 

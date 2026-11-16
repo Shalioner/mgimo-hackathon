@@ -283,11 +283,18 @@ def plan(cfg, *, host, provider, model, effort=None, tier="T1", endpoint=None,
         return stop("Нет разрешения для точного host/provider/endpoint/model")
     if not key_present:
         return stop("API требует отдельный ключ, но ключ сам не даёт разрешение")
-    if not positive_number(grant.get("budget_usd")):
+    zero_budget = (type(grant.get("budget_usd")) in {int, float}
+                   and grant["budget_usd"] == 0 and host == "decision"
+                   and provider == "openrouter"
+                   and endpoint == "https://openrouter.ai/api/alpha/decisions"
+                   and model == "perplexity/pplx-decider-v1.3:free")
+    if not positive_number(grant.get("budget_usd")) and not zero_budget:
         return stop("Нужен конечный положительный budget_usd")
     cap = grant.get("external_cap") or {}
     if (cap.get("confirmed_by_operator") is not True or not cap.get("evidence_ref")
-            or not positive_number(cap.get("amount_usd")) or cap["amount_usd"] > grant["budget_usd"]):
+            or not (positive_number(cap.get("amount_usd")) or
+                    (zero_budget and type(cap.get("amount_usd")) in {int, float} and cap["amount_usd"] == 0))
+            or cap["amount_usd"] > grant["budget_usd"]):
         return stop("Unknown enforcement: нужен отдельно установленный внешний лимит в пределах бюджета "
                     "и подтверждение оператора; локальная оценка не hard cap", "manual")
     bounds = grant.get("context") or {}
@@ -308,13 +315,30 @@ def observe(receipt, data):
     observed = {k: data.get(k) if isinstance(data.get(k), str) else None
                 for k in ("provider", "model", "effort")}
     receipt["observed"] = observed
-    contract = {**receipt["transmitted"], "provider": receipt["requested"].get("provider")}
+    contract = {"provider": receipt["requested"].get("provider"), **receipt["transmitted"]}
+    # Exact catalog identity, verified through OpenRouter /api/v1/models 2026-11-16.
+    # Do not strip suffixes or accept arbitrary version/prefix matches.
+    canonical_match = (receipt.get("endpoint") == "https://openrouter.ai/api/alpha/decisions"
+        and receipt["requested"].get("host") == "decision"
+        and receipt["requested"].get("provider") == "openrouter"
+        and contract.get("model") == "perplexity/pplx-decider-v1.3:free"
+        and observed["model"] == "perplexity/pplx-decider-v1.3-20261112")
+    if canonical_match:
+        contract["model"] = observed["model"]
+        receipt["model_identity_basis"] = "exact_openrouter_catalog_alias_2026-11-16"
     mismatch = [k for k, v in observed.items() if v is not None and
                 contract.get(k) is not None and v != contract[k]]
+    if receipt.get("billing", {}).get("budget_usd") == 0:
+        usage = data.get("usage")
+        cost = usage.get("cost") if isinstance(usage, dict) else None
+        if type(cost) not in {int, float} or cost != 0:
+            mismatch.append("cost")
     requested = receipt["requested"]
     receipt["request_satisfaction"] = {
         k: None if observed[k] is None or requested.get(k) is None else observed[k] == requested[k]
         for k in ("model", "effort")}
+    if canonical_match:
+        receipt["request_satisfaction"]["model"] = True
     receipt["integrity"] = "mismatch" if mismatch else "unconfirmed" if observed["model"] is None else "reported"
     return not mismatch
 

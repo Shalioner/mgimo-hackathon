@@ -1,0 +1,337 @@
+{
+  "synthetic_only": true,
+  "executor_calls": 0,
+  "key_cap": {
+    "limit": 0,
+    "limit_remaining": 0,
+    "usage": 0,
+    "expires_at": "2026-11-17T08:50:00.003Z",
+    "is_free_tier": true
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "wall_seconds": 0.6153411660000001,
+      "report": {
+        "route": {
+          "status": "executable",
+          "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 1,
+          "internal_transport_retries": "disabled",
+          "started": true,
+          "process_exit_code": null,
+          "requested": {
+            "host": "decision",
+            "provider": "openrouter",
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null
+          },
+          "transmitted": {
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null,
+            "provider": "Perplexity"
+          },
+          "observed": {
+            "provider": "Perplexity",
+            "model": "perplexity/pplx-decider-v1.3-20261112",
+            "effort": null
+          },
+          "billing": {
+            "mode": "api_opt_in",
+            "auth": "api_key",
+            "cap_verification": "operator_attestation_not_locally_verified",
+            "budget_usd": 0
+          },
+          "input_bytes": 1832,
+          "endpoint": "https://openrouter.ai/api/alpha/decisions",
+          "policy_digest": "6ae84f17ef4dbbad6cc0e2527056451268b206e981870e2279d7263633f5da37",
+          "context": {
+            "input_byte_upper_bound": 1832,
+            "capacity": 20928,
+            "model_limit": 262144,
+            "plan_limit": 32000,
+            "user_limit": 24000,
+            "output_reserve": 1024,
+            "system_reserve": 2048
+          },
+          "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+          "request_satisfaction": {
+            "model": true,
+            "effort": null
+          },
+          "integrity": "reported",
+          "result": "succeeded",
+          "exit_code": 0,
+          "transport_status_code": 0,
+          "inference_calls": null
+        },
+        "status": "accepted",
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "text"
+        }
+      }
+    },
+    {
+      "id": "Q06",
+      "wall_seconds": 0.696315834,
+      "report": {
+        "route": {
+          "status": "executable",
+          "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 1,
+          "internal_transport_retries": "disabled",
+          "started": true,
+          "process_exit_code": null,
+          "requested": {
+            "host": "decision",
+            "provider": "openrouter",
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null
+          },
+          "transmitted": {
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null,
+            "provider": "Perplexity"
+          },
+          "observed": {
+            "provider": "Perplexity",
+            "model": "perplexity/pplx-decider-v1.3-20261112",
+            "effort": null
+          },
+          "billing": {
+            "mode": "api_opt_in",
+            "auth": "api_key",
+            "cap_verification": "operator_attestation_not_locally_verified",
+            "budget_usd": 0
+          },
+          "input_bytes": 1923,
+          "endpoint": "https://openrouter.ai/api/alpha/decisions",
+          "policy_digest": "6ae84f17ef4dbbad6cc0e2527056451268b206e981870e2279d7263633f5da37",
+          "context": {
+            "input_byte_upper_bound": 1923,
+            "capacity": 20928,
+            "model_limit": 262144,
+            "plan_limit": 32000,
+            "user_limit": 24000,
+            "output_reserve": 1024,
+            "system_reserve": 2048
+          },
+          "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+          "request_satisfaction": {
+            "model": true,
+            "effort": null
+          },
+          "integrity": "reported",
+          "result": "succeeded",
+          "exit_code": 0,
+          "transport_status_code": 0,
+          "inference_calls": null
+        },
+        "status": "accepted",
+        "labels": {
+          "tier": "T1",
+          "effort": "normal",
+          "capability": "tools"
+        }
+      }
+    },
+    {
+      "id": "Q11",
+      "wall_seconds": 0.5510329999999999,
+      "report": {
+        "route": {
+          "status": "executable",
+          "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 1,
+          "internal_transport_retries": "disabled",
+          "started": true,
+          "process_exit_code": null,
+          "requested": {
+            "host": "decision",
+            "provider": "openrouter",
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null
+          },
+          "transmitted": {
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null,
+            "provider": "Perplexity"
+          },
+          "observed": {
+            "provider": "Perplexity",
+            "model": "perplexity/pplx-decider-v1.3-20261112",
+            "effort": null
+          },
+          "billing": {
+            "mode": "api_opt_in",
+            "auth": "api_key",
+            "cap_verification": "operator_attestation_not_locally_verified",
+            "budget_usd": 0
+          },
+          "input_bytes": 2168,
+          "endpoint": "https://openrouter.ai/api/alpha/decisions",
+          "policy_digest": "6ae84f17ef4dbbad6cc0e2527056451268b206e981870e2279d7263633f5da37",
+          "context": {
+            "input_byte_upper_bound": 2168,
+            "capacity": 20928,
+            "model_limit": 262144,
+            "plan_limit": 32000,
+            "user_limit": 24000,
+            "output_reserve": 1024,
+            "system_reserve": 2048
+          },
+          "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+          "request_satisfaction": {
+            "model": true,
+            "effort": null
+          },
+          "integrity": "reported",
+          "result": "succeeded",
+          "exit_code": 0,
+          "transport_status_code": 0,
+          "inference_calls": null
+        },
+        "status": "needs_review",
+        "labels": null,
+        "reason": "Unavailable, invalid or low-confidence classifier; no inferred default tier"
+      }
+    },
+    {
+      "id": "Q16",
+      "wall_seconds": 0.6320155000000001,
+      "report": {
+        "route": {
+          "status": "executable",
+          "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 1,
+          "internal_transport_retries": "disabled",
+          "started": true,
+          "process_exit_code": null,
+          "requested": {
+            "host": "decision",
+            "provider": "openrouter",
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null
+          },
+          "transmitted": {
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null,
+            "provider": "Perplexity"
+          },
+          "observed": {
+            "provider": "Perplexity",
+            "model": "perplexity/pplx-decider-v1.3-20261112",
+            "effort": null
+          },
+          "billing": {
+            "mode": "api_opt_in",
+            "auth": "api_key",
+            "cap_verification": "operator_attestation_not_locally_verified",
+            "budget_usd": 0
+          },
+          "input_bytes": 2285,
+          "endpoint": "https://openrouter.ai/api/alpha/decisions",
+          "policy_digest": "6ae84f17ef4dbbad6cc0e2527056451268b206e981870e2279d7263633f5da37",
+          "context": {
+            "input_byte_upper_bound": 2285,
+            "capacity": 20928,
+            "model_limit": 262144,
+            "plan_limit": 32000,
+            "user_limit": 24000,
+            "output_reserve": 1024,
+            "system_reserve": 2048
+          },
+          "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+          "request_satisfaction": {
+            "model": true,
+            "effort": null
+          },
+          "integrity": "reported",
+          "result": "succeeded",
+          "exit_code": 0,
+          "transport_status_code": 0,
+          "inference_calls": null
+        },
+        "status": "needs_review",
+        "labels": null,
+        "reason": "Unavailable, invalid or low-confidence classifier; no inferred default tier"
+      }
+    },
+    {
+      "id": "Q20",
+      "wall_seconds": 0.5679034170000001,
+      "report": {
+        "route": {
+          "status": "executable",
+          "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 1,
+          "internal_transport_retries": "disabled",
+          "started": true,
+          "process_exit_code": null,
+          "requested": {
+            "host": "decision",
+            "provider": "openrouter",
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null
+          },
+          "transmitted": {
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null,
+            "provider": "Perplexity"
+          },
+          "observed": {
+            "provider": "Perplexity",
+            "model": "perplexity/pplx-decider-v1.3-20261112",
+            "effort": null
+          },
+          "billing": {
+            "mode": "api_opt_in",
+            "auth": "api_key",
+            "cap_verification": "operator_attestation_not_locally_verified",
+            "budget_usd": 0
+          },
+          "input_bytes": 2579,
+          "endpoint": "https://openrouter.ai/api/alpha/decisions",
+          "policy_digest": "6ae84f17ef4dbbad6cc0e2527056451268b206e981870e2279d7263633f5da37",
+          "context": {
+            "input_byte_upper_bound": 2579,
+            "capacity": 20928,
+            "model_limit": 262144,
+            "plan_limit": 32000,
+            "user_limit": 24000,
+            "output_reserve": 1024,
+            "system_reserve": 2048
+          },
+          "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+          "request_satisfaction": {
+            "model": true,
+            "effort": null
+          },
+          "integrity": "reported",
+          "result": "succeeded",
+          "exit_code": 0,
+          "transport_status_code": 0,
+          "inference_calls": null
+        },
+        "status": "accepted",
+        "labels": {
+          "tier": "T3",
+          "effort": "deep",
+          "capability": "text"
+        }
+      }
+    }
+  ]
+}

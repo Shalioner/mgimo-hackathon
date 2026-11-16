@@ -145,7 +145,10 @@ MLX — конкретный runtime проверенной macOS-поставк
 | Другая decision-модель в native Claude/Codex hooks | Прямого переключателя пока нет: `host_routing.py` требует `local-d1`; нужен проверенный совместимый адаптер |
 | Обычная открытая LLM или модель другого протокола | Не прямая замена: нужен адаптер типизированных ответов и проверка вероятностей |
 
-Контракт provider-пути: `POST /systemone`, вход `model/state/questions`, ответ
+**API проверен отдельно:** [подключение бесплатного Perplexity Decider и результаты](docs/OPENROUTER_DECISION.md).
+
+Контракт provider-пути: `POST /systemone` по умолчанию; для OpenRouter — явный
+`protocol: openrouter-decisions` и `POST /api/alpha/decisions`. Вход `model/state/questions`, ответ
 с именованными `answers`. Для маршрутизации нужны допустимые `tier`/`effort`
 и confidence; обычный delegate также использует `capability`. OpenAI-compatible
 chat endpoint сам по себе не означает совместимости с System One.
