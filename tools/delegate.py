@@ -289,8 +289,10 @@ def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=Fal
     if error:
         return 3, "", error, ""
     # --restricted ignores user/project/local settings; managed layers are rejected
-    # by the profile boundary. Explicit settings disable hooks and require claude.ai.
-    settings = json.dumps({"forceLoginMethod": "claudeai", "disableAllHooks": True})
+    # by the profile boundary. Do not restrict the official client's login methods.
+    # This subscription-only adapter checks auth status and declines other modes;
+    # it never changes the user's login or silently bills an API key.
+    settings = json.dumps({"disableAllHooks": True})
     fixed = ["--restricted", "--settings", settings, "--disable-slash-commands",
              "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}', "--tools", "",
              "--disallowedTools", "*"]

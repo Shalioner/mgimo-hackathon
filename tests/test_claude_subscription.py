@@ -32,7 +32,7 @@ else:
     assert '-p' in args and '--restricted' in args
     assert args[args.index('--tools') + 1] == ''
     assert args[args.index('--disallowedTools') + 1] == '*'
-    assert json.loads(args[args.index('--settings') + 1]) == {'forceLoginMethod': 'claudeai', 'disableAllHooks': True}
+    assert json.loads(args[args.index('--settings') + 1]) == {'disableAllHooks': True}
     assert '--strict-mcp-config' in args and '--disable-slash-commands' in args
     assert json.loads(args[args.index('--mcp-config') + 1]) == {'mcpServers': {}}
     assert args[args.index('--effort') + 1] == 'low'

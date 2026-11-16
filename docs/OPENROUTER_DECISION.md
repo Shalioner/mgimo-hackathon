@@ -79,3 +79,5 @@
 [схема запроса](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request),
 [каталог моделей](https://openrouter.ai/api/v1/models?output_modalities=decisions),
 [страница модели](https://openrouter.ai/perplexity/pplx-decider-v1.3:free).
+
+Региональная доступность Claude и ограничения корпоративной поставки: [CLAUDE_ELIGIBILITY.md](CLAUDE_ELIGIBILITY.md). Вход и подписка сами по себе не подтверждают допустимость доступа.
