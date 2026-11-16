@@ -1,0 +1,438 @@
+[
+  {
+    "mode": "normal",
+    "seconds": 1.212253916,
+    "report": {
+      "status": "selected",
+      "host": "codex",
+      "classification": {
+        "route": {
+          "status": "executable",
+          "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+          "max_attempts": 1,
+          "max_attempts_scope": "wrapper_invocations",
+          "wrapper_invocations": 1,
+          "internal_transport_retries": "disabled",
+          "started": true,
+          "process_exit_code": null,
+          "requested": {
+            "host": "decision",
+            "provider": "openrouter",
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null
+          },
+          "transmitted": {
+            "model": "perplexity/pplx-decider-v1.3:free",
+            "effort": null,
+            "provider": "Perplexity"
+          },
+          "observed": {
+            "provider": "Perplexity",
+            "model": "perplexity/pplx-decider-v1.3-20261112",
+            "effort": null
+          },
+          "billing": {
+            "mode": "api_opt_in",
+            "auth": "api_key",
+            "cap_verification": "openrouter_key_api_zero_limit",
+            "budget_usd": 0
+          },
+          "input_bytes": 1733,
+          "endpoint": "https://openrouter.ai/api/alpha/decisions",
+          "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2",
+          "context": {
+            "input_byte_upper_bound": 1733,
+            "capacity": 20928,
+            "model_limit": 262144,
+            "plan_limit": 32000,
+            "user_limit": 24000,
+            "output_reserve": 1024,
+            "system_reserve": 2048
+          },
+          "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+          "request_satisfaction": {
+            "model": true,
+            "effort": null
+          },
+          "integrity": "reported",
+          "result": "succeeded",
+          "exit_code": 0,
+          "transport_status_code": 0,
+          "inference_calls": null
+        },
+        "status": "accepted",
+        "labels": {
+          "tier": "T1",
+          "effort": "normal"
+        },
+        "attempts": [
+          {
+            "classifier": "api",
+            "backend": "provider",
+            "status": "accepted",
+            "reason": null,
+            "route": {
+              "status": "executable",
+              "reason": "Явное API-разрешение; внешний cap подтверждён оператором, не измерен этим кодом",
+              "max_attempts": 1,
+              "max_attempts_scope": "wrapper_invocations",
+              "wrapper_invocations": 1,
+              "internal_transport_retries": "disabled",
+              "started": true,
+              "process_exit_code": null,
+              "requested": {
+                "host": "decision",
+                "provider": "openrouter",
+                "model": "perplexity/pplx-decider-v1.3:free",
+                "effort": null
+              },
+              "transmitted": {
+                "model": "perplexity/pplx-decider-v1.3:free",
+                "effort": null,
+                "provider": "Perplexity"
+              },
+              "observed": {
+                "provider": "Perplexity",
+                "model": "perplexity/pplx-decider-v1.3-20261112",
+                "effort": null
+              },
+              "billing": {
+                "mode": "api_opt_in",
+                "auth": "api_key",
+                "cap_verification": "openrouter_key_api_zero_limit",
+                "budget_usd": 0
+              },
+              "input_bytes": 1733,
+              "endpoint": "https://openrouter.ai/api/alpha/decisions",
+              "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2",
+              "context": {
+                "input_byte_upper_bound": 1733,
+                "capacity": 20928,
+                "model_limit": 262144,
+                "plan_limit": 32000,
+                "user_limit": 24000,
+                "output_reserve": 1024,
+                "system_reserve": 2048
+              },
+              "model_identity_basis": "exact_openrouter_catalog_alias_2026-11-16",
+              "request_satisfaction": {
+                "model": true,
+                "effort": null
+              },
+              "integrity": "reported",
+              "result": "succeeded",
+              "exit_code": 0,
+              "transport_status_code": 0,
+              "inference_calls": null
+            }
+          }
+        ],
+        "selected_classifier": "api"
+      },
+      "classifier": "cascade",
+      "question_scope": "native",
+      "execution": "host_owned",
+      "account_switch": false,
+      "tier": "T1",
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "reason": "Decision classifier selected native host request; host retains credentials, tools and permissions"
+    }
+  },
+  {
+    "mode": "api-unavailable",
+    "seconds": 12.380889125,
+    "report": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "status": "needs_review",
+        "labels": null,
+        "route": {
+          "result": "failed",
+          "started": false,
+          "purpose": "routing_classifier",
+          "transport": "native-subscription",
+          "requested": {
+            "host": "codex",
+            "effort": "low",
+            "model": "gpt-6-luna"
+          },
+          "native_receipt": {
+            "status": "failed",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": null,
+            "transmitted_effort": null,
+            "observed_model": null,
+            "usage_events": [],
+            "elapsed_seconds": 0.436,
+            "turn_id": null,
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+            "reason": "ValueError"
+          }
+        },
+        "method": "labels_with_quotes_not_calibrated_probabilities",
+        "reason": "All classifiers unavailable or uncertain; no default route or paid fallback",
+        "attempts": [
+          {
+            "classifier": "api",
+            "backend": "provider",
+            "status": "unavailable",
+            "reason": "[Errno 2] No such file or directory: '/tmp/strategist-intentionally-missing-key'",
+            "route": {
+              "status": "denied",
+              "reason": "[Errno 2] No such file or directory: '/tmp/strategist-intentionally-missing-key'",
+              "max_attempts": 1,
+              "max_attempts_scope": "wrapper_invocations",
+              "wrapper_invocations": 0,
+              "internal_transport_retries": "disabled",
+              "started": false,
+              "process_exit_code": null,
+              "requested": {
+                "host": "decision",
+                "provider": "openrouter",
+                "model": "perplexity/pplx-decider-v1.3:free",
+                "effort": null
+              },
+              "transmitted": {
+                "model": null,
+                "effort": null
+              },
+              "observed": {
+                "provider": null,
+                "model": null,
+                "effort": null
+              },
+              "billing": {
+                "mode": "api_opt_in",
+                "auth": null,
+                "cap_verification": "unknown"
+              },
+              "input_bytes": 1669,
+              "endpoint": null,
+              "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2"
+            }
+          },
+          {
+            "classifier": "local-decision",
+            "backend": "local-d1",
+            "status": "needs_review",
+            "reason": null,
+            "route": {
+              "status": "executable",
+              "reason": "Critical system memory pressure",
+              "started": true,
+              "wrapper_invocations": 1,
+              "result": "blocked",
+              "fallback": false,
+              "requested": {
+                "host": "local",
+                "provider": "local-d1",
+                "model": "LiquidAI/d1-2B-MLX-8bit",
+                "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                "effort": null
+              },
+              "transmitted": {
+                "host": "local",
+                "provider": "local-d1",
+                "model": "LiquidAI/d1-2B-MLX-8bit",
+                "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                "effort": null
+              },
+              "observed": null,
+              "network": "denied",
+              "transport": "unix-service",
+              "socket": "/Users/shalioner/.cache/strategist/d1-service/service.sock",
+              "input_bytes": 275,
+              "reuse": true,
+              "timeout_seconds": 30,
+              "request_id": "8b36e56ec68940de8594ef84e86476f7"
+            }
+          },
+          {
+            "classifier": "subscription",
+            "backend": "bootstrap",
+            "status": "needs_review",
+            "reason": "Subscription classifier unavailable or configuration changed",
+            "route": {
+              "result": "failed",
+              "started": false,
+              "purpose": "routing_classifier",
+              "transport": "native-subscription",
+              "requested": {
+                "host": "codex",
+                "effort": "low",
+                "model": "gpt-6-luna"
+              },
+              "native_receipt": {
+                "status": "failed",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": null,
+                "transmitted_effort": null,
+                "observed_model": null,
+                "usage_events": [],
+                "elapsed_seconds": 0.436,
+                "turn_id": null,
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+                "reason": "ValueError"
+              }
+            }
+          }
+        ],
+        "selected_classifier": null
+      },
+      "classifier": "cascade",
+      "question_scope": "native",
+      "execution": "host_owned",
+      "account_switch": false
+    }
+  },
+  {
+    "mode": "api-and-local-unavailable",
+    "seconds": 0.2869020839999994,
+    "report": {
+      "status": "needs_review",
+      "host": "codex",
+      "classification": {
+        "status": "needs_review",
+        "labels": null,
+        "route": {
+          "result": "failed",
+          "started": false,
+          "purpose": "routing_classifier",
+          "transport": "native-subscription",
+          "requested": {
+            "host": "codex",
+            "effort": "low",
+            "model": "gpt-6-luna"
+          },
+          "native_receipt": {
+            "status": "failed",
+            "host": "codex",
+            "tier": "T1",
+            "requested_model": "gpt-6-luna",
+            "requested_effort": "low",
+            "transmitted_model": null,
+            "transmitted_effort": null,
+            "observed_model": null,
+            "usage_events": [],
+            "elapsed_seconds": 0.219,
+            "turn_id": null,
+            "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+            "reason": "ValueError"
+          }
+        },
+        "method": "labels_with_quotes_not_calibrated_probabilities",
+        "reason": "All classifiers unavailable or uncertain; no default route or paid fallback",
+        "attempts": [
+          {
+            "classifier": "api",
+            "backend": "provider",
+            "status": "unavailable",
+            "reason": "[Errno 2] No such file or directory: '/tmp/strategist-intentionally-missing-key'",
+            "route": {
+              "status": "denied",
+              "reason": "[Errno 2] No such file or directory: '/tmp/strategist-intentionally-missing-key'",
+              "max_attempts": 1,
+              "max_attempts_scope": "wrapper_invocations",
+              "wrapper_invocations": 0,
+              "internal_transport_retries": "disabled",
+              "started": false,
+              "process_exit_code": null,
+              "requested": {
+                "host": "decision",
+                "provider": "openrouter",
+                "model": "perplexity/pplx-decider-v1.3:free",
+                "effort": null
+              },
+              "transmitted": {
+                "model": null,
+                "effort": null
+              },
+              "observed": {
+                "provider": null,
+                "model": null,
+                "effort": null
+              },
+              "billing": {
+                "mode": "api_opt_in",
+                "auth": null,
+                "cap_verification": "unknown"
+              },
+              "input_bytes": 1669,
+              "endpoint": null,
+              "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2"
+            }
+          },
+          {
+            "classifier": "local-decision",
+            "backend": "local-d1",
+            "status": "unavailable",
+            "reason": null,
+            "route": {
+              "status": "manual",
+              "reason": "[Errno 2] No such file or directory: '/tmp/strategist-intentionally-missing.sock'",
+              "started": false,
+              "wrapper_invocations": 0,
+              "result": "not_started",
+              "fallback": false,
+              "requested": {
+                "host": "local",
+                "provider": "local-d1",
+                "model": "LiquidAI/d1-2B-MLX-8bit",
+                "revision": "3247d0483b11e5da31fa10e7979c23252fbe3580",
+                "effort": null
+              },
+              "transmitted": null,
+              "observed": null,
+              "network": "denied"
+            }
+          },
+          {
+            "classifier": "subscription",
+            "backend": "bootstrap",
+            "status": "needs_review",
+            "reason": "Subscription classifier unavailable or configuration changed",
+            "route": {
+              "result": "failed",
+              "started": false,
+              "purpose": "routing_classifier",
+              "transport": "native-subscription",
+              "requested": {
+                "host": "codex",
+                "effort": "low",
+                "model": "gpt-6-luna"
+              },
+              "native_receipt": {
+                "status": "failed",
+                "host": "codex",
+                "tier": "T1",
+                "requested_model": "gpt-6-luna",
+                "requested_effort": "low",
+                "transmitted_model": null,
+                "transmitted_effort": null,
+                "observed_model": null,
+                "usage_events": [],
+                "elapsed_seconds": 0.219,
+                "turn_id": null,
+                "tools_policy": "disabled_tools_read_only_reject_requests_abort_tool_items",
+                "reason": "ValueError"
+              }
+            }
+          }
+        ],
+        "selected_classifier": null
+      },
+      "classifier": "cascade",
+      "question_scope": "native",
+      "execution": "host_owned",
+      "account_switch": false
+    }
+  }
+]

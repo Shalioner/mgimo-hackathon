@@ -1,0 +1,26 @@
+{
+  "seconds": 1.807344125,
+  "event": {
+    "hook_event_name": "PreToolUse",
+    "tool_name": "spawn_agent",
+    "tool_input": {
+      "task_name": "synthetic-routing-smoke",
+      "fork_turns": "none",
+      "message": "Из выписки выпиши только дату и число договоров. Выписка: отчёт от 12 октября, активных договоров 43. Не делай выводов."
+    }
+  },
+  "output": {
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "updatedInput": {
+        "task_name": "synthetic-routing-smoke",
+        "fork_turns": "none",
+        "message": "Из выписки выпиши только дату и число договоров. Выписка: отчёт от 12 октября, активных договоров 43. Не делай выводов.",
+        "model": "gpt-6-luna",
+        "reasoning_effort": "low"
+      },
+      "additionalContext": "Стратег: для этого субагента выбран gpt-6-luna, effort low."
+    }
+  },
+  "actual_agent_spawned": false
+}

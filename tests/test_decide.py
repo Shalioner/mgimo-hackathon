@@ -310,7 +310,7 @@ def test_openrouter_wire_contract(openrouter_setup, monkeypatch):
 
     def http(request, timeout):
         got.append(request)
-        assert timeout == 17
+        assert 0 < timeout <= 17
         return Response()
 
     monkeypatch.setattr(DC.P, "http_open", http)

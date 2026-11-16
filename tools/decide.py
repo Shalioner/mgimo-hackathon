@@ -29,6 +29,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import stat
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -128,17 +129,36 @@ def decision_body(provider, body):
     return {**body, "provider": {"only": [provider["provider_slug"]], "allow_fallbacks": False}}
 
 
+def provider_key(provider):
+    """Explicit private file supports native hooks without exporting a shell secret."""
+    path = provider.get("api_key_file")
+    if path:
+        path = Path(path).expanduser()
+        info = path.lstat()
+        if (not path.is_absolute() or not stat.S_ISREG(info.st_mode)
+                or info.st_mode & 0o077 or info.st_uid != os.getuid()):
+            raise ValueError("API key file must be an owner-only regular absolute file")
+        key = path.read_text().strip()
+    else:
+        key = os.environ.get(provider.get("api_key_env") or "", "")
+    if len(key) > 4096 or any(c.isspace() for c in key):
+        raise ValueError("Invalid API key format")
+    return key
+
+
 def decision_plan(cfg, provider, body):
     error = None
     try:
         endpoint = decision_endpoint(provider)
         payload = decision_body(provider, body)
-    except ValueError as exc:
+        key_present = bool(provider_key(provider))
+    except (ValueError, OSError) as exc:
         endpoint, payload, error = None, body, str(exc)
+        key_present = False
     result = P.plan(cfg, host="decision", provider=provider.get("name"), model=body.get("model"),
                     endpoint=endpoint,
                     input_bytes=len(json.dumps(payload, ensure_ascii=False).encode("utf-8")),
-                    key_present=bool(os.environ.get(provider.get("api_key_env") or "")))
+                    key_present=key_present)
     if error:
         result.update(status="denied", reason=error)
     return result
@@ -152,16 +172,34 @@ def call(provider: dict, body: dict, timeout: int, cfg=None, receipt=None) -> Tu
     req = urllib.request.Request(decision_endpoint(provider),
                                  data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
                                  headers={"Content-Type": "application/json"})
-    key = os.environ.get(provider.get("api_key_env") or "", "")
+    try:
+        key = provider_key(provider)
+    except (ValueError, OSError):
+        return 3, {}, "API key unavailable; no fallback"
     if key:
         req.add_header("Authorization", f"Bearer {key}")
+    deadline = time.monotonic() + timeout
     try:
+        if checked.get("billing", {}).get("budget_usd") == 0:
+            cap_request = urllib.request.Request("https://openrouter.ai/api/v1/key",
+                headers={"Authorization": "Bearer " + key})
+            with P.http_open(cap_request, timeout) as response:
+                cap_response = json.load(response)
+                cap = cap_response.get("data", {}) if isinstance(cap_response, dict) else {}
+            if (not isinstance(cap, dict) or type(cap.get("limit")) not in {int, float}
+                    or cap["limit"] != 0 or cap.get("is_free_tier") is not True):
+                return 3, {}, "Zero-dollar free-tier key cap not confirmed; no inference"
+            if receipt is not None:
+                receipt["billing"]["cap_verification"] = "openrouter_key_api_zero_limit"
         if receipt is not None:
             receipt.update(started=True, wrapper_invocations=1)
             receipt["transmitted"] = {"model": body["model"], "effort": None}
             if provider.get("protocol") == "openrouter-decisions":
                 receipt["transmitted"]["provider"] = provider["response_provider"]
-        with P.http_open(req, timeout) as r:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return 1, {}, "Decision request deadline exceeded; no fallback"
+        with P.http_open(req, remaining) as r:
             data = json.loads(r.read().decode("utf-8"))
             if provider.get("protocol") == "openrouter-decisions" and not valid_openrouter_response(data, body["questions"]):
                 return 1, {}, "Invalid OpenRouter Decisions response; no fallback"

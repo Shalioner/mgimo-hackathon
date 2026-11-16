@@ -66,14 +66,18 @@ def diagnose(host, *, root=L.ROOT, cfg=None):
         mechanism = 'Claude Code: автоматическая маршрутизация через мод turn.start/turn.step.'
         limitation = 'Регистрация мода не доказывает его загрузку; нужен пробный запрос в вашей сессии Claude.'
     elif host in {'codex', 'codex-app', 'orca'}:
-        mechanism = 'Codex: D1 выбирает маршрут; hooks применяют модель субагента, app-server адаптер — основную модель.'
+        mechanism = 'Codex: классификатор выбирает маршрут; hooks применяют модель субагента, app-server адаптер — основную модель.'
         limitation = 'Основная модель обычного Codex/Orca chat через prompt-hook не переключается. Для Codex проверьте доверие hooks (Review hooks / Settings → Hooks в приложении).'
     else:
         mechanism = 'Автороутинг в этой среде не проверен.'
         limitation = 'Нужна проверка возможностей среды и настройка адаптера; наличие CLI рядом не подтверждает работу IDE.'
     state = 'configured_not_verified' if registered and native_host in enabled else 'needs_setup' if host in files else 'unverified'
     classifier = routing.get('classifier')
-    if classifier == 'local-d1':
+    if classifier == 'cascade':
+        decision = ('Выбран каскад API → локальная decision-модель → подписочный T1/low. '
+                    'Нужны API opt-in/grant, локальный адаптер и авторизованный подписочный резерв; '
+                    'этот осмотр не запускает и не подтверждает доступность трёх уровней.')
+    elif classifier == 'local-d1':
         decision = 'Выбран локальный D1; доступность сервиса и качество ответов этим осмотром не проверены.'
     elif classifier == 'provider' and routing.get('decision_provider'):
         decision = 'Выбран System One API-провайдер; разрешения, доступность и совместимость требуют проверки.'

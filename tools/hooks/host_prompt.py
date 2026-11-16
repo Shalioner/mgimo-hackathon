@@ -37,7 +37,7 @@ def handle(payload, decide=None):
                    '. Выбранная модель не запускалась; не заявляй автоматическое переключение.')
     else:
         route = json.dumps({k: result.get(k) for k in ('tier', 'model', 'effort')}, ensure_ascii=False)
-        message = ('D1 автоматически выбрала маршрут подзадачи: ' + route + '. '
+        message = ('Классификатор автоматически выбрал маршрут подзадачи: ' + route + '. '
                    'Этот hook не меняет основную модель Codex. Для исполнения передай самостоятельное задание '
                    'новому spawn_agent с указанными model и reasoning_effort, fork_turns="none"; '
                    'дай ему нужные данные, не весь диалог. Перед запуском native PreToolUse повторно проверит маршрут. '

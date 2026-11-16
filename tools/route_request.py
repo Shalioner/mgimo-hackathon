@@ -6,6 +6,7 @@ import argparse
 import copy
 import json
 import math
+import time
 from pathlib import Path
 
 import decide as C
@@ -77,6 +78,53 @@ def classified(data, qs, threshold):
     return result
 
 
+def _cascade(request, context, cfg, *, execute, load_config, timeout, question_scope):
+    """Explicit ordered classifier failover; never changes task executor/account."""
+    attempts = []
+    deadline = time.monotonic() + timeout
+    for stage in ("provider", "local-d1", "bootstrap"):
+        def stage_config():
+            fresh = load_config()
+            if fresh != cfg:
+                raise ValueError("Classifier cascade configuration changed")
+            staged = copy.deepcopy(fresh)
+            options = staged["automatic_routing"]
+            options["classifier"] = stage
+            if stage != "provider":
+                options.pop("decision_provider", None)
+            # API grants authorize only the first leg. Subscription never inherits
+            # api_opt_in and cannot fall back to pay-as-you-go auth.
+            if stage != "provider":
+                staged.setdefault("execution_policy", {})["mode"] = "subscription_only"
+            return staged
+        remaining = int(deadline - time.monotonic())
+        if remaining < 1:
+            return {"status": "unavailable", "reason": "Classifier cascade deadline exceeded", "attempts": attempts}
+        try:
+            # Bound unavailable remote service so local/subscription retain time.
+            stage_timeout = min(remaining, 12 if stage == "provider" else 30 if stage == "local-d1" else remaining)
+            staged = stage_config()
+            native = (staged.get('automatic_routing') or {}).get('subscription_classifier') or {}
+            native_host = staged['automatic_routing'].get('bootstrap_host', 'codex')
+            if stage == 'bootstrap' and native.get('enabled') is True and native_host == 'codex' and execute:
+                import subscription_classifier as S
+                result = S.classify(request, context, cfg=staged, load_config=stage_config,
+                    timeout=stage_timeout, question_scope=question_scope, host=native_host,
+                    binary=native.get('codex_binary'))
+            else:
+                result = classify_request(request, context, execute=execute, load_config=stage_config,
+                                          timeout=stage_timeout, question_scope=question_scope)
+        except (ValueError, OSError, TypeError, KeyError):
+            return {"status": "unavailable", "reason": "Cascade configuration or adapter failure", "attempts": attempts}
+        stage_name = {"provider": "api", "local-d1": "local-decision", "bootstrap": "subscription"}[stage]
+        attempts.append({"classifier": stage_name, "backend": stage, "status": result.get("status"),
+                         "reason": result.get("reason"), "route": result.get("route")})
+        if not execute or result.get("status") == "accepted":
+            return {**result, "attempts": attempts, "selected_classifier": stage_name if execute else None}
+    return {**result, "attempts": attempts, "selected_classifier": None,
+            "reason": "All classifiers unavailable or uncertain; no default route or paid fallback"}
+
+
 def classify_request(request, context="", *, execute=False, load_config=L.load_routing, timeout=600,
                      question_scope='all'):
     """Classify only. No task execution; pending preflight never performs inference."""
@@ -94,6 +142,9 @@ def classify_request(request, context="", *, execute=False, load_config=L.load_r
     if not isinstance(options, dict):
         return {"status": "unavailable", "reason": "Invalid automatic_routing configuration"}
     classifier = options.get("classifier", "provider" if options.get("decision_provider") else "bootstrap")
+    if classifier == "cascade":
+        return _cascade(request, context, cfg, execute=execute, load_config=load_config,
+                        timeout=timeout, question_scope=question_scope)
     if classifier == "local-d1":
         if options.get("decision_provider"):
             return {"status": "unavailable", "reason": "Choose local-d1 or decision_provider, not both"}

@@ -27,7 +27,7 @@
           {
             "type": "command",
             "command": ".venv/bin/python tools/hooks/host_prompt.py # strategist-host-routing:v1:host_prompt.py",
-            "timeout": 45
+            "timeout": 130
           }
         ]
       }
@@ -49,7 +49,7 @@
           {
             "type": "command",
             "command": ".venv/bin/python tools/hooks/codex_routing.py # strategist-host-routing:v1:codex_routing.py",
-            "timeout": 45
+            "timeout": 130
           }
         ],
         "matcher": "spawn_agent|collaborationspawn_agent|collaboration.spawn_agent|mcp__collaboration__spawn_agent"

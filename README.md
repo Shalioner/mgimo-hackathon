@@ -145,6 +145,8 @@ MLX — конкретный runtime проверенной macOS-поставк
 | Другая decision-модель в native Claude/Codex hooks | Прямого переключателя пока нет: `host_routing.py` требует `local-d1`; нужен проверенный совместимый адаптер |
 | Обычная открытая LLM или модель другого протокола | Не прямая замена: нужен адаптер типизированных ответов и проверка вероятностей |
 
+**Автоматический каскад:** [API → локальная decision-модель → подписочный Luna/Haiku low](docs/CLASSIFIER_CASCADE.md).
+
 **API проверен отдельно:** [подключение бесплатного Perplexity Decider и результаты](docs/OPENROUTER_DECISION.md).
 
 Контракт provider-пути: `POST /systemone` по умолчанию; для OpenRouter — явный

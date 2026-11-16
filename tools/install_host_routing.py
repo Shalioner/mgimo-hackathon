@@ -47,7 +47,7 @@ def merged_hooks(current, root):
     hooks = result.setdefault('hooks', {})
     for event, script, matcher in HOOKS:
         command = hook_command(root, script) + ' # ' + MARKER + ':' + script
-        entry = {'hooks': [{'type': 'command', 'command': command, 'timeout': 45}]}
+        entry = {'hooks': [{'type': 'command', 'command': command, 'timeout': 130}]}
         if matcher:
             entry['matcher'] = matcher
         rows = hooks.setdefault(event, [])

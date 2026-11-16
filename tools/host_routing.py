@@ -61,6 +61,9 @@ def decide(payload, *, execute=False, load_config=L.load_routing):
         fresh = load_config()
         if fresh != cfg:
             raise ConfigurationChanged()
+        if classifier == 'cascade':
+            fresh = copy.deepcopy(fresh)
+            fresh['automatic_routing']['bootstrap_host'] = 'claude' if host == 'claude-code' else 'codex'
         return fresh
 
     try:

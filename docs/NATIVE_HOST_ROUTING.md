@@ -12,11 +12,11 @@ Project hooks требуют доверия точному хэшу после �
 
 | Хост / вход | Автоматический выбор | Где применяется модель | Приёмка |
 |---|---|---|---|
-| Codex, обычная сессия проекта | `UserPromptSubmit` → локальный D1 | Hook даёт агенту маршрут для делегирования; `PreToolUse` реально переписывает model/effort нового native spawn | Схема и offline hook tests; выполнение агентом инструкции не гарантируется кодом |
+| Codex, обычная сессия проекта | `UserPromptSubmit` → настроенный классификатор | Hook даёт агенту маршрут для делегирования; `PreToolUse` реально переписывает model/effort нового native spawn | Схема и offline hook tests; выполнение агентом инструкции не гарантируется кодом |
 | Orca с Codex в этом проекте | Те же нативные Codex hooks | Новый самостоятельный subagent; основная модель Orca chat этим hook не меняется | Проектная конфигурация установлена; следующий prompt/new session нужен для host adoption |
-| Codex app-server через `codex_routed.py` | Каждый `turn/start` → D1 | Реальная замена `model` и `effort`, включая `collaborationMode.settings` | Живой запрос завершился, выбранные параметры Luna/low переданы серверу |
-| Claude Code, мод проекта | `turn.start` → D1 один раз на ход | `turn.step` передаёт host-у новый model/effort | Native validator success, Node contract tests; native runtime test заблокирован sandbox |
-| Claude general-purpose subagent | `agent.spawn` → D1 | Модель при spawn; effort через проверенный agentId на step | Contract tests; initial engine ordering живьём не подтверждён, T4 spawn запрещён |
+| Codex app-server через `codex_routed.py` | Каждый `turn/start` → настроенный классификатор | Реальная замена `model` и `effort`, включая `collaborationMode.settings` | Живой запрос завершился, выбранные параметры Luna/low переданы серверу |
+| Claude Code, мод проекта | `turn.start` → настроенный классификатор один раз на ход | `turn.step` передаёт host-у новый model/effort | Native validator success, Node contract tests; native runtime test заблокирован sandbox |
+| Claude general-purpose subagent | `agent.spawn` → настроенный классификатор | Модель при spawn; effort через проверенный agentId на step | Contract tests; initial engine ordering живьём не подтверждён, T4 spawn запрещён |
 
 Основной чат Orca не подключён к middleware: в изученной версии 1.4.256 не найден
 поддерживаемый пользовательский hook, позволяющий подменить его `turn/start`.
@@ -49,10 +49,12 @@ effort=.986, capability=.592: лишний capability gate остановил з
 tool-loop запросы одного Codex turn отдельно не считаются — это не денежный лимит.
 Claude T4 subagent блокируется до доказанной квоты первого запроса.
 
-Автоматический native путь сейчас допускает только локальный D1; endpoint/account
-не меняет. System One API-провайдеры остаются у явного `route_request`/`tool_router`
-и проходят существующие API grants. Native session использует свои permissions,
-tools и credentials; isolated `delegate.py` profile этим не включается и не обходится.
+С 16.11.2026 native путь поддерживает явный каскад
+**API → локальная decision-модель → подписочный T1/low**:
+[конфигурация и результаты](CLASSIFIER_CASCADE.md). API требует отдельного opt-in,
+точного grant и закрытого ключа. Native session сохраняет собственные permissions,
+tools и credentials. Изолированные профили `delegate.py` этим не включаются;
+для Codex есть отдельный text-only native transport с проверкой ChatGPT auth.
 Неуверенный Codex middleware возвращает JSON-RPC ошибку до `turn/start`, без fallback.
 Нативные prompt/Claude hooks сохраняют текущий маршрут с сообщением при отсутствии
 уверенного выбора. Это видимый отказ автоматизации, не подтверждённое переключение.
