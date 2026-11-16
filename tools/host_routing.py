@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Host-native request selection: no executor, credentials, endpoint or permissions.
+"""Host-native request selection: classifier only; host owns task execution.
 
 Adapters apply model/effort to an already-authorized request in the SAME host.
 This does not enable the separate isolated delegate.py subscription transport.
@@ -44,17 +44,30 @@ def decide(payload, *, execute=False, load_config=L.load_routing):
         return {'status': 'disabled', 'reason': 'Native host routing not enabled for this project/host'}
     if len((request + context).encode('utf-8')) > 24000:
         return {'status': 'needs_review', 'reason': 'Routing synopsis exceeds 24000 bytes; no hidden truncation'}
-    # Native hooks never silently send user input to a newly configured API.
-    if (cfg.get('automatic_routing') or {}).get('classifier') != 'local-d1':
-        return {'status': 'unavailable', 'reason': 'Native automatic routing currently requires local-d1'}
+    # Configuring a provider alone is not consent to send native host input.
+    classifier = (cfg.get('automatic_routing') or {}).get('classifier')
+    if classifier != 'local-d1' and not (classifier in {'provider', 'cascade'} and settings.get('api_classifier_opt_in') is True):
+        return {'status': 'unavailable', 'reason': 'Native API classification requires explicit api_classifier_opt_in'}
     timeout = settings.get('timeout_seconds', 120)
     if type(timeout) is not int or not 1 <= timeout <= 240:
         return {'status': 'unavailable', 'reason': 'Invalid host routing timeout'}
     compact = settings.get('compact_questions', True)
     if type(compact) is not bool:
         return {'status': 'unavailable', 'reason': 'compact_questions must be boolean'}
-    result = R.classify_request(request, context, execute=execute, load_config=load_config, timeout=timeout,
-                                question_scope='native' if compact else 'all')
+    class ConfigurationChanged(ValueError):
+        pass
+
+    def checked_config():
+        fresh = load_config()
+        if fresh != cfg:
+            raise ConfigurationChanged()
+        return fresh
+
+    try:
+        result = R.classify_request(request, context, execute=execute, load_config=checked_config, timeout=timeout,
+                                    question_scope='native' if compact else 'all')
+    except ConfigurationChanged:
+        return {'status': 'unavailable', 'reason': 'Configuration changed before classification'}
     # Native hosts retain their tools. The text-only delegate's capability gate
     # must not veto a confident model/effort selection here. Keep the raw receipt
     # and unchanged .75 thresholds; never accept a failed/invalid transport.
@@ -65,7 +78,7 @@ def decide(payload, *, execute=False, load_config=L.load_routing):
         if native_labels:
             result = {**result, 'status': 'accepted', 'labels': native_labels,
                       'capability_gate': 'not_applicable_native_host_retains_tools'}
-    report = {'status': result['status'], 'host': host, 'classification': result,
+    report = {'status': result['status'], 'host': host, 'classification': result, 'classifier': classifier,
               'question_scope': 'native' if compact else 'all',
               'execution': 'host_owned', 'account_switch': False}
     if result['status'] != 'accepted':
@@ -88,7 +101,7 @@ def decide(payload, *, execute=False, load_config=L.load_routing):
         if not A.t4_available(cfg):
             return {**report, 'status': 'needs_review', 'reason': 'T4 standing approval/quota unavailable'}
     return {**report, 'status': 'selected', 'tier': tier, 'model': model, 'effort': effort,
-            'reason': 'D1 selected native host request; host retains credentials, tools and permissions'}
+            'reason': 'Decision classifier selected native host request; host retains credentials, tools and permissions'}
 
 
 def authorize(selection, *, load_config=L.load_routing):
@@ -105,6 +118,12 @@ def authorize(selection, *, load_config=L.load_routing):
     if not isinstance(selection, dict) or not options:
         return denied
     host = selection.get('host')
+    classifier = selection.get('classifier')
+    if classifier is not None:
+        if classifier != (cfg.get('automatic_routing') or {}).get('classifier'):
+            return denied
+        if classifier in {'provider', 'cascade'} and options.get('api_classifier_opt_in') is not True:
+            return denied
     tier, model, effort = (selection.get(k) for k in ('tier', 'model', 'effort'))
     if not isinstance(host, str) or not isinstance(tier, str) or host not in FAMILIES or host not in options['enabled_hosts'] or tier not in R.TASKS:
         return denied
@@ -124,7 +143,7 @@ def authorize(selection, *, load_config=L.load_routing):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--execute', action='store_true', help='Local decision only; host executes its own request')
+    parser.add_argument('--execute', action='store_true', help='Configured decision classifier only; host executes its own request')
     parser.add_argument('--authorize', action='store_true', help='Recheck selection before each host model request')
     args = parser.parse_args(argv)
     try:

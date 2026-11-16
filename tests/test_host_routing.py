@@ -171,3 +171,68 @@ def test_acknowledgement_with_material_is_not_silently_skipped(prompt_hook, fiel
     prompt_hook.handle({'hook_event_name': 'UserPromptSubmit', 'prompt': 'спасибо', field: ['material']},
                        decide=lambda *a, **k: calls.append(a) or {'status': 'needs_review'})
     assert len(calls) == 1
+
+
+@pytest.mark.parametrize('opt_in', [None, False, 'true', 1])
+def test_native_api_requires_boolean_opt_in(cfg, monkeypatch, opt_in):
+    cfg['automatic_routing']['classifier'] = 'provider'
+    cfg['automatic_routing']['decision_provider'] = 'openrouter'
+    cfg['automatic_routing']['host_routing']['api_classifier_opt_in'] = opt_in
+    monkeypatch.setattr(H.R, 'classify_request', lambda *a, **k: pytest.fail('no inference'))
+    assert H.decide({'host': 'codex', 'request': 'task'}, execute=True, load_config=lambda: cfg)['status'] == 'unavailable'
+
+
+@pytest.mark.parametrize('host', H.FAMILIES)
+@pytest.mark.parametrize('classifier_name', ['provider', 'cascade'])
+def test_native_api_selects_and_revocation_blocks_authorization(cfg, monkeypatch, host, classifier_name):
+    cfg['automatic_routing'].update(classifier=classifier_name, decision_provider='openrouter')
+    cfg['automatic_routing']['host_routing']['api_classifier_opt_in'] = True
+    seen = []
+    def classify(*a, **kwargs):
+        seen.append((kwargs['execute'], kwargs['question_scope']))
+        return classifier('T1')()
+    monkeypatch.setattr(H.R, 'classify_request', classify)
+    result = H.decide({'host': host, 'request': 'task'}, execute=True, load_config=lambda: cfg)
+    assert result['status'] == 'selected' and result['classifier'] == classifier_name
+    assert seen == [(True, 'native')]
+    assert H.authorize(result, load_config=lambda: cfg)['status'] == 'authorized'
+    cfg['automatic_routing']['host_routing']['api_classifier_opt_in'] = False
+    assert H.authorize(result, load_config=lambda: cfg)['status'] == 'needs_review'
+
+
+@pytest.mark.parametrize('stage', [1, 2])
+def test_api_opt_in_revoked_before_classifier_transport(cfg, monkeypatch, stage):
+    cfg['automatic_routing'].update(classifier='provider', decision_provider='openrouter')
+    cfg['automatic_routing']['host_routing']['api_classifier_opt_in'] = True
+    calls = []
+    def load():
+        fresh = copy.deepcopy(cfg)
+        if len(calls) >= stage:
+            fresh['automatic_routing']['host_routing']['api_classifier_opt_in'] = False
+        calls.append(1)
+        return fresh
+    def classify(*a, **kwargs):
+        kwargs['load_config']()
+        kwargs['load_config']()
+        pytest.fail('revocation should stop classification')
+    monkeypatch.setattr(H.R, 'classify_request', classify)
+    report = H.decide({'host': 'codex', 'request': 'task'}, execute=True, load_config=load)
+    assert report['status'] == 'unavailable'
+
+
+def test_native_api_still_requires_exact_execution_grant(cfg, monkeypatch):
+    cfg['automatic_routing'].update(classifier='provider', decision_provider='openrouter')
+    cfg['automatic_routing']['host_routing']['api_classifier_opt_in'] = True
+    cfg['execution_policy'] = {'mode': 'subscription_only'}
+    monkeypatch.setattr(H.R.C, 'call', lambda *a, **k: pytest.fail('no transport'))
+    report = H.decide({'host': 'codex', 'request': 'task'}, execute=True, load_config=lambda: cfg)
+    assert report['status'] == 'unavailable' and 'model' not in report
+
+
+@pytest.mark.parametrize('status', ['needs_review', 'unavailable'])
+def test_native_api_failed_or_uncertain_never_overrides(cfg, monkeypatch, status):
+    cfg['automatic_routing'].update(classifier='provider', decision_provider='openrouter')
+    cfg['automatic_routing']['host_routing']['api_classifier_opt_in'] = True
+    monkeypatch.setattr(H.R, 'classify_request', lambda *a, **k: {'status': status})
+    report = H.decide({'host': 'claude-code', 'request': 'task'}, execute=True, load_config=lambda: cfg)
+    assert report['status'] == status and 'model' not in report
