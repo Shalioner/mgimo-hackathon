@@ -39,7 +39,17 @@ python tools/ledger.py status
 
 **Windows (PowerShell).** Окружение — `python -m venv .venv; .venv\Scripts\pip install -r requirements.txt`, интерпретатор — `.venv\Scripts\python.exe`. Ограничения: хуки в `.claude/settings.json` и `.codex/hooks.json` вызывают `python3`, а в Windows это часто заглушка Microsoft Store — тогда хуки молча не работают (отключите псевдоним в «Параметры → Приложения → Псевдонимы выполнения приложений» или поставьте Python так, чтобы `python3` был в PATH). В `.mcp.json` указан `.venv/bin/python`; в Windows локально замените его на `.venv\Scripts\python.exe`. Агент работает и без хуков — проверки он запускает сам.
 
-**Локальная D1 на macOS:** установка MLX 8-bit, проверка и условия корпоративного использования — [инструкция](docs/D1_MACOS.md).
+**Без D1:** команды выше позволяют посмотреть состояние и работать с реестром;
+для продуктовой работы откройте папку в агентной среде. Установка локальной модели
+не обязательна для знакомства с продуктом. Быстрая проверка без вызовов LLM:
+
+```sh
+.venv/bin/python tools/ledger.py validate projects/example
+.venv/bin/python tools/ledger.py impact projects/example CHG-001
+```
+
+Ожидается 0 ошибок и 2 предупреждения учебного кейса; `impact` покажет, какие
+основания, решения и обещания затронуло новое сведение. Это не завершённый пересмотр.
 
 Затем откройте папку в своей среде и напишите агенту задачу обычными словами, например:
 
@@ -65,6 +75,101 @@ python tools/ledger.py status
 **Исправить результат:** отредактируйте любой файл в `outputs/` или скажите агенту, что не так. Ваша версия главнее, агент перенесёт правку в реестр.
 
 **Посмотреть пример:** `python tools/ledger.py impact projects/example CHG-001` показывает, какие выводы учебного кейса затронул новый опрос.
+
+## Локальная decision-модель D1: установка и проверка
+
+D1 выбирает маршрут подзадачи; она не заменяет основную модель-исполнителя.
+Этот путь проверен на **macOS с Apple Silicon**, для MLX нужен **Python 3.12 arm64**.
+На новом Mac после базовой установки выше:
+
+```sh
+python3.12 -m venv ~/.cache/strategist/d1-2b-lab/mlx-venv
+~/.cache/strategist/d1-2b-lab/mlx-venv/bin/python -m pip install -r requirements-local-decision-mlx.txt
+~/.cache/strategist/d1-2b-lab/mlx-venv/bin/python tools/local_decision_mlx.py download
+.venv/bin/python tools/d1_control.py start
+.venv/bin/python tools/d1_control.py status
+```
+
+Не переустанавливайте существующее окружение поверх рабочего. Downloader получает
+закреплённую [D1 MLX 8-bit](https://huggingface.co/LiquidAI/d1-2B-MLX-8bit) и проверяет
+SHA256; веса не хранятся в Git. [Исходная D1](https://huggingface.co/LiquidAI/d1-2B)
+также доступна, но этот runtime закреплён на 8-bit. Ниже 8-bit пока не рекомендуем:
+качество для нашей поставки не проверено. Загрузка многогигабайтная, её время
+зависит от сети. На Windows/Linux/Intel Mac данный MLX-путь не подтверждён.
+
+Создайте `knowledge/routing.local.yaml` со следующим блоком; если файл уже есть,
+объедините настройки, не затирая существующие:
+
+```yaml
+automatic_routing:
+  classifier: local-d1
+  local_d1:
+    mode: service
+    reuse: false  # независимая проверка; true включает точный кэш повторов
+```
+
+```sh
+.venv/bin/python tools/route_request.py --prompt-file docs/examples/jury-routing-request.md --host codex --classify-only --execute
+```
+
+Успешный пример: `status: classified`, `classification.status: accepted` и
+ответы с вероятностями. `result.status: not_started` ожидаем — исполнитель
+специально не запускается. `needs_review` не считается автоматически принятым
+маршрутом. D1 исполняется локально; дальнейший исполнитель и веб-поиск могут
+использовать облако и ресурсы аккаунта. Остановка:
+
+```sh
+.venv/bin/python tools/d1_control.py stop
+```
+
+`start` устанавливает пользовательский LaunchAgent с автозапуском при входе;
+`stop` останавливает сервис, но не удаляет plist. Веса/калибровка/revision,
+восстановление и ограничения памяти описаны в [D1_MACOS.md](docs/D1_MACOS.md).
+**Для бизнеса:** лицензия D1 ограничивает коммерческое использование компаниями
+выше порога выручки $10 млн. Права на корпоративное внедрение требуют отдельной
+проверки; доступность весов не равна разрешению использования.
+
+## Подключение роутинга: проект или общий сервис
+
+Один D1-сервис может обслуживать несколько копий Стратега у одного пользователя
+Mac. Hooks, allowlist моделей и разрешения задаются **в каждой копии отдельно**.
+Глобального автороутинга во всех произвольных репозиториях пока нет. LaunchAgent
+содержит абсолютный путь: нельзя удалять/переносить обслуживающий checkout без
+перенастройки. На другом компьютере runtime и веса устанавливаются отдельно.
+
+После настройки `automatic_routing.host_routing` по
+[примеру](knowledge/routing.local.example.yaml), с моделями своего аккаунта:
+
+```sh
+.venv/bin/python tools/install_host_routing.py         # план без записи
+.venv/bin/python tools/install_host_routing.py --apply # установка в этот проект
+.venv/bin/python tools/doctor.py doctor --host claude-code
+# Для приложения Codex: --host codex-app
+```
+
+Откройте новую сессию host. **Doctor проверяет настройки, а не реальное переключение.**
+Claude Code mod реализован и зарегистрирован, но native runtime-проверка не закрыта
+из-за launcher/sandbox. В Codex обычный prompt-hook не меняет основную модель:
+для этого нужен соответствующий адаптер. Работа автороутинга в Cursor и других
+непроверенных средах не заявляется. [Открытые проблемы](docs/TEAM_HANDOFF_MEGAFON.md).
+
+## Где и как проверяли D1
+
+MacBook Air M1, 8 GiB, macOS 15.7.9; основной Python 3.9.6, MLX Python 3.12.13,
+MLX 0.32.4 и MLX-VLM 0.7.11. Версии подтверждены 16.11.2026.
+
+| Эксперимент | Результат | Доказательства |
+|---|---|---|
+| 20 разных задач маршрутизации | 17/20 совпадений с инженерным эталоном; 8 уверенно приняты, среди них 0 ошибок | [Quality](docs/research/d1-routing-quality-2026-11-15/README.md) |
+| Пять одинаковых одновременных запросов | 9,00 → 1,66 с; 5 → 1 вычисление благодаря reuse | [Reuse](docs/research/d1-reuse-2026-11-16/README.md) |
+| 20 разных задач, два варианта, cache off | 3 → 2 native-вопроса: median worker 2,15 → 1,76 с; choices и принятые маршруты совпали | [Overhead](docs/research/d1-overhead-2026-11-16/README.md) |
+
+Это малые локальные эксперименты, не гарантированный p95 или бизнес-ROI.
+Выигрыш кэша относится к повторам. Холодная загрузка измеряется отдельно;
+в парном эксперименте полный холодный запрос занял около 14,76 с.
+Проверены тесты транспорта, отмены, ID и модов; чистая установка зависимостей
+на втором компьютере и живой Claude runtime остаются открытыми проверками.
+Подробный сценарий показа и границы измерений — [гайд жюри](docs/JURY_QUICKSTART.md).
 
 ## Что агент выдаёт
 
