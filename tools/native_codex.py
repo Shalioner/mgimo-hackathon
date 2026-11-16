@@ -48,19 +48,25 @@ def text_only_config(effective):
             "mcp_servers": {name: {"enabled": False} for name in servers}}
 
 
+class SubscriptionConfigurationError(ValueError):
+    """Only fixed, non-secret diagnostic messages from our subscription gate."""
+
+
 def subscription_config(effective):
     """Reject API/custom-provider routing before creating the classifier thread."""
-    if not isinstance(effective, dict) or effective.get('model_provider') != 'openai':
-        raise ValueError('Subscription classifier requires the OpenAI provider')
+    if not isinstance(effective, dict) or effective.get('model_provider') not in (None, 'openai'):
+        raise SubscriptionConfigurationError('Subscription classifier requires the OpenAI provider')
     if effective.get('forced_login_method') not in (None, 'chatgpt'):
-        raise ValueError('Subscription classifier requires ChatGPT login')
+        raise SubscriptionConfigurationError('Subscription classifier requires ChatGPT login')
     for key, expected in (('chatgpt_base_url', 'https://chatgpt.com/backend-api/'),
                           ('openai_base_url', 'https://api.openai.com/v1')):
         if effective.get(key) not in (None, expected):
-            raise ValueError('Custom endpoints are not permitted for subscription classification')
+            raise SubscriptionConfigurationError('Custom endpoints are not permitted for subscription classification')
     providers = effective.get('model_providers') or {}
     if not isinstance(providers, dict) or providers.get('openai'):
-        raise ValueError('Custom OpenAI provider overrides are not permitted')
+        raise SubscriptionConfigurationError('Custom OpenAI provider overrides are not permitted')
+    # config/read returns null when unset. Do not infer a default: the thread
+    # explicitly pins OpenAI below, after rejecting every custom provider override.
     config = text_only_config(effective)
     config.update(forced_login_method='chatgpt', model_provider='openai', service_tier='default')
     return config
@@ -260,7 +266,7 @@ def execute(binary, prompt, selection, *, load_config=L.load_routing, timeout=60
     except KeyboardInterrupt:
         receipt.update(status='failed', reason='Native execution cancelled')
     except (OSError, ValueError, TypeError, KeyError, RuntimeError, TimeoutError) as exc:
-        receipt.update(status='failed', reason=str(exc) if isinstance(exc, (RuntimeError, TimeoutError)) else type(exc).__name__)
+        receipt.update(status='failed', reason=str(exc) if isinstance(exc, (RuntimeError, TimeoutError, SubscriptionConfigurationError)) else type(exc).__name__)
     finally:
         sel.close()
         try:

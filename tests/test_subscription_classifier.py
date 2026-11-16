@@ -96,3 +96,17 @@ def test_claude_unavailable_and_revoked_config_never_execute(cfg, monkeypatch):
     changed = copy.deepcopy(cfg); changed["automatic_routing"] = {}
     assert S.classify("request", "", cfg=cfg, load_config=lambda:changed, timeout=3,
                      question_scope="native", host="codex", binary="/fake")["status"] == "unavailable"
+
+
+def test_unset_provider_is_pinned_not_inferred():
+    config = N.subscription_config({"model_provider": None, "forced_login_method": "chatgpt", "mcp_servers": {}})
+    assert config["model_provider"] == "openai"
+    assert config["forced_login_method"] == "chatgpt"
+
+
+def test_subscription_rejection_reason_is_safe_and_specific(cfg, subscription_server):
+    binary, log = subscription_server(provider="custom")
+    receipt, _ = N.execute(binary, "classify only", N.plan("T1", cfg, effort="low"),
+        load_config=lambda: cfg, timeout=3, require_subscription=True)
+    assert receipt["reason"] == "Subscription classifier requires the OpenAI provider"
+    assert "turn/start" not in log.read_text()
