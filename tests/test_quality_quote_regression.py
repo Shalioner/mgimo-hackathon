@@ -7,7 +7,7 @@ import pytest
 import adaptive_execution as A
 
 BENCH = Path(__file__).resolve().parents[1] / 'docs/research/five-agent-d1-2026-11-15'
-DIAGNOSTICS = json.loads((BENCH / 'quality-gate-diagnostic.json').read_text())
+DIAGNOSTICS = json.loads((BENCH / 'quality-gate-diagnostic.json').read_text(encoding="utf-8"))
 
 
 def review(evidence, **changes):
@@ -17,7 +17,7 @@ def review(evidence, **changes):
 
 @pytest.mark.parametrize('item', DIAGNOSTICS, ids=lambda x: f"{x['batch']}-{x['case']}-{x['step']}")
 def test_replay_live_json_quotes_without_unescaping_or_weakening(item):
-    stored = json.loads((BENCH / item['batch'] / f"{item['case']}-step{item['step']}.json").read_text())
+    stored = json.loads((BENCH / item['batch'] / f"{item['case']}-step{item['step']}.json").read_text(encoding="utf-8"))
     task, result = stored['input'], stored['report']['result']
     answer = result.get('candidate', result.get('text'))
     quote = item['quality_response']['quote']

@@ -283,8 +283,8 @@ def main(argv=None):
     parser.add_argument('--timeout', type=int, default=240)
     args = parser.parse_args(argv)
     try:
-        report = select_action(args.request_file.read_text(), args.context_file.read_text() if args.context_file else '',
-                               json.loads(args.candidates_file.read_text()), execute=args.execute, timeout=args.timeout)
+        report = select_action(args.request_file.read_text(encoding="utf-8"), args.context_file.read_text(encoding="utf-8") if args.context_file else '',
+                               json.loads(args.candidates_file.read_text(encoding="utf-8")), execute=args.execute, timeout=args.timeout)
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
     print(json.dumps(report, ensure_ascii=False, indent=2))
@@ -292,4 +292,10 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

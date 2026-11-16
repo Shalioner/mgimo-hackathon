@@ -270,7 +270,7 @@ def main(argv=None):
         if args.prompt_file:
             if args.server_args:
                 parser.error('server_args cannot be combined with --prompt-file')
-            result = prompt_once(str(args.binary), args.prompt_file.read_text(), timeout=args.timeout)
+            result = prompt_once(str(args.binary), args.prompt_file.read_text(encoding="utf-8"), timeout=args.timeout)
             print(json.dumps(result, ensure_ascii=False))
             return 0 if result['status'] == 'completed' else 3
         forwarded = args.server_args[1:] if args.server_args[:1] == ['--'] else args.server_args
@@ -286,4 +286,9 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    for _stream in (sys.stdin, sys.stdout, sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

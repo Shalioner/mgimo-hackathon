@@ -68,7 +68,7 @@ def main(argv=None):
         if args.key_file:
             if args.key_file.stat().st_mode & 0o077:
                 raise ValueError("Key file must have owner-only permissions")
-            os.environ["OPENROUTER_API_KEY"] = args.key_file.read_text().strip()
+            os.environ["OPENROUTER_API_KEY"] = args.key_file.read_text(encoding="utf-8").strip()
         if not os.environ.get("OPENROUTER_API_KEY"):
             raise ValueError("OPENROUTER_API_KEY is missing")
         result["key_cap"] = verify_key(args.timeout)
@@ -96,11 +96,17 @@ def main(argv=None):
         else:
             os.environ["OPENROUTER_API_KEY"] = previous
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    with args.output.open("x") as f:
+    with args.output.open("x", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2, allow_nan=False)
     print(json.dumps({k: result.get(k) for k in ("status", "code", "http_status", "wall_seconds")}, ensure_ascii=False))
     return 0 if result["status"] == "passed" else 1
 
 
 if __name__ == "__main__":
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

@@ -133,12 +133,14 @@ def provider_key(provider):
     """Explicit private file supports native hooks without exporting a shell secret."""
     path = provider.get("api_key_file")
     if path:
+        if os.name != "posix":  # owner/mode checks need POSIX uid; fail closed instead of AttributeError
+            raise ValueError("api_key_file is supported only on POSIX; use api_key_env on Windows")
         path = Path(path).expanduser()
         info = path.lstat()
         if (not path.is_absolute() or not stat.S_ISREG(info.st_mode)
                 or info.st_mode & 0o077 or info.st_uid != os.getuid()):
             raise ValueError("API key file must be an owner-only regular absolute file")
-        key = path.read_text().strip()
+        key = path.read_text(encoding="utf-8").strip()
     else:
         key = os.environ.get(provider.get("api_key_env") or "", "")
     if len(key) > 4096 or any(c.isspace() for c in key):
@@ -180,7 +182,8 @@ def call(provider: dict, body: dict, timeout: int, cfg=None, receipt=None) -> Tu
         req.add_header("Authorization", f"Bearer {key}")
     deadline = time.monotonic() + timeout
     try:
-        if checked.get("billing", {}).get("budget_usd") == 0:
+        if (checked.get("billing", {}).get("budget_usd") == 0
+                and checked["billing"].get("cap_verification") != "local_loopback_no_billing"):
             cap_request = urllib.request.Request("https://openrouter.ai/api/v1/key",
                 headers={"Authorization": "Bearer " + key})
             with P.http_open(cap_request, timeout) as response:

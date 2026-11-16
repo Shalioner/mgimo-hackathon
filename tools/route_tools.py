@@ -30,7 +30,7 @@ def run(request, project, *, execute=False, load_config=L.load_routing, timeout=
     def handler(command):
         def invoke():
             proc = subprocess.run([sys.executable, str(L.ROOT / 'tools/ledger.py'), command, str(project)],
-                                  capture_output=True, text=True, timeout=30, check=False)
+                                  capture_output=True, text=True, timeout=30, check=False, encoding="utf-8")
             # Validation errors are useful tool results, not failed dispatches.
             return {'exit_code': proc.returncode, 'stdout': proc.stdout, 'stderr': proc.stderr}
         return invoke
@@ -46,7 +46,7 @@ def main(argv=None):
     parser.add_argument('--execute', action='store_true', help='Classify and run one read-only ledger helper')
     args = parser.parse_args(argv)
     try:
-        result = run(args.request_file.read_text(), args.project, execute=args.execute)
+        result = run(args.request_file.read_text(encoding="utf-8"), args.project, execute=args.execute)
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
     print(json.dumps(result, ensure_ascii=False, indent=2))
@@ -54,4 +54,10 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

@@ -54,7 +54,7 @@ def diagnose(host, *, root=L.ROOT, cfg=None):
              'claude-code': root / '.claude/settings.local.json'}
     registered = False
     try:
-        settings = json.loads(files[host].read_text()) if host in files else {}
+        settings = json.loads(files[host].read_text(encoding="utf-8")) if host in files else {}
         if host in {'codex', 'codex-app', 'orca'}:
             registered = hooks_ready(settings, root)
         elif host == 'claude-code':
@@ -168,4 +168,10 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

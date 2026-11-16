@@ -23,8 +23,8 @@ def flow(subscription, tmp_path, monkeypatch):
     cfg["execution_policy"]["codex_subscription"]["models"] += ["terra", "sol"]
     cfg["execution_policy"]["codex_subscription"]["efforts"] += ["medium", "high", "xhigh"]
     paths = [tmp_path / "a.md", tmp_path / "b.md"]
-    paths[0].write_text("Retention is 24%.\nORIGINAL_A_NEVER_TO_SENIOR\n" + "irrelevant background\n" * 100)
-    paths[1].write_text("Retention is 18%.\nORIGINAL_B_NEVER_TO_SENIOR\n" + "irrelevant background\n" * 100)
+    paths[0].write_text("Retention is 24%.\nORIGINAL_A_NEVER_TO_SENIOR\n" + "irrelevant background\n" * 100, encoding="utf-8")
+    paths[1].write_text("Retention is 18%.\nORIGINAL_B_NEVER_TO_SENIOR\n" + "irrelevant background\n" * 100, encoding="utf-8")
     calls, syntheses = [], []
     controls = {"tier": "T2", "transform": lambda card: card, "callback": lambda: None, "fail": False}
 
@@ -120,7 +120,7 @@ def test_transport_failure_no_other_host_or_synthesis(flow):
 def test_irrelevant_middle_document_keeps_provenance_and_continues(flow):
     cfg, paths, calls, syntheses, controls = flow
     third = paths[0].parent / "c.md"
-    third.write_text("Retention is 30%.\n")
+    third.write_text("Retention is 30%.\n", encoding="utf-8")
     paths.append(third)
     reason = "No findings relevant to this request"
     controls["transform"] = lambda c: {**c, "findings": [], "limitations": [reason]} if len(calls) == 2 else c
@@ -149,7 +149,7 @@ def test_all_irrelevant_preserves_cards_without_senior_call(flow):
 
 def test_source_changed_during_first_extraction_stops_pipeline(flow):
     cfg, paths, calls, syntheses, controls = flow
-    controls["callback"] = lambda: paths[1].write_text("changed")
+    controls["callback"] = lambda: paths[1].write_text("changed", encoding="utf-8")
     result = F.run_documents("Compare", paths, ["codex"], execute=True, load_config=lambda: cfg)
     assert result["status"] == "stale_input" and len(calls) == 1 and not syntheses
     assert not result["cards"]
@@ -159,7 +159,7 @@ def test_source_changed_during_synthesis_withholds_result(flow):
     cfg, paths, calls, syntheses, controls = flow
     def mutate():
         if len(calls) == 3:
-            paths[0].write_text("changed")
+            paths[0].write_text("changed", encoding="utf-8")
     controls["callback"] = mutate
     result = F.run_documents("Compare", paths, ["codex"], execute=True, load_config=lambda: cfg)
     assert result["status"] == "stale_input"
@@ -202,7 +202,7 @@ def test_contradictions_preserved_not_silently_resolved(flow):
 
 def test_source_count_duplicate_and_size_limits(tmp_path):
     source = tmp_path / "source.txt"
-    source.write_text("source")
+    source.write_text("source", encoding="utf-8")
     for paths in ([], [source] * 16, [source, source]):
         with pytest.raises(ValueError):
             F.snapshot_sources(paths)
@@ -214,11 +214,11 @@ def test_source_count_duplicate_and_size_limits(tmp_path):
 def test_cli_preflight_new_receipt_and_no_ledger_writes(flow, tmp_path, monkeypatch, capsys):
     cfg, paths, calls, _, _ = flow
     prompt, receipt = tmp_path / "request.txt", tmp_path / "receipt.json"
-    prompt.write_text("Compare")
+    prompt.write_text("Compare", encoding="utf-8")
     real_run = F.run_documents
     monkeypatch.setattr(F, "run_documents", lambda *a, **kw: real_run(*a, **kw, load_config=lambda: cfg))
     args = ["--prompt-file", str(prompt), "--source-file", str(paths[0]), "--host", "codex", "--dry-run", "--receipt", str(receipt)]
     assert F.main(args) == 0
-    assert json.loads(receipt.read_text())["status"] == "planned" and not calls
+    assert json.loads(receipt.read_text(encoding="utf-8"))["status"] == "planned" and not calls
     with pytest.raises(SystemExit):
         F.main(args)

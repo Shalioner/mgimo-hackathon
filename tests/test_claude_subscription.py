@@ -37,7 +37,7 @@ else:
     assert json.loads(args[args.index('--mcp-config') + 1]) == {'mcpServers': {}}
     assert args[args.index('--effort') + 1] == 'low'
     print(json.dumps({'type': 'result', 'result': 'subscription answer', 'is_error': False, 'usage': {'input_tokens': 10, 'output_tokens': 5}}))
-'''.replace('PYTHON', sys.executable).replace('CALLS', repr(str(calls))))
+'''.replace('PYTHON', sys.executable).replace('CALLS', repr(str(calls))), encoding="utf-8")
     p['binary_sha256'] = hashlib.sha256(binary.read_bytes()).hexdigest()
     cfg['families'] = {'claude': {'T1': 'm'}}
     cfg['delegate_backends'] = ['claude']
@@ -55,10 +55,10 @@ def test_claude_success_isolated_env_and_no_private_auth_output(claude_profile, 
                  'CLAUDE_CONFIG_DIR', 'NODE_OPTIONS', 'ORCA_AGENT_HOOK_TOKEN'):
         monkeypatch.setenv(name, 'LEAK_SENTINEL')
     assert D.main(args) == 0
-    assert 'LEAK_SENTINEL' not in calls.read_text()
-    assert len(calls.read_text().splitlines()) == 3
-    assert all('PRIVATE_SENTINEL' not in f.read_text() for f in project.rglob('*') if f.is_file())
-    receipt = json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text())
+    assert 'LEAK_SENTINEL' not in calls.read_text(encoding="utf-8")
+    assert len(calls.read_text(encoding="utf-8").splitlines()) == 3
+    assert all('PRIVATE_SENTINEL' not in f.read_text(encoding="utf-8") for f in project.rglob('*') if f.is_file())
+    receipt = json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text(encoding="utf-8"))
     assert receipt['started'] and receipt['process_exit_code'] == 0 and receipt['result'] == 'succeeded'
     assert receipt['billing']['auth'] == 'claude.ai' and receipt['observed']['model'] is None
     assert receipt['internal_transport_retries'] == 'unknown_version_dependent'
@@ -69,22 +69,22 @@ def test_claude_rejects_before_inference(claude_profile, mode):
     cfg, args, calls, binary, project = claude_profile
     p = cfg['execution_policy']['claude_subscription']
     if mode in {'api_key', 'oauth_token', 'third_party', 'none'}:
-        binary.write_text(binary.read_text().replace("'authMethod': 'claude.ai'", "'authMethod': " + repr(mode)))
+        binary.write_text(binary.read_text(encoding="utf-8").replace("'authMethod': 'claude.ai'", "'authMethod': " + repr(mode)))
     elif mode == 'directory':
-        binary.write_text(binary.read_text().replace("'configDirectory': os.environ['CLAUDE_CONFIG_DIR']", "'configDirectory': '/other'"))
+        binary.write_text(binary.read_text(encoding="utf-8").replace("'configDirectory': os.environ['CLAUDE_CONFIG_DIR']", "'configDirectory': '/other'"))
     elif mode == 'settings':
-        (Path(p['config_dir']) / 'settings.json').write_text('{"apiKeyHelper":"evil"}')
+        (Path(p['config_dir']) / 'settings.json').write_text('{"apiKeyHelper":"evil"}', encoding="utf-8")
     elif mode == 'managed':
         P.CLAUDE_SYSTEM_DIRS[0].mkdir()
     elif mode == 'version':
         p['version'] = 'other'
     else:
-        binary.write_text(binary.read_text().replace("elif 'status' in args:", "elif 'status' in args:\n    Path(os.environ['CLAUDE_CONFIG_DIR'], 'settings.json').write_text('{}')"))
+        binary.write_text(binary.read_text(encoding="utf-8").replace("elif 'status' in args:", "elif 'status' in args:\n    Path(os.environ['CLAUDE_CONFIG_DIR'], 'settings.json').write_text('{}')"))
     p['binary_sha256'] = hashlib.sha256(binary.read_bytes()).hexdigest()
     assert D.main(args) == 3
     if calls.exists():
-        assert all('-p' not in json.loads(l)['args'] for l in calls.read_text().splitlines())
-    receipt = json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text())
+        assert all('-p' not in json.loads(l)['args'] for l in calls.read_text(encoding="utf-8").splitlines())
+    receipt = json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text(encoding="utf-8"))
     assert receipt['result'] == 'not_started' and not receipt['started']
 
 
@@ -102,10 +102,10 @@ def test_claude_preflight_no_spawn(claude_profile, capsys):
 def test_claude_result_validation(claude_profile, body, code, outcome):
     cfg, args, calls, binary, project = claude_profile
     old = "print(json.dumps({'type': 'result', 'result': 'subscription answer', 'is_error': False, 'usage': {'input_tokens': 10, 'output_tokens': 5}}))"
-    binary.write_text(binary.read_text().replace(old, 'print(' + repr(body) + '); sys.exit(' + str(code) + ')'))
+    binary.write_text(binary.read_text(encoding="utf-8").replace(old, 'print(' + repr(body) + '); sys.exit(' + str(code) + ')'))
     cfg['execution_policy']['claude_subscription']['binary_sha256'] = hashlib.sha256(binary.read_bytes()).hexdigest()
     assert D.main(args) == 1
-    receipt = json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text())
+    receipt = json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text(encoding="utf-8"))
     assert receipt['result'] == outcome and receipt['process_exit_code'] == code and receipt['started']
     assert not list((project / 'state/delegated').glob('*.md'))
-    assert sum('-p' in json.loads(l)['args'] for l in calls.read_text().splitlines()) == 1
+    assert sum('-p' in json.loads(l)['args'] for l in calls.read_text(encoding="utf-8").splitlines()) == 1

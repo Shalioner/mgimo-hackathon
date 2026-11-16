@@ -45,7 +45,7 @@ for line in sys.stdin:
     if m['state']=='slow': time.sleep(0.6)
     r={'answers':{'tier':{'type':'choice','choice':'T1','confidence':0.9,'probabilities':{'T1':0.9,'T2':0.1}}},'usage':{'input_tokens':10,'output_tokens':0}}
     print(json.dumps({'event':'result','id':m['id'],'response':r,'inference_seconds':time.monotonic()-started}),flush=True)
-'''.replace('MODEL', repr(S.pinned.REPO)).replace('REVISION', repr(S.pinned.REVISION)))
+'''.replace('MODEL', repr(S.pinned.REPO)).replace('REVISION', repr(S.pinned.REVISION)), encoding="utf-8")
     processes = []
     def spawn():
         proc = subprocess.Popen([sys.executable, str(script)], stdin=subprocess.PIPE,
@@ -268,7 +268,7 @@ def test_real_service_process_single_instance_and_graceful_stop():
             wait_until(path.exists)
             state = S.request(path, {'op': 'status'})
             assert state['model_state'] == 'idle' and state['worker_pid'] is None
-            second = subprocess.run(command, capture_output=True, text=True, timeout=3)
+            second = subprocess.run(command, capture_output=True, text=True, timeout=3, encoding="utf-8")
             assert second.returncode == 3 and 'already running' in second.stdout
             assert S.request(path, {'op':'stop'})['status'] == 'stopping'
             assert process.wait(timeout=3) == 0
@@ -282,10 +282,10 @@ def test_real_service_process_single_instance_and_graceful_stop():
 def test_service_refuses_foreign_regular_socket_path():
     with tempfile.TemporaryDirectory(prefix='d1-owner-', dir='/tmp') as folder:
         path = Path(folder)/'s.sock'
-        path.write_text('do not replace')
+        path.write_text('do not replace', encoding="utf-8")
         with pytest.raises(ValueError, match='Refusing'):
             S.serve(path)
-        assert path.read_text() == 'do not replace'
+        assert path.read_text(encoding="utf-8") == 'do not replace'
 
 
 def test_worker_receives_explicit_paths_under_isolated_home(tmp_path):
@@ -306,7 +306,7 @@ e.worker()
 '''.replace('TOOLS', repr(str(Path(E.__file__).parent))).replace('EXPECTED_WEIGHTS', repr(str(actual_weights))).replace('EXPECTED_LOCK', repr(str(actual_lock)))
     process = subprocess.run([sys.executable, '-c', code, '--weights', str(actual_weights),
                               '--lock-file', str(actual_lock)], input='', capture_output=True, text=True,
-                              env={'HOME':str(isolated_home), 'PATH':'/usr/bin:/bin'}, timeout=5)
+                              env={'HOME':str(isolated_home), 'PATH':'/usr/bin:/bin'}, timeout=5, encoding="utf-8")
     assert process.returncode == 0, process.stderr
     assert json.loads(process.stdout)['event'] == 'ready'
 
@@ -322,7 +322,7 @@ e.worker()
 '''.replace('TOOLS', repr(str(Path(E.__file__).parent)))
     process = subprocess.run([sys.executable, '-c', code, '--weights', str(tmp_path),
                               '--lock-file', str(tmp_path/'lock')], input='', capture_output=True,
-                              text=True, timeout=5)
+                              text=True, timeout=5, encoding="utf-8")
     result = json.loads(process.stdout)
     assert result == {'event':'failed', 'phase':'startup', 'reason':'ValueError: Pinned calibration missing'}
 
@@ -425,7 +425,7 @@ e.worker()
     process = subprocess.run([sys.executable, '-c', code, '--weights', str(tmp_path),
                               '--lock-file', str(tmp_path/'lock')],
                              input=json.dumps(message('PRIVATE_MARKER'))+'\n', capture_output=True,
-                             text=True, timeout=5)
+                             text=True, timeout=5, encoding="utf-8")
     assert process.returncode == 0
     ready, result = map(json.loads, process.stdout.splitlines())
     assert ready['event'] == 'ready'
@@ -509,7 +509,7 @@ def test_unknown_invalid_finished_cancel_never_stops_worker(server):
 def test_cancel_loading_does_not_apply_crash_cooldown(setup, tmp_path):
     original, _, _ = setup
     script = tmp_path/'loading.py'
-    script.write_text('import time;time.sleep(10)')
+    script.write_text('import time;time.sleep(10)', encoding="utf-8")
     children = []
     def spawn():
         proc = subprocess.Popen([sys.executable, str(script)], stdin=subprocess.PIPE,

@@ -214,12 +214,12 @@ def _head_objects(ledger: Ledger) -> Dict[str, dict]:
         path = ledger.dir / fname
         try:
             top = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=str(ledger.dir),
-                                 capture_output=True, text=True, timeout=10)
+                                 capture_output=True, text=True, timeout=10, encoding="utf-8")
             if top.returncode != 0:
                 return {}
             rel = path.resolve().relative_to(Path(top.stdout.strip()).resolve())
             show = subprocess.run(["git", "show", f"HEAD:{rel.as_posix()}"], cwd=str(ledger.dir),
-                                  capture_output=True, text=True, timeout=10)
+                                  capture_output=True, text=True, timeout=10, encoding="utf-8")
         except (OSError, ValueError, subprocess.SubprocessError):
             return {}
         if show.returncode != 0:

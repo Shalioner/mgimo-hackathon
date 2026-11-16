@@ -37,8 +37,8 @@ def matches(actual, expected):
 
 
 def analyze(folder):
-    summary = json.loads((folder/'summary.json').read_text())
-    manifest = json.loads((folder/'manifest.json').read_text())
+    summary = json.loads((folder/'summary.json').read_text(encoding="utf-8"))
+    manifest = json.loads((folder/'manifest.json').read_text(encoding="utf-8"))
     cases = {c['id']: c for c in manifest['cases']}
     prices = cost.load_prices(folder/'prices.yaml')
     arms, blind, mapping = {}, [], {}
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     metrics, blind, mapping = analyze(args.folder)
     for name, value in [('metrics.json', metrics), ('blind-review.json', blind), ('blind-map.json', mapping)]:
-        with (args.folder/name).open('x') as file:
+        with (args.folder/name).open('x', encoding="utf-8") as file:
             json.dump(value, file, ensure_ascii=False, indent=2)
     print(json.dumps({arm: {k:v for k,v in x.items() if k not in ('sequences','mechanical_checks','d1_timing')}
                       for arm,x in metrics['arms'].items()}, ensure_ascii=False, indent=2))

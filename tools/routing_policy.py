@@ -281,6 +281,18 @@ def plan(cfg, *, host, provider, model, effort=None, tier="T1", endpoint=None,
                   and model in g["models"]), None)
     if not grant:
         return stop("Нет разрешения для точного host/provider/endpoint/model")
+    if grant.get("local") is True:
+        # Local System One server (e.g. llama.cpp /v1/systemone with d1 GGUF): loopback only,
+        # no key, no billing. Same exact grant match, effort allowlist and context bounds.
+        if host != "decision" or urlsplit(endpoint).hostname not in {"localhost", "127.0.0.1", "::1"}:
+            return stop("local grant допустим только для decision на loopback endpoint")
+        error = context_check(result, grant.get("context") or {}, input_bytes)
+        if error:
+            return stop(error, "manual")
+        if effort not in grant["efforts"]:
+            return stop("Effort не входит в подтверждённый allowlist модели")
+        result["billing"].update(auth="none", budget_usd=0, cap_verification="local_loopback_no_billing")
+        return stop("Локальный decision-сервер на loopback: без ключа и без оплаты", "executable")
     if not key_present:
         return stop("API требует отдельный ключ, но ключ сам не даёт разрешение")
     zero_budget = (type(grant.get("budget_usd")) in {int, float}
@@ -328,7 +340,8 @@ def observe(receipt, data):
         receipt["model_identity_basis"] = "exact_openrouter_catalog_alias_2026-11-16"
     mismatch = [k for k, v in observed.items() if v is not None and
                 contract.get(k) is not None and v != contract[k]]
-    if receipt.get("billing", {}).get("budget_usd") == 0:
+    if (receipt.get("billing", {}).get("budget_usd") == 0
+            and receipt["billing"].get("cap_verification") != "local_loopback_no_billing"):
         usage = data.get("usage")
         cost = usage.get("cost") if isinstance(usage, dict) else None
         if type(cost) not in {int, float} or cost != 0:

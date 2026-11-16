@@ -41,9 +41,9 @@ def test_runtime_refusal_is_audited_once(tmp_path, monkeypatch, entry):
     project = tmp_path / 'p'
     (project / 'state').mkdir(parents=True)
     log = project / 'state/run_log.md'
-    log.write_text('')
+    log.write_text('', encoding="utf-8")
     prompt = tmp_path / 'q.md'
-    prompt.write_text('public sample')
+    prompt.write_text('public sample', encoding="utf-8")
     cfg = {'tasks': {'classify': {'tier': 'T1'}}, 'families': {'openai': {'T1': 'm'}},
            'decision': {'providers': [{'name': 'explicit', 'base_url': 'https://example.test', 'model': 'm'}]}}
     monkeypatch.setattr(L, 'load_routing', lambda: cfg)
@@ -54,11 +54,11 @@ def test_runtime_refusal_is_audited_once(tmp_path, monkeypatch, entry):
     assert rc == 3
     receipts = list((project / 'state/delegated').glob('*.receipt.json'))
     assert len(receipts) == 1
-    receipt = json.loads(receipts[0].read_text())
+    receipt = json.loads(receipts[0].read_text(encoding="utf-8"))
     assert receipt['status'] in {'manual', 'denied'}
     assert all(x is None for x in receipt['transmitted'].values())
     assert all(x is None for x in receipt['observed'].values())
-    assert log.read_text().count('routing refusal') == 1
+    assert log.read_text(encoding="utf-8").count('routing refusal') == 1
 
 
 @pytest.mark.parametrize('value', ['grok-premium', {'grok': True}, True, [], [True], [''], [None]])
@@ -94,9 +94,9 @@ def test_refusal_preflight_does_not_audit(tmp_path, monkeypatch, entry):
     project = tmp_path / 'p'
     (project / 'state').mkdir(parents=True)
     log = project / 'state/run_log.md'
-    log.write_text('')
+    log.write_text('', encoding="utf-8")
     prompt = tmp_path / 'q.md'
-    prompt.write_text('public sample')
+    prompt.write_text('public sample', encoding="utf-8")
     cfg = {'tasks': {'classify': {'tier': 'T1'}}, 'families': {'openai': {'T1': 'm'}},
            'decision': {'providers': [{'name': 'explicit', 'base_url': 'https://example.test', 'model': 'm'}]}}
     monkeypatch.setattr(L, 'load_routing', lambda: cfg)
@@ -105,4 +105,4 @@ def test_refusal_preflight_does_not_audit(tmp_path, monkeypatch, entry):
         rc = D.main(args + ['--task', 'classify', '--prompt-file', str(prompt)])
     else:
         rc = DC.main(args + ['--provider', 'explicit', '--ask', 'Ready?', '--state', 'public sample'])
-    assert rc == 0 and log.read_text() == '' and not (project / 'state/delegated').exists()
+    assert rc == 0 and log.read_text(encoding="utf-8") == '' and not (project / 'state/delegated').exists()

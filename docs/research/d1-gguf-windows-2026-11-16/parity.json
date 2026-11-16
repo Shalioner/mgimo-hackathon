@@ -1,0 +1,2903 @@
+{
+  "summary": {
+    "cases": 20,
+    "valid": 60,
+    "requests": 60,
+    "tier_match": 17,
+    "effort_match": 20,
+    "tier_effort_match": 17,
+    "selected_at_075": 12,
+    "errors_among_selected": 2,
+    "tier_agree_with_mlx": "16/20",
+    "confidence_drift_vs_mlx_same_choice": {
+      "median": 0.0586,
+      "max": 0.4187,
+      "n": 55
+    },
+    "latency_seconds": {
+      "median": 0.089,
+      "max": 0.1039,
+      "min": 0.0623
+    },
+    "answers_changed_between_repeats": 0
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "repeat": 0,
+      "seconds": 0.1035,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9855660806618614
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9908160220062766
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9798011356934195
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9815591183707032
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.99118900882896
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9590835142773387
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q02",
+      "repeat": 0,
+      "seconds": 0.0831,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9758160482457345
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8742406875095271
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9273013280448021
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9577262683161528
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8799517852766835
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9227095672101985
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q03",
+      "repeat": 0,
+      "seconds": 0.0801,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.8910665004618418
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9899683425590907
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.960112917087064
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.757576635010924
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9784893707570735
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9602144523384908
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q04",
+      "repeat": 0,
+      "seconds": 0.0803,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9481784504951685
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9892849425571999
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7078735365880338
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9182423085363858
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.990193319412349
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8439889132684599
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q05",
+      "repeat": 0,
+      "seconds": 0.0891,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "tools"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9828108938156461
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9728744059645619
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.8586019363725904
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.8933398759849787
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9740348311232415
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.857338784155086
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q06",
+      "repeat": 0,
+      "seconds": 0.0753,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "tools"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.7380805897938634
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9863823754219204
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.9170214697591456
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.49463560494734937
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9866050473968001
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.9283440525521938
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q07",
+      "repeat": 0,
+      "seconds": 0.0962,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.6534604421896008
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9596088654789228
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8565379511578306
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.5392622930183806
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9212388049964508
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8700532208355902
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q08",
+      "repeat": 0,
+      "seconds": 0.0837,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.9264223157188383
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9397854540480723
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8753491965799098
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.8613494221270612
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8432181983887297
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9362623269775595
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q09",
+      "repeat": 0,
+      "seconds": 0.0891,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.7710297362592495
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9265676382687015
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7560652066692024
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5593252748915568
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9459544316886074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8462825330514214
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q10",
+      "repeat": 0,
+      "seconds": 0.0883,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.8106452775551529
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9651679655241902
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7523139209878448
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.6542504152897856
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9764315958020774
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6433647017198885
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q11",
+      "repeat": 0,
+      "seconds": 0.0945,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.711817217437391
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8328373519317348
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.5275915638053994
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.4616614291527331
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8462825330514213
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.697483660141517
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q12",
+      "repeat": 0,
+      "seconds": 0.0821,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5707268345776058
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.7442701052826459
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8721024936464289
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5350631066828311
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.7930747643585097
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8329152009404159
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q13",
+      "repeat": 0,
+      "seconds": 0.0877,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9669189151491807
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.5683346851126372
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.726793252816302
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6761581809048038
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.6566529080000585
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8385286918058753
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q14",
+      "repeat": 0,
+      "seconds": 0.0949,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9372576477786773
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8157696538957445
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8240104805609757
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5974909604156742
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8401043183936286
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8911908721241296
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q15",
+      "repeat": 0,
+      "seconds": 0.0768,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9672495481657333
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.6578432794547339
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6935586920032764
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8432674216976095
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5058412992322059
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7872638119456479
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q16",
+      "repeat": 0,
+      "seconds": 0.0926,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.7099956341249183
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8138218808980807
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.5253038240649582
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.48282135796629105
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.752109973818074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6592821430066037
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q17",
+      "repeat": 0,
+      "seconds": 0.0949,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9698106859901543
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.7937224977178824
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.864680697752571
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5511333181070177
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8768319681717824
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9298829358518595
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q18",
+      "repeat": 0,
+      "seconds": 0.0983,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9563323258098754
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5125360257557375
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8107127066832497
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6993276251952312
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5567101876527129
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9144134445796595
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q19",
+      "repeat": 0,
+      "seconds": 0.0891,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T4"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8763060316824881
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.961655406621001
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7173645256532266
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.8288503883223985
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9804272192356049
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6774065515442976
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q20",
+      "repeat": 0,
+      "seconds": 0.0946,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T4"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8887413712901547
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9699310741774807
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6522434915283636
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.9259502588521585
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9876082228951698
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7108675031629312
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q01",
+      "repeat": 1,
+      "seconds": 0.0826,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9855660806618614
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9908160220062766
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9798011356934195
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9815591183707032
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.99118900882896
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9590835142773387
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q02",
+      "repeat": 1,
+      "seconds": 0.0785,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9758160482457345
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8742406875095271
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9273013280448021
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9577262683161528
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8799517852766835
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9227095672101985
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q03",
+      "repeat": 1,
+      "seconds": 0.0735,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.8910665004618418
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9899683425590907
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.960112917087064
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.757576635010924
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9784893707570735
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9602144523384908
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q04",
+      "repeat": 1,
+      "seconds": 0.0623,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9481784504951685
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9892849425571999
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7078735365880338
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9182423085363858
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.990193319412349
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8439889132684599
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q05",
+      "repeat": 1,
+      "seconds": 0.0802,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "tools"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9828108938156461
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9728744059645619
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.8586019363725904
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.8933398759849787
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9740348311232415
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.857338784155086
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q06",
+      "repeat": 1,
+      "seconds": 0.0733,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "tools"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.7380805897938634
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9863823754219204
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.9170214697591456
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.49463560494734937
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9866050473968001
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.9283440525521938
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q07",
+      "repeat": 1,
+      "seconds": 0.0881,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.6534604421896008
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9596088654789228
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8565379511578306
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.5392622930183806
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9212388049964508
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8700532208355902
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q08",
+      "repeat": 1,
+      "seconds": 0.0907,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.9264223157188383
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9397854540480723
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8753491965799098
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.8613494221270612
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8432181983887297
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9362623269775595
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q09",
+      "repeat": 1,
+      "seconds": 0.0952,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.7710297362592495
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9265676382687015
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7560652066692024
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5593252748915568
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9459544316886074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8462825330514214
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q10",
+      "repeat": 1,
+      "seconds": 0.0913,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.8106452775551529
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9651679655241902
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7523139209878448
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.6542504152897856
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9764315958020774
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6433647017198885
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q11",
+      "repeat": 1,
+      "seconds": 0.0831,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.711817217437391
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8328373519317348
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.5275915638053994
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.4616614291527331
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8462825330514213
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.697483660141517
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q12",
+      "repeat": 1,
+      "seconds": 0.0927,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5707268345776058
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.7442701052826459
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8721024936464289
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5350631066828311
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.7930747643585097
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8329152009404159
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q13",
+      "repeat": 1,
+      "seconds": 0.0995,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9669189151491807
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.5683346851126372
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.726793252816302
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6761581809048038
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.6566529080000585
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8385286918058753
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q14",
+      "repeat": 1,
+      "seconds": 0.0935,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9372576477786773
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8157696538957445
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8240104805609757
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5974909604156742
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8401043183936286
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8911908721241296
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q15",
+      "repeat": 1,
+      "seconds": 0.09,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9672495481657333
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.6578432794547339
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6935586920032764
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8432674216976095
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5058412992322059
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7872638119456479
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q16",
+      "repeat": 1,
+      "seconds": 0.0882,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.7099956341249183
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8138218808980807
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.5253038240649582
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.48282135796629105
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.752109973818074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6592821430066037
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q17",
+      "repeat": 1,
+      "seconds": 0.0772,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9698106859901543
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.7937224977178824
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.864680697752571
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5511333181070177
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8768319681717824
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9298829358518595
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q18",
+      "repeat": 1,
+      "seconds": 0.0889,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9563323258098754
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5125360257557375
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8107127066832497
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6993276251952312
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5567101876527129
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9144134445796595
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q19",
+      "repeat": 1,
+      "seconds": 0.1037,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T4"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8763060316824881
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.961655406621001
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7173645256532266
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.8288503883223985
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9804272192356049
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6774065515442976
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q20",
+      "repeat": 1,
+      "seconds": 0.1039,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T4"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8887413712901547
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9699310741774807
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6522434915283636
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.9259502588521585
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9876082228951698
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7108675031629312
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q01",
+      "repeat": 2,
+      "seconds": 0.0893,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9855660806618614
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9908160220062766
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9798011356934195
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9815591183707032
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.99118900882896
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9590835142773387
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q02",
+      "repeat": 2,
+      "seconds": 0.0768,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9758160482457345
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8742406875095271
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9273013280448021
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9577262683161528
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8799517852766835
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9227095672101985
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q03",
+      "repeat": 2,
+      "seconds": 0.0739,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.8910665004618418
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9899683425590907
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.960112917087064
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.757576635010924
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9784893707570735
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9602144523384908
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q04",
+      "repeat": 2,
+      "seconds": 0.0783,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9481784504951685
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9892849425571999
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7078735365880338
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9182423085363858
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.990193319412349
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8439889132684599
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q05",
+      "repeat": 2,
+      "seconds": 0.0784,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "tools"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.9828108938156461
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9728744059645619
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.8586019363725904
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.8933398759849787
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9740348311232415
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.857338784155086
+        }
+      },
+      "selected_labels": {
+        "tier": "T1",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q06",
+      "repeat": 2,
+      "seconds": 0.0782,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T1"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "tools"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.7380805897938634
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9863823754219204
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.9170214697591456
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.49463560494734937
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9866050473968001
+        },
+        "capability": {
+          "choice": "tools",
+          "confidence": 0.9283440525521938
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q07",
+      "repeat": 2,
+      "seconds": 0.0849,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.6534604421896008
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9596088654789228
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8565379511578306
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T1",
+          "confidence": 0.5392622930183806
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9212388049964508
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8700532208355902
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q08",
+      "repeat": 2,
+      "seconds": 0.0956,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.9264223157188383
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9397854540480723
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8753491965799098
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.8613494221270612
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8432181983887297
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9362623269775595
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q09",
+      "repeat": 2,
+      "seconds": 0.0908,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.7710297362592495
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9265676382687015
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7560652066692024
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5593252748915568
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9459544316886074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8462825330514214
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q10",
+      "repeat": 2,
+      "seconds": 0.0817,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.8106452775551529
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9651679655241902
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7523139209878448
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.6542504152897856
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.9764315958020774
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6433647017198885
+        }
+      },
+      "selected_labels": {
+        "tier": "T2",
+        "effort": "normal"
+      }
+    },
+    {
+      "id": "Q11",
+      "repeat": 2,
+      "seconds": 0.0922,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.711817217437391
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8328373519317348
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.5275915638053994
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.4616614291527331
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8462825330514213
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.697483660141517
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q12",
+      "repeat": 2,
+      "seconds": 0.0924,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T2"
+        ],
+        "effort": [
+          "normal"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5707268345776058
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.7442701052826459
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8721024936464289
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T2",
+          "confidence": 0.5350631066828311
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.7930747643585097
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8329152009404159
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q13",
+      "repeat": 2,
+      "seconds": 0.0887,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9669189151491807
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.5683346851126372
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.726793252816302
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6761581809048038
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.6566529080000585
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8385286918058753
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q14",
+      "repeat": 2,
+      "seconds": 0.0874,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9372576477786773
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8157696538957445
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8240104805609757
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5974909604156742
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8401043183936286
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8911908721241296
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q15",
+      "repeat": 2,
+      "seconds": 0.0914,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9672495481657333
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.6578432794547339
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6935586920032764
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8432674216976095
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5058412992322059
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7872638119456479
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q16",
+      "repeat": 2,
+      "seconds": 0.0912,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "normal",
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.7099956341249183
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.8138218808980807
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.5253038240649582
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.48282135796629105
+        },
+        "effort": {
+          "choice": "normal",
+          "confidence": 0.752109973818074
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6592821430066037
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q17",
+      "repeat": 2,
+      "seconds": 0.101,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9698106859901543
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.7937224977178824
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.864680697752571
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.5511333181070177
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.8768319681717824
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9298829358518595
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q18",
+      "repeat": 2,
+      "seconds": 0.0854,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T3"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.9563323258098754
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5125360257557375
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.8107127066832497
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.6993276251952312
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.5567101876527129
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.9144134445796595
+        }
+      },
+      "selected_labels": null
+    },
+    {
+      "id": "Q19",
+      "repeat": 2,
+      "seconds": 0.0902,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T4"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8763060316824881
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.961655406621001
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7173645256532266
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.8288503883223985
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9804272192356049
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6774065515442976
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    },
+    {
+      "id": "Q20",
+      "repeat": 2,
+      "seconds": 0.0963,
+      "valid": true,
+      "reference": {
+        "tier": [
+          "T4"
+        ],
+        "effort": [
+          "deep"
+        ],
+        "capability": [
+          "text"
+        ]
+      },
+      "gguf": {
+        "tier": {
+          "choice": "T3",
+          "confidence": 0.8887413712901547
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9699310741774807
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.6522434915283636
+        }
+      },
+      "mlx": {
+        "tier": {
+          "choice": "T4",
+          "confidence": 0.9259502588521585
+        },
+        "effort": {
+          "choice": "deep",
+          "confidence": 0.9876082228951698
+        },
+        "capability": {
+          "choice": "text",
+          "confidence": 0.7108675031629312
+        }
+      },
+      "selected_labels": {
+        "tier": "T3",
+        "effort": "deep"
+      }
+    }
+  ]
+}

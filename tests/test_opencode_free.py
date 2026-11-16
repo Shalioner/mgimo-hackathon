@@ -26,7 +26,7 @@ def model(ident="big-pickle"):
 @pytest.fixture
 def configured(tmp_path, monkeypatch):
     binary = tmp_path / "fake-opencode"
-    binary.write_text("fake; never executed")
+    binary.write_text("fake; never executed", encoding="utf-8")
     binary.chmod(0o700)
     provider = {"id": "opencode", "name": "OpenCode", "env": ["OPENCODE_API_KEY"],
                 "models": {"big-pickle": model(), "flash-free": model("flash-free")}}
@@ -34,7 +34,7 @@ def configured(tmp_path, monkeypatch):
             "provider": provider, "sha256": O.digest(provider), "binary": str(binary),
             "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(), "version": O.VERSION}
     path = tmp_path / "catalog.json"
-    path.write_text(json.dumps(data))
+    path.write_text(json.dumps(data), encoding="utf-8")
     cfg = {"tasks": {"classify": {"tier": "T1"}, "problem-framing": {"tier": "T2"}},
            "execution_policy": {"opencode_free": {"enabled": True, "catalog": str(path),
            "candidates": {"T1": ["opencode/flash-free", "opencode/big-pickle"], "T2": ["opencode/big-pickle"]}}}}
@@ -97,13 +97,13 @@ def test_snapshot_validation(configured, mutation):
     elif mutation == "future":
         data["fetched_at"] = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=1)).isoformat()
     elif mutation == "malformed":
-        path.write_text("[]")
+        path.write_text("[]", encoding="utf-8")
     elif mutation == "binary":
-        Path(data["binary"]).write_text("changed")
+        Path(data["binary"]).write_text("changed", encoding="utf-8")
     else:
         data[{"digest": "sha256", "version": "version", "source": "source"}[mutation]] = "unknown"
     if mutation != "malformed":
-        path.write_text(json.dumps(data))
+        path.write_text(json.dumps(data), encoding="utf-8")
     assert plan(cfg)["status"] == "denied"
 
 
@@ -112,7 +112,7 @@ def test_prices_rechecked_each_task_no_paid_fallback(configured):
     for item in data["provider"]["models"].values():
         item["cost"]["text"]["output"]["price"] = 2
     data["sha256"] = O.digest(data["provider"])
-    path.write_text(json.dumps(data))
+    path.write_text(json.dumps(data), encoding="utf-8")
     assert plan(cfg)["status"] == "denied"
     with pytest.raises(ValueError, match="No confirmed free"):
         O.select(cfg, "classify", "T1")
@@ -185,7 +185,7 @@ def test_one_attempt_no_fallback(configured, monkeypatch, failure):
             launches.append(command)
             assert command[1:3] == ["--standalone", "run"]
             assert command[command.index("--model") + 1] == "opencode/big-pickle"
-            catalog = json.loads(Path(kw["env"]["OPENCODE_MODELS_PATH"]).read_text())
+            catalog = json.loads(Path(kw["env"]["OPENCODE_MODELS_PATH"]).read_text(encoding="utf-8"))
             assert set(catalog) == {"opencode"}
             assert set(catalog["opencode"]["models"]) == {"big-pickle"}
         def communicate(self, timeout=None):
@@ -226,9 +226,9 @@ def test_delegate_receipt_and_default_effort(configured, monkeypatch, tmp_path):
     monkeypatch.setattr(L, "load_routing", lambda: cfg)
     project = tmp_path / "project"
     (project / "state").mkdir(parents=True)
-    (project / "state" / "run_log.md").write_text("")
+    (project / "state" / "run_log.md").write_text("", encoding="utf-8")
     prompt = tmp_path / "prompt.md"
-    prompt.write_text("synthetic")
+    prompt.write_text("synthetic", encoding="utf-8")
     def fake_call(config, model_id, text, effort, timeout, receipt, human_approved):
         assert model_id == "opencode/big-pickle" and effort is None
         receipt.update(started=True, process_exit_code=0, wrapper_invocations=1)
@@ -242,7 +242,7 @@ def test_delegate_receipt_and_default_effort(configured, monkeypatch, tmp_path):
                    "--host", "opencode"]) == 0
     receipts = list((project / "state" / "delegated").glob("*.receipt.json"))
     assert len(receipts) == 1
-    receipt = json.loads(receipts[0].read_text())
+    receipt = json.loads(receipts[0].read_text(encoding="utf-8"))
     assert receipt["result"] == "succeeded" and receipt["started"]
     assert receipt["process_exit_code"] == 0
     assert receipt["requested"]["model"] == receipt["transmitted"]["model"] == "opencode/big-pickle"
@@ -281,15 +281,15 @@ def test_decide_delegate_same_offline_route(configured, monkeypatch, tmp_path, c
     for item in data["provider"]["models"].values():
         item["capabilities"]["reasoning"].pop("effort", None)
     data["sha256"] = O.digest(data["provider"])
-    path.write_text(json.dumps(data))
+    path.write_text(json.dumps(data), encoding="utf-8")
     monkeypatch.setattr(L, "load_routing", lambda: cfg)
     monkeypatch.setattr(subprocess, "run", lambda *a, **kw: pytest.fail("preflight process"))
     monkeypatch.setattr(subprocess, "Popen", lambda *a, **kw: pytest.fail("preflight launch"))
     project = tmp_path / "p"
     (project / "state").mkdir(parents=True)
-    (project / "state" / "run_log.md").write_text("")
+    (project / "state" / "run_log.md").write_text("", encoding="utf-8")
     prompt = tmp_path / "prompt.md"
-    prompt.write_text("fixture")
+    prompt.write_text("fixture", encoding="utf-8")
     assert DC.main(["--project", str(project), "--ask", "Ready?", "--state", "fixture", "--preflight"]) == 0
     decision = json.loads(capsys.readouterr().out)["route"]
     assert D.main(["--project", str(project), "--task", "classify", "--prompt-file", str(prompt),
@@ -337,10 +337,10 @@ def test_metadata_diff_and_sync_new_only_candidate(configured, tmp_path):
     local = tmp_path / "routing.local.yaml"
     cfg["execution_policy"]["codex_subscription"] = {"enabled": True, "keep": "existing"}
     cfg["other"] = {"keep": [1, 2]}
-    local.write_text(yaml.safe_dump(cfg))
-    path.write_text(json.dumps(new))
+    local.write_text(yaml.safe_dump(cfg), encoding="utf-8")
+    path.write_text(json.dumps(new), encoding="utf-8")
     O.write_candidates(local, new, path)
-    synced = yaml.safe_load(local.read_text())
+    synced = yaml.safe_load(local.read_text(encoding="utf-8"))
     assert synced["other"] == cfg["other"]
     assert synced["execution_policy"]["codex_subscription"] == cfg["execution_policy"]["codex_subscription"]
     assert O.select(synced, "classify", "T1") == "opencode/new-free"
@@ -368,15 +368,15 @@ def test_refresh_command_sync_offline_fake(configured, monkeypatch, tmp_path, ca
     data["provider"]["models"] = {"new-free": model("new-free")}
     data["sha256"] = O.digest(data["provider"])
     def fake_refresh(binary, output):
-        output.write_text(json.dumps(data))
+        output.write_text(json.dumps(data), encoding="utf-8")
         return data
     monkeypatch.setattr(O, "refresh", fake_refresh)
     local = tmp_path / "routing.local.yaml"
-    local.write_text(yaml.safe_dump(cfg))
+    local.write_text(yaml.safe_dump(cfg), encoding="utf-8")
     assert O.main(["refresh", "--binary", data["binary"], "--output", str(path), "--write-candidates", str(local)]) == 0
     report = json.loads(capsys.readouterr().out)
     assert report["diff"]["supported_exact_zero"] == ["opencode/new-free"]
-    synced = yaml.safe_load(local.read_text())
+    synced = yaml.safe_load(local.read_text(encoding="utf-8"))
     assert O.select(synced, "classify", "T1") == "opencode/new-free"
 
 
@@ -397,9 +397,9 @@ def test_refresh_paid_only_revokes_candidates_without_inference(configured, monk
     monkeypatch.setattr(subprocess, "run", fake_metadata)
     data = O.refresh(Path(old["binary"]), path)
     local = tmp_path / "routing.local.yaml"
-    local.write_text(yaml.safe_dump(cfg))
+    local.write_text(yaml.safe_dump(cfg), encoding="utf-8")
     O.write_candidates(local, data, path)
-    synced = yaml.safe_load(local.read_text())
+    synced = yaml.safe_load(local.read_text(encoding="utf-8"))
     assert len(calls) == 2
     assert synced["execution_policy"]["opencode_free"]["candidates"] == {"T1": [], "T2": [], "T3": []}
     assert plan(synced)["status"] == "denied"
@@ -410,14 +410,14 @@ def test_sync_preserves_disabled_and_absent_enable(configured, tmp_path):
     _, path, data = configured
     local = tmp_path / "routing.local.yaml"
     O.write_candidates(local, data, path)
-    assert yaml.safe_load(local.read_text())["execution_policy"]["opencode_free"]["enabled"] is False
+    assert yaml.safe_load(local.read_text(encoding="utf-8"))["execution_policy"]["opencode_free"]["enabled"] is False
 
 
 @pytest.mark.parametrize("bad", [[], {"source": O.SOURCE, "provider": []},
                                  {"source": O.SOURCE, "provider": {"models": {"x": False}}}])
 def test_refresh_malformed_previous_stops_before_network(tmp_path, monkeypatch, bad):
     path = tmp_path / "catalog.json"
-    path.write_text(json.dumps(bad))
+    path.write_text(json.dumps(bad), encoding="utf-8")
     monkeypatch.setattr(O, "refresh", lambda *a: pytest.fail("refresh after malformed snapshot"))
     assert O.main(["refresh", "--binary", "/fake", "--output", str(path)]) == 3
 

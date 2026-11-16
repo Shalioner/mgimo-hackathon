@@ -61,7 +61,7 @@ for line in sys.stdin:
    emit({{'method':'turn/completed','params':{{'threadId':'thread','turn':{{'id':'turn','status':'completed'}}}}}})
    time.sleep(.04)
    emit({{'method':'thread/tokenUsage/updated','params':{{'threadId':'thread','turnId':'turn','tokenUsage':{{'last':{{'totalTokens':17}}}}}}}})
-''')
+''', encoding="utf-8")
         path.chmod(0o700)
         return path, log
     return make
@@ -87,11 +87,11 @@ def test_success_usage_after_completion_and_native_params(cfg, server):
     assert receipt['usage_events'][0]['params']['tokenUsage']['last']['totalTokens'] == 17
     assert receipt['observed_model'] is None
     assert receipt['transmitted_model'] == selected['model']
-    msgs = [json.loads(x) for x in log.read_text().splitlines()]
+    msgs = [json.loads(x) for x in log.read_text(encoding="utf-8").splitlines()]
     assert [m.get('method') for m in msgs] == ['initialize','initialized','config/read','thread/start','turn/start']
     assert msgs[-1]['params']['effort'] == selected['effort']
     assert not Path(msgs[-2]['params']['cwd']).exists()
-    assert 'do-not-log' not in json.dumps(receipt) and 'do-not-log' not in log.read_text()
+    assert 'do-not-log' not in json.dumps(receipt) and 'do-not-log' not in log.read_text(encoding="utf-8")
 
 
 def test_fresh_revocation_prevents_turn(cfg, server):
@@ -101,7 +101,7 @@ def test_fresh_revocation_prevents_turn(cfg, server):
     receipt, text = N.execute(binary, 'text', selected, load_config=lambda: cfg, timeout=3)
     assert receipt['status'] == 'manual' and text is None, receipt
     assert receipt['transmitted_model'] is None
-    assert 'turn/start' not in log.read_text()
+    assert 'turn/start' not in log.read_text(encoding="utf-8")
 
 
 @pytest.mark.parametrize('mode', ['request', 'tool', 'error', 'eof', 'oversize', 'timeout', 'malformed', 'null_params', 'null_item', 'null_turn', 'empty'])
@@ -110,7 +110,7 @@ def test_fail_closed_without_retry(cfg, server, mode):
     receipt, text = N.execute(binary, 'text', N.plan('T1', cfg), load_config=lambda: cfg,
                               timeout=2 if mode == 'timeout' else 3)
     assert receipt['status'] == 'failed' and text is None
-    assert log.read_text().count('turn/start') == 1
+    assert log.read_text(encoding="utf-8").count('turn/start') == 1
     assert 'secret error' not in json.dumps(receipt)
 
 
@@ -153,7 +153,7 @@ def test_worker_thread_does_not_install_signal_handlers(cfg, server, monkeypatch
 def test_sigterm_cleans_child_process_group_and_restores_handler(cfg, tmp_path):
     binary = tmp_path / 'sleeping-server'
     pid_file = tmp_path / 'server.pid'
-    binary.write_text(f'#!{sys.executable}\nimport os,time\nfrom pathlib import Path\nPath({str(pid_file)!r}).write_text(str(os.getpid()))\ntime.sleep(30)\n')
+    binary.write_text(f'#!{sys.executable}\nimport os,time\nfrom pathlib import Path\nPath({str(pid_file)!r}).write_text(str(os.getpid()))\ntime.sleep(30)\n', encoding="utf-8")
     binary.chmod(0o700)
     runner = tmp_path / 'runner.py'
     runner.write_text("import sys,json,signal\n"
@@ -163,16 +163,16 @@ def test_sigterm_cleans_child_process_group_and_restores_handler(cfg, tmp_path):
                       + "previous=signal.getsignal(signal.SIGTERM)\n"
                       + f"receipt,text=N.execute({str(binary)!r}, 'text', N.plan('T1', cfg), load_config=lambda:cfg, timeout=20)\n"
                       + "assert signal.getsignal(signal.SIGTERM)==previous\n"
-                      + "print(json.dumps(receipt),flush=True)\n")
+                      + "print(json.dumps(receipt),flush=True)\n", encoding="utf-8")
     process = subprocess.Popen([sys.executable, str(runner)], stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE, text=True)
+                               stderr=subprocess.PIPE, text=True, encoding="utf-8")
     child_pid = None
     try:
         end = time.monotonic() + 5
         while not pid_file.exists() and time.monotonic() < end:
             time.sleep(.02)
         assert pid_file.exists()
-        child_pid = int(pid_file.read_text())
+        child_pid = int(pid_file.read_text(encoding="utf-8"))
         process.send_signal(signal.SIGTERM)
         stdout, stderr = process.communicate(timeout=5)
         assert process.returncode == 0, stderr

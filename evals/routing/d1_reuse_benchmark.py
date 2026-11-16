@@ -32,7 +32,7 @@ def main():
     if ('reuse' not in status or status['active_id'] or status['queue_depth']
             or status['reuse']['entries']):
         raise RuntimeError('Updated idle service with empty cache required; restart before the experiment')
-    cases = json.loads((Path(__file__).with_name('d1_quality_cases.json')).read_text())['cases']
+    cases = json.loads((Path(__file__).with_name('d1_quality_cases.json')).read_text(encoding="utf-8"))['cases']
     questions = R.questions()
     unique = [cases[i] for i in (0, 6, 12, 15, 19)]
     duplicate = [cases[4]] * 5
@@ -40,7 +40,7 @@ def main():
                 'questions': questions, 'unique_cases': unique, 'duplicate_case': cases[4],
                 'files': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                           for p in [ROOT/'tools/d1_service.py', ROOT/'tools/d1_engine.py', Path(__file__)]}}
-    (args.output/'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
+    (args.output/'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
     def call(case, reuse, barrier=None):
         before = time.monotonic()
@@ -58,7 +58,7 @@ def main():
                 'preparation_seconds': preparation, 'result': result}
 
     warmup = call(cases[1], False)
-    (args.output/'warmup.json').write_text(json.dumps(warmup, ensure_ascii=False, indent=2))
+    (args.output/'warmup.json').write_text(json.dumps(warmup, ensure_ascii=False, indent=2), encoding="utf-8")
     summaries = []
     answers = {}
     for name, workload, reuse in [
@@ -84,7 +84,7 @@ def main():
         finally:
             stop.set()
             sampler.join(timeout=10)
-        (args.output/f'{name}.json').write_text(json.dumps({'rows': rows, 'memory_samples': samples}, ensure_ascii=False, indent=2))
+        (args.output/f'{name}.json').write_text(json.dumps({'rows': rows, 'memory_samples': samples}, ensure_ascii=False, indent=2), encoding="utf-8")
         for row in rows:
             answer = row['result']['response']['answers']
             if row['case'] in answers and answers[row['case']] != answer:
@@ -100,7 +100,7 @@ def main():
         summaries.append(summary)
         print(json.dumps(summary), flush=True)
     (args.output/'summary.json').write_text(json.dumps({'phases': summaries,
-        'answer_equality': True, 'limitations': 'Five clients per phase, one run, synthetic reuse rate; no p95 or business-cost claim.'}, indent=2))
+        'answer_equality': True, 'limitations': 'Five clients per phase, one run, synthetic reuse rate; no p95 or business-cost claim.'}, indent=2), encoding="utf-8")
 
 
 if __name__ == '__main__':

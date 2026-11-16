@@ -29,7 +29,7 @@ class Engine:
         import fcntl
         import importlib.metadata
         self.weights = Path(weights) if weights is not None else pinned.WEIGHTS
-        self.model_lock = Path(lock_file or base.LAB / 'inference.lock').open('a')
+        self.model_lock = Path(lock_file or base.LAB / 'inference.lock').open('a', encoding="utf-8")
         try:
             fcntl.flock(self.model_lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
@@ -86,7 +86,7 @@ def worker(argv=None):
     args = parser.parse_args(argv)
     # Imported libraries must not contaminate the NDJSON protocol or log sources.
     try:
-        with open('/dev/null', 'w') as quiet, contextlib.redirect_stdout(quiet), contextlib.redirect_stderr(quiet):
+        with open('/dev/null', 'w', encoding="utf-8") as quiet, contextlib.redirect_stdout(quiet), contextlib.redirect_stderr(quiet):
             engine = Engine(weights=args.weights, lock_file=args.lock_file)
     except Exception as exc:
         known = ('Missing regular pinned file:', 'Pinned SHA256 mismatch:', 'Unreviewed file in weights',
@@ -109,7 +109,7 @@ def worker(argv=None):
             return
         started = time.monotonic()
         try:
-            with open('/dev/null', 'w') as quiet, contextlib.redirect_stdout(quiet), contextlib.redirect_stderr(quiet):
+            with open('/dev/null', 'w', encoding="utf-8") as quiet, contextlib.redirect_stdout(quiet), contextlib.redirect_stderr(quiet):
                 answer = engine.infer(message['state'], message['questions'])
             result = {'event': 'result', 'id': message['id'], 'response': answer,
                       'engine_timing': getattr(engine, 'last_timing', {}),
@@ -123,4 +123,9 @@ def worker(argv=None):
 
 
 if __name__ == '__main__':
+    for _stream in (sys.stdin, sys.stdout, sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     worker()

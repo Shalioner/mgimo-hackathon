@@ -28,9 +28,9 @@ def test_merge_inherited_plugin_dirs(tmp_path, monkeypatch):
     monkeypatch.setenv('CLAUDE_CODE_PLUGIN_DIRS', '/environment')
     monkeypatch.setenv('CLAUDE_CONFIG_DIR', str(tmp_path / 'global'))
     (tmp_path / 'global').mkdir()
-    (tmp_path / 'global/settings.json').write_text(json.dumps({'env': {'CLAUDE_CODE_PLUGIN_DIRS': '/global'}}))
+    (tmp_path / 'global/settings.json').write_text(json.dumps({'env': {'CLAUDE_CODE_PLUGIN_DIRS': '/global'}}), encoding="utf-8")
     (tmp_path / '.claude').mkdir()
-    (tmp_path / '.claude/settings.json').write_text(json.dumps({'env': {'CLAUDE_CODE_PLUGIN_DIRS': '/project'}}))
+    (tmp_path / '.claude/settings.json').write_text(json.dumps({'env': {'CLAUDE_CODE_PLUGIN_DIRS': '/project'}}), encoding="utf-8")
     merged = I.merged_claude({'env': {'CLAUDE_CODE_PLUGIN_DIRS': '/local'}}, tmp_path, I.inherited_plugin_dirs(tmp_path))
     assert merged['env']['CLAUDE_CODE_PLUGIN_DIRS'].split(':') == ['/environment', '/global', '/project', '/local', str(tmp_path / 'plugins/strategist-routing')]
 
@@ -40,10 +40,10 @@ def test_validate_all_before_writing(tmp_path):
                  'plugins/strategist-routing/hooks/hooks.json', '.venv/bin/python']:
         path = tmp_path / name
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text('fixture')
+        path.write_text('fixture', encoding="utf-8")
         path.chmod(0o700)
     (tmp_path / '.claude').mkdir()
-    (tmp_path / '.claude/settings.local.json').write_text('invalid JSON')
+    (tmp_path / '.claude/settings.local.json').write_text('invalid JSON', encoding="utf-8")
     with pytest.raises(ValueError):
         I.install(tmp_path, apply=True)
     assert not (tmp_path / '.codex/hooks.json').exists()
@@ -55,7 +55,7 @@ def test_dry_run_then_apply(tmp_path, monkeypatch):
                  'plugins/strategist-routing/hooks/hooks.json', '.venv/bin/python']:
         path = tmp_path / name
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text('fixture')
+        path.write_text('fixture', encoding="utf-8")
         path.chmod(0o700)
     result = I.install(tmp_path)
     assert all(r['status'] == 'pending' for r in result)
@@ -94,7 +94,7 @@ def test_exact_shipped_legacy_migration_and_foreign_same_names(tmp_path):
 
 
 def test_checkout_template_is_portable_and_installable(tmp_path):
-    template = json.loads((I.L.ROOT / '.codex/hooks.json').read_text())
+    template = json.loads((I.L.ROOT / '.codex/hooks.json').read_text(encoding="utf-8"))
     assert '/Users/' not in json.dumps(template)
     result = I.merged_hooks(template, tmp_path)
     for event, script, _ in I.HOOKS:
@@ -109,7 +109,7 @@ def test_nonexecutable_python_refused_before_writes(tmp_path):
                  'plugins/strategist-routing/hooks/hooks.json', '.venv/bin/python']:
         path = tmp_path / name
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text('fixture')
+        path.write_text('fixture', encoding="utf-8")
     with pytest.raises(ValueError, match='not executable'):
         I.install(tmp_path, apply=True)
     assert not (tmp_path / '.codex/hooks.json').exists()
@@ -126,15 +126,15 @@ def test_clean_install_copy_reinstall_and_idempotence(tmp_path, monkeypatch):
                  'plugins/strategist-routing/hooks/hooks.json', '.venv/bin/python']:
         path = source / name
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text('fixture')
+        path.write_text('fixture', encoding="utf-8")
         path.chmod(0o700)
     assert all(r['status'] == 'installed' for r in I.install(source, apply=True))
     shutil.copytree(source, recipient)
     # Only a disposable fixture is removed; the original checkout is unavailable.
     shutil.rmtree(source)
-    assert not I.hooks_ready(json.loads((recipient / '.codex/hooks.json').read_text()), recipient)
+    assert not I.hooks_ready(json.loads((recipient / '.codex/hooks.json').read_text(encoding="utf-8")), recipient)
     I.install(recipient, apply=True)
-    hooks = json.loads((recipient / '.codex/hooks.json').read_text())
+    hooks = json.loads((recipient / '.codex/hooks.json').read_text(encoding="utf-8"))
     assert I.hooks_ready(hooks, recipient)
     assert str(source) not in json.dumps(hooks)
     assert all(r['status'] == 'current' for r in I.install(recipient, apply=True))

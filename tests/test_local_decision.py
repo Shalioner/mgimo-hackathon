@@ -57,19 +57,19 @@ def test_manifest_rejects_modified_custom_code(tmp_path, monkeypatch):
     weights = tmp_path / "weights"
     weights.mkdir()
     code = weights / "model.py"
-    code.write_text("reviewed code")
+    code.write_text("reviewed code", encoding="utf-8")
     manifest = tmp_path / "manifest.json"
-    manifest.write_text(json.dumps({"model.py": hashlib.sha256(code.read_bytes()).hexdigest()}))
+    manifest.write_text(json.dumps({"model.py": hashlib.sha256(code.read_bytes()).hexdigest()}), encoding="utf-8")
     monkeypatch.setattr(L, "MANIFEST", manifest)
     L.verify_weights(weights)
-    code.write_text("different code")
+    code.write_text("different code", encoding="utf-8")
     with pytest.raises(ValueError, match="SHA256"):
         L.verify_weights(weights)
 
 
 def test_yaml_error_is_structured(tmp_path):
     q = tmp_path / "q.yaml"
-    q.write_text("questions: [unfinished")
+    q.write_text("questions: [unfinished", encoding="utf-8")
     with pytest.raises(ValueError, match="Invalid questions YAML"):
         L.read_questions(q)
 

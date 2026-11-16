@@ -39,7 +39,7 @@ def sha256(path):
 
 
 def verify_weights(directory, manifest_path=None):
-    manifest = json.loads((manifest_path or MANIFEST).read_text())
+    manifest = json.loads((manifest_path or MANIFEST).read_text(encoding="utf-8"))
     for name, expected in manifest.items():
         path = directory / name
         require(path.is_file() and not path.is_symlink(), f"Missing regular pinned file: {name}; run download")
@@ -50,7 +50,7 @@ def verify_weights(directory, manifest_path=None):
 def download(directory, *, manifest_path=None, repo=REPO, revision=REVISION):
     """Explicit network action for official public artifacts only, never inference."""
     directory.mkdir(parents=True, exist_ok=True)
-    for name, expected in json.loads((manifest_path or MANIFEST).read_text()).items():
+    for name, expected in json.loads((manifest_path or MANIFEST).read_text(encoding="utf-8")).items():
         target = directory / name
         if target.is_file() and not target.is_symlink() and sha256(target) == expected:
             continue
@@ -139,7 +139,7 @@ def read_questions(path):
 
 
 def memory():
-    text = subprocess.run(["/usr/sbin/sysctl", "vm.swapusage", "kern.memorystatus_vm_pressure_level"], capture_output=True, text=True, timeout=5).stdout.strip()
+    text = subprocess.run(["/usr/sbin/sysctl", "vm.swapusage", "kern.memorystatus_vm_pressure_level"], capture_output=True, text=True, timeout=5, encoding="utf-8").stdout.strip()
     match = re.search(r"used = ([\d.]+)M", text)
     pressure = re.search(r"kern.memorystatus_vm_pressure_level: (\d+)", text)
     return {"swap_used_mib": float(match[1]) if match else None,
@@ -207,7 +207,7 @@ def execute(cases, directory, timeout, *, worker_script=None, preflight_samples=
     for case in cases:
         validate_request(case["state"], case["questions"])
     LAB.mkdir(parents=True, exist_ok=True)
-    with (LAB / "inference.lock").open("a") as lock:
+    with (LAB / "inference.lock").open("a", encoding="utf-8") as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
@@ -233,7 +233,7 @@ def execute(cases, directory, timeout, *, worker_script=None, preflight_samples=
                        sys.executable, str(Path(worker_script or __file__).resolve()), "_worker"]
             start = time.monotonic()
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                    text=True, cwd=tmp, env=env)
+                                    text=True, cwd=tmp, env=env, encoding="utf-8")
             payload = json.dumps({"weights": str(directory.resolve()), "cases": cases}, ensure_ascii=False)
             stopped = None
             samples = []
@@ -244,7 +244,7 @@ def execute(cases, directory, timeout, *, worker_script=None, preflight_samples=
                         break
                     except subprocess.TimeoutExpired:
                         payload = None
-                        rss = subprocess.run(["/bin/ps", "-o", "rss=", "-p", str(proc.pid)], capture_output=True, text=True, timeout=5).stdout.strip()
+                        rss = subprocess.run(["/bin/ps", "-o", "rss=", "-p", str(proc.pid)], capture_output=True, text=True, timeout=5, encoding="utf-8").stdout.strip()
                         sample = {"seconds": round(time.monotonic()-start, 1), "rss_kib": int(rss) if rss.isdigit() else None, **memory()}
                         samples.append(sample)
                         swap_growth = (sample["swap_used_mib"] or 0) - (before["swap_used_mib"] or 0)
@@ -337,4 +337,10 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

@@ -206,8 +206,8 @@ def test_local_unavailable_no_execution(local, monkeypatch):
 
 def test_cli_execute_only_selects(local, tmp_path, capsys):
     request, candidates = tmp_path / 'request.txt', tmp_path / 'candidates.json'
-    request.write_text('count records')
-    candidates.write_text(json.dumps(CANDIDATES))
+    request.write_text('count records', encoding="utf-8")
+    candidates.write_text(json.dumps(CANDIDATES), encoding="utf-8")
     # main uses the configured default; substitute selection to prove no dispatch.
     report = select(execute=True)
     original = T.select_action

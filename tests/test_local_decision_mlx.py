@@ -49,7 +49,7 @@ def test_single_instance_and_stop_before_image_on_bad_text(monkeypatch, tmp_path
 
 def test_cli_uses_same_supervisor_and_no_fallback(monkeypatch, tmp_path, capsys):
     q = tmp_path/'q.json'
-    q.write_text(json.dumps(Q))
+    q.write_text(json.dumps(Q), encoding="utf-8")
     calls = []
     def execute(cases, directory, timeout, **kwargs):
         calls.append((cases, kwargs))

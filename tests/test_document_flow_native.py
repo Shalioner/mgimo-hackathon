@@ -24,9 +24,9 @@ def native_flow(tmp_path, monkeypatch):
         'quality': {'enabled': True, 'max_attempts': 6}}
     paths = [tmp_path / 'one.md', tmp_path / 'two.md']
     for index, path in enumerate(paths):
-        path.write_text(f'Value is {index}.\nORIGINAL_PRIVATE_BACKGROUND_{index}\n' + 'Unused background\n' * 100)
+        path.write_text(f'Value is {index}.\nORIGINAL_PRIVATE_BACKGROUND_{index}\n' + 'Unused background\n' * 100, encoding="utf-8")
     binary = tmp_path / 'codex'
-    binary.write_text('This fixture must never be executed.')
+    binary.write_text('This fixture must never be executed.', encoding="utf-8")
     calls, classifications = [], []
     controls = {'tier': 'T2', 'verdicts': ['accept'], 'callback': lambda kind: None,
                 'transport_failure': None, 'sure': True, 'bad_card': False}
@@ -347,7 +347,7 @@ def test_confident_d1_policy_denial_never_triggers_t1_review(uncertain_native, t
     cfg, calls, _, selection, _, run = uncertain_native
     if tier == 'T4':
         quota = tmp_path / 'quota.json'
-        quota.write_text(json.dumps({'approval_ref': 'test-scope', 'calls': 2}))
+        quota.write_text(json.dumps({'approval_ref': 'test-scope', 'calls': 2}), encoding="utf-8")
         cfg['automatic_routing']['t4'] = {'enabled': True, 'approval_ref': 'test-scope',
             'max_calls': 2, 'usage_file': str(quota)}
     selection['reason'] = reason

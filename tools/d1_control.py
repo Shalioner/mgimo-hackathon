@@ -67,7 +67,7 @@ def install(idle_seconds=300):
 
 
 def launchctl(*args):
-    return subprocess.run([LAUNCHCTL, *args], capture_output=True, text=True, timeout=20)
+    return subprocess.run([LAUNCHCTL, *args], capture_output=True, text=True, timeout=20, encoding="utf-8")
 
 
 def status():
@@ -163,4 +163,9 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    for _stream in (sys.stdin, sys.stdout, sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

@@ -95,7 +95,8 @@ python3.12 -m venv ~/.cache/strategist/d1-2b-lab/mlx-venv
 SHA256; веса не хранятся в Git. [Исходная D1](https://huggingface.co/LiquidAI/d1-2B)
 также доступна, но этот runtime закреплён на 8-bit. Ниже 8-bit пока не рекомендуем:
 качество для нашей поставки не проверено. Загрузка многогигабайтная, её время
-зависит от сети. На Windows/Linux/Intel Mac данный MLX-путь не подтверждён.
+зависит от сети. На Windows/Linux/Intel Mac данный MLX-путь не подтверждён; там та же модель
+работает через llama.cpp и официальный GGUF — [D1_WINDOWS.md](docs/D1_WINDOWS.md).
 
 Создайте `knowledge/routing.local.yaml` со следующим блоком; если файл уже есть,
 объедините настройки, не затирая существующие:

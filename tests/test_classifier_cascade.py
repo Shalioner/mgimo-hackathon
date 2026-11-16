@@ -56,7 +56,7 @@ def test_cascade_cannot_upgrade_subscription_only_to_api(monkeypatch):
 
 
 def test_private_key_file_and_missing_file_fail_closed(tmp_path, monkeypatch):
-    key = tmp_path / 'key'; key.write_text('fake-key'); key.chmod(0o600)
+    key = tmp_path / 'key'; key.write_text('fake-key', encoding="utf-8"); key.chmod(0o600)
     provider = {**S.PROVIDER, 'api_key_file': str(key)}
     monkeypatch.setenv('OPENROUTER_API_KEY', 'wrong-environment-key')
     assert D.provider_key(provider) == 'fake-key'

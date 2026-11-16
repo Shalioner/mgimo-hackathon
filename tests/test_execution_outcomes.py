@@ -7,12 +7,12 @@ from test_codex_subscription import subscription
 
 
 def change(cfg, binary, old, new):
-    binary.write_text(binary.read_text().replace(old, new))
+    binary.write_text(binary.read_text(encoding="utf-8").replace(old, new))
     cfg['execution_policy']['codex_subscription']['binary_sha256'] = hashlib.sha256(binary.read_bytes()).hexdigest()
 
 
 def saved(project):
-    return json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text())
+    return json.loads(next((project / 'state/delegated').glob('*.receipt.json')).read_text(encoding="utf-8"))
 
 
 EVENT = "print(json.dumps({'type': 'turn.completed', 'usage': {'input_tokens': 10, 'output_tokens': 5}}))"
@@ -25,7 +25,7 @@ def test_started_exit3_keeps_transmitted(subscription):
     r = saved(project)
     assert r['started'] is True and r['process_exit_code'] == 3
     assert r['transmitted']['model'] == 'm' and r['result'] == 'failed'
-    assert '0 inference calls' not in (project / 'state/run_log.md').read_text()
+    assert '0 inference calls' not in (project / 'state/run_log.md').read_text(encoding="utf-8")
 
 
 @pytest.mark.parametrize('replacement', ["print('[]')", "print('null')", "print('broken-json')",
@@ -39,7 +39,7 @@ def test_invalid_events_are_controlled(subscription, replacement):
     assert r['process_exit_code'] == 0 and r['exit_code'] == 1
     assert r['result'] == 'invalid_result' and r['observed']['model'] is None
     assert not list((project / 'state/delegated').glob('*.md'))
-    assert (project / 'state/run_log.md').read_text().count('делегирование') == 1
+    assert (project / 'state/run_log.md').read_text(encoding="utf-8").count('делегирование') == 1
 
 
 def test_empty_result_is_not_success(subscription):

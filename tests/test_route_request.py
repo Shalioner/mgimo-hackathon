@@ -184,20 +184,20 @@ def test_stale_free_catalog_blocks_candidate(routed, configured):
     cfg["execution_policy"].update(free_cfg["execution_policy"])
     cfg["tasks"].update(free_cfg["tasks"])
     data["fetched_at"] = "2000-01-01T00:00:00+00:00"
-    path.write_text(json.dumps(data))
+    path.write_text(json.dumps(data), encoding="utf-8")
     result = R.run_request("test request", "", ["opencode"], execute=True, load_config=lambda: cfg)
     assert len(calls) == 1 and result["plan"]["selected"] is None
 
 
 def test_fake_cli_end_to_end(subscription):
     cfg, _, calls, binary, _ = subscription
-    source = binary.read_text().replace("Path(args[args.index('-o') + 1]).write_text('subscription answer')",
+    source = binary.read_text(encoding="utf-8").replace("Path(args[args.index('-o') + 1]).write_text('subscription answer')",
         "Path(args[args.index('-o') + 1]).write_text(" + repr(json.dumps(labels("T1"))) + " if 'QUESTIONS:' in args[-1] else 'task answer')")
-    binary.write_text(source)
+    binary.write_text(source, encoding="utf-8")
     cfg["execution_policy"]["codex_subscription"]["binary_sha256"] = hashlib.sha256(binary.read_bytes()).hexdigest()
     result = R.run_request("test request", "", ["codex"], execute=True, load_config=lambda: cfg)
     assert result["result"] == {"status": "succeeded", "text": "task answer"}
-    invocations = [json.loads(line) for line in calls.read_text().splitlines()]
+    invocations = [json.loads(line) for line in calls.read_text(encoding="utf-8").splitlines()]
     assert sum("exec" in row["args"] for row in invocations) == 2
 
 
@@ -205,13 +205,13 @@ def test_fake_cli_end_to_end(subscription):
 def test_claude_fake_cli_end_to_end(claude_profile, host):
     cfg, _, calls, binary, _ = claude_profile
     cfg["automatic_routing"] = {"bootstrap_host": host}
-    source = binary.read_text().replace("'result': 'subscription answer'",
+    source = binary.read_text(encoding="utf-8").replace("'result': 'subscription answer'",
         "'result': (" + repr(json.dumps(labels("T1"))) + " if 'QUESTIONS:' in args[-1] else 'task answer')")
-    binary.write_text(source)
+    binary.write_text(source, encoding="utf-8")
     cfg["execution_policy"]["claude_subscription"]["binary_sha256"] = hashlib.sha256(binary.read_bytes()).hexdigest()
     result = R.run_request("test request", "", [host], execute=True, load_config=lambda: cfg)
     assert result["result"] == {"status": "succeeded", "text": "task answer"}
-    assert sum("-p" in json.loads(row)["args"] for row in calls.read_text().splitlines()) == 2
+    assert sum("-p" in json.loads(row)["args"] for row in calls.read_text(encoding="utf-8").splitlines()) == 2
 
 
 def test_untrusted_model_fields_cannot_grant_or_escalate(routed):

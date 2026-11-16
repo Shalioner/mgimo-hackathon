@@ -10,7 +10,7 @@ from test_d1_service import wait_until
 def test_five_callers_receive_only_their_own_result(server, tmp_path):
     path, _, processes, _ = server
     worker = tmp_path / 'worker.py'
-    worker.write_text(worker.read_text().replace(
+    worker.write_text(worker.read_text(encoding="utf-8").replace(
         "'input_tokens':10", "'input_tokens':10+int(m['state'])"))
     barrier = threading.Barrier(5)
 
