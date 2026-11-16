@@ -279,3 +279,91 @@ def test_route_mentions_decision_model(capsys, monkeypatch):
     monkeypatch.delenv("REQUESTY_API_KEY", raising=False)
     assert L.main(["route", "classify"]) == 0
     assert "tools/decide.py" in capsys.readouterr().out
+
+
+@pytest.fixture
+def openrouter_setup(monkeypatch):
+    from test_routing_policy import api_policy
+    provider = {"name": "openrouter", "protocol": "openrouter-decisions",
+                "base_url": "https://openrouter.ai/api/alpha", "provider_slug": "perplexity",
+                "response_provider": "Perplexity", "model": "perplexity/pplx-decider-v1.3:free",
+                "api_key_env": "OPENROUTER_FIXTURE_KEY"}
+    cfg = {"execution_policy": api_policy("decision", "openrouter",
+            "https://openrouter.ai/api/alpha/decisions", provider["model"])}
+    monkeypatch.setenv("OPENROUTER_FIXTURE_KEY", "synthetic-key")
+    body = {"model": provider["model"], "state": "The label is red.",
+            "questions": {"red": {"type": "noul", "instructions": "Is the label red?"}}}
+    return provider, cfg, body
+
+
+def test_openrouter_wire_contract(openrouter_setup, monkeypatch):
+    provider, cfg, body = openrouter_setup
+    got = []
+    data = {"model": provider["model"], "provider": "Perplexity",
+            "answers": {"red": {"type": "noul", "noul": 0.99}},
+            "usage": {"input_tokens": 20, "output_tokens": 0, "cost": 0}}
+
+    class Response:
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def read(self): return json.dumps(data).encode()
+
+    def http(request, timeout):
+        got.append(request)
+        assert timeout == 17
+        return Response()
+
+    monkeypatch.setattr(DC.P, "http_open", http)
+    receipt = DC.decision_plan(cfg, provider, body)
+    assert receipt["status"] == "executable"
+    assert DC.call(provider, body, 17, cfg, receipt) == (0, data, "")
+    assert len(got) == 1
+    request = got[0]
+    assert request.full_url == receipt["endpoint"] == "https://openrouter.ai/api/alpha/decisions"
+    assert request.get_header("Authorization") == "Bearer synthetic-key"
+    wire = json.loads(request.data)
+    assert wire == {**body, "provider": {"only": ["perplexity"], "allow_fallbacks": False}}
+    assert "provider" not in body  # no mutation of caller's request
+    assert receipt["input_bytes"] == len(request.data)
+    assert receipt["transmitted"]["provider"] == "Perplexity"
+    assert "synthetic-key" not in json.dumps(receipt)
+
+
+@pytest.mark.parametrize("change", [
+    {"protocol": "unknown"},
+    {"base_url": "https://openrouter.ai/api/v1"},
+    {"base_url": "https://other.example/api/alpha"},
+    {"base_url": "https://openrouter.ai/api/alpha?key=secret"},
+    {"provider_slug": ""},
+    {"response_provider": None},
+])
+def test_openrouter_invalid_adapter_denies_before_transport(openrouter_setup, monkeypatch, change):
+    provider, cfg, body = openrouter_setup
+    provider.update(change)
+    monkeypatch.setattr(DC.P, "http_open", lambda *a: pytest.fail("must not send"))
+    assert DC.decision_plan(cfg, provider, body)["status"] == "denied"
+    assert DC.call(provider, body, 2, cfg)[0] == 3
+
+
+@pytest.mark.parametrize("extra", [
+    {"models": ["paid/fallback"]}, {"provider": {"allow_fallbacks": True}},
+    {"plugins": [{"id": "routing"}]},
+])
+def test_openrouter_rejects_routing_overrides(openrouter_setup, monkeypatch, extra):
+    provider, cfg, body = openrouter_setup
+    body.update(extra)
+    monkeypatch.setattr(DC.P, "http_open", lambda *a: pytest.fail("must not send"))
+    assert DC.call(provider, body, 2, cfg)[0] == 3
+
+
+@pytest.mark.parametrize("status", [401, 402, 429, 503])
+def test_openrouter_http_errors_never_retry(openrouter_setup, monkeypatch, status):
+    provider, cfg, body = openrouter_setup
+    calls = []
+    def http(request, timeout):
+        calls.append(request)
+        raise DC.urllib.error.HTTPError(request.full_url, status, "synthetic-key", {}, None)
+    monkeypatch.setattr(DC.P, "http_open", http)
+    code, data, error = DC.call(provider, body, 2, cfg)
+    assert code == status and data == {} and len(calls) == 1
+    assert "synthetic-key" not in error

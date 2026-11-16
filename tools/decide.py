@@ -103,19 +103,54 @@ def pick_provider(cfg: dict, requested: Optional[str] = None) -> Optional[dict]:
     return None
 
 
+def decision_endpoint(provider):
+    """Resolve one explicit wire protocol; never guess from a model slug."""
+    protocol = provider.get("protocol", "systemone")
+    base = str(provider.get("base_url") or "").rstrip("/")
+    if protocol == "systemone":
+        return base + "/systemone"
+    if protocol == "openrouter-decisions":
+        if base != "https://openrouter.ai/api/alpha":
+            raise ValueError("OpenRouter Decisions требует base_url https://openrouter.ai/api/alpha")
+        return base + "/decisions"
+    raise ValueError("Неизвестный decision protocol")
+
+
+def decision_body(provider, body):
+    """Keep the caller's payload intact; pin gateway routing in the wire copy."""
+    if provider.get("protocol", "systemone") != "openrouter-decisions":
+        return body
+    if set(body) - {"model", "state", "questions", "assets"}:
+        raise ValueError("OpenRouter Decisions: неподдерживаемые поля запроса")
+    for key in ("provider_slug", "response_provider"):
+        if not isinstance(provider.get(key), str) or not provider[key].strip():
+            raise ValueError("OpenRouter Decisions требует provider_slug и response_provider")
+    return {**body, "provider": {"only": [provider["provider_slug"]], "allow_fallbacks": False}}
+
+
 def decision_plan(cfg, provider, body):
-    return P.plan(cfg, host="decision", provider=provider.get("name"), model=body.get("model"),
-                  endpoint=str(provider.get("base_url") or "").rstrip("/") + "/systemone",
-                  input_bytes=len(json.dumps(body, ensure_ascii=False).encode("utf-8")),
-                  key_present=bool(os.environ.get(provider.get("api_key_env") or "")))
+    error = None
+    try:
+        endpoint = decision_endpoint(provider)
+        payload = decision_body(provider, body)
+    except ValueError as exc:
+        endpoint, payload, error = None, body, str(exc)
+    result = P.plan(cfg, host="decision", provider=provider.get("name"), model=body.get("model"),
+                    endpoint=endpoint,
+                    input_bytes=len(json.dumps(payload, ensure_ascii=False).encode("utf-8")),
+                    key_present=bool(os.environ.get(provider.get("api_key_env") or "")))
+    if error:
+        result.update(status="denied", reason=error)
+    return result
 
 
 def call(provider: dict, body: dict, timeout: int, cfg=None, receipt=None) -> Tuple[int, dict, str]:
     checked = decision_plan(cfg if cfg is not None else L.load_routing(), provider, body)
     if checked["status"] != "executable":
         return 3, {}, checked["reason"]
-    req = urllib.request.Request(provider["base_url"].rstrip("/") + "/systemone",
-                                 data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+    payload = decision_body(provider, body)
+    req = urllib.request.Request(decision_endpoint(provider),
+                                 data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
                                  headers={"Content-Type": "application/json"})
     key = os.environ.get(provider.get("api_key_env") or "", "")
     if key:
@@ -124,6 +159,8 @@ def call(provider: dict, body: dict, timeout: int, cfg=None, receipt=None) -> Tu
         if receipt is not None:
             receipt.update(started=True, wrapper_invocations=1)
             receipt["transmitted"] = {"model": body["model"], "effort": None}
+            if provider.get("protocol") == "openrouter-decisions":
+                receipt["transmitted"]["provider"] = provider["response_provider"]
         with P.http_open(req, timeout) as r:
             data = json.loads(r.read().decode("utf-8"))
             return (0, data, "") if isinstance(data, dict) else (1, {}, "Invalid response object")
