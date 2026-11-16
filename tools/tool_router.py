@@ -31,8 +31,10 @@ def _probability(value):
     return type(value) in (int, float) and math.isfinite(value) and 0 <= value <= 1
 
 
-def _valid_response(data, questions):
+def _valid_response(data, questions, *, protocol=None):
     if not C.valid_response(data, questions) or set(data['answers']) != set(questions):
+        return False
+    if protocol == 'openrouter-decisions' and not C.valid_openrouter_response(data, questions):
         return False
     for key, q in questions.items():
         a = data['answers'][key]
@@ -50,7 +52,7 @@ def _valid_response(data, questions):
         choice, confidence = a.get('choice'), a.get('confidence')
         if (not isinstance(choice, str) or choice not in probs or not _probability(confidence)
                 or probs[choice] != max(probs.values())
-                or not math.isclose(confidence, probs[choice], abs_tol=1e-6)):
+                or (protocol != 'openrouter-decisions' and not math.isclose(confidence, probs[choice], abs_tol=1e-6))):
             return False
     return True
 
@@ -106,19 +108,19 @@ def infer_questions(state, questions, *, execute=False, load_config=L.load_routi
     if fresh != cfg or C.pick_provider(fresh, provider_name) != provider:
         return {**report, 'status': 'unavailable', 'reason': 'Configuration changed before inference'}
     code, data, _ = C.call(provider, body, timeout, fresh, route)
-    if code or not _valid_response(data, questions):
+    if code or not _valid_response(data, questions, protocol=provider.get('protocol')):
         route['result'] = 'failed' if code else 'invalid_result'
         return {**report, 'status': 'needs_review'}
     if not P.observe(route, data):
         route['result'] = 'quarantined'
         return {**report, 'status': 'needs_review'}
     route['result'] = 'succeeded'
-    return {**report, 'status': 'succeeded', 'response': data}
+    return {**report, 'status': 'succeeded', 'response': data, 'protocol': provider.get('protocol')}
 
 
-def _confident(data, questions):
+def _confident(data, questions, *, protocol=None):
     """Action threshold and compaction's conservative yes/no retention boundary."""
-    if not _valid_response(data, questions):
+    if not _valid_response(data, questions, protocol=protocol):
         return False
     for key, question in questions.items():
         answer = data['answers'][key]
@@ -127,7 +129,7 @@ def _confident(data, questions):
                 return False
         else:
             scores = sorted(answer['probabilities'].values(), reverse=True)
-            if answer['confidence'] < MIN_CONFIDENCE or (len(scores) > 1 and scores[0] - scores[1] < MIN_MARGIN):
+            if min(answer['confidence'], scores[0]) < MIN_CONFIDENCE or (len(scores) > 1 and scores[0] - scores[1] < MIN_MARGIN):
                 return False
     return True
 
@@ -153,6 +155,7 @@ def _cascade_questions(state, questions, cfg, *, execute, load_config, timeout):
         if remaining < 1:
             return {'status': 'unavailable', 'route': None, 'attempts': attempts,
                     'reason': 'Classifier cascade deadline exceeded'}
+        stage_start = time.monotonic()
         try:
             staged = stage_config()
             if stage == 'subscription':
@@ -164,17 +167,27 @@ def _cascade_questions(state, questions, cfg, *, execute, load_config, timeout):
                                          timeout=min(remaining, limit))
         except (ValueError, OSError, TypeError, KeyError):
             result = {'status': 'unavailable', 'route': None, 'reason': 'Classifier adapter failed'}
-        # Revocation while waiting invalidates even an otherwise valid answer.
-        if load_config() != cfg:
-            return {'status': 'unavailable', 'route': None, 'attempts': attempts,
+        if execute and result.get('status') == 'succeeded' and not _confident(result.get('response'), questions, protocol=result.get('protocol')):
+            result = {**result, 'status': 'needs_review', 'reason': 'Uncertain classifier answers'}
+        usage = (result.get('response') or {}).get('usage') or {}
+        safe_usage = {key: value for key, value in usage.items()
+                      if key in {'input_tokens', 'output_tokens', 'cost'}
+                      and type(value) in (int, float) and math.isfinite(value) and value >= 0} if isinstance(usage, dict) else {}
+        attempts.append({'classifier': name, 'status': result.get('status'),
+                         'reason': result.get('reason'), 'route': result.get('route'),
+                         'wall_seconds': max(0, time.monotonic() - stage_start),
+                         'usage': safe_usage or None})
+        # Record dispatched work before invalidating its result on revocation/timeout.
+        try:
+            unchanged = load_config() == cfg
+        except (ValueError, OSError, TypeError, KeyError):
+            unchanged = False
+        if not unchanged:
+            return {'status': 'unavailable', 'route': result.get('route'), 'attempts': attempts,
                     'reason': 'Classifier cascade configuration changed'}
         if time.monotonic() >= deadline:
-            return {'status': 'unavailable', 'route': None, 'attempts': attempts,
+            return {'status': 'unavailable', 'route': result.get('route'), 'attempts': attempts,
                     'reason': 'Classifier cascade deadline exceeded'}
-        if execute and result.get('status') == 'succeeded' and not _confident(result.get('response'), questions):
-            result = {**result, 'status': 'needs_review', 'reason': 'Uncertain classifier answers'}
-        attempts.append({'classifier': name, 'status': result.get('status'),
-                         'reason': result.get('reason'), 'route': result.get('route')})
         if not execute or result.get('status') == 'succeeded':
             return {**result, 'attempts': attempts, 'selected_classifier': name if execute else None}
     return {**result, 'attempts': attempts, 'selected_classifier': None,
@@ -220,7 +233,7 @@ def select_action(request, context, candidates, *, execute=False, load_config=L.
     answer = result['response']['answers']['action']
     ordered = sorted(answer['probabilities'].values(), reverse=True)
     report.update(confidence=answer['confidence'], margin=ordered[0] - ordered[1])
-    if answer['confidence'] < MIN_CONFIDENCE or report['margin'] < MIN_MARGIN:
+    if min(answer['confidence'], ordered[0]) < MIN_CONFIDENCE or report['margin'] < MIN_MARGIN:
         return {**report, 'status': 'needs_review', 'reason': 'Low confidence or ambiguous action'}
     if answer['choice'] == 'none':
         return {**report, 'status': 'abstained'}

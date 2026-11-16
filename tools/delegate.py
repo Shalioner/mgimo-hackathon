@@ -211,13 +211,14 @@ def pick_backend(cfg: dict, requested: Optional[str]) -> Optional[str]:
     return requested or next(iter(cfg.get("delegate_backends") or ["codex"]), None)
 
 
-def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
+def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=False, *, revalidate=None):
     """One isolated subscription exec, with local version/auth probes beforehand.
 
     Never login, copy credentials, inherit user config, relaunch, or switch to API.
     Internal CLI transport retries are unknown and depend on the reviewed version.
     Probe output is consumed as a predicate and never persisted (may contain keys).
     """
+    deadline = time.monotonic() + timeout
     checked = P.plan(cfg, host="codex", provider="openai", model=model, effort=effort,
                      tier=receipt.get("tier", "T1"), input_bytes=len(prompt.encode("utf-8")),
                      human_approved=human_approved)
@@ -244,8 +245,11 @@ def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=Fals
         env.update(HOME=str(home), CODEX_HOME=profile["codex_home"])
 
         def run(argv, limit):
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise subprocess.TimeoutExpired(argv, timeout)
             return subprocess.run(argv, cwd=str(workdir), env=env, stdin=subprocess.DEVNULL,
-                                  capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=limit)
+                                  capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=min(limit, remaining))
 
         try:
             version = run([profile["binary"], "--version"], min(timeout, 10))
@@ -266,6 +270,10 @@ def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=Fals
             error = reserve_t4_attempt(cfg, receipt)
             if error:
                 return 3, '', error, ''
+            if not _revalidated(revalidate):
+                return 3, '', 'Configuration changed before inference', ''
+            if time.monotonic() >= deadline:
+                return 3, '', 'Classifier deadline exceeded before inference', ''
             receipt["transmitted"] = {"model": model, "effort": effort}
             receipt["started"] = True
             receipt["wrapper_invocations"] = 1
@@ -278,8 +286,9 @@ def call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved=Fals
             return 1, "", "CLI failure/timeout; no wrapper retry/fallback", ""
 
 
-def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
+def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=False, *, revalidate=None):
     """One wrapper invocation; internal CLI retries remain version-dependent."""
+    deadline = time.monotonic() + timeout
     checked = P.plan(cfg, host=receipt["requested"]["host"], provider="anthropic", model=model,
                      effort=effort, tier=receipt.get("tier", "T1"), input_bytes=len(prompt.encode("utf-8")),
                      human_approved=human_approved)
@@ -307,8 +316,11 @@ def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=Fal
         env.update(HOME=str(home), CLAUDE_CONFIG_DIR=profile["config_dir"])
 
         def run(argv, limit):
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise subprocess.TimeoutExpired(argv, timeout)
             return subprocess.run(argv, cwd=str(workdir), env=env, stdin=subprocess.DEVNULL,
-                                  capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=limit)
+                                  capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=min(limit, remaining))
         try:
             version = run([profile["binary"], "--version"], min(timeout, 10))
             if version.returncode != 0 or version.stdout.strip() != profile["version"]:
@@ -332,6 +344,10 @@ def call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved=Fal
             error = reserve_t4_attempt(cfg, receipt)
             if error:
                 return 3, '', error, ''
+            if not _revalidated(revalidate):
+                return 3, '', 'Configuration changed before inference', ''
+            if time.monotonic() >= deadline:
+                return 3, '', 'Classifier deadline exceeded before inference', ''
             receipt.update(started=True, wrapper_invocations=1)
             receipt["transmitted"] = {"model": model, "effort": effort}
             proc = run(command, timeout)
@@ -376,17 +392,31 @@ def select_route(cfg, backend, task, tier, explicit_model=None, explicit_effort=
     return family, model, effort, selection_error
 
 
-def execute_route(cfg, backend, model, prompt, effort, timeout, receipt, human_approved=False):
+def _revalidated(revalidate):
+    if revalidate is None:
+        return True
+    try:
+        return revalidate() is True
+    except (OSError, ValueError, TypeError, KeyError):
+        return False
+
+
+def execute_route(cfg, backend, model, prompt, effort, timeout, receipt, human_approved=False, *, revalidate=None):
     """Shared execution boundary. Transport rechecks policy; parse before publishing."""
     if backend not in {"codex", "claude", "claude-code", "opencode", "selfhosted"}:
         receipt.update(status="manual", reason="Execution adapter absent", result="not_started", exit_code=3,
                        started=False, inference_calls=0)
         return receipt, "", ""
+    if revalidate is not None and backend not in {'codex', 'claude', 'claude-code'}:
+        receipt.update(status='manual', reason='Adapter lacks fresh authorization callback',
+                       result='not_started', exit_code=3, started=False, inference_calls=0)
+        return receipt, '', ''
+    callback = {'revalidate': revalidate} if revalidate is not None else {}
     answer = ""
     if backend == "codex":
-        code, stdout, stderr, answer = call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved)
+        code, stdout, stderr, answer = call_codex(cfg, model, prompt, effort, timeout, receipt, human_approved, **callback)
     elif backend in {"claude", "claude-code"}:
-        code, stdout, stderr, answer = call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved)
+        code, stdout, stderr, answer = call_claude(cfg, model, prompt, effort, timeout, receipt, human_approved, **callback)
     elif backend == "opencode":
         import opencode_free as O
         code, stdout, stderr, answer = O.call(cfg, model, prompt, effort, timeout, receipt, human_approved)

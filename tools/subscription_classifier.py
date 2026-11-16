@@ -86,7 +86,7 @@ def infer_questions(state, questions, *, cfg, load_config, execute=False, timeou
         if load_config() != cfg:
             return {**report, 'route': route, 'reason': 'Classifier configuration changed'}
         route, text, _ = D.execute_route(cfg, host, route['requested']['model'], prompt,
-                                         route['requested']['effort'], timeout, route)
+                                         route['requested']['effort'], timeout, route, revalidate=lambda: load_config() == cfg)
     route['method'] = report['method']
     report.update(status='needs_review', route=route)
     if route.get('result') != 'succeeded' or load_config() != cfg:
