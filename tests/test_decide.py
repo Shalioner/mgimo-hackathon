@@ -25,7 +25,7 @@ def test_http_answer_type_validation(tmp_path, monkeypatch, answer, exit_code, o
     project = tmp_path / "p"
     (project / "state").mkdir(parents=True)
     log = project / "state/run_log.md"
-    log.write_text("")
+    log.write_text("", encoding="utf-8")
     provider = {"name": "test", "model": "m", "base_url": "https://fixture.test",
                 "api_key_env": "REVIEW_FAKE_KEY"}
     cfg = {"execution_policy": api_policy("decision", "test", "https://fixture.test/systemone", "m"),
@@ -49,11 +49,11 @@ def test_http_answer_type_validation(tmp_path, monkeypatch, answer, exit_code, o
     assert len(calls) == 1
     receipts = list((project / "state").rglob("*.receipt.json"))
     assert len(receipts) == 1
-    receipt = json.loads(receipts[0].read_text())
+    receipt = json.loads(receipts[0].read_text(encoding="utf-8"))
     assert receipt["result"] == outcome and receipt["exit_code"] == exit_code
     assert receipt["started"] and receipt["transmitted"]["model"] == "m"
     assert receipt["observed"]["model"] is None
-    assert log.read_text().count("decision:m") == 1
+    assert log.read_text(encoding="utf-8").count("decision:m") == 1
 
 
 @pytest.mark.parametrize("bad_type", [[], {}])
@@ -103,7 +103,7 @@ def setup(tmp_path, monkeypatch, server):
                    "api_key_env: DEC_TEST_KEY}\n", encoding="utf-8")
     from test_routing_policy import api_policy
     import yaml
-    with loc.open("a") as f:
+    with loc.open("a", encoding="utf-8") as f:
         f.write(yaml.safe_dump({"execution_policy": api_policy("decision", "kev-local",
             f"http://127.0.0.1:{srv.server_port}/v1/systemone", "kev-test")}))
     monkeypatch.setattr(L, "ROUTING_LOCAL_PATH", loc)

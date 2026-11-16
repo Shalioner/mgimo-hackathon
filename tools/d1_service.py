@@ -77,7 +77,7 @@ def sample_memory(pid=None):
     result['rss_kib'] = None
     if pid:
         raw = subprocess.run(['/bin/ps', '-o', 'rss=', '-p', str(pid)], capture_output=True,
-                             text=True, timeout=3).stdout.strip()
+                             text=True, timeout=3, encoding="utf-8").stdout.strip()
         result['rss_kib'] = int(raw) if raw.isdigit() else None
     return result
 
@@ -645,4 +645,9 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    for _stream in (sys.stdin, sys.stdout, sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

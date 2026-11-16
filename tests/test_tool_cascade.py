@@ -210,7 +210,7 @@ def test_started_receipt_survives_postcheck_config_read_error(remote, monkeypatc
 
 def test_openrouter_frozen_confidence_is_not_choice_probability():
     from pathlib import Path
-    frozen = json.loads((Path(__file__).parents[1] / 'docs/research/openrouter-decider-2026-11-16/smoke-final.json').read_text())
+    frozen = json.loads((Path(__file__).parents[1] / 'docs/research/openrouter-decider-2026-11-16/smoke-final.json').read_text(encoding="utf-8"))
     answer = frozen['response']['answers']['team']
     data = {**frozen['response'], 'answers': {'team': answer}}
     questions = {'team': {'type': 'choice', 'instructions': 'team',
@@ -232,7 +232,7 @@ def test_claude_fresh_config_gate_after_auth_before_inference(claude_profile, mo
     def load():
         reads[0] += 1
         # Before auth probes no calls exist. Revoke after auth was actually run.
-        if calls.exists() and len(calls.read_text().splitlines()) >= 2:
+        if calls.exists() and len(calls.read_text(encoding="utf-8").splitlines()) >= 2:
             changed = copy.deepcopy(snapshot)
             changed['execution_policy']['mode'] = 'plan_only'
             return changed
@@ -241,7 +241,7 @@ def test_claude_fresh_config_gate_after_auth_before_inference(claude_profile, mo
                               cfg=snapshot, load_config=load, execute=True, timeout=3)
     assert result['status'] != 'succeeded'
     assert not result['route']['started']
-    assert all('-p' not in json.loads(line)['args'] for line in calls.read_text().splitlines())
+    assert all('-p' not in json.loads(line)['args'] for line in calls.read_text(encoding="utf-8").splitlines())
 
 
 def test_claude_probes_share_inference_deadline(claude_profile, monkeypatch):

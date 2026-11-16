@@ -69,7 +69,7 @@ def saved_rows(folder, cases):
         if not path.exists():
             continue
         try:
-            row = json.loads(path.read_text())
+            row = json.loads(path.read_text(encoding="utf-8"))
             if row.get('id') != case['id']:
                 raise ValueError('Receipt ID mismatch')
             rows.append(row)
@@ -84,7 +84,7 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--execute', action='store_true')
     args = p.parse_args()
-    cases = json.loads(args.cases.read_text())['cases']
+    cases = json.loads(args.cases.read_text(encoding="utf-8"))['cases']
     cfg = L.load_routing()
     cfg['automatic_routing'].setdefault('local_d1', {})['reuse'] = False
     # Preserve the historical three-question quality protocol.

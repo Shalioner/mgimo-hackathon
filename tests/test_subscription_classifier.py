@@ -33,7 +33,7 @@ for line in sys.stdin:
   out={{'method':'turn/completed','params':{{'threadId':'thread','turn':{{'id':'turn','status':'completed'}}}}}}
  else: continue
  print(json.dumps(out),flush=True)
-""")
+""", encoding="utf-8")
         binary.chmod(0o700)
         return binary, log
     return make
@@ -46,7 +46,7 @@ def test_subscription_auth_gate_and_no_api_environment(cfg, subscription_server,
         load_config=lambda: cfg, timeout=3, require_subscription=True)
     assert receipt["status"] == "succeeded" and text == "answer"
     assert receipt["auth_check"] == "chatgpt_confirmed_by_app_server"
-    messages = [json.loads(line) for line in log.read_text().splitlines()]
+    messages = [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines()]
     assert [m["method"] for m in messages] == ["initialize", "initialized", "config/read", "account/read", "thread/start", "turn/start"]
     assert messages[-2]["params"]["config"]["forced_login_method"] == "chatgpt"
     assert "private@example" not in json.dumps(receipt)
@@ -62,7 +62,7 @@ def test_wrong_auth_or_provider_cannot_start_inference(cfg, subscription_server,
     receipt, text = N.execute(binary, "classify only", N.plan("T1", cfg, effort="low"),
         load_config=lambda: cfg, timeout=3, require_subscription=True)
     assert receipt["status"] != "succeeded" and text is None
-    assert "turn/start" not in log.read_text()
+    assert "turn/start" not in log.read_text(encoding="utf-8")
 
 
 def test_native_classifier_low_effort_with_evidence_and_no_capability_gate(cfg, monkeypatch):
@@ -109,7 +109,7 @@ def test_subscription_rejection_reason_is_safe_and_specific(cfg, subscription_se
     receipt, _ = N.execute(binary, "classify only", N.plan("T1", cfg, effort="low"),
         load_config=lambda: cfg, timeout=3, require_subscription=True)
     assert receipt["reason"] == "Subscription classifier requires the OpenAI provider"
-    assert "turn/start" not in log.read_text()
+    assert "turn/start" not in log.read_text(encoding="utf-8")
 
 
 @pytest.mark.parametrize('generic', [False, True])

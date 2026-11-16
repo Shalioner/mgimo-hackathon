@@ -26,7 +26,7 @@ def phase(name, mx=None):
     rss, rss_error = '', None
     try:
         rss = subprocess.run(['/bin/ps', '-o', 'rss=', '-p', str(os.getpid())],
-                             capture_output=True, text=True, timeout=5).stdout.strip()
+                             capture_output=True, text=True, timeout=5, encoding="utf-8").stdout.strip()
     except (OSError, subprocess.SubprocessError) as exc:
         rss_error = type(exc).__name__  # sandbox may deny ps; diagnostics must not abort inference
     record = {'phase': name, 'timestamp': datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -176,4 +176,10 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

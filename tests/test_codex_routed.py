@@ -105,7 +105,7 @@ for line in sys.stdin:
         print(json.dumps({'id':999,'method':'item/commandExecution/requestApproval','params':{'x':1}}),flush=True)
     else:
         print(json.dumps({'method':'echo','params':data}),flush=True)
-''')
+''', encoding="utf-8")
     runner = tmp_path / 'runner.py'
     runner.write_text('''import sys
 sys.path.insert(0, sys.argv[1])
@@ -115,9 +115,9 @@ def decide(payload,execute=False):
     return {'status':'selected','host':'codex','model':'gpt-6-luna','effort':'low','tier':'T1'}
 def authorize(selection): return {'status':'authorized'}
 raise SystemExit(R.proxy([sys.executable,sys.argv[2]],decide=decide,authorize=authorize))
-''')
+''', encoding="utf-8")
     process = subprocess.Popen([sys.executable, str(runner), str(Path(R.__file__).parent), str(child)],
-                               stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                               stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8")
     def send(data):
         process.stdin.write(json.dumps(data)+'\n')
         process.stdin.flush()
@@ -149,13 +149,13 @@ raise SystemExit(R.proxy([sys.executable,sys.argv[2]],decide=decide,authorize=au
 
 
 def test_cli_invalid_binary_refused():
-    result = subprocess.run([sys.executable, R.__file__, '--binary', 'codex'], capture_output=True, text=True)
+    result = subprocess.run([sys.executable, R.__file__, '--binary', 'codex'], capture_output=True, text=True, encoding="utf-8")
     assert result.returncode == 2 and result.stdout == ''
 
 
 def test_sigterm_during_classification_reaps_independent_appserver(tmp_path):
     server = tmp_path / 'sleeping_server.py'
-    server.write_text('import os,json,time\nprint(json.dumps({"method":"ready","pid":os.getpid()}),flush=True)\ntime.sleep(60)\n')
+    server.write_text('import os,json,time\nprint(json.dumps({"method":"ready","pid":os.getpid()}),flush=True)\ntime.sleep(60)\n', encoding="utf-8")
     runner = tmp_path / 'blocked_proxy.py'
     runner.write_text('''import sys,time
 sys.path.insert(0,sys.argv[1])
@@ -164,10 +164,10 @@ def decide(*a,**kw):
     print('CLASSIFYING',file=sys.stderr,flush=True)
     time.sleep(60)
 raise SystemExit(R.proxy([sys.executable,sys.argv[2]],decide=decide))
-''')
+''', encoding="utf-8")
     process = subprocess.Popen([sys.executable,str(runner),str(Path(R.__file__).parent),str(server)],
                                stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
-                               text=True,start_new_session=True)
+                               text=True,start_new_session=True, encoding="utf-8")
     server_pid = None
     try:
         server_pid = json.loads(process.stdout.readline())['pid']
@@ -207,7 +207,7 @@ for line in sys.stdin:
         assert 'error' in m and 'result' not in m
         print(json.dumps({'method':'item/completed','params':{'item':{'type':'agentMessage','text':'done'}}}),flush=True)
         print(json.dumps({'method':'turn/completed','params':{'turn':{'id':'turn1','status':'completed'}}}),flush=True)
-''')
+''', encoding="utf-8")
     monkeypatch.setattr(R, '__file__', str(fake_proxy))
     result = R.prompt_once('/not/invoked', 'Hello', timeout=5)
     assert result == {'status':'completed','text':'done','turn_id':'turn1'}

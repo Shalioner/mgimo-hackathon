@@ -608,3 +608,11 @@ Guide explicitly separates shared per-user service from project hooks, includes
 license/runtime limitations, and does not claim clean-machine installation or
 remote publication. Initial non-ASCII log append hit stdin encoding error;
 retried with ASCII text and explicit UTF-8 output.
+
+## 2026-11-16 — проверка сокомандника на Windows, локальный D1 через llama.cpp
+- **Запрос:** проверить ветку `research/mgimo-video-2026-11-15`, поставить локальную decision-модель под свою машину, поправить тесты под ТЗ, найти что нового у конкурентов, выдвинуть гипотезы оптимизации.
+- **Windows 11 / Python 3.14:** на 7cc884d сбор тестов падал (`fcntl`), без трёх модулей — 196 failed; демо-проекты не проходили `validate` из-за CRLF. Исправлено: `.gitattributes` (LF), явный UTF-8 в 240 местах I/O, UTF-8 stdio в 21 entrypoint, fail-closed `api_key_file` на не-POSIX, граница POSIX-адаптеров в conftest (xfail с причиной). Итог: 567 passed, 171 xfailed, 279 xpassed, 0 failed. macOS не перепроверен.
+- **D1 GGUF:** LiquidAI/d1-2B-GGUF Q8_0 и Q4_K_M + llama.cpp b12433 CUDA, SHA-256 совпали. На 20 задачах маршрутизации — 17/20 как у MLX, медиана 0,09 с против 2,1 с, но 2 уверенные ошибки (T4 → T3). Узкий `local: true` grant для loopback decision-сервера, 8 тестов. `docs/D1_WINDOWS.md`.
+- **ТЗ «команды из источников»:** автотестов не было; замер `evals/injection` на d1 — 10/10, ложных тревог 1/10.
+- **Конкуренты после 15.11:** новых репозиториев нет; Fighter90 (14 коммитов: автотест команд из документации, CI, DOCX со сносками), vladekds (слепой судья).
+- Подробно: `docs/research/teammate-check-windows-2026-11-16.md`.

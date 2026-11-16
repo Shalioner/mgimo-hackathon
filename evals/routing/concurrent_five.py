@@ -122,18 +122,18 @@ def native_receipts(value):
 
 def summarize(folder):
     rows = []
-    manifest = json.loads((folder / 'manifest.json').read_text())
+    manifest = json.loads((folder / 'manifest.json').read_text(encoding="utf-8"))
     expected = [(label, case['id'], step) for label in manifest['order']
                 for case in manifest['cases'] for step in (1, 2)]
     for label, case, step in expected:
         path = folder / label / f'{case}-step{step}.json'
-        raw = (json.loads(path.read_text()) if path.exists() else
+        raw = (json.loads(path.read_text(encoding="utf-8")) if path.exists() else
                {'case': case, 'step': step, 'arm': label.split('-', 1)[1],
                 'report': {'status': 'missing_result'}, 'elapsed_seconds': None})
         report = raw['report']
         prefix = f'{case}-step{step}-call'
         ends = sorted(path.parent.glob(prefix + '*-end.json'))
-        receipts = [receipt for end in ends for receipt in native_receipts(json.loads(end.read_text()))]
+        receipts = [receipt for end in ends for receipt in native_receipts(json.loads(end.read_text(encoding="utf-8")))]
         totals = {'input': 0, 'cached': 0, 'output': 0, 'reasoning_output': 0}
         missing = len(list(path.parent.glob(prefix + '*-start.json'))) - len(ends)
         calls = []
@@ -153,7 +153,7 @@ def summarize(folder):
         classification = report.get('classification', {}).get('classification', {})
         d1_file = path.parent / f'{case}-step{step}-d1.json'
         if not classification and d1_file.exists():
-            classification = json.loads(d1_file.read_text()).get('classification', {})
+            classification = json.loads(d1_file.read_text(encoding="utf-8")).get('classification', {})
         attempts = report.get('result', {}).get('attempts', [])
         rows.append({'batch': path.parent.name, 'case': raw['case'], 'step': raw['step'],
                      'arm': raw['arm'], 'status': report['status'], 'wall_seconds': raw['elapsed_seconds'],
@@ -212,7 +212,7 @@ def main():
     parser.add_argument('--binary', required=True)
     parser.add_argument('--execute', action='store_true')
     args = parser.parse_args()
-    cases = json.loads(args.cases.read_text())['cases']
+    cases = json.loads(args.cases.read_text(encoding="utf-8"))['cases']
     if len(cases) != 5 or len({c['id'] for c in cases}) != 5 or any(len(c['steps']) != 2 for c in cases):
         parser.error('Exactly five unique cases, two steps each')
     cfg = configuration()

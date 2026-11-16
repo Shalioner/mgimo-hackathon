@@ -29,12 +29,12 @@ def main():
     status = S.request(S.DEFAULT_SOCKET, {'op': 'status'})
     if status.get('active_id') or status.get('queue_depth'):
         raise RuntimeError('Idle service required')
-    cases = json.loads(Path(__file__).with_name('d1_quality_cases.json').read_text())['cases']
+    cases = json.loads(Path(__file__).with_name('d1_quality_cases.json').read_text(encoding="utf-8"))['cases']
     qs = R.questions(L.load_routing())
     native = {k: qs[k] for k in ('tier', 'effort')}
     args.output.mkdir(parents=True, exist_ok=False)
     def write(name, data):
-        (args.output/name).write_text(json.dumps(data, ensure_ascii=False, indent=2))
+        (args.output/name).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     files = [Path(__file__), ROOT/'tools/d1_engine.py', ROOT/'tools/d1_service.py']
     write('manifest.json', {'started_utc': datetime.now(timezone.utc).isoformat(),
           'before': status, 'reuse': False, 'questions': qs, 'cases': cases,

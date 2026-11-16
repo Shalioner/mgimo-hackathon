@@ -180,3 +180,23 @@
 # T4 всё равно требует automatic_routing.t4 standing approval+quota.
 # .venv/bin/python tools/install_host_routing.py --apply
 # Возможности/ограничения конкретных хостов: docs/NATIVE_HOST_ROUTING.md.
+
+# 8) Локальный D1 на Windows/Linux: llama.cpp + LiquidAI/d1-2B-GGUF (System One на loopback).
+# local: true — только host decision и только 127.0.0.1/localhost/::1: без ключа и оплаты.
+# Сервер запускать с --alias d1-2B-Q8_0 и --host 127.0.0.1. Подробно: docs/D1_WINDOWS.md.
+# execution_policy:
+#   mode: api_opt_in
+#   max_input_bytes: 128000
+#   api:
+#     enabled: true
+#     grants:
+#       - host: decision
+#         provider: llamacpp-d1
+#         endpoint: http://127.0.0.1:8089/v1/systemone
+#         models: [d1-2B-Q8_0]
+#         efforts: [null]
+#         local: true
+#         context: {model_limit: 8192, plan_limit: 8192, user_limit: 8192, output_reserve: 1, system_reserve: 512}
+# decision:
+#   providers:
+#     - {name: llamacpp-d1, protocol: systemone, base_url: "http://127.0.0.1:8089/v1", model: d1-2B-Q8_0}

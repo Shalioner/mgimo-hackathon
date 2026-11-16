@@ -126,7 +126,7 @@ def system_boundary():
 def load_catalog(profile, now=None):
     path = Path(profile.get("catalog") or "")
     require(path.is_absolute() and path.is_file(), "Explicit absolute catalog snapshot required; run refresh")
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     require(type(data) is dict and data.get("source") == SOURCE and data.get("schema") == 1,
             "Unknown catalog source/schema")
     stamp = dt.datetime.fromisoformat(data["fetched_at"])
@@ -236,7 +236,7 @@ def call(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
         # Pin the CLI's catalog to one validated route: even auxiliary calls
         # cannot choose a paid/default/newest model or fetch a replacement.
         catalog = root / "catalog.json"
-        catalog.write_text(json.dumps({"opencode": {**data["provider"], "models": {item["id"]: item}}}))
+        catalog.write_text(json.dumps({"opencode": {**data["provider"], "models": {item["id"]: item}}}), encoding="utf-8")
         env["OPENCODE_MODELS_PATH"] = str(catalog)
         env["OPENCODE_CONFIG_CONTENT"] = json.dumps({
             "model": model, "autoupdate": False,
@@ -245,7 +245,7 @@ def call(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
         binary = data["binary"]
         def run(args, seconds):
             return subprocess.run([binary, *args], cwd=root, env=env, input="", text=True,
-                                  capture_output=True, timeout=seconds)
+                                  capture_output=True, timeout=seconds, encoding="utf-8")
         try:
             require(run(["--version"], 15).stdout.strip() == VERSION, "Runtime version mismatch")
             auth = run(["--standalone", "auth", "list", "--format", "json"], 60)
@@ -261,7 +261,7 @@ def call(cfg, model, prompt, effort, timeout, receipt, human_approved=False):
             command = [binary, "--standalone", "run", "--model", model + ("#" + effort if effort else ""),
                        "--format", "json", "--title", "Scoped delegation", "--", prompt]
             proc = subprocess.Popen(command, cwd=root, env=env, stdin=subprocess.DEVNULL,
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8")
             receipt["started"] = True
             try:
                 stdout, _ = proc.communicate(timeout=timeout)
@@ -334,7 +334,7 @@ An empty tier remains disabled by the exact allowlist gate.
 def write_candidates(path, data, snapshot):
     """Opt-in sync only the free profile's catalog/candidates; retain other keys."""
     require(not path.is_symlink() and path.resolve() != snapshot.resolve(), "Candidate policy must be a separate regular file")
-    cfg = yaml.safe_load(path.read_text()) if path.exists() else {}
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else {}
     require(type(cfg) is dict, "Local routing config must be a mapping")
     policy = cfg.setdefault("execution_policy", {})
     require(type(policy) is dict, "execution_policy must be a mapping")
@@ -371,12 +371,12 @@ def refresh(binary, output):
     with tempfile.TemporaryDirectory(prefix="strateg-opencode-refresh-", dir="/tmp") as directory:
         env = isolated_env(Path(directory))
         proc = subprocess.run([str(binary), "--version"], env=env, cwd=directory,
-                              capture_output=True, text=True, timeout=15)
+                              capture_output=True, text=True, timeout=15, encoding="utf-8")
         require(proc.returncode == 0 and proc.stdout.strip() == VERSION, "Unreviewed OpenCode version")
         # System curl handles the platform CA store; no user curlrc/proxy/redirects.
         response = subprocess.run(["/usr/bin/curl", "-q", "--fail", "--silent", "--show-error",
                                    "--proto", "=https", "--max-time", "30", SOURCE],
-                                  env=env, cwd=directory, capture_output=True, text=True, timeout=35)
+                                  env=env, cwd=directory, capture_output=True, text=True, timeout=35, encoding="utf-8")
         require(response.returncode == 0, "Official catalog refresh failed")
         catalog = json.loads(response.stdout)
         require(type(catalog) is dict, "Malformed catalog mapping")
@@ -409,7 +409,7 @@ def main(argv=None):
                     help="Opt-in: merge supported free candidates into this local routing YAML; preserve other settings")
     args = ap.parse_args(argv)
     try:
-        previous = json.loads(args.output.read_text()) if args.output.exists() else None
+        previous = json.loads(args.output.read_text(encoding="utf-8")) if args.output.exists() else None
         if previous is not None:
             old_provider = previous.get("provider") if type(previous) is dict else None
             require(type(previous) is dict and previous.get("source") == SOURCE
@@ -431,4 +431,10 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     sys.exit(main())

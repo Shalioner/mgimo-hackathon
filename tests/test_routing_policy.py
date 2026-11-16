@@ -82,9 +82,9 @@ def test_observed_is_not_requested():
 def test_dry_run_no_spawn_network_or_writes(tmp_path, monkeypatch, capsys):
     p = tmp_path / "project"
     (p / "state").mkdir(parents=True)
-    (p / "state/run_log.md").write_text("")
+    (p / "state/run_log.md").write_text("", encoding="utf-8")
     q = tmp_path / "q.md"
-    q.write_text("данные" * 100)
+    q.write_text("данные" * 100, encoding="utf-8")
     monkeypatch.setattr(L, "load_routing", lambda: {"tasks": {"classify": {"tier": "T1"}},
         "families": {"openai": {"T1": "m"}}, "delegate_backends": ["codex"]})
     monkeypatch.setattr(D.subprocess, "run", lambda *a, **k: pytest.fail("spawn"))
@@ -152,11 +152,11 @@ def test_delegate_metadata_receipt_and_quarantine(tmp_path, monkeypatch, observe
     monkeypatch.setattr(P, "http_open", call)
     project = tmp_path / "p"
     (project / "state").mkdir(parents=True)
-    (project / "state/run_log.md").write_text("")
+    (project / "state/run_log.md").write_text("", encoding="utf-8")
     prompt = tmp_path / "q.md"
-    prompt.write_text("Classify")
+    prompt.write_text("Classify", encoding="utf-8")
     assert D.main(["--project", str(project), "--prompt-file", str(prompt), "--task", "classify"]) == expected
-    receipt = json.loads(next((project / "state/delegated").glob("*.receipt.json")).read_text())
+    receipt = json.loads(next((project / "state/delegated").glob("*.receipt.json")).read_text(encoding="utf-8"))
     assert receipt["requested"]["model"] == receipt["transmitted"]["model"] == "m"
     assert receipt["observed"]["model"] == observed and receipt["observed"]["effort"] is None
     assert len(calls) == 1
@@ -187,12 +187,12 @@ def test_timeout_single_attempt(monkeypatch):
 
 def test_code_only_gate_works_without_entitlement(tmp_path, monkeypatch):
     gate = tmp_path / "gate.yaml"
-    gate.write_text('questions:\n  content:\n    instructions: Has content\n    check: {all: [content]}\n')
+    gate.write_text('questions:\n  content:\n    instructions: Has content\n    check: {all: [content]}\n', encoding="utf-8")
     art = tmp_path / "01_brief.md"
-    art.write_text("content")
+    art.write_text("content", encoding="utf-8")
     project = tmp_path / "p"
     (project / "state").mkdir(parents=True)
-    (project / "state/run_log.md").write_text("")
+    (project / "state/run_log.md").write_text("", encoding="utf-8")
     monkeypatch.setattr(DC, "gate_file", lambda _: gate)
     monkeypatch.setattr(L, "load_routing", lambda: {})
     monkeypatch.setattr(P, "http_open", lambda *a: pytest.fail("network"))

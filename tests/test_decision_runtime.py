@@ -24,7 +24,7 @@ def response(qs, choices=None, confidence=0.95):
 @pytest.fixture
 def local(monkeypatch, tmp_path):
     binary = tmp_path / "python"
-    binary.write_text("fixture")
+    binary.write_text("fixture", encoding="utf-8")
     binary.chmod(0o700)
     weights = tmp_path / "weights"
     weights.mkdir()
@@ -38,8 +38,8 @@ def local(monkeypatch, tmp_path):
     def invoke(command, **kwargs):
         calls.append((command, kwargs))
         # Actual wrapper inputs must survive exactly; no hidden truncation.
-        calls[-1][1]["state"] = Path(command[command.index("--state-file") + 1]).read_text()
-        calls[-1][1]["questions"] = json.loads(Path(command[command.index("--questions") + 1]).read_text())
+        calls[-1][1]["state"] = Path(command[command.index("--state-file") + 1]).read_text(encoding="utf-8")
+        calls[-1][1]["questions"] = json.loads(Path(command[command.index("--questions") + 1]).read_text(encoding="utf-8"))
         return (0 if report["status"] == "succeeded" else 3), json.dumps(report), ""
     monkeypatch.setattr(DR, "_invoke", invoke)
     monkeypatch.setattr(R.D, "execute_route", lambda *a, **kw: pytest.fail("No cloud task allowed"))

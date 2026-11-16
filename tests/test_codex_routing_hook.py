@@ -124,7 +124,7 @@ def test_other_events_not_claimed_as_model_switch():
 
 @pytest.mark.parametrize('raw', ['not-json', 'null', '[]', 'x' * 65537])
 def test_cli_invalid_input_denied_without_inference(raw):
-    proc = subprocess.run([sys.executable, str(SCRIPT)], input=raw, text=True, capture_output=True, check=False)
+    proc = subprocess.run([sys.executable, str(SCRIPT)], input=raw, text=True, capture_output=True, check=False, encoding="utf-8")
     assert proc.returncode == 0 and proc.stderr == ''
     assert json.loads(proc.stdout)['hookSpecificOutput']['permissionDecision'] == 'deny'
 
@@ -193,7 +193,7 @@ def test_real_helper_blocks_third_astra_spawn_without_inference(tmp_path, monkey
     assert all(item['model'] == model for item in dispatched)
     assert receipts[2]['permissionDecision'] == 'deny'
     assert 'updatedInput' not in receipts[2]
-    assert json.loads(quota.read_text())['calls'] == 2
+    assert json.loads(quota.read_text(encoding="utf-8"))['calls'] == 2
 
 
 @pytest.mark.parametrize('event', [
@@ -202,7 +202,7 @@ def test_real_helper_blocks_third_astra_spawn_without_inference(tmp_path, monkey
 ])
 def test_cli_valid_unrelated_event_preserved(event):
     proc = subprocess.run([sys.executable, str(SCRIPT)], input=json.dumps(event),
-                          text=True, capture_output=True, check=False)
+                          text=True, capture_output=True, check=False, encoding="utf-8")
     assert proc.returncode == 0 and json.loads(proc.stdout) == {} and proc.stderr == ''
 
 
@@ -210,7 +210,7 @@ def test_cli_oversized_astra_payload_denied_without_inference():
     event = payload()
     event['tool_input'].update(model='gpt-6-astra', message='x' * 65536)
     proc = subprocess.run([sys.executable, str(SCRIPT)], input=json.dumps(event),
-                          text=True, capture_output=True, check=False)
+                          text=True, capture_output=True, check=False, encoding="utf-8")
     out = json.loads(proc.stdout)['hookSpecificOutput']
     assert proc.returncode == 0 and proc.stderr == ''
     assert out['permissionDecision'] == 'deny'
@@ -239,7 +239,7 @@ def test_every_alias_denies_exhausted_real_quota(tool_name, tmp_path, monkeypatc
     cfg = routing.L.load_routing()
     model = routing.L.model_for(cfg, 'openai', 'T4')
     quota = tmp_path / 'quota.json'
-    quota.write_text(json.dumps({'approval_ref': 'offline-alias-test', 'calls': 2}))
+    quota.write_text(json.dumps({'approval_ref': 'offline-alias-test', 'calls': 2}), encoding="utf-8")
     cfg['automatic_routing'] = {
         'classifier': 'local-d1',
         'host_routing': {'enabled_hosts': ['codex'], 'models': {'codex': [model]}},
@@ -255,7 +255,7 @@ def test_every_alias_denies_exhausted_real_quota(tool_name, tmp_path, monkeypatc
                    decide=lambda *a, **k: routing.decide(*a, **k, load_config=lambda: cfg),
                    authorize=lambda s: routing.authorize(s, load_config=lambda: cfg))['hookSpecificOutput']
     assert out['permissionDecision'] == 'deny' and 'updatedInput' not in out
-    assert json.loads(quota.read_text())['calls'] == 2
+    assert json.loads(quota.read_text(encoding="utf-8"))['calls'] == 2
 
 
 @pytest.mark.parametrize('failure', ['quota', 'exception', 'oversize'])
@@ -264,7 +264,7 @@ def test_custom_t4_fallback_denied(failure, tmp_path, monkeypatch):
     cfg = copy.deepcopy(routing.L.load_routing())
     cfg['families']['openai']['T4'] = 'gpt-betelgeuse'
     quota = tmp_path / 'quota.json'
-    quota.write_text(json.dumps({'approval_ref': 'custom-t4', 'calls': 2}))
+    quota.write_text(json.dumps({'approval_ref': 'custom-t4', 'calls': 2}), encoding="utf-8")
     cfg['automatic_routing'] = {
         'classifier': 'local-d1',
         'host_routing': {'enabled_hosts': ['codex'], 'models': {'codex': ['gpt-betelgeuse']}},
@@ -284,7 +284,7 @@ def test_custom_t4_fallback_denied(failure, tmp_path, monkeypatch):
     out = H.handle(event, decide=decide)['hookSpecificOutput']
     assert out['permissionDecision'] == 'deny'
     assert 'updatedInput' not in out
-    assert json.loads(quota.read_text())['calls'] == 2
+    assert json.loads(quota.read_text(encoding="utf-8"))['calls'] == 2
 
 
 @pytest.mark.parametrize("message", ["Extract source facts", "x" * 24001, ""], ids=['normal', 'oversize', 'empty'])

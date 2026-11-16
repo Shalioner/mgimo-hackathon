@@ -90,7 +90,7 @@ def test_hints_and_delegate_prompt_include_them(tmp_path, monkeypatch, capsys):
     assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "extract-claims", "--dry-run"]) == 0
     import json
     plan = json.loads(capsys.readouterr().out)
-    assert plan["input_bytes"] > len((D.GUARD + q.read_text()).encode("utf-8"))
+    assert plan["input_bytes"] > len((D.GUARD + q.read_text(encoding="utf-8")).encode("utf-8"))
     assert plan["transmitted"]["model"] is None
 
 
@@ -214,7 +214,7 @@ def test_selfhosted_backend_roundtrip(tmp_path, monkeypatch):
                    "delegate_backends: [selfhosted, codex]\n", encoding="utf-8")
     from test_routing_policy import api_policy
     import yaml
-    with loc.open("a") as f:
+    with loc.open("a", encoding="utf-8") as f:
         f.write(yaml.safe_dump({"execution_policy": api_policy("selfhosted", "selfhosted",
             f"http://127.0.0.1:{srv.server_port}/v1/chat/completions", "my-classifier")}))
     monkeypatch.setattr(L, "ROUTING_LOCAL_PATH", loc)

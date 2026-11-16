@@ -12,9 +12,9 @@ import d1_control as C
 def control(tmp_path, monkeypatch):
     root = tmp_path / 'repo'
     (root / 'tools').mkdir(parents=True)
-    (root / 'tools/d1_service.py').write_text('# test only')
+    (root / 'tools/d1_service.py').write_text('# test only', encoding="utf-8")
     binary = tmp_path / 'python'
-    binary.write_text('# test only')
+    binary.write_text('# test only', encoding="utf-8")
     binary.chmod(0o700)
     monkeypatch.setattr(C, 'ROOT', root)
     monkeypatch.setattr(C, 'PYTHON', binary)

@@ -126,7 +126,7 @@ def inherited_plugin_dirs(root):
     config_dir = Path(os.environ.get('CLAUDE_CONFIG_DIR') or Path.home() / '.claude')
     for path in [config_dir / 'settings.json', root / '.claude/settings.json']:
         if path.is_file():
-            data = json.loads(path.read_text())
+            data = json.loads(path.read_text(encoding="utf-8"))
             values.append((data.get('env') or {}).get('CLAUDE_CODE_PLUGIN_DIRS', ''))
     if not all(isinstance(value, str) for value in values):
         raise ValueError('Inherited plugin directories must be strings')
@@ -191,4 +191,10 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     main()

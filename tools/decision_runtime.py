@@ -74,7 +74,7 @@ def plan(state, questions, cfg, timeout=240):
 def _invoke(command, *, cwd, env, timeout):
     # Own a process group so an outer timeout cannot leave the model child running.
     proc = subprocess.Popen(command, cwd=cwd, env=env, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, text=True, start_new_session=True)
+                            stderr=subprocess.PIPE, text=True, start_new_session=True, encoding="utf-8")
     try:
         stdout, stderr = proc.communicate(timeout=timeout)
         return proc.returncode, stdout, stderr

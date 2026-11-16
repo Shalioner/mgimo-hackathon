@@ -45,7 +45,7 @@ def test_unstarted_plan_is_not_actual_switch(tmp_path):
 
 
 def test_case_inputs_have_no_expected_values_injected():
-    cases = json.loads((ROOT/'evals/routing/four_cases.json').read_text())['cases']
+    cases = json.loads((ROOT/'evals/routing/four_cases.json').read_text(encoding="utf-8"))['cases']
     assert len(cases) == 5
     for case in cases:
         assert len(case['steps']) == 2

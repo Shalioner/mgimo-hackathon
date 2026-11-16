@@ -170,7 +170,7 @@ def main(argv=None):
     parser.add_argument('--execute', action='store_true', help='Call configured decision provider; does not modify session')
     args = parser.parse_args(argv)
     try:
-        result = compact(json.loads(args.transcript.read_text()), args.goal, execute=args.execute)
+        result = compact(json.loads(args.transcript.read_text(encoding="utf-8")), args.goal, execute=args.execute)
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
     print(json.dumps(result, ensure_ascii=False, indent=2))
@@ -178,4 +178,10 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    import sys as _sys
+    for _stream in (_sys.stdin, _sys.stdout, _sys.stderr):  # Windows: pipes/console default to cp1251
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     raise SystemExit(main())

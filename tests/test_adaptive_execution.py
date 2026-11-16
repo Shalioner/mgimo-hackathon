@@ -140,7 +140,7 @@ def test_direct_transport_cannot_bypass_t4_quota(subscription, tmp_path):
     route = selected(cfg, 'T4', 'm', 'low')
     receipt, text, _ = A.D.execute_route(cfg, 'codex', 'm', 'task', 'low', 20, route)
     assert receipt['result'] == 'succeeded' and text
-    assert json.loads((tmp_path / 'quota.json').read_text())['calls'] == 1
+    assert json.loads((tmp_path / 'quota.json').read_text(encoding="utf-8"))['calls'] == 1
     route = selected(cfg, 'T4', 'm', 'low')
     assert route['status'] == 'denied'
     receipt, text, _ = A.D.execute_route(cfg, 'codex', 'm', 'task', 'low', 20, route)
@@ -183,7 +183,7 @@ def test_document_pipeline_end_to_end_uses_real_router_and_quality(subscription,
     cfg['automatic_routing'] = {'classifier': 'local-d1', 'quality': {'enabled': True, 'max_attempts': 3}}
     files = [tmp_path / 'one.txt', tmp_path / 'two.txt']
     for index, path in enumerate(files):
-        path.write_text(f'Value is {index}.\nSECRET_ORIGINAL_BACKGROUND\n' + 'unused text\n'*100)
+        path.write_text(f'Value is {index}.\nSECRET_ORIGINAL_BACKGROUND\n' + 'unused text\n'*100, encoding="utf-8")
     calls = []
     def classify(state, questions, cfg, execute=False, timeout=600):
         assert 'SECRET_ORIGINAL_BACKGROUND' not in state and 'evidence_cards' not in state

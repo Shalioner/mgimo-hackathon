@@ -35,8 +35,8 @@ def test_policy_denial_does_not_become_classifier_uncertainty():
 
 
 def test_saved_receipt_survives_interrupted_batch_and_corrupt_is_visible(tmp_path):
-    (tmp_path/'0.json').write_text(json.dumps(row('0', 'T2', .9)))
-    (tmp_path/'1.json').write_text('{')
+    (tmp_path/'0.json').write_text(json.dumps(row('0', 'T2', .9)), encoding="utf-8")
+    (tmp_path/'1.json').write_text('{', encoding="utf-8")
     cases = [case(str(i)) for i in range(3)]
     s = Q.summarize(cases, Q.saved_rows(tmp_path, cases))
     assert s['tasks'] == 3 and s['selected_routes'] == 1
