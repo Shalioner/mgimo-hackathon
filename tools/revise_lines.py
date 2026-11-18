@@ -63,7 +63,7 @@ def build_task(ledger: L.Ledger, change: str, stale: List[dict]) -> Tuple[str, D
     refs = sorted({r for i in stale for r in i["refs"]})
     objs = "\n".join(f"- {r}: {object_summary(ledger.objects[r])}" for r in refs if r in ledger.objects)
     keyed = {f"{i['file'][:2]}:{i['line']}": i for i in stale}
-    lines = "\n".join(f"[{k}] {i['text']}" for k, i in keyed.items())
+    lines = "\n".join(f"[{k}] {i['raw_text']}" for k, i in keyed.items())
     chg = ledger.objects.get(change, {})
     return TASK.format(change=change, summary=chg.get("summary", ""), objects=objs, lines=lines), keyed
 
@@ -101,25 +101,33 @@ def apply(project: Path, change: str, keyed: Dict[str, dict], proposals: List[di
         f = project / "outputs" / fname
         lines = f.read_text(encoding="utf-8").split("\n")
         for ln, p in edits.items():
+            if not 1 <= ln <= len(lines):
+                stats["skipped"] += 1
+                continue
             old = lines[ln - 1]
-            if V.normalize_short_lists(old.strip())[:300] != p["item"]["text"]:
+            if old != p["item"]["raw_text"]:
                 stats["skipped"] += 1  # строка изменилась после проверки — не трогаем
                 continue
             new = None
-            if p["action"] == "rewrite" and p.get("text"):
+            if p["action"] == "rewrite" and isinstance(p.get("text"), str):
                 cand = p["text"].strip()
                 keep_ids = set(V.expand_refs(V.normalize_short_lists(old)))
                 ok_ids = keep_ids <= set(V.expand_refs(V.normalize_short_lists(cand)))
-                ok_table = (not old.strip().startswith("|")) or (cand.startswith("|") and cand.count("|") == old.strip().count("|"))
-                if ok_ids and ok_table:
+                ok_table = (not old.strip().startswith("|")) or (
+                    cand.startswith("|") and cand.endswith("|")
+                    and cand.count("|") == old.strip().count("|"))
+                if cand and len(cand.splitlines()) == 1 and ok_ids and ok_table:
                     indent = old[:len(old) - len(old.lstrip())]
                     new = _with_mark(indent + cand, f"(пересмотрено по {change})")
                     stats["rewrite"] += 1
-            if new is None:
+            if p["action"] == "mark":
                 new = _with_mark(old, f"(проверено по {change})")
                 stats["mark"] += 1
+            if new is None:
+                stats["skipped"] += 1
+                continue
             lines[ln - 1] = new
-        f.write_text("\n".join(lines), encoding="utf-8")
+        L.atomic_write_text(f, "\n".join(lines))
     return stats
 
 
@@ -169,9 +177,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 0
     stats = apply(project, args.change, keyed, proposals)
     left = [i for i in V.verify(project, args.files, args.change)["items"] if i["verdict"] == "stale?"]
-    L.cmd_log(project, args.step, f"правка строк по {args.change}", "T2", "revise_lines.py",
-              f"переписано {stats['rewrite']}, помечено {stats['mark']}, пропущено {stats['skipped']}, осталось {len(left)}",
-              "см. строку делегирования выше")
+    L.log_or_defer(project, args.step, f"правка строк по {args.change}", "T2", "revise_lines.py",
+                   f"переписано {stats['rewrite']}, помечено {stats['mark']}, пропущено {stats['skipped']}, осталось {len(left)}",
+                   "см. строку делегирования выше")
     print(f"Переписано {stats['rewrite']}, помечено «проверено» {stats['mark']}, пропущено {stats['skipped']}; "
           f"осталось {len(left)}. Проверь `git diff -- projects/<case>/outputs` и исправь остаток сам.")
     for i in left[:20]:

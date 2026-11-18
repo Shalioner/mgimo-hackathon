@@ -1,8 +1,13 @@
-.venv/
+.venv
 __pycache__/
 .pytest_cache/
 .env
 *.pyc
 .DS_Store
+**/state/.ledger-write.lock
+**/state/.run-log-pending/
 knowledge/routing.local.yaml
 knowledge/models.inventory.yaml
+
+# BULLSEYE judge rounds: internal red-team material, never public
+judging/

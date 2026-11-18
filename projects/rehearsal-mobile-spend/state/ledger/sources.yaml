@@ -1,0 +1,67 @@
+- id: SRC-001
+  title: 'МТС Бизнес: как контролировать расходы сотрудников'
+  kind: website
+  access: open
+  path: sources/01_mts_limits.md
+  sha256: c10694f4818cf3d4995b289cda67d6208ac8b73471ddb5e3ee34aa26b2f8ba5d
+  retrieved: '2026-11-17'
+  reliability: high
+  url: https://support.mts.ru/mobilnaya-svyaz-b2b/kak-upravlyat-korporativnimi-nomerami/kak-kontrolirovat-rashodi-sotrudnikov
+- id: SRC-002
+  title: 'билайн бизнес Москва: мобильная связь для бизнеса'
+  kind: website
+  access: open
+  path: sources/02_beeline_controls.md
+  sha256: 75cf03757e1cad014577b5366c309a2eb17caf62b629e40830af5269b04eb005
+  retrieved: '2026-11-17'
+  reliability: high
+  url: https://moskva.beeline.ru/business/mobile-and-internet/mobile/
+- id: SRC-003
+  title: 'билайн бизнес Москва: «Гибкий интернет»'
+  kind: website
+  access: open
+  path: sources/03_beeline_data.md
+  sha256: fefd86cf5c1c5f4e310a3de20adafaf9bb00abef20bf7fce48a5e92f4514b8db
+  retrieved: '2026-11-17'
+  reliability: high
+  url: https://moskva.beeline.ru/business/mobile-and-internet/mobile-internet/
+- id: SRC-004
+  title: 'МегаФон: описание тарифа «Управляй! Директор»'
+  kind: document
+  access: open
+  path: sources/04_megafon_tariff.md
+  sha256: c865d9516938e554073c3d428e98f879cfd2cf9ce375955fa3930b6fd6d8412e
+  retrieved: '2026-11-17'
+  reliability: high
+  url: https://ceph.megafon.ru/htdocs-pk-ceph/ai/tariff_attrs/ac3834e1-31c5-4ccf-8258-bcfb3eb64577/e3566818-7b1a-4667-8fdc-5de27ed0880e/pdf/tariff_4949_spb_8a977.pdf
+- id: SRC-005
+  title: Текстовый макет F1 для учебной проверки
+  kind: document
+  access: own
+  path: sources/05_f1_mockup.md
+  sha256: 9951b386b5b0c26fd84f1fcb7de70e20923885cd6230ef86c85a5ccc398577c8
+  retrieved: '2026-11-17'
+  reliability: high
+  notes: Вымышленный номер. Доказательство только содержимого карточки, без утверждений
+    о поведении системы или клиента.
+- id: SRC-006
+  title: M27 — терминальный проход EXP-001 с участником
+  kind: dataset
+  access: own
+  path: sources/06_exp001_participant.json
+  sha256: 40c819794219b97a215e5316c15533e236ec30f14a682419b396dddf1acc760d
+  retrieved: '2026-11-18'
+  reliability: medium
+  notes: Один участник и шесть вымышленных событий. Квитанция фиксирует выбор и время
+    от показа приглашения. Полевой эффект и эффект относительно отчёта не измерялись.
+- id: SRC-007
+  title: M27 — сравнение предупреждения и отчёта с участником (EXP-002)
+  kind: dataset
+  access: own
+  path: sources/07_exp002_participant.json
+  sha256: aa2b6bf311600a20a32f9358ee4bb9e17a45c6fe2e566946c1a3664f7ee7fc2f
+  retrieved: '2026-11-18'
+  reliability: medium
+  notes: Один участник прошёл те же учебные события в двух терминальных представлениях.
+    Порядок первого показа чередовался. Измерено время после появления экрана. Частота
+    доставки событий и поведение реальных клиентов не проверялись. Некорректный свободный ввод сохранён кодом invalid.

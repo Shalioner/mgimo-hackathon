@@ -1,0 +1,9 @@
+- id: PAIN-001
+  segment: Ответственный за корпоративную связь в малом бизнесе, рабочая роль для проверки
+  statement: Возможная боль — о риске исчерпания пакета узнают слишком поздно, чтобы предупредить значимые расходы или снижение скорости.
+  criteria:
+    frequency: {level: unknown, basis: [HYP-003]}
+    cost: {level: unknown, basis: [CLM-004, HYP-003]}
+    workarounds: {level: unknown, basis: [CLM-001, CLM-002, CLM-003], note: 'Описания альтернатив есть, фактическое применение не измерено.'}
+    gap: {level: unknown, basis: [HYP-001, HYP-002]}
+    measurability: {level: medium, basis: [HYP-001], note: 'Можно сопоставить время сигнала, действия и последствия, если события доступны.'}

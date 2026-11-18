@@ -1,0 +1,96 @@
+{
+  "case": "esim-travel",
+  "date": "2026-11-18",
+  "question": "Что уже выбрано, что мешает запуску, какую одну проверку поручить и какой следующий выбор руководителя?",
+  "conditions": [
+    "Сохранён выбор, сделанный на C2",
+    "Повторное C3 открыто",
+    "Названа проверка датированных полных цен",
+    "Назван следующий выбор по обещаниям и stop/go"
+  ],
+  "all_answers_accepted": true,
+  "model": "gpt-6.2-sol",
+  "price_source": "knowledge/prices.yaml",
+  "active_human_seconds": null,
+  "actual_billed_usd": null,
+  "runs": [
+    {
+      "pair": 1,
+      "compact": false,
+      "tokens": {
+        "input": 80843,
+        "cached": 683904,
+        "output": 3974,
+        "calls": 1
+      },
+      "api_equivalent_usd": 0.2698164,
+      "wall_s": 114.795,
+      "answer_sha256": "16d6c3967e01c7e044bd39964fa8d619591bf6d5659e039fcfc87273c62b3545"
+    },
+    {
+      "pair": 1,
+      "compact": true,
+      "tokens": {
+        "input": 43337,
+        "cached": 467712,
+        "output": 3897,
+        "calls": 1
+      },
+      "api_equivalent_usd": 0.1724152,
+      "wall_s": 110.014,
+      "answer_sha256": "9497137cd08ef66e637f393d60ea42d5b2b9ed6352f16946b16189e1c42b1897"
+    },
+    {
+      "pair": 2,
+      "compact": true,
+      "tokens": {
+        "input": 80751,
+        "cached": 442240,
+        "output": 3692,
+        "calls": 1
+      },
+      "api_equivalent_usd": 0.242646,
+      "wall_s": 102.033,
+      "answer_sha256": "60492b7b467c799f1ca35eacba2dee20b4921f0b5aac498413563f7f90f5ba30"
+    },
+    {
+      "pair": 2,
+      "compact": false,
+      "tokens": {
+        "input": 46688,
+        "cached": 683520,
+        "output": 3546,
+        "calls": 1
+      },
+      "api_equivalent_usd": 0.197188,
+      "wall_s": 110.624,
+      "answer_sha256": "d95e3dd95313c3854f203f9eb6951ce1e26e75b24d22df03f0a7986be7b77f10"
+    },
+    {
+      "pair": 3,
+      "compact": false,
+      "tokens": {
+        "input": 50529,
+        "cached": 642816,
+        "output": 3630,
+        "calls": 1
+      },
+      "api_equivalent_usd": 0.2016396,
+      "wall_s": 109.15,
+      "answer_sha256": "31e8c965a1da2cf9e2f83c3fa3941293f262b3a0c4d5c533d504efae08c69e4e"
+    },
+    {
+      "pair": 3,
+      "compact": true,
+      "tokens": {
+        "input": 53380,
+        "cached": 455168,
+        "output": 2646,
+        "calls": 1
+      },
+      "api_equivalent_usd": 0.1787368,
+      "wall_s": 86.43,
+      "answer_sha256": "f7a97b4113c5e75b333de5bb12b8cb4259c438522b5762187d8b5b090d8c2aa7"
+    }
+  ]
+}

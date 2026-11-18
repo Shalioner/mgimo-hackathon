@@ -4,9 +4,15 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 HOOK = ROOT / "tools" / "hooks" / "strategist_hook.py"
+
+
+@pytest.fixture(autouse=True)
+def isolate_welcome_state(tmp_path, monkeypatch):
+    monkeypatch.setenv('XDG_STATE_HOME', str(tmp_path))
 
 
 def run(mode, payload=None, timeout=30):
@@ -56,7 +62,12 @@ def test_hook_configs_point_to_same_script():
     codex = json.loads((ROOT / ".codex/hooks.json").read_text(encoding="utf-8"))
     for cfg in (claude, codex):
         cmds = [h["command"] for ev in ("SessionStart", "UserPromptSubmit", "PostToolUse") for blk in cfg["hooks"][ev] for h in blk["hooks"]]
-        assert all("strategist_hook.py" in c for c in cmds) and len(cmds) == 3
+        shared = [c for c in cmds if "strategist_hook.py" in c]
+        assert len(shared) == 3
+        for event in ("SessionStart", "UserPromptSubmit", "PostToolUse"):
+            assert sum("strategist_hook.py" in h["command"] for block in cfg["hooks"][event] for h in block["hooks"]) == 1
+        extra = [c for c in cmds if "strategist_hook.py" not in c]
+        assert extra == [] if cfg is claude else len(extra) == 1 and "host_prompt.py" in extra[0]
 
 
 OBJECTIONS = ["это не так, перечитай чат", "как же ты меня бесишь", "ты меня не понял", "опять не то",

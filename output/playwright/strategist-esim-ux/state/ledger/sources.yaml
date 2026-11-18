@@ -1,0 +1,27 @@
+- id: SRC-001
+  title: Nomad UAE eSIM, выбор пакета
+  kind: image
+  access: open
+  url: https://www.nomadesim.com/united-arab-emirates-eSIM/3gb-30day
+  path: sources/catalogue.png
+  sha256: 6abd41e6f673b82e27783b64b84e8156d5653c8d276299a54b4b1411e370174d
+  retrieved: '2026-11-18'
+  reliability: medium
+- id: SRC-002
+  title: Nomad UAE eSIM, детали пакета
+  kind: image
+  access: open
+  url: https://www.nomadesim.com/united-arab-emirates-eSIM/3gb-30day
+  path: sources/plan-details.png
+  sha256: d64eb5a27c722eb61150d5138533f4938946e029d0b3afda90415ba5ba41b241
+  retrieved: '2026-11-18'
+  reliability: medium
+- id: SRC-003
+  title: Nomad UAE eSIM, условия активации
+  kind: image
+  access: open
+  url: https://www.nomadesim.com/united-arab-emirates-eSIM/3gb-30day
+  path: sources/activation.png
+  sha256: bc7ac146c78f901c2962730f3445f081af8fdd247ce021bd34d8963ad3d87e40
+  retrieved: '2026-11-18'
+  reliability: medium

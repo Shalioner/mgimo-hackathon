@@ -17,15 +17,24 @@
 from __future__ import annotations
 
 import argparse
+import datetime
+import errno
 import hashlib
 import os
 import json
 import re
+import shlex
+import stat
+import subprocess
 import sys
+import tempfile
+import time
+import uuid
 from collections import deque
+from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Dict, Iterable, Iterator, List, Optional, Tuple
 
 import yaml
 from jsonschema import Draft202012Validator
@@ -234,6 +243,40 @@ def _head_objects(ledger: Ledger) -> Dict[str, dict]:
     return out
 
 
+def _validate_supersession(ledger: Ledger, rep: Report, starts: Optional[Iterable[str]] = None) -> None:
+    """Проверить связи замены целиком или только цепочки, достижимые из starts."""
+    objs = ledger.objects
+    checked = set()
+    for start in objs if starts is None else starts:
+        path: Dict[str, int] = {}
+        oid = start
+        while oid not in checked:
+            if oid in path:
+                cycle = list(path)[path[oid]:] + [oid]
+                rep.err(oid, f"цикл superseded_by: {' → '.join(cycle)}")
+                break
+            path[oid] = len(path)
+            obj = objs[oid]
+            status = obj.get("status", "active")
+            if "superseded_by" not in obj:
+                if status == "superseded":
+                    rep.err(oid, "status=superseded, но не указан superseded_by")
+                break
+            target = obj["superseded_by"]
+            if status == "active":
+                rep.warn(oid, f"у активной записи указан superseded_by={target}")
+            if not isinstance(target, str) or target not in objs:
+                rep.err(oid, f"superseded_by ссылается на несуществующий объект {target!r}")
+                break
+            if prefix(target) != prefix(oid) or ledger.origin[target] != ledger.origin[oid]:
+                rep.err(oid, f"superseded_by ссылается на {target} другого типа")
+                break
+            if objs[target].get("status") == "retracted" and "superseded_by" not in objs[target]:
+                rep.warn(oid, f"цепочка superseded_by заканчивается отозванным объектом {target} (retracted)")
+            oid = target
+        checked.update(path)
+
+
 def validate(ledger: Ledger) -> Report:
     rep = Report()
     for where, msg in ledger.load_problems:
@@ -267,8 +310,7 @@ def validate(ledger: Ledger) -> Report:
             if o.get("status", "active") == "active" and t.get("status", "active") != "active" \
                     and prefix(oid) != "CHG":
                 rep.warn(oid, f"опирается на {target} со статусом {t.get('status')} — пересмотреть")
-        if o.get("status") == "superseded" and not o.get("superseded_by"):
-            rep.err(oid, "status=superseded, но не указан superseded_by")
+    _validate_supersession(ledger, rep)
 
     # 3. источники: открытость, наличие файла, контрольная сумма
     for oid, o in objs.items():
@@ -758,31 +800,144 @@ def cmd_env() -> int:
     return 0
 
 
+_WRITE_LOCK_TIMEOUT = 5.0
+
+
+@contextmanager
+def _project_write_lock(project: Path) -> Iterator[bool]:
+    """Serialize ledger commands for one case on a local filesystem."""
+    # Keep the file in place so queued writers and new writers lock the same inode.
+    with ExitStack() as stack:
+        try:
+            path = project.resolve() / "state" / ".ledger-write.lock"
+            stream = stack.enter_context(path.open("a+b"))
+            fd = stream.fileno()
+            if os.name == "posix":
+                import fcntl
+
+                def try_lock() -> None:
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            elif os.name == "nt":
+                import msvcrt
+
+                # The CRT can lock a byte beyond EOF. Use the same offset even
+                # if the lock file contains data.
+                stream.seek(0)
+
+                def try_lock() -> None:
+                    msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+            else:
+                raise OSError(f"неподдерживаемая платформа {os.name}")
+
+            deadline = time.monotonic() + _WRITE_LOCK_TIMEOUT
+            while True:
+                try:
+                    try_lock()
+                    break
+                except OSError as exc:
+                    if exc.errno not in (errno.EACCES, errno.EAGAIN):
+                        raise
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError(f"истекло ожидание ({_WRITE_LOCK_TIMEOUT:g} с)") from exc
+                    time.sleep(min(0.01, remaining))
+
+            if os.name == "nt":
+                stack.callback(msvcrt.locking, fd, msvcrt.LK_UNLCK, 1)
+        except (OSError, ImportError, RuntimeError) as exc:
+            print(f"Не удалось заблокировать запись в проект {project}: {exc}", file=sys.stderr)
+            yield False
+        else:
+            yield True
+
+
+def atomic_write_text(path: Path, text: str) -> None:
+    """Опубликовать целый файл, сохраняя предыдущую версию до замены."""
+    path = path.resolve()
+    mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else None
+    stream = tempfile.NamedTemporaryFile(
+        mode="w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
+    )
+    temporary = Path(stream.name)
+    try:
+        with stream:
+            stream.write(text)
+            stream.flush()
+            if mode is not None:
+                temporary.chmod(mode)
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
 def cmd_supersede(project: Path, old_id: str, new_id: str, note: Optional[str]) -> int:
-    """Пометить старый объект заменённым новым (запись не удаляется и не переписывается)."""
+    """Зафиксировать замену, сохраняя уже подтверждённые связи."""
     import datetime
-    ledger = Ledger(project)
-    for x in (old_id, new_id):
-        if x not in ledger.objects:
-            print(f"Не найден {x}", file=sys.stderr)
-            return 2
-    if prefix(old_id) != prefix(new_id) or old_id == new_id:
-        print("Заменять можно только объектом того же типа и с другим ID", file=sys.stderr)
+    if not (project / "state").exists():
+        print(f"Не найден {old_id}", file=sys.stderr)
         return 2
-    fname = TYPES[prefix(old_id)][0]
-    path = ledger.dir / fname
-    text = path.read_text(encoding="utf-8")
-    data = yaml.load(text, Loader=_Loader) or []
-    for o in data:
-        if o.get("id") == old_id:
-            o["status"] = "superseded"
-            o["superseded_by"] = new_id
-            o["updated"] = datetime.date.today().isoformat()
-            if note:
-                o["status_note"] = note
-    path.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
-    print(f"{old_id} → superseded, заменён {new_id}. Запустите validate: всё, что опирается на {old_id}, получит предупреждение.")
-    return 0
+    with _project_write_lock(project) as locked:
+        if not locked:
+            return 1
+        ledger = Ledger(project)
+        for oid in (old_id, new_id):
+            if oid not in ledger.objects:
+                print(f"Не найден {oid}", file=sys.stderr)
+                return 2
+        kind = TYPES.get(prefix(old_id))
+        if (kind is None or old_id == new_id or prefix(old_id) != prefix(new_id)
+                or any(ledger.origin[oid] != kind[0] for oid in (old_id, new_id))):
+            print("Заменять можно только объектом того же типа и с другим ID", file=sys.stderr)
+            return 2
+        fname = kind[0]
+        rep = Report()
+        for where, msg in ledger.load_problems:
+            if where == fname:
+                rep.err(where, msg)
+        _validate_supersession(ledger, rep, (old_id,))
+        if rep.errors:
+            print(*rep.errors, sep="\n", file=sys.stderr)
+            return 2
+
+        old = ledger.objects[old_id]
+        status = old.get("status", "active")
+        if status == "superseded":
+            successor = old["superseded_by"]
+            if successor == new_id and (not note or note == old.get("status_note")):
+                print(f"{old_id} уже заменён {successor}")
+                return 0
+            print(f"{old_id} уже заменён {successor}. Чтобы продолжить подтверждённую цепочку, "
+                  f"найдите её последний активный объект начиная с {successor} и замените его "
+                  "командой supersede с новым активным ID. Прежняя связь и заметка сохранены.",
+                  file=sys.stderr)
+            return 3
+        if status != "active":
+            print(f"Запись {old_id} неактивна (status={status})", file=sys.stderr)
+            return 2
+        if "superseded_by" in old:
+            print(f"У активной записи {old_id} уже указан преемник. Проверьте её историю.", file=sys.stderr)
+            return 2
+        new = ledger.objects[new_id]
+        new_status = new.get("status", "active")
+        if new_status != "active":
+            print(f"Новый объект {new_id} неактивен (status={new_status})", file=sys.stderr)
+            return 2
+
+        old.update(status="superseded", superseded_by=new_id, updated=datetime.date.today().isoformat())
+        if note:
+            old["status_note"] = note
+        _validate_supersession(ledger, rep, (old_id,))
+        if rep.errors:
+            print(*rep.errors, sep="\n", file=sys.stderr)
+            return 2
+        if "superseded_by" in new:
+            print(f"У активного преемника {new_id} уже указан superseded_by. Проверьте его историю.", file=sys.stderr)
+            return 2
+        data = [obj for oid, obj in ledger.objects.items() if ledger.origin[oid] == fname]
+        atomic_write_text(ledger.dir / fname, yaml.safe_dump(data, allow_unicode=True, sort_keys=False))
+        print(f"{old_id} → superseded, заменён {new_id}. Запустите validate: всё, что опирается на {old_id}, получит предупреждение.")
+        return 0
 
 
 def brief_line(oid: str, o: dict) -> str:
@@ -820,10 +975,21 @@ def cmd_brief(ledger: "Ledger", ids: List[str], include_all: bool) -> int:
     return 0
 
 
+def _log_row(ts: str, step: str, action: str, tier: str, model: str, result: str, cost: str) -> str:
+    return "| " + " | ".join(_cell(x) for x in (ts, step, action, tier, model, result, cost)) + " |\n"
+
+
+def _append_log_row(log: Path, row: str, *, replay: bool = False) -> None:
+    text = log.read_text(encoding="utf-8")
+    if replay and row[:-1] in text.split("\n"):
+        return
+    if not text.endswith("\n"):
+        text += "\n"
+    atomic_write_text(log, text + row)
+
+
 def cmd_log(project: Path, step: str, action: str, tier: str, model: str, result: str, cost: str,
             now: Optional[str] = None) -> int:
-    import datetime
-
     log = project / "state" / "run_log.md"
     if not log.exists():
         print(f"Нет журнала {log}: сначала ledger.py init", file=sys.stderr)
@@ -832,12 +998,102 @@ def cmd_log(project: Path, step: str, action: str, tier: str, model: str, result
         print(f"Уровень должен быть одним из {', '.join(TIER_ORDER)} или «-»", file=sys.stderr)
         return 2
     ts = now or datetime.datetime.now().astimezone().isoformat(timespec="seconds")
-    row = "| " + " | ".join(_cell(x) for x in (ts, step, action, tier, model, result, cost)) + " |\n"
-    text = log.read_text(encoding="utf-8")
-    if not text.endswith("\n"):
-        text += "\n"
-    log.write_text(text + row, encoding="utf-8")
-    print(f"Записано в журнал: {ts} · шаг {step} · {tier}")
+    row = _log_row(ts, step, action, tier, model, result, cost)
+    with _project_write_lock(project) as locked:
+        if not locked:
+            return 1
+        _append_log_row(log, row)
+        print(f"Записано в журнал: {ts} · шаг {step} · {tier}")
+        return 0
+
+
+_PENDING_LOG_ID = re.compile(r"[0-9a-f]{32}")
+
+
+def _pending_log_dir(project: Path) -> Path:
+    state = project.resolve() / "state"
+    directory = state / ".run-log-pending"
+    if state.is_symlink() or directory.is_symlink():
+        raise ValueError(f"Каталог ожидающих записей должен находиться в state проекта: {directory}")
+    return directory
+
+
+def pending_log_files(project: Path) -> Iterator[Path]:
+    directory = _pending_log_dir(project)
+    try:
+        files = sorted(directory.iterdir())
+    except FileNotFoundError:
+        return
+    yield from (p for p in files if p.suffix == ".md" and _PENDING_LOG_ID.fullmatch(p.stem))
+
+
+def _log_marker(entry_id: str) -> str:
+    return f"<!-- run-log:{entry_id} -->"
+
+
+def read_pending_log(path: Path) -> Tuple[str, str]:
+    if path.is_symlink() or (path.exists() and not path.is_file()):
+        raise ValueError(f"Ожидался обычный файл: {path}")
+    row = path.read_text(encoding="utf-8")
+    cells = row.split("|")
+    if (len(cells) != 9 or cells[0] or cells[-1] != "\n" or row.count("\n") != 1
+            or not cells[6].rstrip().endswith(_log_marker(path.stem))):
+        raise ValueError(f"Повреждённая строка журнала: {path}")
+    ts = cells[1].strip()
+    datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    return ts, row
+
+
+def log_or_defer(project: Path, step: str, action: str, tier: str, model: str, result: str, cost: str) -> None:
+    """Record a completed action without changing its exit status on a log write error."""
+    ts = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    entry_id = uuid.uuid4().hex
+    # Keep the identity in the same atomic journal update as the row.
+    result = f"{result} {_log_marker(entry_id)}"
+    try:
+        rc = cmd_log(project, step, action, tier, model, result, cost, now=ts)
+    except (OSError, UnicodeError) as exc:
+        print(f"Не удалось записать журнал {project}: {exc}", file=sys.stderr)
+    else:
+        if rc == 0:
+            return
+
+    try:
+        directory = _pending_log_dir(project)
+        directory.mkdir(exist_ok=True)
+        path = directory / f"{entry_id}.md"
+        atomic_write_text(path, _log_row(ts, step, action, tier, model, result, cost))
+    except (OSError, ValueError) as exc:
+        print(f"log_status=failed: не удалось сохранить ожидающую запись {entry_id} ({ts}): {exc}", file=sys.stderr)
+        return
+    argv = [sys.executable, str(Path(__file__).resolve()), "log-replay", str(project.resolve()), entry_id]
+    command = subprocess.list2cmdline(argv) if os.name == "nt" else shlex.join(argv)
+    print(f"log_status=pending: {path}\nВосстановление: {command}", file=sys.stderr)
+
+
+def cmd_log_replay(project: Path, entry_id: str) -> int:
+    if not _PENDING_LOG_ID.fullmatch(entry_id):
+        print("Укажите ID ожидающей записи из команды восстановления", file=sys.stderr)
+        return 2
+    try:
+        path = _pending_log_dir(project) / f"{entry_id}.md"
+        log = project / "state" / "run_log.md"
+        with _project_write_lock(project) as locked:
+            if not locked:
+                return 1
+            try:
+                _, row = read_pending_log(path)
+            except FileNotFoundError:
+                print(f"Ожидающей записи {entry_id} нет")
+                return 0
+            if log.is_symlink():
+                raise ValueError(f"Ожидался журнал в state проекта: {log}")
+            _append_log_row(log, row, replay=True)
+            path.unlink()
+    except (OSError, ValueError) as exc:
+        print(f"Не удалось восстановить ожидающую запись {entry_id}: {exc}", file=sys.stderr)
+        return 1
+    print(f"Восстановлена запись журнала {entry_id}")
     return 0
 
 
@@ -883,58 +1139,63 @@ def cmd_add_source(project: Path, file: Path, title: str, kind: str, access: str
     if access not in ("open", "own"):
         print("access должен быть open или own: закрытые данные не используются", file=sys.stderr)
         return 1
-    # путь может быть абсолютным, относительным от текущей папки или от папки проекта
-    candidates = [file] if file.is_absolute() else [Path.cwd() / file, project / file]
-    file = next((c for c in candidates if c.exists()), candidates[0])
-    if not file.exists():
-        print(f"Файл не найден: {file}", file=sys.stderr)
-        return 1
-    ledger = Ledger(project)
-    digest = hashlib.sha256(file.read_bytes()).hexdigest()
-    for oid, o in ledger.objects.items():
-        if prefix(oid) == "SRC" and o.get("sha256") == digest:
-            print(f"Уже зарегистрирован как {oid} — повторно не добавляю", file=sys.stderr)
-            return 3
-    sources_dir = (project / "sources").resolve()
-    target = file.resolve()
-    if sources_dir not in target.parents:
-        target = sources_dir / file.name
-        if target.exists():
-            print(f"В sources/ уже есть другой файл {file.name} — переименуйте", file=sys.stderr)
+    with _project_write_lock(project) as locked:
+        if not locked:
             return 1
-        shutil.copy2(file, target)
-    new_id = _next_id(ledger, "SRC")
-    entry = {
-        "id": new_id, "title": title, "kind": kind, "access": access,
-        "path": target.relative_to(project.resolve()).as_posix(), "sha256": digest,
-        "retrieved": today or datetime.date.today().isoformat(), "reliability": reliability,
-    }
-    if url:
-        entry["url"] = url
-    if published:
-        entry["published"] = published
-    if notes:
-        entry["notes"] = notes
-    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
-    problems = [e.message for e in Draft202012Validator(
-        {"$schema": schema["$schema"], "$defs": schema["$defs"], "$ref": "#/$defs/source"}).iter_errors(entry)]
-    if problems:
-        if target != file.resolve():
-            target.unlink()  # убрать только что скопированную копию
-        print("Источник не зарегистрирован: " + "; ".join(problems), file=sys.stderr)
-        return 1
-    path = project / "state/ledger/sources.yaml"
-    existing = path.read_text(encoding="utf-8") if path.exists() else ""
-    if existing.strip() in ("", "[]"):
-        existing = ""
-    block = yaml.safe_dump([entry], allow_unicode=True, sort_keys=False)
-    sep = "" if existing.endswith("\n") or not existing else "\n"
-    path.write_text(existing + sep + block, encoding="utf-8")
-    print(f"{new_id} зарегистрирован: {entry['path']} (sha256 {digest[:12]}…)")
-    return 0
+        # путь может быть абсолютным, относительным от текущей папки или от папки проекта
+        candidates = [file] if file.is_absolute() else [Path.cwd() / file, project / file]
+        file = next((c for c in candidates if c.exists()), candidates[0])
+        if not file.exists():
+            print(f"Файл не найден: {file}", file=sys.stderr)
+            return 1
+        ledger = Ledger(project)
+        digest = hashlib.sha256(file.read_bytes()).hexdigest()
+        for oid, o in ledger.objects.items():
+            if prefix(oid) == "SRC" and o.get("sha256") == digest:
+                print(f"Уже зарегистрирован как {oid} — повторно не добавляю", file=sys.stderr)
+                return 3
+        sources_dir = (project / "sources").resolve()
+        target = file.resolve()
+        if sources_dir not in target.parents:
+            target = sources_dir / file.name
+            if target.exists():
+                print(f"В sources/ уже есть другой файл {file.name} — переименуйте", file=sys.stderr)
+                return 1
+            shutil.copy2(file, target)
+        new_id = _next_id(ledger, "SRC")
+        entry = {
+            "id": new_id, "title": title, "kind": kind, "access": access,
+            "path": target.relative_to(project.resolve()).as_posix(), "sha256": digest,
+            "retrieved": today or datetime.date.today().isoformat(), "reliability": reliability,
+        }
+        if url:
+            entry["url"] = url
+        if published:
+            entry["published"] = published
+        if notes:
+            entry["notes"] = notes
+        schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+        problems = [e.message for e in Draft202012Validator(
+            {"$schema": schema["$schema"], "$defs": schema["$defs"], "$ref": "#/$defs/source"}).iter_errors(entry)]
+        if problems:
+            if target != file.resolve():
+                target.unlink()  # убрать только что скопированную копию
+            print("Источник не зарегистрирован: " + "; ".join(problems), file=sys.stderr)
+            return 1
+        path = project / "state/ledger/sources.yaml"
+        existing = path.read_text(encoding="utf-8") if path.exists() else ""
+        if existing.strip() in ("", "[]"):
+            existing = ""
+        block = yaml.safe_dump([entry], allow_unicode=True, sort_keys=False)
+        sep = "" if existing.endswith("\n") or not existing else "\n"
+        atomic_write_text(path, existing + sep + block)
+        print(f"{new_id} зарегистрирован: {entry['path']} (sha256 {digest[:12]}…)")
+        return 0
 
 
 def cmd_status(projects_root: Path) -> int:
+    from c3_approval import status as approval_status
+
     if not projects_root.is_dir():
         print("Проектов пока нет. Начните: python tools/ledger.py init projects/<slug> --title \"…\"")
         return 0
@@ -950,6 +1211,9 @@ def cmd_status(projects_root: Path) -> int:
         done = len(re.findall(r"- \[x\]", text, flags=re.I))
         ledger = Ledger(proj)
         todo = []
+        approval, message, _ = approval_status(ledger)
+        if approval in ("stale", "invalid"):
+            todo.append(message)
         for oid, o in ledger.objects.items():
             if prefix(oid) == "CHG" and not o.get("processed"):
                 todo.append(f"необработанные сведения {oid}")
@@ -998,11 +1262,17 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--reliability", default="medium", choices=["high", "medium", "low"])
     p.add_argument("--published")
     p.add_argument("--notes")
-    p = sub.add_parser("supersede", help="пометить объект заменённым новым")
+    p = sub.add_parser(
+        "supersede",
+        help="заменить активный объект новым того же типа",
+        description="Фиксирует замену активной записи. Повтор с тем же преемником и без новой заметки "
+                    "завершается без записи (код 0). Конфликт с подтверждённой заменой — код 3, "
+                    "некорректный ID, статус или цепочка — код 2.",
+    )
     p.add_argument("project", type=Path)
-    p.add_argument("old")
-    p.add_argument("--by", required=True, help="ID нового объекта")
-    p.add_argument("--note")
+    p.add_argument("old", help="ID заменяемого объекта")
+    p.add_argument("--by", required=True, help="ID активного объекта того же типа для новой замены")
+    p.add_argument("--note", help="заметка при первой записи замены")
     sub.add_parser("env", help="определить среду (claude-code, codex, zcode, …) по переменным окружения")
     p = sub.add_parser("status", help="проекты и текущий шаг")
     p.add_argument("--root", type=Path, default=ROOT / "projects")
@@ -1019,6 +1289,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--model", default="-", help="модель или инструмент")
     p.add_argument("--result", required=True)
     p.add_argument("--cost", default="-", help="токены / поиски / источники, если известно")
+    p = sub.add_parser("log-replay", help="восстановить ожидающую строку журнала")
+    p.add_argument("project", type=Path)
+    p.add_argument("entry_id", help="ID ожидающей записи проекта")
     args = ap.parse_args(argv)
 
     if args.cmd == "status":
@@ -1032,6 +1305,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     if args.cmd == "log":
         return cmd_log(args.project.resolve(), args.step, args.action, args.tier, args.model, args.result,
                        args.cost)
+    if args.cmd == "log-replay":
+        return cmd_log_replay(args.project.resolve(), args.entry_id)
     if args.cmd == "init":
         return cmd_init(args.project.resolve(), args.title)
     if args.cmd == "add-source":

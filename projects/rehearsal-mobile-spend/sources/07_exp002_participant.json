@@ -1,0 +1,163 @@
+{
+  "experiment": "M27/EXP-002",
+  "actor": "human",
+  "started_utc": "2026-11-18T14:41:21.380+00:00",
+  "prerequisite_sha256": "40c819794219b97a215e5316c15533e236ec30f14a682419b396dddf1acc760d",
+  "controls": {
+    "N1": {
+      "observed": "forbidden",
+      "expected": "forbidden",
+      "passed": true
+    },
+    "N2": {
+      "observed": "stale",
+      "expected": "stale",
+      "passed": true
+    },
+    "N3": {
+      "observed": "duplicate",
+      "expected": "duplicate",
+      "passed": true
+    }
+  },
+  "attempts": [
+    {
+      "id": "A1",
+      "chosen": "В",
+      "elapsed_s": 6.169612416997552,
+      "deadline_s_from_event": 1800,
+      "timely_correct": false,
+      "mode": "warning",
+      "meaning": "invalid",
+      "meaning_correct": false
+    },
+    {
+      "id": "A2",
+      "chosen": "Б",
+      "elapsed_s": 17.103453667019494,
+      "deadline_s_from_event": 600,
+      "timely_correct": true,
+      "mode": "report",
+      "meaning": "2",
+      "meaning_correct": true
+    },
+    {
+      "id": "A3",
+      "chosen": "В",
+      "elapsed_s": 6.318994292058051,
+      "deadline_s_from_event": 2700,
+      "timely_correct": true,
+      "mode": "warning",
+      "meaning": "3",
+      "meaning_correct": false
+    },
+    {
+      "id": "A4",
+      "chosen": "Г",
+      "elapsed_s": 6.323928458034061,
+      "deadline_s_from_event": 300,
+      "timely_correct": true,
+      "mode": "report",
+      "meaning": "2",
+      "meaning_correct": true
+    },
+    {
+      "id": "A5",
+      "chosen": "Д",
+      "elapsed_s": 8.415244666975923,
+      "deadline_s_from_event": 1800,
+      "timely_correct": true,
+      "mode": "warning",
+      "meaning": "2",
+      "meaning_correct": true
+    },
+    {
+      "id": "A6",
+      "chosen": "И",
+      "elapsed_s": 7.355553834000602,
+      "deadline_s_from_event": 1200,
+      "timely_correct": false,
+      "mode": "report",
+      "meaning": null,
+      "meaning_correct": false
+    },
+    {
+      "id": "A1",
+      "chosen": "А",
+      "elapsed_s": 4.067757999990135,
+      "deadline_s_from_event": 1800,
+      "timely_correct": true,
+      "mode": "report",
+      "meaning": "2",
+      "meaning_correct": true
+    },
+    {
+      "id": "A2",
+      "chosen": "Б",
+      "elapsed_s": 4.012693665921688,
+      "deadline_s_from_event": 600,
+      "timely_correct": true,
+      "mode": "warning",
+      "meaning": "2",
+      "meaning_correct": true
+    },
+    {
+      "id": "A3",
+      "chosen": "Л",
+      "elapsed_s": 4.033292167005129,
+      "deadline_s_from_event": 2700,
+      "timely_correct": false,
+      "mode": "report",
+      "meaning": null,
+      "meaning_correct": false
+    },
+    {
+      "id": "A4",
+      "chosen": "Г",
+      "elapsed_s": 4.808320875046775,
+      "deadline_s_from_event": 300,
+      "timely_correct": true,
+      "mode": "warning",
+      "meaning": "2",
+      "meaning_correct": true
+    },
+    {
+      "id": "A5",
+      "chosen": "Д",
+      "elapsed_s": 5.013832124997862,
+      "deadline_s_from_event": 1800,
+      "timely_correct": true,
+      "mode": "report",
+      "meaning": "2",
+      "meaning_correct": true
+    },
+    {
+      "id": "A6",
+      "chosen": "Ж",
+      "elapsed_s": 4.11731908400543,
+      "deadline_s_from_event": 1200,
+      "timely_correct": true,
+      "mode": "warning",
+      "meaning": "2",
+      "meaning_correct": true
+    }
+  ],
+  "status": "done",
+  "model_calls": 0,
+  "finished_utc": "2026-11-18T14:44:11.605+00:00",
+  "totals": {
+    "warning": {
+      "timely_correct": 5,
+      "meaning_correct": 4,
+      "choice_wait_seconds": 33.84218500100542,
+      "scenarios": 6
+    },
+    "report": {
+      "timely_correct": 4,
+      "meaning_correct": 4,
+      "choice_wait_seconds": 43.89781825104728,
+      "scenarios": 6
+    }
+  },
+  "outcome": "below_margin"
+}

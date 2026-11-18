@@ -1,0 +1,5 @@
+- id: DEC-001
+  question: Запускать ли платный продукт?
+  options: [ALT-001, ALT-002, ALT-003]
+  state: decided
+  chosen: ALT-001

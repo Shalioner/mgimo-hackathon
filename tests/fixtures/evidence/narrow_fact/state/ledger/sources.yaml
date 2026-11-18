@@ -1,0 +1,5 @@
+- id: SRC-001
+  title: Выгрузка биллинга за октябрь 2026
+  kind: dataset
+  access: own
+  path: sources/billing.md

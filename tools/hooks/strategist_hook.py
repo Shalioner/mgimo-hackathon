@@ -52,6 +52,13 @@ def session_start() -> int:
     r = run(["status"])
     py = str(PY) if PY.exists() else sys.executable
     try:
+        guide = child([py, str(ROOT / 'tools/doctor.py'), 'welcome', '--once'], 5)
+        if guide.returncode == 0 and guide.stdout.strip():
+            print('Первое знакомство: покажи пользователю этот короткий гайд один раз. '
+                  'Это приглашение к работе, а не подтверждение работоспособности всех интеграций.\n' + guide.stdout.strip())
+    except subprocess.SubprocessError:
+        pass
+    try:
         m = child([py, str(ROOT / "tools" / "models.py"), "check", "--brief"], 40)
         if m.stdout.strip():
             print(m.stdout.strip())

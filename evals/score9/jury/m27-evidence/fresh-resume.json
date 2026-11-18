@@ -1,0 +1,21 @@
+{
+  "model": "gpt-6.2-sol",
+  "started_utc": "2026-11-18T14:24:40.206Z",
+  "completed_utc": "2026-11-18T14:24:56.549Z",
+  "wall_seconds": 16.343,
+  "checkpoint_sha256": "25345e3f371ff361276db606af0c4be262a600fef5ee066a467aa5be29657c3b",
+  "next_scenario": "A4",
+  "controls": [
+    "forbidden",
+    "stale",
+    "duplicate"
+  ],
+  "exp001_human_observed": false,
+  "service_tier": "priority",
+  "input_tokens": 79613,
+  "cached_input_tokens": 55040,
+  "output_tokens": 717,
+  "reasoning_output_tokens": 104,
+  "standard_api_equivalent_usd": 0.06182,
+  "actual_cost_usd": null
+}

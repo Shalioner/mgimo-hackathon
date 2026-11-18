@@ -6,19 +6,46 @@
 # families:
 #   claude: {T1: "<дешёвая модель прокси>", T2: "<средняя>", T3: "<сильная>", T4: null}
 
-# 2) OpenCode только на бесплатных моделях (Zen free; квоты по IP, состав меняется — сверяйте `opencode models`):
+# 2) OpenCode signed-out free-only, контракт v2.2.5: docs/OPENCODE_FREE.md.
+# Сначала явно обновите каталог через tools/opencode_free.py refresh.
+# Для обновления также allowlist добавьте --write-candidates knowledge/routing.local.yaml:
+# сохраняет остальные настройки, новые eligible ID получает из metadata, quality=not_evaluated.
+# `opencode models` и суффикс free НЕ доказывают нулевую цену.
 # environments:
 #   opencode: {family: opencode-free}
 # delegate_families:
 #   opencode: opencode-free
+# execution_policy:
+#   opencode_free:
+#     enabled: true
+#     catalog: /absolute/path/to/opencode-free-catalog.json
+# Рекомендации T1/T2/T3 различаются; исполнение повторно проверяет все цены,
+# срок каталога <=24h и exact allowlist. Нет paid fallback или login.
+# Preflight не запускает CLI, не обновляет каталог и не пишет файлы.
 
 # 3) Свой лимит эскалаций:
 # budget: {max_t4_calls: 0}
 
+# Автоматический вход: локальная D1 MLX уже должна быть установлена отдельно.
+# Ни этот блок, ни согласие на T4 не подтверждают подписочный профиль/оплату.
+# automatic_routing:
+#   classifier: local-d1
+#   local_d1:
+#     mode: service              # default; lab только для явного лабораторного запуска
+#     reuse: true                # точный RAM-кэш; false для независимых замеров классификатора
+#     socket: /Users/your-user/.cache/strategist/d1-service/service.sock
+#   quality: {enabled: true, max_attempts: 6}
+#   t4:
+#     enabled: true                 # только после явного предварительного согласия
+#     approval_ref: user-approved-project-scope
+#     max_calls: 2
+#     usage_file: /absolute/existing/directory/project-t4-usage.json
+# Не удалять/обнулять usage_file для обхода лимита. Область общая для всех запросов проекта.
+
 # 4) Своя (self-hosted) модель: любой OpenAI-совместимый сервер — Ollama, vLLM, LM Studio, корпоративный шлюз.
 #    Удобно для массовых T1-задач (классификация, оценка по признакам) и когда данные нельзя отдавать в облако.
 #    Ключ — только в переменной окружения (имя в api_key_env), не в файле. Модели сервера попадут в инвентарь
-#    при `tools/models.py scan` (GET {base_url}/models). Effort передаётся как reasoning_effort (send_effort: false — не передавать).
+#    только после отдельной проверки: автоматический HTTP scan выключен. Effort — reasoning_effort (send_effort: false — не передавать).
 # selfhosted:
 #   base_url: http://localhost:11434/v1      # Ollama; vLLM обычно http://localhost:8000/v1
 #   api_key_env: SELFHOSTED_API_KEY          # необязательно
@@ -32,4 +59,124 @@
 # decision:
 #   providers:
 #     - {name: kev-local, base_url: "http://localhost:8080/v1", model: kev-4b}
-#     - {name: openrouter, base_url: "https://openrouter.ai/api/v1", model: typesafe/jev-1.13, api_key_env: OPENROUTER_API_KEY}
+#     - name: openrouter
+#       protocol: openrouter-decisions
+#       base_url: https://openrouter.ai/api/alpha
+#       model: perplexity/pplx-decider-v1.3:free
+#       provider_slug: perplexity
+#       response_provider: Perplexity
+#       api_key_env: OPENROUTER_API_KEY
+# Бесплатный изолированный тест с проверкой нулевого лимита ключа:
+# tools/openrouter_decision_smoke.py — см. docs/OPENROUTER_DECISION.md.
+# Наличие провайдера здесь не включает API и не меняет native local-d1 hooks.
+
+# 6) Исполнение отдельно от рекомендаций. Примеры выше НЕ разрешают вызов.
+# По умолчанию subscription_only; Codex/Claude требуют reviewed profiles, остальные CLI manual.
+# API opt-in — только после отдельного решения оператора. Это НЕ настройка лимита
+# у провайдера: external_cap подтверждает уже установленный внешний лимит аккаунта.
+# Без такого лимита маршрут manual. Код не проверяет баланс/тариф и не обещает hard cap.
+# execution_policy:
+#   mode: api_opt_in
+#   max_input_bytes: 128000
+#   api:
+#     enabled: true
+#     grants:
+#       - host: selfhosted                   # либо decision для System One
+#         provider: my-approved-provider     # должен совпадать с selfhosted.provider
+#         endpoint: https://approved.example/v1/chat/completions # точный полный URL
+#         models: [exact-reviewed-model-id]  # не glob, не auto/newest
+#         efforts: [null, low]               # только проверенные для этой модели
+#         budget_usd: 1
+#         external_cap:
+#           confirmed_by_operator: true
+#           amount_usd: 1                   # <= budget_usd, установлен отдельно
+#           evidence_ref: local-cap-review  # ссылка на проверку, без секретов
+#         context:
+#           model_limit: 32000              # подтверждённые токеновые границы
+#           plan_limit: 32000
+#           user_limit: 16000
+#           output_reserve: 1024            # max_completion_tokens (включая reasoning)
+#           system_reserve: 2048
+# selfhosted:
+#   provider: my-approved-provider
+#   base_url: https://approved.example/v1
+#   api_key_env: SELFHOSTED_API_KEY          # имя, не значение; обязателен в API mode
+#   send_effort: true
+# При HTTP 401/403/429/timeout — остановка, не переход на другой аккаунт/провайдера.
+# decision использует такой же grant, host: decision и endpoint .../systemone.
+# Наличие ключа не включает api_opt_in. CLI API adapters не реализованы.
+
+# 7) Subscription-first: заранее авторизованный выделенный Codex ChatGPT profile.
+# Login/копирование credentials этот код не выполняет. Оператор выбирает existing
+# dedicated CODEX_HOME (0700), auth.json (0600), без config/hooks/plugins/skills.
+# Подтверждаются план, отключённый overage и отсутствие MDM/cloud-managed config.
+# execution_policy:
+#   mode: subscription_only
+#   codex_subscription:
+#     enabled: true
+#     binary: /absolute/path/to/reviewed/codex
+#     binary_sha256: <SHA256 reviewed executable>
+#     version: "codex-cli <exact reviewed version>"
+#     codex_home: /absolute/path/to/dedicated-codex-profile
+#     entitlement_confirmed: true
+#     overage_disabled: true
+#     cli_contract_reviewed: true
+#     managed_config_absent: true
+#     cloud_managed_config_absent: true
+#     evidence_ref: local-profile-review
+#     models: [exact-reviewed-model-id]
+#     efforts: [low, medium, high]
+#     context:
+#       model_limit: 32000
+#       plan_limit: 32000
+#       user_limit: 16000
+#       output_reserve: 2048
+#       system_reserve: 4096
+# Preflight читает границы профиля без CLI/network/writes; runtime перед exec
+# проверяет fingerprint/version и login status == Logged in using ChatGPT.
+# Ошибка/квота завершает маршрут; API/account/model fallback отсутствует.
+# Одна попытка = один запуск wrapper; внутренние transport retries CLI неизвестны.
+
+# 8) Claude Code native subscription, без OAuth-token gateway и копирования ключей.
+# CLI contract должен включать --restricted и auth status.configDirectory (>=2.1.268).
+# execution_policy:
+#   mode: subscription_only
+#   claude_subscription:
+#     enabled: true
+#     binary: /absolute/path/to/reviewed/claude
+#     binary_sha256: <SHA256 reviewed executable>
+#     version: "<exact stdout of reviewed claude --version>"
+#     config_dir: /absolute/path/to/dedicated-claude-profile
+#     credential_store: file  # либо keychain на macOS; auth status проверяет directory
+#     entitlement_confirmed: true
+#     overage_disabled: true
+#     cli_contract_reviewed: true
+#     managed_config_absent: true
+#     cloud_managed_config_absent: true
+#     evidence_ref: local-claude-profile-review
+#     models: [exact-reviewed-model-id]
+#     efforts: [low, medium, high]
+#     context:
+#       model_limit: 32000
+#       plan_limit: 32000
+#       user_limit: 16000
+#       output_reserve: 2048
+#       system_reserve: 4096
+# Wrapper не выполняет login/update и не читает credential contents/Keychain.
+# --host claude и --host claude-code используют один контракт, без API fallback.
+
+# 9) Native session hooks (не isolated delegate profile). Host сохраняет credentials,
+# endpoint/tools/permissions. Codex app-server helper отдельно подключается клиентом.
+# automatic_routing:
+#   classifier: local-d1
+#   host_routing:
+#     enabled_hosts: [codex, orca, claude-code]
+#     timeout_seconds: 120            # includes queue and cold model setup
+#     compact_questions: true         # native: tier+effort; false возвращает прежние 3 вопроса
+#     models:
+#       codex: [gpt-6-luna, gpt-6.1-terra, gpt-6.1-sol, gpt-6-astra]
+#       orca: [gpt-6-luna, gpt-6.1-terra, gpt-6.1-sol, gpt-6-astra]
+#       claude-code: [haiku, sonnet, opus, fable]
+# T4 всё равно требует automatic_routing.t4 standing approval+quota.
+# .venv/bin/python tools/install_host_routing.py --apply
+# Возможности/ограничения конкретных хостов: docs/NATIVE_HOST_ROUTING.md.

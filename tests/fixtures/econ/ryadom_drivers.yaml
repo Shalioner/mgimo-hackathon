@@ -1,0 +1,56 @@
+name: "Экономическая модель Рядом (CHG-001 + допущения)"
+decision: DEC-001
+unit: "₽/мес"
+formula: "installs * (pos_rate * d7_pos + (1 - pos_rate) * d7_nopos) * trial_to_paid * price - monthly_cost"
+breakeven_var: trial_to_paid
+breakeven_target: 0
+drivers:
+  - id: installs
+    label: "Новые установки за месяц"
+    low: 2500
+    base: 3100
+    high: 3800
+    type: fact
+    ref: CLM-019
+  - id: pos_rate
+    label: "Доля установок с первой актуальной геопозицией"
+    low: 0.75
+    base: 0.8193548387
+    high: 0.90
+    type: fact
+    ref: CLM-019
+  - id: d7_pos
+    label: "Удержание D7 с первой позицией"
+    low: 0.25
+    base: 0.31
+    high: 0.36
+    type: fact
+    ref: CLM-020
+  - id: d7_nopos
+    label: "Удержание D7 без подключения"
+    low: 0.04
+    base: 0.06
+    high: 0.10
+    type: fact
+    ref: CLM-020
+  - id: trial_to_paid
+    label: "Конверсия активных на D7 после trial 7 дней в оплату"
+    low: 0.05
+    base: 0.15
+    high: 0.30
+    type: assumption
+    ref: HYP-003
+  - id: price
+    label: "Цена подписки после trial 7 дней"
+    low: 299
+    base: 299
+    high: 299
+    type: fact
+    ref: CLM-021
+  - id: monthly_cost
+    label: "Операционные затраты на поддержку сценария"
+    low: 15000
+    base: 30000
+    high: 60000
+    type: assumption
+    ref: HYP-006

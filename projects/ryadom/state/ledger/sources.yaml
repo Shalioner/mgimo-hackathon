@@ -92,3 +92,14 @@
   reliability: medium
   notes: Собственный учебный материал; один месяц, добровольный самоотчёт; возрастной
     и географический срез не указан. Не закрытая аналитика компании.
+- id: SRC-010
+  title: KOALA Project Report 2 — выдержка из Executive Summary
+  kind: document
+  access: open
+  path: sources/09_koala_executive_summary.md
+  sha256: f14168d2240b111095c91ce3880c4aab7db9bdd37ec142ffe7d37e048356ae86
+  retrieved: '2026-11-17'
+  reliability: medium
+  url: https://arxiv.org/pdf/1809.10944
+  notes: Адресная проверка срока исследования. В резюме и введении разные размеры
+    опроса.

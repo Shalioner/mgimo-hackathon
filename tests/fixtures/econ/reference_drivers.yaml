@@ -1,0 +1,42 @@
+name: "Эталонная модель драйверов"
+decision: DEC-001
+unit: "₽/мес"
+formula: "base * conv * price * retention - cost"
+breakeven_var: conv
+breakeven_target: 0
+drivers:
+  - id: base
+    label: "Активная база"
+    low: 1000
+    base: 2000
+    high: 3000
+    type: fact
+    ref: CLM-001
+  - id: conv
+    label: "Конверсия в покупку"
+    low: 0.05
+    base: 0.10
+    high: 0.20
+    type: assumption
+    ref: HYP-001
+  - id: price
+    label: "Цена пакета"
+    low: 200
+    base: 300
+    high: 400
+    type: fact
+    ref: CLM-002
+  - id: retention
+    label: "Множитель повторных покупок"
+    low: 1.0
+    base: 1.5
+    high: 2.0
+    type: hypothesis
+    ref: HYP-002
+  - id: cost
+    label: "Постоянные затраты"
+    low: 40000
+    base: 50000
+    high: 70000
+    type: assumption
+    ref: CLM-001

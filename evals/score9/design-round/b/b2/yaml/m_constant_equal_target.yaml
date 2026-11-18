@@ -1,0 +1,21 @@
+name: "M: постоянная модель, тождественно равная target (2000)"
+decision: "M-constant-equal-target"
+unit: "у.е./квартал"
+formula: "0 * m + sq"
+breakeven_var: m
+breakeven_target: 2000
+drivers:
+  - id: m
+    label: "Инкрементальный вклад на продление (не влияет на постоянную формулу)"
+    low: 4.0
+    base: 6.0
+    high: 8.0
+    type: assumption
+    unit: "у.е./продление"
+  - id: sq
+    label: "Постоянный вклад, равный status quo"
+    low: 2000
+    base: 2000
+    high: 2000
+    type: fact
+    unit: "у.е./квартал"

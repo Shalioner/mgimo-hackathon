@@ -1,0 +1,74 @@
+{
+  "experiment": "M27/EXP-001",
+  "started_utc": "2026-11-18T14:35:36.496+00:00",
+  "control_seconds": 0.000186,
+  "actor": "human",
+  "controls": {
+    "N1": {
+      "observed": "forbidden",
+      "expected": "forbidden",
+      "passed": true
+    },
+    "N2": {
+      "observed": "stale",
+      "expected": "stale",
+      "passed": true
+    },
+    "N3": {
+      "observed": "duplicate",
+      "expected": "duplicate",
+      "passed": true
+    }
+  },
+  "attempts": [
+    {
+      "id": "A1",
+      "chosen": "А",
+      "elapsed_s": 18.97591179201845,
+      "deadline_s_from_event": 1800,
+      "timely_correct": true
+    },
+    {
+      "id": "A2",
+      "chosen": "С",
+      "elapsed_s": 6.282432749983855,
+      "deadline_s_from_event": 600,
+      "timely_correct": false
+    },
+    {
+      "id": "A3",
+      "chosen": "В",
+      "elapsed_s": 4.04677733394783,
+      "deadline_s_from_event": 2700,
+      "timely_correct": true
+    },
+    {
+      "id": "A4",
+      "chosen": "Г",
+      "elapsed_s": 1.6989447500091046,
+      "deadline_s_from_event": 300,
+      "timely_correct": true
+    },
+    {
+      "id": "A5",
+      "chosen": "Д",
+      "elapsed_s": 1.830704583087936,
+      "deadline_s_from_event": 1800,
+      "timely_correct": true
+    },
+    {
+      "id": "A6",
+      "chosen": "Ж",
+      "elapsed_s": 1.8902130409842357,
+      "deadline_s_from_event": 1200,
+      "timely_correct": true
+    }
+  ],
+  "status": "done",
+  "model_calls": 0,
+  "finished_utc": "2026-11-18T14:36:11.270+00:00",
+  "timely_correct": 5,
+  "scripted_gate": null,
+  "exp001_gate": true,
+  "human_prompt_wait_seconds": 34.72498425003141
+}

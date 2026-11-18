@@ -1,0 +1,28 @@
+name: "M: суженный устойчивый диапазон [6, 8] при здоровой базе (status quo = 2000)"
+decision: "M-narrow-stable"
+unit: "у.е./квартал"
+formula: "renewals * m - cost"
+breakeven_var: m
+breakeven_target: 2000
+drivers:
+  - id: renewals
+    label: "Продления за квартал"
+    low: 1000
+    base: 1000
+    high: 1000
+    type: fact
+    unit: "продлений"
+  - id: m
+    label: "Инкрементальный вклад на продление (уточнённый диапазон)"
+    low: 6.0
+    base: 6.0
+    high: 8.0
+    type: assumption
+    unit: "у.е./продление"
+  - id: cost
+    label: "Затраты Change"
+    low: 3000
+    base: 3000
+    high: 3000
+    type: fact
+    unit: "у.е./квартал"

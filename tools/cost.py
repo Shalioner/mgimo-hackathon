@@ -6,7 +6,7 @@
 
 Откуда берутся токены (только чтение, ничего не меняет):
   codex       — $CODEX_HOME, ~/.codex и домашние папки Codex, которые создаёт Orca: state_5.sqlite (потоки по cwd)
-                + файл сессии (последний token_count: input, cached, output);
+                + файл сессии (прирост total_token_usage по времени событий token_count);
   claude-code — ~/.claude/projects/*/*.jsonl (message.usage по cwd);
   zcode       — ~/.zcode/cli/rollout/model-io-*.jsonl (usage ответа модели; фильтр по времени и --match).
 Цены — knowledge/prices.yaml (официальные страницы, дата проверки). Модели без цены показываются с токенами
@@ -39,7 +39,7 @@ HOME = Path.home()
 def parse_time(s: Optional[str]) -> Optional[dt.datetime]:
     if not s:
         return None
-    t = dt.datetime.fromisoformat(s)
+    t = dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
     return t if t.tzinfo else t.astimezone()
 
 
@@ -69,8 +69,96 @@ def codex_homes() -> List[Path]:
     return [c for c in dict.fromkeys(cands) if (c / "state_5.sqlite").exists()]
 
 
-def codex_usage(cwd_sub: str, since, until) -> Iterable[Tuple[str, str, dict, str]]:
-    """(среда, модель, usage, id) по потокам Codex, чей cwd содержит cwd_sub и чьё время попадает в окно."""
+def _codex_window(path, created, since, until) -> Optional[dict]:
+    """Sum cumulative deltas at event timestamps (inclusive bounds).
+
+    A first snapshot is charged from zero only for an unbounded start or a
+    thread created inside the window. Otherwise its earlier usage is unknown.
+    last_token_usage is deliberately unused: repeated snapshots repeat it too.
+    """
+    totals = {"input": 0, "cached": 0, "output": 0, "calls": 0}
+    previous = None
+    previous_ts = None
+    notes = set()
+    fields = ("input_tokens", "cached_input_tokens", "output_tokens")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                try:
+                    event = json.loads(line)
+                except ValueError:
+                    notes.add("повреждённая строка журнала")
+                    continue
+                if not isinstance(event, dict) or event.get("type") != "event_msg":
+                    continue
+                payload = event.get("payload")
+                if not isinstance(payload, dict) or payload.get("type") != "token_count":
+                    continue
+                info = payload.get("info")
+                # info:null is a real non-measuring token_count event.
+                if info is None:
+                    continue
+                try:
+                    ts = parse_time(event.get("timestamp"))
+                except (ValueError, TypeError, AttributeError):
+                    ts = None
+                if ts is None and (since or until):
+                    notes.add("нет времени события")
+                    continue
+                if ts and until and ts > until:
+                    continue
+                in_window = not (ts and since and ts < since)
+                usage = info.get("total_token_usage") if isinstance(info, dict) else None
+                if (not isinstance(usage, dict) or
+                        any(type(usage.get(k)) is not int or usage[k] < 0 for k in fields) or
+                        usage["cached_input_tokens"] > usage["input_tokens"]):
+                    if in_window:
+                        notes.add("неполные или некорректные счётчики")
+                    continue
+                current = tuple(usage[k] for k in fields)
+                if ts and previous_ts and ts < previous_ts:
+                    if in_window:
+                        notes.add("нарушен порядок времени событий")
+                    continue
+                if previous is None:
+                    if in_window and (not since or (created is not None and created >= since)):
+                        delta = current
+                    else:
+                        delta = (0, 0, 0)
+                        if in_window:
+                            notes.add("нет начальной точки до окна")
+                else:
+                    delta = tuple(v - p for v, p in zip(current, previous))
+                previous, previous_ts = current, ts
+                if not in_window:
+                    continue
+                if any(v < 0 for v in delta) or delta[1] > delta[0]:
+                    notes.add("сброс или несогласованный прирост счётчиков")
+                    continue
+                totals["input"] += delta[0] - delta[1]
+                totals["cached"] += delta[1]
+                totals["output"] += delta[2]
+                if any(delta):
+                    totals["calls"] = 1  # streams, not snapshot count
+    except (OSError, UnicodeError) as exc:
+        notes.add(f"журнал недоступен: {exc.__class__.__name__}")
+    if notes:
+        totals.update(incomplete=True, notes=sorted(notes))
+    return totals if totals["calls"] or notes else None
+
+
+def cwd_matches(recorded: Optional[str], selected: str, exact: bool) -> bool:
+    if not isinstance(recorded, str) or not recorded:
+        return False
+    if not exact:
+        return selected in recorded
+    return (os.path.isabs(recorded)
+            and os.path.normcase(os.path.realpath(recorded)) == selected)
+
+
+def codex_usage(cwd_sub: str, since, until, *, exact: bool = False) -> Iterable[Tuple[str, str, dict, str]]:
+    """Codex streams by cwd; usage is bounded by event time, not creation time."""
+    seen = set()
     for home in codex_homes():
         try:
             con = sqlite3.connect(f"file:{quote(str(home / 'state_5.sqlite'))}?mode=ro", uri=True)
@@ -80,31 +168,25 @@ def codex_usage(cwd_sub: str, since, until) -> Iterable[Tuple[str, str, dict, st
                 con.close()
         except sqlite3.Error as exc:  # база занята или недоступна — не роняем весь отчёт
             print(f"cost.py: пропущен {home}: {exc}", file=sys.stderr)
+            yield "codex", "?", {"input": 0, "cached": 0, "output": 0, "calls": 0,
+                                  "incomplete": True, "notes": ["база потоков недоступна"]}, str(home)
             continue
         for tid, path, model, c, u, cwd in rows:
-            if cwd_sub not in (cwd or ""):
+            if tid in seen or not cwd_matches(cwd, cwd_sub, exact):
                 continue
-            created = dt.datetime.fromtimestamp(c).astimezone()
-            if (since and created < since) or (until and created > until):
-                continue
-            last = None
+            seen.add(tid)
             try:
-                with open(path, encoding="utf-8") as f:
-                    for line in f:
-                        if '"token_count"' in line:
-                            p = json.loads(line).get("payload") or {}
-                            if (p.get("info") or {}).get("total_token_usage"):
-                                last = p["info"]["total_token_usage"]
-            except OSError:
+                created = dt.datetime.fromtimestamp(c).astimezone()
+            except (TypeError, ValueError, OverflowError, OSError):
+                created = None
+            if created is not None and until and created > until:
                 continue
-            if not last:
-                continue
-            cached = int(last.get("cached_input_tokens", 0))
-            yield "codex", model or "?", {"input": int(last.get("input_tokens", 0)) - cached, "cached": cached,
-                                          "output": int(last.get("output_tokens", 0)), "calls": 1}, tid
+            usage = _codex_window(path, created, since, until)
+            if usage is not None:
+                yield "codex", model or "?", usage, tid
 
 
-def claude_usage(cwd_sub: str, since, until) -> Iterable[Tuple[str, str, dict, str]]:
+def claude_usage(cwd_sub: str, since, until, *, exact: bool = False) -> Iterable[Tuple[str, str, dict, str]]:
     for f in glob.glob(str(HOME / ".claude/projects/*/*.jsonl")):
         try:
             fh = open(f, encoding="utf-8")
@@ -112,7 +194,7 @@ def claude_usage(cwd_sub: str, since, until) -> Iterable[Tuple[str, str, dict, s
             continue
         with fh:
             for line in fh:
-                if '"usage"' not in line or cwd_sub not in line:
+                if '"usage"' not in line or (not exact and cwd_sub not in line):
                     continue
                 try:
                     e = json.loads(line)
@@ -120,7 +202,7 @@ def claude_usage(cwd_sub: str, since, until) -> Iterable[Tuple[str, str, dict, s
                     continue
                 msg = e.get("message") or {}
                 u = msg.get("usage")
-                if e.get("type") != "assistant" or not u or cwd_sub not in (e.get("cwd") or ""):
+                if e.get("type") != "assistant" or not u or not cwd_matches(e.get("cwd"), cwd_sub, exact):
                     continue
                 ts = parse_time(e.get("timestamp", "").replace("Z", "+00:00")) if e.get("timestamp") else None
                 if ts and ((since and ts < since) or (until and ts > until)):
@@ -180,10 +262,34 @@ def delegated_usage(project: Path, since, until) -> Iterable[Tuple[str, str, dic
         yield "delegate", model, {"input": total - cached, "cached": cached, "output": out, "calls": 1}, cells[0]
 
 
+def pending_log_notes(project: Path, since, until) -> Iterable[str]:
+    from ledger import pending_log_files, read_pending_log
+
+    try:
+        for path in pending_log_files(project):
+            try:
+                ts, _ = read_pending_log(path)
+                stamp = parse_time(ts)
+            except FileNotFoundError:
+                continue  # Replay already moved the row into the journal.
+            except (OSError, ValueError) as exc:
+                yield f"log_status=pending: {path}: {exc}"
+                continue
+            if (since and stamp < since) or (until and stamp > until):
+                continue
+            yield f"log_status=pending: {path} ({ts})"
+    except (OSError, ValueError) as exc:
+        yield f"Не удалось проверить ожидающие записи {project}: {exc}"
+
+
 # ---------- сводка ----------
-def summarize(records: Iterable[Tuple[str, str, dict, str]], prices: List[dict]) -> dict:
+def summarize(records: Iterable[Tuple[str, str, dict, str]], prices: List[dict],
+              *, pending_notes: Iterable[str] = ()) -> dict:
     agg: Dict[Tuple[str, str], dict] = defaultdict(lambda: {"input": 0, "cached": 0, "output": 0, "calls": 0})
-    for env, model, u, _ in records:
+    notes = set(pending_notes)
+    for env, model, u, record_id in records:
+        if u.get("incomplete"):
+            notes.update(f"{env}/{record_id}: {note}" for note in u.get("notes", ["неполные данные"]))
         a = agg[(env, model)]
         for k in a:
             a[k] += u.get(k, 0)
@@ -196,20 +302,38 @@ def summarize(records: Iterable[Tuple[str, str, dict, str]], prices: List[dict])
         else:
             total += cost
         rows.append({"env": env, "model": model, **u, "usd": cost})
-    return {"rows": rows, "total_usd": round(total, 4), "unpriced": unpriced}
+    result = {"rows": rows, "total_usd": round(total, 4), "unpriced": unpriced}
+    if notes or unpriced:
+        result.update(total_usd=None, known_usd=round(total, 4) if rows else None, incomplete=True, notes=sorted(notes))
+    return result
+
+
+NO_USAGE_NOTE = "Статус расчёта: нет записей токенов для выбранного окна."
 
 
 def render(s: dict, title: str, usd_rub: Optional[float]) -> str:
+    if not s["rows"]:
+        text = f"## {title}\n\n{NO_USAGE_NOTE}\nДенежный итог по этому окну неизвестен."
+        if s.get("notes"):
+            text += "\nНеполные данные: " + "; ".join(s["notes"]) + "."
+        return text
+
     out = [f"## {title}", "", "| Среда | Модель | Вызовы/потоки | Вход (без кэша) | Кэш | Выход | USD |",
            "|---|---|---|---|---|---|---|"]
     for r in s["rows"]:
         c = f"{r['usd']:.4f}" if r["usd"] is not None else "нет цены"
         out.append(f"| {r['env']} | {r['model']} | {r['calls']} | {r['input']:,} | {r['cached']:,} | {r['output']:,} | {c} |"
                    .replace(",", " "))
-    tot = f"**Итого (API-эквивалент): ${s['total_usd']:.4f}**"
+    amount = s["known_usd"] if s.get("incomplete") else s["total_usd"]
+    if s.get("incomplete"):
+        tot = f"**Полный итог неизвестен; учтённая часть (API-эквивалент): ${amount:.4f}**"
+    else:
+        tot = f"**Итого (API-эквивалент): ${amount:.4f}**"
     if usd_rub:
-        tot += f" ≈ {s['total_usd'] * usd_rub:.2f} ₽ (курс {usd_rub}, указан вручную)"
+        tot += f" ≈ {amount * usd_rub:.2f} ₽ (курс {usd_rub}, указан вручную)"
     out += ["", tot]
+    if s.get("notes"):
+        out.append("Неполные данные: " + "; ".join(s["notes"]) + ".")
     if s["unpriced"]:
         out.append(f"Без цены (в итог не вошли): {', '.join(s['unpriced'])} — добавить в knowledge/prices.yaml.")
     out.append(f"Цены: knowledge/prices.yaml (официальные страницы вендоров). Подписка — не цена API.")
@@ -219,6 +343,7 @@ def render(s: dict, title: str, usd_rub: Optional[float]) -> str:
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="Стоимость прогона по журналам сред и официальным ценам")
     ap.add_argument("--cwd", help="часть пути рабочей папки сессии (Codex, Claude Code)")
+    ap.add_argument("--cwd-exact", action="store_true", help="сопоставить --cwd с полным путём, исключая соседние и вложенные папки")
     ap.add_argument("--zcode", action="store_true", help="учесть журналы ZCode")
     ap.add_argument("--match", help="для ZCode: строка, которая должна встречаться в сессии (например, путь проекта)")
     ap.add_argument("--since")
@@ -228,21 +353,30 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--project", type=Path, help="учесть вызовы delegate.py из run_log проекта (их нет в журналах сред)")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
+    cwd = args.cwd
+    if args.cwd_exact:
+        if not cwd or not os.path.isabs(os.path.expanduser(cwd)):
+            ap.error("--cwd-exact требует абсолютный путь в --cwd")
+        cwd = os.path.normcase(os.path.realpath(os.path.expanduser(cwd)))
     if not args.cwd and not args.zcode and not args.project:
         print("Укажите --cwd, --zcode и/или --project", file=sys.stderr)
         return 2
     since, until = parse_time(args.since), parse_time(args.until)
     recs: List = []
-    if args.cwd:
-        recs += list(codex_usage(args.cwd, since, until)) + list(claude_usage(args.cwd, since, until))
+    if cwd:
+        recs += list(codex_usage(cwd, since, until, exact=args.cwd_exact))
+        recs += list(claude_usage(cwd, since, until, exact=args.cwd_exact))
     if args.zcode:
         recs += list(zcode_usage(args.match, since, until))
     proj = args.project or args.write
+    pending_notes = []
     if proj:
+        # Scan pending first: replay publishes the journal row before removing its pending file.
+        pending_notes = list(pending_log_notes(proj, since, until))
         recs += list(delegated_usage(proj, since, until))
-    s = summarize(recs, load_prices())
+    s = summarize(recs, load_prices(), pending_notes=pending_notes)
     if args.json:
-        print(json.dumps(s, ensure_ascii=False, indent=2))
+        print(json.dumps(s if s["rows"] else {**s, "total_usd": None}, ensure_ascii=False, indent=2))
         return 0
     title = f"Стоимость: {args.cwd or ''}{' + ZCode' if args.zcode else ''} ({args.since or '…'} — {args.until or '…'})"
     text = render(s, title, args.usd_rub)

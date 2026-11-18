@@ -1,0 +1,18 @@
+- id: SRC-001
+  title: 'Модельный респондент 01: самостоятельное действие'
+  kind: synthetic_interview
+  access: own
+  path: sources/synthetic_01.md
+  sha256: b51ffa62b403a35a0f046430405e515ff4b65fe19c3e37d7a8d675cd130b1ed4
+  retrieved: '2026-11-18'
+  reliability: low
+  notes: Один синтетический ролевой прогон guide 01, gpt-6.2-sol в текущей сессии.
+- id: SRC-002
+  title: 'Модельный респондент 02: согласование действия'
+  kind: synthetic_interview
+  access: own
+  path: sources/synthetic_02.md
+  sha256: 685a092434d304471ded3facf00cf0885247e4eb39ed50199b8895cc5ea9e523
+  retrieved: '2026-11-18'
+  reliability: low
+  notes: Один синтетический ролевой прогон guide 02, gpt-6.2-sol в текущей сессии.

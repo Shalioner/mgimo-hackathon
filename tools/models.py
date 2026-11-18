@@ -71,32 +71,15 @@ def scan_codex_efforts() -> Dict[str, List[str]]:
 
 
 def scan_selfhosted(cfg: Optional[dict]) -> List[str]:
-    """Модели своего OpenAI-совместимого сервера (Ollama, vLLM, LM Studio, корпоративный шлюз): GET {base_url}/models."""
-    sh = (cfg or {}).get("selfhosted") or {}
-    if not sh.get("base_url"):
-        return []
-    import os
-    import urllib.request
-    req = urllib.request.Request(sh["base_url"].rstrip("/") + "/models")
-    key = os.environ.get(sh.get("api_key_env") or "", "")
-    if key:
-        req.add_header("Authorization", f"Bearer {key}")
-    try:
-        with urllib.request.urlopen(req, timeout=5) as r:
-            data = json.loads(r.read().decode("utf-8"))
-    except (OSError, ValueError):
-        return []
-    return [m.get("id") for m in data.get("data", []) if isinstance(m, dict) and m.get("id")]
+    """Remote discovery disabled until a scoped metadata adapter is verified."""
+    # Inventory is recommendation-only. No credential-bearing remote discovery
+    # until a separate metadata adapter/authorization contract is implemented.
+    return []
 
 
 def scan_opencode() -> List[str]:
-    if not shutil.which("opencode"):
-        return []
-    try:
-        r = subprocess.run(["opencode", "models"], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30)
-    except (OSError, subprocess.SubprocessError):
-        return []
-    return [l.strip() for l in r.stdout.splitlines() if re.match(r"^[\w.\-]+/[\w.\-:#]+$", l.strip())]
+    """Unknown CLI config/auth precedence: do not launch it during auto-scan."""
+    return []
 
 
 def scan_zcode() -> List[str]:
@@ -352,7 +335,10 @@ def map_efforts(wanted: List[str], supported: List[str]) -> List[str]:
 # ---------- гайды ----------
 def load_guides() -> List[dict]:
     out = []
-    for f in sorted(GUIDES.glob("*.md")):
+    # The free-only OpenCode transport contract covers opaque hosted models
+    # without pretending to know their vendor internals or quality ranking.
+    transport_guide = ROOT / "docs" / "OPENCODE_FREE.md"
+    for f in [*sorted(GUIDES.glob("*.md")), *([transport_guide] if transport_guide.is_file() else [])]:
         text = f.read_text(encoding="utf-8")
         if not text.startswith("---"):
             continue

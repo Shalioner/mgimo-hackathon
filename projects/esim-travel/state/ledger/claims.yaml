@@ -22,6 +22,10 @@
   - source: SRC-001
     quote: launching their own travel eSIMs will become critical for mobile operators
       to retain roaming revenue and avoid losing market share to third-party providers
+  - source: SRC-001
+    quote: it will be pivotal in 2026 that operators launch their own travel eSIM
+      services
+    locator: «Выдержки», строка 16
   as_of: '2025-10-07'
   confidence:
     level: high
@@ -73,6 +77,8 @@
   - source: SRC-003
     quote: 30 ГБ при поездке в Европу обойдутся в сумму от 1050 рублей, а в страны
       СНГ — уже от 1450 рублей.
+  - source: SRC-003
+    quote: Минимальный срок работы eSIM — 3 дня, максимальный — 1 месяц.
   as_of: '2026-11-09'
   confidence:
     level: medium
@@ -150,6 +156,11 @@
     level: low
     rationale: Нативная реклама; диапазон согласуется с CLM-005/006/009, но множитель
       завышен для новых пакетов операторов
+  status: superseded
+  superseded_by: CLM-016
+  updated: '2026-11-18'
+  status_note: В SRC-006 указан общий рекламный ориентир для Турции и ОАЭ. Отдельный
+    диапазон для Турции и независимая оценка цен или кратности разницы не подтверждены.
 - id: CLM-012
   type: fact
   statement: 'Мотивы выбора путешественниками travel eSIM (по статье): заранее известная
@@ -207,6 +218,14 @@
   - source: SRC-007
     quote: Плата в дни пользования 599 ₽
   - source: SRC-007
+    quote: 2 ГБ Интернет в популярных странах
+  - source: SRC-007
+    quote: 1 ГБ Интернет в остальных странах
+  - source: SRC-007
+    quote: Включает плату за мессенджеры и интернет. 788 ₽
+  - source: SRC-007
+    quote: Включает плату за оба пакета — интернета и минут. 799 ₽
+  - source: SRC-007
     quote: Включает плату за все 3 пакета — интернета, мессенджеров и минут. 988 ₽
   as_of: '2026-11-10'
   confidence:
@@ -215,3 +234,17 @@
   limitations: Цены московского региона, могут отличаться по регионам и меняться;
     сравнение с агрегаторами — в пересчёте на ГБ, а не в лоб (дневная плата против
     разового пакета).
+- id: CLM-016
+  type: fact
+  statement: Нативная реклама Yesim на vc.ru приводит для Турции и ОАЭ один ориентировочный
+    диапазон цен travel eSIM — от 7 до 15 долларов.
+  evidence:
+  - source: SRC-006
+    quote: Турция и ОАЭ — «от 7 до 15 $»
+    locator: «Выдержки», строка 13, «Цены по направлениям»
+  as_of: '2026-11-10'
+  confidence:
+    level: low
+    rationale: Нативная реклама Yesim.
+  limitations: Один диапазон для двух направлений. Отдельный диапазон для Турции и
+    независимая рыночная оценка не подтверждены.

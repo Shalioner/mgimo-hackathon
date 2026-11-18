@@ -1,0 +1,8 @@
+- id: CLM-001
+  type: fact
+  statement: Доля оттока за октябрь 2026 составила 8,5% при доходе $1,8 млрд (в 2024-м было $989 млн).
+  evidence:
+    - source: SRC-001
+      quote: "Oct churn was 8.5%; revenue $1.8 billion vs $989 million in 2024."
+  as_of: '2026-10-31'
+  confidence: {level: high, rationale: Внутренняя выгрузка}

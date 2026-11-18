@@ -27,10 +27,12 @@ PROTOCOL = "2025-06-18"
 SERVER = {"name": "strategist", "version": "1.0.0"}
 
 
-def project_path(slug: str) -> Path:
+def project_path(slug: str, *, allow_missing: bool = False) -> Path:
     p = (ROOT / "projects" / str(slug)).resolve()
     if (ROOT / "projects").resolve() not in p.parents:
         raise ValueError("проект должен лежать в projects/ этого репозитория")
+    if allow_missing and not p.exists():
+        return p
     if not (p / "state").is_dir():
         raise ValueError(f"нет проекта projects/{slug}")
     return p
@@ -66,7 +68,7 @@ def t_impact(args):
 
 
 def t_validate(args):
-    return _ledger("validate", str(project_path(args["project"])))
+    return _ledger("validate", str(project_path(args["project"], allow_missing=True)))
 
 
 def t_route(args):
@@ -101,6 +103,8 @@ def t_cost(args):
     for k in ("cwd", "since", "until", "match"):
         if args.get(k):
             a += [f"--{k}", str(args[k])]
+    if args.get("cwd_exact"):
+        a.append("--cwd-exact")
     if args.get("zcode"):
         a.append("--zcode")
     return run(C.main, a)
@@ -153,7 +157,8 @@ TOOLS: Dict[str, dict] = {
                         "schema": {"type": "object", "properties": {"project": S, "files": {"type": "array", "items": S},
                                                                     "step": S}, "required": ["project", "files"]}},
     "strategist_cost": {"fn": t_cost, "description": "Стоимость прогона по журналам Codex/Claude Code/ZCode и официальным ценам.",
-                        "schema": {"type": "object", "properties": {"cwd": S, "since": S, "until": S, "match": S,
+                          "schema": {"type": "object", "properties": {"cwd": S, "cwd_exact": {"type": "boolean"},
+                                                                    "since": S, "until": S, "match": S,
                                                                     "zcode": {"type": "boolean"}}}},
     "strategist_models": {"fn": t_models, "description": "Модели: check (новые версии и устаревшие гайды), resolve, specialized.",
                           "schema": {"type": "object", "properties": {"command": {"type": "string",

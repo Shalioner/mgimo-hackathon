@@ -1,0 +1,28 @@
+name: "M: отрицательный контроль направления (порог по затратам cost > 4000)"
+decision: "M-inverse-direction"
+unit: "у.е./квартал"
+formula: "renewals * m - cost"
+breakeven_var: cost
+breakeven_target: 2000
+drivers:
+  - id: renewals
+    label: "Продления за квартал"
+    low: 1000
+    base: 1000
+    high: 1000
+    type: fact
+    unit: "продлений"
+  - id: m
+    label: "Инкрементальный вклад на продление (фиксирован на base=6)"
+    low: 6.0
+    base: 6.0
+    high: 6.0
+    type: assumption
+    unit: "у.е./продление"
+  - id: cost
+    label: "Затраты Change"
+    low: 2000
+    base: 3000
+    high: 5000
+    type: assumption
+    unit: "у.е./квартал"

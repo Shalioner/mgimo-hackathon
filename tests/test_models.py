@@ -86,12 +86,12 @@ def test_hints_and_delegate_prompt_include_them(tmp_path, monkeypatch, capsys):
     L.main(["init", str(p), "--title", "Д"])
     q = tmp_path / "q.md"
     q.write_text("Выпиши проценты.", encoding="utf-8")
-    seen = {}
-    orig = D.build_command
-    monkeypatch.setattr(D, "build_command", lambda b, m, pr, o, w, e=None: seen.setdefault("p", pr) and orig(b, m, pr, o, w, e))
+    capsys.readouterr()
     assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "extract-claims", "--dry-run"]) == 0
-    assert "Особенности модели" in seen["p"] and M.hints("openai")[0] in seen["p"]
-    assert seen["p"].index("Особенности модели") < seen["p"].index("Выпиши проценты.")
+    import json
+    plan = json.loads(capsys.readouterr().out)
+    assert plan["input_bytes"] > len((D.GUARD + q.read_text()).encode("utf-8"))
+    assert plan["transmitted"]["model"] is None
 
 
 # ---------- новые имена, специализированные модели, effort, self-hosted ----------
@@ -179,7 +179,7 @@ def test_delegate_passes_effort_to_codex(tmp_path, monkeypatch, capsys):
     assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "alternatives", "--tier", "T3",
                    "--dry-run"]) == 0
     out = capsys.readouterr().out
-    assert "gpt-6.1-sol@high" in out and "model_reasoning_effort=high" in out
+    assert '"model": "gpt-6.1-sol"' in out and '"effort": "high"' in out
     assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "alternatives", "--tier", "T3",
                    "--effort", "max", "--dry-run"]) == 2  # max — только с согласия
     assert D.main(["--project", str(p), "--prompt-file", str(q), "--task", "alternatives", "--tier", "T3",
@@ -212,6 +212,11 @@ def test_selfhosted_backend_roundtrip(tmp_path, monkeypatch):
     loc.write_text(f"selfhosted: {{base_url: 'http://127.0.0.1:{srv.server_port}/v1', api_key_env: SH_TEST_KEY}}\n"
                    "families:\n  selfhosted: {T1: my-classifier, T2: null, T3: null, T4: null}\n"
                    "delegate_backends: [selfhosted, codex]\n", encoding="utf-8")
+    from test_routing_policy import api_policy
+    import yaml
+    with loc.open("a") as f:
+        f.write(yaml.safe_dump({"execution_policy": api_policy("selfhosted", "selfhosted",
+            f"http://127.0.0.1:{srv.server_port}/v1/chat/completions", "my-classifier")}))
     monkeypatch.setattr(L, "ROUTING_LOCAL_PATH", loc)
     monkeypatch.setenv("SH_TEST_KEY", "k-test")
     monkeypatch.setattr(D.shutil, "which", lambda b: None)

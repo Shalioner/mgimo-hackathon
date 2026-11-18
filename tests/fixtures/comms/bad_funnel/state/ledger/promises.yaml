@@ -1,0 +1,6 @@
+- id: PRM-001
+  status: active
+  message: У нас есть функция карты в приложении.
+  audience: Родители
+  feature: Карта
+  decision: DEC-001

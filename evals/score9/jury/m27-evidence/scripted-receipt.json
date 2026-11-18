@@ -1,0 +1,74 @@
+{
+  "experiment": "M27/EXP-001",
+  "started_utc": "2026-11-18T14:24:24.664+00:00",
+  "control_seconds": 0.000162,
+  "actor": "scripted",
+  "controls": {
+    "N1": {
+      "observed": "forbidden",
+      "expected": "forbidden",
+      "passed": true
+    },
+    "N2": {
+      "observed": "stale",
+      "expected": "stale",
+      "passed": true
+    },
+    "N3": {
+      "observed": "duplicate",
+      "expected": "duplicate",
+      "passed": true
+    }
+  },
+  "attempts": [
+    {
+      "id": "A1",
+      "chosen": "А",
+      "elapsed_s": 15.0,
+      "deadline_s_from_event": 1800,
+      "timely_correct": true
+    },
+    {
+      "id": "A2",
+      "chosen": "Б",
+      "elapsed_s": 15.0,
+      "deadline_s_from_event": 600,
+      "timely_correct": true
+    },
+    {
+      "id": "A3",
+      "chosen": "В",
+      "elapsed_s": 15.0,
+      "deadline_s_from_event": 2700,
+      "timely_correct": true
+    },
+    {
+      "id": "A4",
+      "chosen": "Г",
+      "elapsed_s": 300.0,
+      "deadline_s_from_event": 300,
+      "timely_correct": false
+    },
+    {
+      "id": "A5",
+      "chosen": "Е",
+      "elapsed_s": 15.0,
+      "deadline_s_from_event": 1800,
+      "timely_correct": false
+    },
+    {
+      "id": "A6",
+      "chosen": "Ж",
+      "elapsed_s": 15.0,
+      "deadline_s_from_event": 1200,
+      "timely_correct": true
+    }
+  ],
+  "status": "done",
+  "model_calls": 0,
+  "finished_utc": "2026-11-18T14:24:24.741+00:00",
+  "timely_correct": 4,
+  "scripted_gate": true,
+  "exp001_gate": null,
+  "human_prompt_wait_seconds": null
+}

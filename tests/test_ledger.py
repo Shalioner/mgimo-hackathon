@@ -1,8 +1,12 @@
 """Тесты детерминированных инструментов реестра (tools/ledger.py)."""
+import multiprocessing
+import os
 import re
 import shutil
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from threading import Barrier
 
 import pytest
 import yaml
@@ -299,6 +303,121 @@ def test_supersede_marks_old_and_keeps_record(proj):
     assert led.objects["CLM-003"]["status"] == "superseded" and led.objects["CLM-003"]["superseded_by"] == "CLM-007"
     assert L.validate(led).errors == []
     assert L.main(["supersede", str(proj), "CLM-003", "--by", "HYP-001"]) == 2
+
+
+def test_interrupted_supersede_preserves_previous_ledger(proj, monkeypatch):
+    data = load(proj, "claims.yaml")
+    dump(proj, "claims.yaml", data + [dict(data[2], id="CLM-007")])
+    path = proj / "state/ledger/claims.yaml"
+    old = path.read_bytes()
+
+    def interrupt(_):
+        raise KeyboardInterrupt
+
+    with monkeypatch.context() as interrupted:
+        interrupted.setattr(L.os, "fsync", interrupt)
+        with pytest.raises(KeyboardInterrupt):
+            L.cmd_supersede(proj, "CLM-003", "CLM-007", None)
+    assert path.read_bytes() == old
+    assert not list(path.parent.glob(".claims.yaml.*.tmp"))
+    assert L.cmd_supersede(proj, "CLM-003", "CLM-007", None) == 0
+    assert L.Ledger(proj).objects["CLM-003"]["superseded_by"] == "CLM-007"
+
+
+def _add_source(project, source):
+    return L.cmd_add_source(project, source, "Источник", "document", "own",
+                            None, "high", None, None)
+
+
+@pytest.mark.parametrize("duplicate", [True, False])
+def test_add_source_concurrent_conflict(tmp_path, duplicate):
+    project = tmp_path / "case"
+    assert L.cmd_init(project, "Тест") == 0
+    a = tmp_path / "a" / "note.md"
+    b = tmp_path / "b" / ("other.md" if duplicate else "note.md")
+    for path, content in ((a, "Первый"), (b, "Первый" if duplicate else "Второй")):
+        path.parent.mkdir()
+        path.write_text(content, encoding="utf-8")
+    start = Barrier(2, timeout=10)
+
+    def add(path):
+        start.wait()
+        return _add_source(project, path)
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        assert sorted(pool.map(add, (a, b))) == [0, 3 if duplicate else 1]
+    ledger = L.Ledger(project)
+    assert list(ledger.objects) == ["SRC-001"]
+    assert list((project / "sources").iterdir()) == [project / ledger.objects["SRC-001"]["path"]]
+    assert L.validate(ledger).errors == []
+
+
+def _hold_project_write_lock(project, connection):
+    with connection, L._project_write_lock(project) as locked:
+        connection.send(locked)
+        connection.poll(20)
+
+
+def test_project_write_lock_timeout_and_recovery(proj, tmp_path, monkeypatch, capsys):
+    other = tmp_path / "other"
+    assert L.cmd_init(other, "Другой") == 0
+    log = proj / "state/run_log.md"
+    log.write_text(L.RUN_LOG_HEADER, encoding="utf-8")
+    source = tmp_path / "new.md"
+    source.write_text("Новый источник", encoding="utf-8")
+    sources = proj / "state/ledger/sources.yaml"
+    before = sources.read_bytes(), log.read_bytes()
+    monkeypatch.chdir(tmp_path)
+    alias = Path(proj.name)
+    if os.name == "posix":
+        alias = Path("alias")
+        alias.symlink_to(proj.name, target_is_directory=True)
+    monkeypatch.setattr(L, "_WRITE_LOCK_TIMEOUT", 0.05)
+
+    ctx = multiprocessing.get_context("spawn")
+    parent, child = ctx.Pipe()
+    owner = ctx.Process(target=_hold_project_write_lock, args=(proj, child))
+    owner.start()
+    child.close()
+    lock_file = proj / "state/.ledger-write.lock"
+    try:
+        assert parent.poll(10) and parent.recv()
+        inode = lock_file.stat().st_ino
+        assert L.cmd_log(other, "3", "другая запись", "T0", "-", "ok", "-") == 0
+        assert _add_source(alias, source) == 1
+        assert L.cmd_log(alias, "3", "заблокировано", "T0", "-", "ok", "-") == 1
+        assert L.cmd_supersede(alias, "SRC-001", "SRC-002", None) == 1
+        assert capsys.readouterr().err.count("истекло ожидание") == 3
+        assert (sources.read_bytes(), log.read_bytes()) == before
+        assert not (proj / "sources" / source.name).exists()
+    finally:
+        owner.kill()
+        owner.join(10)
+        parent.close()
+
+    assert owner.exitcode is not None and owner.exitcode != 0
+    assert _add_source(alias, source) == 0
+    assert lock_file.stat().st_ino == inode
+
+
+def test_supersede_and_add_source_preserve_both_updates(proj, tmp_path):
+    source = tmp_path / "new.md"
+    source.write_text("Новый источник", encoding="utf-8")
+    start = Barrier(2, timeout=10)
+
+    def supersede():
+        start.wait()
+        return L.cmd_supersede(proj, "SRC-001", "SRC-002", "Уточнение")
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        replaced = pool.submit(supersede)
+        start.wait()
+        assert _add_source(proj, source) == 0
+        assert replaced.result(timeout=10) == 0
+    ledger = L.Ledger(proj)
+    assert ledger.objects["SRC-001"]["superseded_by"] == "SRC-002"
+    assert ledger.objects["SRC-006"]["path"] == "sources/new.md"
+    assert L.validate(ledger).errors == []
 
 
 def test_brief_one_line_per_object(capsys):

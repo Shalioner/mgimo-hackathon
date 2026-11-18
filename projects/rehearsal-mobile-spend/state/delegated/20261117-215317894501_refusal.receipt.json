@@ -1,0 +1,36 @@
+{
+  "status": "manual",
+  "reason": "Неизвестны provider/model",
+  "max_attempts": 1,
+  "max_attempts_scope": "wrapper_invocations",
+  "wrapper_invocations": 0,
+  "internal_transport_retries": "disabled",
+  "started": false,
+  "process_exit_code": null,
+  "requested": {
+    "host": "decision",
+    "provider": "local-d1",
+    "model": null,
+    "effort": null
+  },
+  "transmitted": {
+    "model": null,
+    "effort": null
+  },
+  "observed": {
+    "provider": null,
+    "model": null,
+    "effort": null
+  },
+  "billing": {
+    "mode": "api_opt_in",
+    "auth": null,
+    "cap_verification": "unknown"
+  },
+  "input_bytes": 8118,
+  "endpoint": null,
+  "policy_digest": "b1f015e0ef56ce082bbee6b37bdfaabb471de6653094e2f0ce321278de4860f2",
+  "result": "not_started",
+  "inference_calls": 0,
+  "exit_code": 3
+}

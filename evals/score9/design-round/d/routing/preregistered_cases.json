@@ -1,0 +1,233 @@
+{
+  "schema": 1,
+  "round": "D2",
+  "baseline_sha": "cb228422368ff1d95650ecaf9234b56d7915c4ce",
+  "source_cases_path": "evals/routing/d1_quality_cases.json",
+  "source_cases_sha256": "96d215f4707b1d13b65111d055decb4fceb094872d65b80cd45baa9760d83e50",
+  "thresholds": {
+    "tier": 0.75,
+    "effort": 0.75,
+    "capability": 0.75
+  },
+  "route_config": {
+    "classifier": "local-d1",
+    "local_d1": {
+      "mode": "service",
+      "reuse": false
+    },
+    "hosts": [
+      "codex"
+    ]
+  },
+  "positive_cases": [
+    {
+      "id": "Q01",
+      "origin": "evals/routing/d1_quality_cases.json",
+      "request": "Из выписки выпиши дату отчёта, число активных договоров и валюту. Не делай выводов.",
+      "context": "Отчёт от 12 октября. Активных договоров: 43. Валюта: RUB.",
+      "tier": [
+        "T1"
+      ],
+      "effort": [
+        "normal"
+      ],
+      "capability": [
+        "text"
+      ],
+      "basis": "Буквальное извлечение из одного источника.",
+      "taxonomy_ceiling_T0": false,
+      "expected_policy_status": "manual",
+      "expected_execution_status": "not_started"
+    },
+    {
+      "id": "Q07",
+      "origin": "evals/routing/d1_quality_cases.json",
+      "request": "Составь бриф исследования: проблема, аудитория, цель, ограничения и открытые вопросы. Стратегию выбирать пока не нужно.",
+      "context": "Руководитель хочет понять, почему новички не завершают регистрацию. Есть только жалобы на длинную форму; аналитика ещё не собрана. Аудитория — новые пользователи мобильного приложения.",
+      "tier": [
+        "T2"
+      ],
+      "effort": [
+        "normal"
+      ],
+      "capability": [
+        "text"
+      ],
+      "basis": "Черновик брифа по заданным сведениям.",
+      "taxonomy_ceiling_T0": false,
+      "expected_policy_status": "manual",
+      "expected_execution_status": "not_started"
+    },
+    {
+      "id": "Q13",
+      "origin": "evals/routing/d1_quality_cases.json",
+      "request": "Сравни три направления развития и сохранение текущего продукта. Рекомендуй одно, объясни отказ от остальных и условия пересмотра.",
+      "context": "Продукт — сервис записи. Варианты: календарная интеграция, предоплата, новая отрасль. Команда может делать только один вариант за квартал. Для интеграции есть 12 запросов, для предоплаты — 4; спрос новой отрасли не проверен. Экономика неизвестна.",
+      "tier": [
+        "T3"
+      ],
+      "effort": [
+        "normal",
+        "deep"
+      ],
+      "capability": [
+        "text"
+      ],
+      "basis": "Сравнение стратегических альтернатив; depth допускает обе интерпретации.",
+      "taxonomy_ceiling_T0": false,
+      "expected_policy_status": "manual",
+      "expected_execution_status": "not_started"
+    },
+    {
+      "id": "D2_NEW_01",
+      "origin": "preregistered_new_training_case",
+      "request": "Подготовь сводную карту ситуации по двум совместимым отчётам поддержки и перечисли пробелы данных. Продуктовую стратегию и приоритеты не выбирай.",
+      "context": "Отчёт 1 (октябрь): 120 тикетов по теме экспорта отчёта, 45 из них закрыты инструкцией по CSV. Отчёт 2 (октябрь): время первого ответа составило 18 минут, повторных обращений после инструкции — 9. Причины остальных 75 обращений не размечены.",
+      "tier": [
+        "T2"
+      ],
+      "effort": [
+        "normal"
+      ],
+      "capability": [
+        "text"
+      ],
+      "basis": "Сводка двух совместимых источников и пробелов данных без противоречий и без выбора стратегии (T2, normal, text).",
+      "taxonomy_ceiling_T0": false,
+      "expected_policy_status": "manual",
+      "expected_execution_status": "not_started"
+    }
+  ],
+  "negative_controls": [
+    {
+      "id": "NEG_PREFLIGHT_NO_EXEC",
+      "kind": "preflight_no_execute",
+      "request": "Из выписки выпиши дату отчёта, число активных договоров и валюту. Не делай выводов.",
+      "context": "Отчёт от 12 октября. Активных договоров: 43. Валюта: RUB.",
+      "execute": false,
+      "classify_only": false,
+      "expected": {
+        "report_status": "awaiting_classification",
+        "classification_status": "pending",
+        "route_status": "executable",
+        "started": false,
+        "wrapper_invocations": 0,
+        "result_status": "not_started"
+      }
+    },
+    {
+      "id": "NEG_CLASSIFY_ONLY",
+      "kind": "classify_only_stops_before_execution",
+      "request": "Из выписки выпиши дату отчёта, число активных договоров и валюту. Не делай выводов.",
+      "context": "Отчёт от 12 октября. Активных договоров: 43. Валюта: RUB.",
+      "execute": true,
+      "classify_only": true,
+      "expected": {
+        "allowed_report_statuses": [
+          "classified",
+          "manual"
+        ],
+        "start_is_none": true,
+        "result_status": "not_started"
+      }
+    },
+    {
+      "id": "NEG_MISSING_SOCKET",
+      "kind": "missing_socket_in_temp_dir",
+      "request": "Из выписки выпиши дату отчёта, число активных договоров и валюту. Не делай выводов.",
+      "context": "Отчёт от 12 октября. Активных договоров: 43. Валюта: RUB.",
+      "execute": true,
+      "classify_only": false,
+      "expected": {
+        "report_status": "manual",
+        "classification_status": "unavailable",
+        "route_status": "manual",
+        "started": false,
+        "wrapper_invocations": 0,
+        "result_status": "not_started"
+      }
+    },
+    {
+      "id": "NEG_TRANSPORT_REFUSED",
+      "kind": "transport_connection_refused",
+      "request": "Из выписки выпиши дату отчёта, число активных договоров и валюту. Не делай выводов.",
+      "context": "Отчёт от 12 октября. Активных договоров: 43. Валюта: RUB.",
+      "execute": true,
+      "classify_only": false,
+      "expected": {
+        "report_status": "manual",
+        "classification_status": "needs_review",
+        "route_result": "failed",
+        "started": true,
+        "result_status": "not_started"
+      }
+    },
+    {
+      "id": "NEG_OVERSIZE_NO_TRUNCATION",
+      "kind": "oversize_state_rejected_no_truncation",
+      "request": "Проверь длинный текст без усечения.",
+      "context_repeat_char": "я",
+      "context_repeat_count": 17000,
+      "execute": true,
+      "classify_only": false,
+      "expected": {
+        "report_status": "manual",
+        "classification_status": "unavailable",
+        "route_status": "manual",
+        "reason_contains": "no truncation",
+        "started": false,
+        "wrapper_invocations": 0,
+        "result_status": "not_started"
+      }
+    },
+    {
+      "id": "NEG_CONFLICTING_CONFIG",
+      "kind": "conflicting_classifier_and_invalid_reuse",
+      "request": "Из выписки выпиши дату отчёта.",
+      "context": "Отчёт от 12 октября.",
+      "execute": true,
+      "classify_only": false,
+      "expected": {
+        "report_status": "manual",
+        "classification_status": "unavailable",
+        "started": false,
+        "result_status": "not_started"
+      }
+    },
+    {
+      "id": "NEG_LOW_CONFIDENCE_PROBE",
+      "kind": "live_ambiguous_probe",
+      "request": "Сделай что-нибудь по этому вопросу.",
+      "context": "Подробности не заданы.",
+      "execute": true,
+      "classify_only": false,
+      "expected": {
+        "report_status": "manual",
+        "result_status": "not_started",
+        "note": "Если live D1 вернёт confidence < 0.75 или отказ/guard — classification.status == needs_review; если >= 0.75 — policy gate оставляет plan.status == manual и execution == not_started."
+      }
+    }
+  ],
+  "deterministic_t0_actions": [
+    {
+      "id": "T0_ROUTE_VALIDATE",
+      "command": [
+        "tools/ledger.py",
+        "route",
+        "validate"
+      ],
+      "expected_exit_code": 0,
+      "expected_tier": "T0"
+    },
+    {
+      "id": "T0_LEDGER_VALIDATE_EXAMPLE",
+      "command": [
+        "tools/ledger.py",
+        "validate",
+        "projects/example"
+      ],
+      "expected_exit_code": 0,
+      "expected_tier": "T0"
+    }
+  ]
+}

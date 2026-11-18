@@ -1,0 +1,35 @@
+name: Иллюстративная экономика предупреждений
+decision: DEC-001
+unit: ₽/мес на условном портфеле
+formula: opportunities * timely * avoided_loss - combined_cost
+breakeven_var: timely
+stop_go_experiment: EXP-003
+drivers:
+- id: opportunities
+  label: Подходящие события
+  low: 10
+  base: 30
+  high: 60
+  type: assumption
+  ref: HYP-004
+- id: timely
+  label: Доля своевременных действий
+  low: 0.20
+  base: 0.45
+  high: 0.70
+  type: assumption
+  ref: HYP-004
+- id: avoided_loss
+  label: Избегаемые издержки за действие
+  low: 150
+  base: 300
+  high: 600
+  type: assumption
+  ref: HYP-004
+- id: combined_cost
+  label: Затраты команды и стоимость реакции клиента
+  low: 2500
+  base: 4500
+  high: 7000
+  type: assumption
+  ref: HYP-004
