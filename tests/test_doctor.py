@@ -28,7 +28,8 @@ def test_json_cli_preserves_unicode_with_stdout_encoding(command, encoding):
 
 def test_catalog_is_local_not_personal_global_skills():
     rows = D.inventory()
-    assert len(rows) == 13
+    assert len(rows) == 14
+    assert any(row['name'] == 'strategist-route-skills' for row in rows)
     assert {r['name'] for r in rows} == set(D.PURPOSES)
     assert all(r['description'] and r['path'].startswith('skills/') for r in rows)
 

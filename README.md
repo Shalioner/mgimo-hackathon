@@ -11,7 +11,7 @@
 | Запрос и исходные материалы | [Постановка задачи](projects/family-connect/outputs/01_brief.md) · [Бриф МегаФона](projects/family-connect/sources/2994317a-e9da-4c24-bbe7-598abf45f6ee-dc138c98-7bfb-4523-a3dc-ee32f1e77a0b-pdf.pdf) · [Папка источников](projects/family-connect/sources/) |
 | Варианты и стратегии | [Альтернативы](projects/family-connect/outputs/04_options.md) · [Продуктовая стратегия](projects/family-connect/outputs/05_product_strategy.md) · [Коммуникационная стратегия](projects/family-connect/outputs/06_comms_strategy.md) · [План проверки](projects/family-connect/outputs/07_validation_plan.md) |
 | Решение и продолжение | [Пятичастный ответ](projects/family-connect/outputs/00_brief_response.md) · [HTML-отчёт](projects/family-connect/outputs/report.html) · [Журнал решений](projects/family-connect/outputs/08_decision_log.md) |
-| Видео и описание работы | [Ролик, 1 мин 44 с](evals/score9/demonstration/family-connect.mp4) · [Таймкоды](docs/JURY_EVIDENCE.md#таймкоды) · [PDF со скриншотами](output/pdf/strategist.pdf) |
+| Видео и описание работы | [Живая запись с D1 и таймером](evals/score9/demonstration/family-connect-live.mp4) · [Таймкоды](docs/JURY_EVIDENCE.md#таймкоды) · [PDF со скриншотами](output/pdf/strategist.pdf) |
 
 ## Быстрый старт
 
@@ -33,11 +33,21 @@ python3 -m venv .venv
 
 Посмотреть сохранённый выбор, следующее действие и открытое согласование без модели можно командой `.venv/bin/python tools/next.py projects/esim-travel --resume`.
 
+## Выбор навыка и инструмента
+
+`$strategist-route-skills` выбирает процедуру по короткой реплике и состоянию проекта. Например, «что выбрали?» ведёт к сохранённому решению, «вот новый отчёт» — к пересмотру. В среде без меню навыков откройте инструкцию напрямую. [Навык маршрутизации](skills/strategist-route-skills/SKILL.md)
+
+В Codex `SessionStart` показывает сохранённое состояние. При настроенном D1 `UserPromptSubmit` добавляет рекомендацию по модели, а `PreToolUse` проверяет параметры отдельного субагента перед запуском. Эти два хука работают после штатного доверия в Codex и при наличии локальной настройки. Основная модель остаётся моделью чата. [Конфигурация хуков](.codex/hooks.json) · [Маршрут и ограничения](docs/NATIVE_HOST_ROUTING.md)
+
+Проектный интерфейс `tools/route_tools.py` позволяет D1 выбрать действие для реестра. В записи он направляет один запрос на проверку ошибок, другой на подсчёт объектов. [Повтор команд](docs/TOOL_ROUTING.md#пример-из-видео)
+
+В записи префикс `rtk proxy` принадлежит терминалу автора. Например, команда из записи работает как `.venv/bin/python tools/next.py projects/family-connect --resume`. `rg` ищет текст, `sed` и `cat` читают файлы, `shasum` сверяет отпечатки. Для основного сценария используйте Python-команды из быстрого старта.
+
 ## Материалы для жюри
 
 - [Официальный кейс «Связь для близких»](projects/family-connect/outputs/00_brief_response.md) · [HTML-отчёт](projects/family-connect/outputs/report.html) · [Текущее согласование](projects/family-connect/state/progress.md).
 - [Решение о допуске пилота](docs/FAMILY_PILOT_DECISION.md) · условия допуска, порог набора и границы сценарной экономики.
-- [Демонстрация официального кейса, 1 мин 44 с](evals/score9/demonstration/family-connect.mp4) · [Продолжение после утверждения](projects/family-connect/outputs/08_decision_log.md) · [Время и расходы](projects/family-connect/outputs/09_run_report.md).
+- [Запись официального кейса в Codex](evals/score9/demonstration/family-connect-live.mp4) · [Продолжение после утверждения](projects/family-connect/outputs/08_decision_log.md) · [Время и расходы](projects/family-connect/outputs/09_run_report.md).
 - [Описание работы со скриншотами, PDF](output/pdf/strategist.pdf) · [Архитектура, инструменты и замеры](docs/DESCRIPTION.md) · [Карта доказательств и таймкоды](docs/JURY_EVIDENCE.md).
 - Проверка комплекта офлайн — `.venv/bin/python evals/score9/jury/run.py`. Она проверяет официальный пакет, учебные сценарии и отрицательные контроли на временных копиях.
 

@@ -12,6 +12,7 @@ import ledger as L
 from install_host_routing import hooks_ready
 
 PURPOSES = {
+    'strategist-route-skills': 'выбор навыка по запросу и состоянию кейса',
     'problem-framing': 'постановка задачи', 'research-plan': 'план исследования',
     'source-intake': 'разбор файлов и источников', 'situation-map': 'факты, пробелы и гипотезы',
     'alternatives': 'сравнение вариантов', 'strategy': 'продуктовая и коммуникационная стратегия',
