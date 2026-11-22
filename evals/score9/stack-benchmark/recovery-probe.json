@@ -1,0 +1,43 @@
+{
+  "transport": "stub",
+  "interrupted": {
+    "status": "failed",
+    "validated_cards": 2,
+    "seconds": 0.002670167000000001,
+    "extraction_calls": 3,
+    "extraction_bytes": 7296,
+    "synthesis_calls": 0,
+    "synthesis_context_bytes": 0,
+    "reused": 0
+  },
+  "resumed": {
+    "status": "succeeded",
+    "validated_cards": 4,
+    "seconds": 0.0027777910000000017,
+    "extraction_calls": 2,
+    "extraction_bytes": 4864,
+    "synthesis_calls": 1,
+    "synthesis_context_bytes": 2371,
+    "reused": 2
+  },
+  "changed_source": {
+    "status": "succeeded",
+    "validated_cards": 4,
+    "seconds": 0.0029811659999999796,
+    "extraction_calls": 3,
+    "extraction_bytes": 7350,
+    "synthesis_calls": 1,
+    "synthesis_context_bytes": 2371,
+    "reused": 1
+  },
+  "changed_instruction": {
+    "status": "succeeded",
+    "validated_cards": 4,
+    "seconds": 0.0028894579999999837,
+    "extraction_calls": 4,
+    "extraction_bytes": 9860,
+    "synthesis_calls": 1,
+    "synthesis_context_bytes": 2371,
+    "reused": 0
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "time_utc": "2026-11-18T23:28:38.199434+00:00",
+  "scope": "Technical check of the proposed recovery instruction; not EXP-001/002, no usefulness result or time-budget feasibility claim",
+  "changed_fields": [
+    {
+      "row": 0,
+      "field": "promise"
+    },
+    {
+      "row": 0,
+      "field": "source"
+    },
+    {
+      "row": 0,
+      "field": "scope"
+    },
+    {
+      "row": 0,
+      "field": "missing"
+    }
+  ],
+  "commands": [
+    {
+      "label": "original-incomplete",
+      "command": [
+        ".venv/bin/python",
+        "projects/stezhok/sources/lab-audit/audit.py",
+        "--input",
+        "projects/stezhok/sources/lab-audit/invalid.json",
+        "--output",
+        "projects/stezhok/state/refusal-recovery-recheck/incomplete-output.md"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "usage: audit.py [-h] --input INPUT --output OUTPUT\naudit.py: error: four nonempty text fields required\n",
+      "output_exists": false
+    },
+    {
+      "label": "corrected-copy-only-missing",
+      "command": [
+        ".venv/bin/python",
+        "projects/stezhok/sources/lab-audit/audit.py",
+        "--input",
+        "projects/stezhok/state/refusal-recovery-recheck/filled-only-missing.json",
+        "--output",
+        "projects/stezhok/state/refusal-recovery-recheck/corrected-output.md"
+      ],
+      "exit": 0,
+      "stdout": "{\"written\": 1, \"output\": \"projects/stezhok/state/refusal-recovery-recheck/corrected-output.md\"}\n",
+      "stderr": "",
+      "output_exists": true
+    },
+    {
+      "label": "failed-call-with-old-output",
+      "command": [
+        ".venv/bin/python",
+        "projects/stezhok/sources/lab-audit/audit.py",
+        "--input",
+        "projects/stezhok/sources/lab-audit/invalid.json",
+        "--output",
+        "projects/stezhok/state/refusal-recovery-recheck/old-output.md"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "usage: audit.py [-h] --input INPUT --output OUTPUT\naudit.py: error: four nonempty text fields required\n",
+      "output_exists": true,
+      "old_bytes_unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "baseline": "0888a8e5d92c2e62593bf5dccf9ee1da65ea1fe1",
+  "result": "Рядом: пакет ALT-006 после CHG-001; срез 2026-11-10",
+  "window_models": [
+    {
+      "model": "gpt-6-luna",
+      "input": 203477,
+      "cached": 2335488,
+      "output": 22187,
+      "calls": 3,
+      "usd": "0.05479608"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "input": 498908,
+      "cached": 11385088,
+      "output": 104399,
+      "calls": 5,
+      "usd": "3.1803148"
+    }
+  ],
+  "result_models": [
+    {
+      "model": "gpt-6-luna",
+      "input": 203477,
+      "cached": 2335488,
+      "output": 22187,
+      "calls": 3,
+      "usd": "0.05479608"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "input": 436635,
+      "cached": 10966784,
+      "output": 100839,
+      "calls": 4,
+      "usd": "2.9783384"
+    }
+  ],
+  "window_api_equivalent_usd": "3.2351",
+  "api_equivalent_usd": "3.0331",
+  "included_streams": 7,
+  "excluded_api_equivalent_usd": "0.2020",
+  "exclusion": {
+    "thread_id": "01a1c5cf-edac-7b92-8ff4-7efa23a78925",
+    "type": "own user request in response_item, role=user",
+    "quote": "Добавь в Рядом страницу конкурента как источник — projects/ryadom/inbox/competitor_page.md. Решение пересматривать не надо, просто скажи, есть ли там что-то важное.",
+    "reason": "separate request after accepted package; token events 17:15:15–17:17:21 MSK"
+  },
+  "cash_payment_usd": null,
+  "active_seconds": null,
+  "calendar": {
+    "start": "2026-11-10T14:20:35+03:00",
+    "end": "2026-11-10T16:27:58+03:00",
+    "seconds": 7643
+  },
+  "initial_calendar_seconds": 5746,
+  "search": {
+    "calls": 2,
+    "queries": 4,
+    "failed_opens": 3,
+    "external_sources_read": 6,
+    "cash_payment_usd": null
+  },
+  "sources_in_window": 9,
+  "later_sources_excluded": [
+    "SRC-010"
+  ],
+  "human": {
+    "initial_checkpoints": [
+      "C1",
+      "C2",
+      "C3"
+    ],
+    "revision_approval": true,
+    "active_seconds": null
+  },
+  "plan": {
+    "status": "approved_limit_not_actual",
+    "hours_by_experiment": {
+      "EXP-001": 2,
+      "EXP-002": 4,
+      "EXP-003": 4,
+      "EXP-004": 10,
+      "EXP-005": 4
+    },
+    "total_hours": 24,
+    "new_cash_limit": 0
+  },
+  "chosen": "ALT-006",
+  "decided_by": "Руководитель продукта",
+  "references": {
+    "cost": {
+      "path": "projects/ryadom/state/cost_report.md",
+      "line": 8,
+      "quote": "**Итого (API-эквивалент): $3.2351**"
+    },
+    "search": {
+      "path": "projects/ryadom/state/run_log.md",
+      "line": 22,
+      "quote": "| 2026-11-10T14:32:26+03:00 | 3 | Учёт веб-бюджета | web.run | Поиск: Q2/Q3 совместный раунд 1 (3 запроса), Q4 раунд 1 (1 запрос); Q1 без поиска. 8 зарегистрированных SRC: 2 условия кейса и 6 открытых; 6 уникальных использованных внешних публикаций прочитаны выборочно, PDF как текст | Всего 2 поисковых вызова, 4 запроса; чтение и повторные открытия не считаются новыми раундами; токены/стоимость недоступны |"
+    },
+    "retry": {
+      "path": "projects/ryadom/state/run_log.md",
+      "line": 36,
+      "quote": "| 2026-11-10T15:39:07+03:00 | 7 | Независимая проверка claim-verifier всех outputs на gpt-6-luna; замечание о временном статусе 04_options исправлено | T1 | gpt-6-luna | Первый проход: 42/43 сгруппированных связок ok, 1 wrong-ref (исторические счётчики до C2); unsupported/overstated 0. Исправлен временной статус, запрошена только повторная проверка затронутого абзаца; validate 0/0, 48 объектов. Проверка локальных копий, без live web | 1 независимый проход и адресная перепроверка; поисков/контактов/закупок 0; точные токены и стоимость не показаны |"
+    },
+    "change": {
+      "path": "projects/ryadom/state/run_log.md",
+      "line": 43,
+      "quote": "| 2026-11-10T16:18:08+03:00 | 8 | Извлечены CLM-019–024; impact CHG-001 дал 22 прежних объекта; пересмотр снизу вверх и diff решения подготовлены | T3 | gpt-6.1-sol | ALT-006 рекомендован; DEC-001 needs_review, последний chosen ALT-001 сохранён. Предложен новый расклад в прежнем лимите. Ни EXP.result, ни выбор человека не присвоены; предупреждение processed:false ожидаемо до завершения обработки | 1 учебный источник; 0 веб-поисков; T0 расчёты и граф; точные токены и стоимость недоступны |"
+    },
+    "completion": {
+      "path": "projects/ryadom/state/run_log.md",
+      "line": 47,
+      "quote": "| 2026-11-10T16:27:58+03:00 | 8 | Адресная независимая приёмка принятого пакета; точка продолжения и отчёт обновлены | T1 | gpt-6-luna | 10/10 существенных связок ok, без неподдержанных/завышенных выводов; метод сообщений, владелец диагностики, HYP.open и отсутствие EXP.result сохранены. Координатор проверил HEAD-контракты/суммы/ссылки; validate57: 0 ошибок, 0 предупреждений. Следующий gate EXP-001; повторного C2/C3 на те же границы не нужно | 1 независимый read-only субагент; 0 поисков и новых источников; точные токены и стоимость недоступны |"
+    },
+    "later_work": {
+      "path": "projects/ryadom/state/run_log.md",
+      "line": 48,
+      "quote": "| 2026-11-17T21:46:28+03:00 | 8 | Уточнены цитаты CLM-013 и CLM-019, актуальные итоги разведены по документам | T0 | local-tools | SRC-010, validate 0, consistency 0 ошибок, проверка версий сохраняет историю и выбор | 1 адресная сверка открытого первоисточника |"
+    },
+    "choice": {
+      "path": "projects/ryadom/state/ledger/decisions.yaml",
+      "line": 48,
+      "quote": "  chosen: ALT-006"
+    },
+    "approval": {
+      "path": "projects/ryadom/state/ledger/decisions.yaml",
+      "line": 108,
+      "quote": "    было, в тех же 4 часах. Часы перераспредели сам в пределах 24, разбор так же 24"
+    },
+    "plan": {
+      "path": "projects/ryadom/outputs/08_decision_log.md",
+      "line": 15,
+      "quote": "| Доступы, устройства, добровольные согласия, подготовка | EXP-001 | 2 | Руководитель продукта |"
+    },
+    "human": {
+      "path": "projects/ryadom/outputs/09_run_report.md",
+      "line": 16,
+      "quote": "Помощь человека потребовалась на 3 обязательных checkpoints: C1 — рамка и критерии, C2 — основной ALT-001 и вспомогательная проверка ALT-003, C3 — утверждение пакета/лимитов/даты и назначение продуктового аналитика. C1 отражён в CLM-004, ответы C2/C3 дословно сохранены в DEC-001. Повторное подтверждение тех же условий не требуется."
+    }
+  }
+}

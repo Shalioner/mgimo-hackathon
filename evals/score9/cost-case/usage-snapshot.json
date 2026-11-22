@@ -1,0 +1,217 @@
+{
+  "baseline": "0888a8e5d92c2e62593bf5dccf9ee1da65ea1fe1",
+  "captured_on": "2026-11-19",
+  "access": "own",
+  "method": "baseline tools/cost.py codex_usage; cwd substring e2e-ryadom; inclusive event time window; no conversation bodies exported",
+  "window": [
+    "2026-11-10T14:00:00+03:00",
+    "2026-11-10T18:00:00+03:00"
+  ],
+  "records": [
+    [
+      "codex",
+      "gpt-6.1-sol",
+      {
+        "input": 115552,
+        "cached": 3362560,
+        "output": 29160,
+        "calls": 1
+      },
+      "01a1c52c-e3cc-78f1-a162-c0d573a9e1ac"
+    ],
+    [
+      "codex",
+      "gpt-6.1-sol",
+      {
+        "input": 29455,
+        "cached": 672512,
+        "output": 2430,
+        "calls": 1
+      },
+      "01a1c52f-5a80-7060-ba01-4c030915845a"
+    ],
+    [
+      "codex",
+      "gpt-6.1-sol",
+      {
+        "input": 96202,
+        "cached": 3963904,
+        "output": 37773,
+        "calls": 1
+      },
+      "01a1c562-950c-75d3-a482-498eb5774f4f"
+    ],
+    [
+      "codex",
+      "gpt-6-luna",
+      {
+        "input": 102967,
+        "cached": 1470848,
+        "output": 15597,
+        "calls": 1
+      },
+      "01a1c574-22db-72d1-a245-d0fb3f3a0181"
+    ],
+    [
+      "codex",
+      "gpt-6.1-sol",
+      {
+        "input": 195426,
+        "cached": 2967808,
+        "output": 31476,
+        "calls": 1
+      },
+      "01a1c594-55af-7b42-a837-fed0cb40b474"
+    ],
+    [
+      "codex",
+      "gpt-6-luna",
+      {
+        "input": 64731,
+        "cached": 435200,
+        "output": 3198,
+        "calls": 1
+      },
+      "01a1c59a-3edd-7930-b683-ccdb9bf2c627"
+    ],
+    [
+      "codex",
+      "gpt-6-luna",
+      {
+        "input": 35779,
+        "cached": 429440,
+        "output": 3392,
+        "calls": 1
+      },
+      "01a1c5a3-14b7-7150-bc8a-72a2b120ae93"
+    ],
+    [
+      "codex",
+      "gpt-6.1-sol",
+      {
+        "input": 62273,
+        "cached": 418304,
+        "output": 3560,
+        "calls": 1
+      },
+      "01a1c5cf-edac-7b92-8ff4-7efa23a78925"
+    ]
+  ],
+  "sources": {
+    "docs/TZ_OFFICIAL.md": {
+      "sha256": "9d95c113ab4574fe1d8ae99f14f840435f82fe840c64507ef3e9a6e60d24fd95"
+    },
+    "knowledge/prices.yaml": {
+      "sha256": "14dc7764455faeb9a710f6ea1ef735a57f7213dc4a777dde5ab348237e8daeb6"
+    },
+    "tools/cost.py": {
+      "sha256": "55ab9664497d4f811aa7045b26de0ed44b7046cee8507c1cc34c95e2f048abb9"
+    },
+    "projects/ryadom/state/cost_report.md": {
+      "sha256": "cfe86fd2f8a6ed7dbc269530f573148578d6e13302f2710d2ad8c7daa7e86fe0"
+    },
+    "projects/ryadom/state/run_log.md": {
+      "sha256": "6f3aa6b27254ef93a531a4ddaccc75b1b6cf807c3034e6072dd766d9f216d1c1"
+    },
+    "projects/ryadom/state/ledger/decisions.yaml": {
+      "sha256": "6bb3f1b1d7105d42d1c4c680de914e39ef0b7f65dc689cb4a08219903323a511"
+    },
+    "projects/ryadom/state/ledger/experiments.yaml": {
+      "sha256": "ac75371532e81c4bb54c7e2519d411c74aedb4a4cf3c741efa073a1ee550c943"
+    },
+    "projects/ryadom/state/ledger/sources.yaml": {
+      "sha256": "de59cfaf511602d0b9daecc49bc8e32c3c9c44a565e2bfc111cc516ff59cc551"
+    },
+    "projects/ryadom/state/verification.md": {
+      "sha256": "f0408053bd64208e5803644c6785540b61db632fa9a554caf650f0ae84f937b7"
+    },
+    "projects/ryadom/outputs/01_brief.md": {
+      "sha256": "79ca27686afe1d69141f60c181f56015338ccb2042a5ed823b659fdb3c9720ad"
+    },
+    "projects/ryadom/outputs/04_options.md": {
+      "sha256": "285b41486ce79b47821faa6315359053eb5c45b085864633467fea00e78de943"
+    },
+    "projects/ryadom/outputs/05_product_strategy.md": {
+      "sha256": "2bb3883cea204c7793a06a735747119288ea3f6f63259e01201d707d299891ef"
+    },
+    "projects/ryadom/outputs/06_comms_strategy.md": {
+      "sha256": "34be3e5d1407ca9d0c2b85e314b3b04c28c4d2df7fe8792bc0e1d6b14507b78c"
+    },
+    "projects/ryadom/outputs/07_validation_plan.md": {
+      "sha256": "c6f60baf32502a7be99a46aaca285e8054276a54fb59146169de5a6189f79181"
+    },
+    "projects/ryadom/outputs/08_decision_log.md": {
+      "sha256": "d2d1f26526390617709eeefec41b08f09cf937f2a859417b2d01dcf7fcc7f02c"
+    },
+    "projects/ryadom/outputs/09_run_report.md": {
+      "sha256": "c39765b651272bd273070b3b2c3d2ac91f77abd5bc7c81b92e01942041150bce"
+    }
+  },
+  "attribution": [
+    {
+      "thread_id": "01a1c52c-e3cc-78f1-a162-c0d573a9e1ac",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T11:17:10.483Z",
+      "last_token_event": "2026-11-10T11:39:30.652Z"
+    },
+    {
+      "thread_id": "01a1c52f-5a80-7060-ba01-4c030915845a",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T11:19:43.642Z",
+      "last_token_event": "2026-11-10T11:36:44.159Z"
+    },
+    {
+      "thread_id": "01a1c562-950c-75d3-a482-498eb5774f4f",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T12:15:47.479Z",
+      "last_token_event": "2026-11-10T12:57:17.412Z"
+    },
+    {
+      "thread_id": "01a1c574-22db-72d1-a245-d0fb3f3a0181",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T12:34:53.108Z",
+      "last_token_event": "2026-11-10T12:40:15.509Z"
+    },
+    {
+      "thread_id": "01a1c594-55af-7b42-a837-fed0cb40b474",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T13:10:13.062Z",
+      "last_token_event": "2026-11-10T13:28:05.465Z"
+    },
+    {
+      "thread_id": "01a1c59a-3edd-7930-b683-ccdb9bf2c627",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T13:16:29.941Z",
+      "last_token_event": "2026-11-10T13:18:28.456Z"
+    },
+    {
+      "thread_id": "01a1c5a3-14b7-7150-bc8a-72a2b120ae93",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T13:26:11.698Z",
+      "last_token_event": "2026-11-10T13:27:23.249Z"
+    },
+    {
+      "thread_id": "01a1c5cf-edac-7b92-8ff4-7efa23a78925",
+      "cwd_leaf": "e2e-ryadom",
+      "cwd_sha256": "1329da1c34d3c7a912ff979e76fa9c355aa597bb8f7bd268c37f2e2e5a9c40b2",
+      "first_token_event": "2026-11-10T14:15:15.553Z",
+      "last_token_event": "2026-11-10T14:17:21.264Z"
+    }
+  ],
+  "excluded_threads": [
+    "01a1c5cf-edac-7b92-8ff4-7efa23a78925"
+  ],
+  "exclusion_evidence": {
+    "thread_id": "01a1c5cf-edac-7b92-8ff4-7efa23a78925",
+    "type": "own user request in response_item, role=user",
+    "quote": "Добавь в Рядом страницу конкурента как источник — projects/ryadom/inbox/competitor_page.md. Решение пересматривать не надо, просто скажи, есть ли там что-то важное.",
+    "reason": "separate request after accepted package; token events 17:15:15–17:17:21 MSK"
+  }
+}

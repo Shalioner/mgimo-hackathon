@@ -117,6 +117,44 @@ def test_agent_cannot_decide(proj):
     assert any("финальный выбор делает человек" in e for e in errors(proj))
 
 
+
+@pytest.mark.parametrize("actor", ["Стратег", "GPT-6.1-sol", "assistant", "auto", "-"])
+def test_model_or_placeholder_cannot_be_recorded_as_human(proj, actor):
+    edit(proj, "decisions.yaml", "DEC-001", lambda o: o.update(decided_by=actor))
+    assert any("финальный выбор делает человек" in e for e in errors(proj))
+
+
+def test_proposed_decision_cannot_contain_human_choice(proj):
+    edit(proj, "decisions.yaml", "DEC-001", lambda o: o.update(state="proposed"))
+    assert any("proposed не может содержать chosen/decided_by/decided_at" in e for e in errors(proj))
+
+
+def test_chosen_option_cannot_also_be_rejected(proj):
+    def reject_chosen(o):
+        o["rejected"].append({"option": o["chosen"], "reason": "Противоречивый отказ"})
+    edit(proj, "decisions.yaml", "DEC-001", reject_chosen)
+    assert any("одновременно указан в rejected" in e for e in errors(proj))
+
+
+def test_decided_requires_nonblank_rationale(proj):
+    edit(proj, "decisions.yaml", "DEC-001", lambda o: o.update(rationale="   "))
+    assert any("не заполнено поле rationale" in e for e in errors(proj))
+
+
+@pytest.mark.parametrize("historical", [False, True])
+def test_one_active_decision_per_question_preserves_history(proj, historical):
+    import copy
+    data = load(proj, "decisions.yaml")
+    duplicate = copy.deepcopy(data[0])
+    duplicate.update(id="DEC-002", question="  " + duplicate["question"].upper() + "  ")
+    if historical:
+        duplicate["status"] = "retracted"
+    data.append(duplicate)
+    dump(proj, "decisions.yaml", data)
+    found = any("дубль активного решения" in e for e in errors(proj))
+    assert found is not historical
+
+
 def test_chosen_must_be_an_option(proj):
     edit(proj, "decisions.yaml", "DEC-001", lambda o: o.update(chosen="ALT-099"))
     errs = errors(proj)
@@ -425,3 +463,46 @@ def test_brief_one_line_per_object(capsys):
     out = capsys.readouterr().out.strip().splitlines()
     assert out and all(l.startswith(("HYP-", "DEC-001")) for l in out)
     assert any("увер." in l for l in out if l.startswith("HYP-"))
+
+
+def test_add_source_retry_after_interrupted_registration(tmp_path, monkeypatch):
+    project = tmp_path / "case"
+    L.main(["init", str(project), "--title", "Проверка"])
+    source = tmp_path / "data.csv"
+    source.write_bytes(b"original")
+    def interrupt(*args):
+        raise KeyboardInterrupt
+    with monkeypatch.context() as patch:
+        patch.setattr(L, "atomic_write_text", interrupt)
+        with pytest.raises(KeyboardInterrupt):
+            _add_source(project, source)
+    target = project / "sources/data.csv"
+    assert target.read_bytes() == b"original"
+    source.write_bytes(b"changed")
+    assert _add_source(project, source) == 1
+    assert target.read_bytes() == b"original"
+    source.write_bytes(b"original")
+    assert _add_source(project, source) == 0
+    assert _add_source(project, source) == 3
+    assert list(L.Ledger(project).objects) == ["SRC-001"]
+
+
+def test_interrupted_attachment_copy_does_not_leave_partial_source(tmp_path, monkeypatch):
+    import shutil
+
+    project = tmp_path / "case"
+    L.main(["init", str(project), "--title", "Проверка"])
+    source = tmp_path / "data.csv"
+    source.write_bytes(b"complete data")
+
+    def partial_copy(src, staged):
+        Path(staged).write_bytes(b"partial")
+        raise KeyboardInterrupt
+
+    with monkeypatch.context() as patch:
+        patch.setattr(shutil, "copy2", partial_copy)
+        with pytest.raises(KeyboardInterrupt):
+            _add_source(project, source)
+    assert list((project / "sources").iterdir()) == []
+    assert _add_source(project, source) == 0
+    assert (project / "sources/data.csv").read_bytes() == source.read_bytes()

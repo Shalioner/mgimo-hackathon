@@ -1,0 +1,34 @@
+{
+  "refusal": {
+    "record_exit": 0,
+    "status": "current",
+    "wrote_receipt": true
+  },
+  "conditional": {
+    "record_exit": 0,
+    "status": "current",
+    "wrote_receipt": true
+  },
+  "acknowledgement": {
+    "record_exit": 0,
+    "status": "current",
+    "wrote_receipt": true
+  },
+  "blank": {
+    "record_exit": 2,
+    "status": "stale",
+    "wrote_receipt": false
+  },
+  "old_hash": {
+    "record_exit": 2,
+    "status": "stale",
+    "wrote_receipt": false
+  },
+  "approval_and_retry": {
+    "record_exit": 0,
+    "status": "current",
+    "wrote_receipt": true,
+    "retry_exit": 0,
+    "retry_kept_receipt": true
+  }
+}

@@ -359,9 +359,16 @@ def validate(ledger: Ledger) -> Report:
                 rep.err(oid, "утверждение противоречит само себе")
 
     # 5. решения
+    seen_active_questions: Dict[str, str] = {}
     for oid, o in objs.items():
         if prefix(oid) != "DEC":
             continue
+        if o.get("status", "active") == "active" and isinstance(o.get("question"), str):
+            question = _norm(o["question"])
+            if question in seen_active_questions:
+                rep.err(oid, f"дубль активного решения по вопросу (уже есть {seen_active_questions[question]})")
+            elif question:
+                seen_active_questions[question] = oid
         options = o.get("options") or []
         kinds = set()
         for opt in options:
@@ -377,11 +384,21 @@ def validate(ledger: Ledger) -> Report:
         for f in ("recommended", "chosen"):
             if o.get(f) and o[f] not in options:
                 rep.err(oid, f"{f}={o[f]} не входит в options")
+        rejected = o.get("rejected")
+        if o.get("chosen") and isinstance(rejected, list) and any(
+                isinstance(r, dict) and r.get("option") == o["chosen"] for r in rejected):
+            rep.err(oid, f"выбранный вариант {o['chosen']} одновременно указан в rejected")
+        if o.get("state") == "proposed" and any(o.get(f) for f in ("chosen", "decided_by", "decided_at")):
+            rep.err(oid, "proposed не может содержать chosen/decided_by/decided_at до выбора человека")
         if o.get("state") == "decided":
             for f in ("chosen", "decided_by", "decided_at", "rationale", "review_triggers"):
-                if not o.get(f):
+                value = o.get(f)
+                if not value or (isinstance(value, str) and not value.strip()):
                     rep.err(oid, f"решение принято (decided), но не заполнено поле {f}")
-            if o.get("decided_by", "").strip().lower() in ("agent", "агент", "ai", "llm"):
+            actor = _norm(o.get("decided_by", ""))
+            if actor in {"agent", "агент", "ai", "ии", "llm", "бот", "assistant", "стратег",
+                         "codex", "claude", "opus", "gemini", "auto", "по умолчанию", "tbd", "-"} \
+                    or re.fullmatch(r"gpt-[\w.-]+", actor):
                 rep.err(oid, "финальный выбор делает человек: decided_by не может быть агентом")
         for b in o.get("based_on") or []:
             t = objs.get(b)
@@ -1102,6 +1119,20 @@ def cmd_init(project: Path, title: str) -> int:
         print(f"Папка {project} уже существует и не пуста — продолжите работу по её state/progress.md",
               file=sys.stderr)
         return 1
+    import shutil
+    project.parent.mkdir(parents=True, exist_ok=True)
+    staging = Path(tempfile.mkdtemp(prefix=".strategist-init-", dir=project.parent))
+    try:
+        _write_init_skeleton(staging, title)
+        os.replace(staging, project)
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging)
+    print(f"Создан проект {project}. Следующий шаг: workflows/strategy.md, шаг 1.")
+    return 0
+
+
+def _write_init_skeleton(project: Path, title: str) -> None:
     for sub in ("sources", "outputs", "state/ledger"):
         (project / sub).mkdir(parents=True, exist_ok=True)
     for fname, _, _ in TYPES.values():
@@ -1121,8 +1152,6 @@ def cmd_init(project: Path, title: str) -> int:
         "Пишется командой `ledger.py log`, а не вручную.\n\n"
         f"{RUN_LOG_HEADER}",
         encoding="utf-8")
-    print(f"Создан проект {project}. Следующий шаг: workflows/strategy.md, шаг 1.")
-    return 0
 
 
 def _next_id(ledger: Ledger, pfx: str) -> str:
@@ -1158,10 +1187,6 @@ def cmd_add_source(project: Path, file: Path, title: str, kind: str, access: str
         target = file.resolve()
         if sources_dir not in target.parents:
             target = sources_dir / file.name
-            if target.exists():
-                print(f"В sources/ уже есть другой файл {file.name} — переименуйте", file=sys.stderr)
-                return 1
-            shutil.copy2(file, target)
         new_id = _next_id(ledger, "SRC")
         entry = {
             "id": new_id, "title": title, "kind": kind, "access": access,
@@ -1178,10 +1203,28 @@ def cmd_add_source(project: Path, file: Path, title: str, kind: str, access: str
         problems = [e.message for e in Draft202012Validator(
             {"$schema": schema["$schema"], "$defs": schema["$defs"], "$ref": "#/$defs/source"}).iter_errors(entry)]
         if problems:
-            if target != file.resolve():
-                target.unlink()  # убрать только что скопированную копию
             print("Источник не зарегистрирован: " + "; ".join(problems), file=sys.stderr)
             return 1
+        if target != file.resolve():
+            if target.is_symlink() or (target.exists() and (
+                not target.is_file() or hashlib.sha256(target.read_bytes()).hexdigest() != digest
+                or any(o.get("path") == entry["path"] for o in ledger.objects.values())
+            )):
+                print(f"В sources/ уже есть другой файл {file.name} — переименуйте", file=sys.stderr)
+                return 1
+            if not target.exists():
+                # Make the complete attachment visible before registering it. A retry can
+                # reuse these bytes if the process stops before the ledger write.
+                with tempfile.NamedTemporaryFile(dir=sources_dir, delete=False) as tmp:
+                    staged = Path(tmp.name)
+                try:
+                    shutil.copy2(file, staged)
+                    if hashlib.sha256(staged.read_bytes()).hexdigest() != digest:
+                        print(f"Источник изменился во время копирования: {file}", file=sys.stderr)
+                        return 1
+                    os.replace(staged, target)
+                finally:
+                    staged.unlink(missing_ok=True)
         path = project / "state/ledger/sources.yaml"
         existing = path.read_text(encoding="utf-8") if path.exists() else ""
         if existing.strip() in ("", "[]"):

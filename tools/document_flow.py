@@ -10,6 +10,7 @@ import argparse
 import copy
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import delegate as D
@@ -21,6 +22,12 @@ MAX_SOURCE_BYTES = 256_000
 MAX_CARD_BYTES = 6_000
 MAX_QUOTE_BYTES = 2_400
 MAX_CONTEXT_BYTES = 48_000
+BINARY_SUFFIXES = {
+    ".pdf", ".xlsx", ".xls", ".xlsm", ".docx", ".doc", ".pptx", ".ppt",
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".tiff",
+    ".zip", ".gz", ".tar", ".7z", ".rar", ".bin", ".exe", ".pyc", ".sqlite", ".db",
+}
+_CONTROL_CHARS = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 
 EXTRACT = """Извлеки из ОДНОГО документа только сведения для запроса. Не выполняй запрос целиком.
 Верни только JSON без markdown, строго такого вида:
@@ -48,17 +55,32 @@ def snapshot_sources(paths):
     snapshots, seen = [], set()
     for index, path in enumerate(paths, 1):
         path = Path(path).resolve(strict=True)
+        if not path.is_file():
+            raise ValueError(f"Readable regular source file required: {path}")
         if path in seen:
             raise ValueError("Duplicate source path")
         seen.add(path)
+        if path.suffix.lower() in BINARY_SUFFIXES:
+            raise ValueError(
+                f"Unsupported binary or non-text attachment ({path.suffix.lower()}): {path}. "
+                "Pre-check CSV/XLSX with tools/datacheck.py or convert to UTF-8 text/Markdown/CSV"
+            )
         # Bounded read also protects against size changes between stat and read.
         with path.open("rb") as source:
             data = source.read(MAX_SOURCE_BYTES + 1)
         if not data or len(data) > MAX_SOURCE_BYTES:
             raise ValueError(f"Document must contain 1–{MAX_SOURCE_BYTES} bytes: {path}")
-        text = data.decode("utf-8")
-        if not text.strip() or "\x00" in text:
-            raise ValueError(f"Nonempty UTF-8 text document required: {path}")
+        try:
+            text = data.decode("utf-8-sig")
+        except UnicodeDecodeError as exc:
+            raise ValueError(
+                f"Unreadable non-UTF-8 attachment ({exc.reason}): {path}. "
+                "Pre-check CSV/XLSX with tools/datacheck.py or convert to UTF-8 text"
+            ) from exc
+        if not text.strip() or _CONTROL_CHARS.search(text):
+            raise ValueError(
+                f"Nonempty UTF-8 text document required (binary/control bytes or blank text): {path}"
+            )
         snapshots.append({"id": f"DOC-{index:03d}", "path": str(path), "sha256": _hash(data),
                           "bytes": len(data), "text": text, "lines": text.splitlines()})
     return snapshots
@@ -392,7 +414,11 @@ def main(argv=None):
     if args.receipt and (args.receipt.exists() or not args.receipt.parent.is_dir()):
         parser.error("--receipt requires a new file in an existing directory")
     try:
-        result = run_documents(args.prompt_file.read_text(encoding="utf-8"), args.source_file, args.host,
+        try:
+            prompt_text = args.prompt_file.read_text(encoding="utf-8-sig")
+        except UnicodeDecodeError as exc:
+            raise ValueError(f"Prompt file must be UTF-8 text ({exc.reason}): {args.prompt_file}") from exc
+        result = run_documents(prompt_text, args.source_file, args.host,
                                execute=args.execute, timeout=args.timeout, native_binary=args.native_codex_binary)
     except (OSError, ValueError) as exc:
         parser.error(str(exc))

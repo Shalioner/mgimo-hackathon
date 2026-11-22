@@ -1,0 +1,45 @@
+{
+  "experiment_id": "wave1-approval-card-ab-ux",
+  "title": "A/B UX-тест: одна компактная карточка C3 vs штатный отчёт (report.html)",
+  "base_commit": "e89f77599f8fd5a40f3cadb01ece8c21122d3900",
+  "frozen_package": {
+    "archive_path": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/strategist-jury.tar.gz",
+    "archive_sha256": "45067b201632781870cc73f95e2810283b26102f1df3e0114ec80e88e7eac006",
+    "unpacked_root": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked",
+    "access_mode": "read-only"
+  },
+  "cases": {
+    "family-connect": {
+      "label": "Связь для близких и собственных устройств",
+      "c3_state_label": "approved",
+      "baseline_report_rel": "projects/family-connect/outputs/report.html",
+      "baseline_report_sha256": "1acce3873e18688eed82201035560ae67c1a5cb9b52d2059f2f12125075360de",
+      "c3_receipt_rel": "projects/family-connect/state/c3_approvals.json",
+      "c3_receipt_sha256": "aaf09a1bd70983fb59f3896d3c68fcd714759662b2054852da7771321e7875eb",
+      "expected_c3_check_status": "current",
+      "expected_c3_package_sha256": "b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483",
+      "compact_card_rel": "cards/family-connect-card.html",
+      "task_ids": ["T01", "T02", "T03", "T04", "T05"]
+    },
+    "esim-travel": {
+      "label": "Запуск eSIM для путешественников: стоит ли и кому продавать",
+      "c3_state_label": "reopened",
+      "baseline_report_rel": "projects/esim-travel/outputs/report.html",
+      "baseline_report_sha256": "74d6f732489e4ad9ebef0a2e37fda7cda29106610ea066e1ee6674291cba15d4",
+      "c3_receipt_rel": null,
+      "c3_receipt_sha256": null,
+      "expected_c3_check_status": "unrecorded",
+      "expected_c3_prepare_blocked_substring": "0 активных PRM",
+      "historical_c3_note": "Статус unrecorded в c3_approval.py означает отсутствие файла-квитанции с хэшем версии, а НЕ отсутствие прошлого утверждения: историческое согласование C3 сохранено в progress.md, 07_validation_plan.md и 08_decision_log.md.",
+      "compact_card_rel": "cards/esim-travel-card.html",
+      "task_ids": ["T06", "T07", "T08", "T09", "T10"]
+    }
+  },
+  "acceptance_criteria": {
+    "min_correct_tasks": 8,
+    "total_tasks": 10,
+    "max_scope_errors": 0,
+    "scope_critical_tasks": ["T01", "T06", "T07"],
+    "ux_timing_requires_human_participants": true
+  }
+}

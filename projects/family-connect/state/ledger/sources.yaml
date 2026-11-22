@@ -1,0 +1,60 @@
+- id: SRC-001
+  title: 'Пример брифа: связь для близких и собственных устройств'
+  kind: document
+  access: own
+  path: sources/2994317a-e9da-4c24-bbe7-598abf45f6ee-dc138c98-7bfb-4523-a3dc-ee32f1e77a0b-pdf.pdf
+  sha256: 558d2c665caa4f4954135c8bbfb69d791e398dcdc5b625d5ded7bdb2d0eb0fa5
+  retrieved: '2026-11-19'
+  reliability: high
+- id: SRC-002
+  title: T2, Делитесь гигабайтами — открытый пример функционального аналога
+  kind: website
+  access: open
+  path: sources/t2-share-gb.md
+  sha256: 4f7da0ab2709034898f5dff39dae99c672376c5158763abc2c630c6c6004e854
+  retrieved: '2026-11-21'
+  reliability: medium
+  url: https://konkurs.t2.ru/option/share-gb
+- id: SRC-003
+  title: Текстовый макет F1, закрытая диагностика
+  kind: document
+  access: own
+  path: sources/f1-family-signal-mockup.md
+  sha256: 2f5804b21f42883a11e2ce305601a5ef9d428a46e70dcfe34337dc60ae9c57e1
+  retrieved: '2026-11-21'
+  reliability: high
+- id: SRC-004
+  title: Макет F1, сигнал и разрешение на остаток, вторая версия
+  kind: document
+  access: own
+  path: sources/f1-family-signal-consent-v2.md
+  sha256: 5d6cc8b194444a0cccf9f753ef798a7465de557a5c845af1f9673d82ee3d9f2c
+  retrieved: '2026-11-21'
+  reliability: high
+- id: SRC-005
+  title: МТС, роли и права семейной группы
+  kind: website
+  access: open
+  path: sources/mts-family-roles.md
+  sha256: e2b6ab5d1014a2d826f9d2a2515a759461d4a8216d65554859b588984cb8a1d2
+  retrieved: '2026-11-21'
+  reliability: high
+  url: https://support.mts.ru/semeinaya_gruppa/obschaya-informatsiya/kakie-est-roli-v-semeinoi-gruppe
+- id: SRC-006
+  title: МТС, раздельные пакеты в Семейной группе
+  kind: website
+  access: open
+  path: sources/mts-family-allowance.md
+  sha256: 604c06f3da1092e11e04544691bc1d5677cb64e99d0b88e2b8dd15fd6b326960
+  retrieved: '2026-11-21'
+  reliability: high
+  url: https://support.mts.ru/semeinaya_gruppa/obschaya-informatsiya/chto-takoe-semeinaya-gruppa-i-kak-ona-rabotaet
+- id: SRC-007
+  title: Билайн, индивидуальные лимиты в ЯНАО
+  kind: website
+  access: open
+  path: sources/beeline-family-limits.md
+  sha256: a031aea764fd3d3ad5bb9fe5cef8e9d5439a01fc8df7c69ba39dfbb4e9414713
+  retrieved: '2026-11-21'
+  reliability: high
+  url: https://yanao.beeline.ru/family/deli-vse-deli-gigi/

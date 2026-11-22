@@ -7,6 +7,7 @@ import re
 import shlex
 import shutil
 import sys
+from urllib.parse import urlsplit
 
 import pytest
 
@@ -333,3 +334,348 @@ def test_check_ignores_only_generated_timestamp(project, tmp_path, metadata, ext
     assert count == 1
     out.write_text(html, encoding="utf-8")
     assert check_without_writes(project, tmp_path) == status
+
+
+def _hrefs_and_ids(html: str) -> tuple[list[str], set[str]]:
+    tags = Tags(html).tags
+    hrefs = [attrs["href"] for tag, attrs in tags if tag == "a" and "href" in attrs]
+    ids = {attrs["id"] for _, attrs in tags if "id" in attrs}
+    return hrefs, ids
+
+
+def _relative_hrefs(hrefs: list[str]) -> list[str]:
+    return [
+        href for href in hrefs
+        if not href.startswith("#")
+        and not urlsplit(href).scheme
+        and not urlsplit(href).netloc
+        and not urlsplit(href).path.startswith("/")
+    ]
+
+
+def test_embedded_doc_links_redirect_to_anchors_and_preserve_fragments_queries_and_external(project, tmp_path):
+    (project / "state/verification.md").write_text("# Сверка\n", encoding="utf-8")
+    (project / "sources/mockup.md").write_text("# Макет\n", encoding="utf-8")
+    (project / "state/progress.md").write_text(
+        "# Прогресс: Кейс\nТекущий шаг: 7 — пакет ожидает утверждения на C3\n",
+        encoding="utf-8",
+    )
+    (project / "outputs/00_brief_response.md").write_text(
+        "# Ответ руководителю\n\n## Главное\n"
+        "См. [Бриф](01_brief.md), [Стратегию](./05_product_strategy.md), "
+        "[CLM-001](06_comms_strategy.md), [Отсутствующий](02_research_plan.md).\n\n"
+        "С фрагментом и параметрами: [Критерии](07_validation_plan.md#критерии-остановки), "
+        "[Сырой бриф](01_brief.md?mode=raw), [Секция](01_brief.md?mode=raw#sec).\n\n"
+        "Материалы: [Сверка](../state/verification.md), "
+        "[Сверка с якорем](../state/verification.md#L5), "
+        "[Макет](../sources/mockup.md).\n\n"
+        "Внешние и прочие: [Сайт](https://example.com/01_brief.md), "
+        "[Почта](mailto:lead@example.com), [Якорь](#local-anchor), "
+        "[Протокол](//example.com/01_brief.md), [Корень](/docs/01_brief.md), "
+        "[XSS](javascript:alert(1)), [Data](data:text/html,hi).\n",
+        encoding="utf-8",
+    )
+    (project / "outputs/05_product_strategy.md").write_text(
+        "# Продуктовая стратегия\n\n## Главное\n"
+        "См. [ответ руководителю](00_brief_response.md) и [макет](../sources/mockup.md).\n",
+        encoding="utf-8",
+    )
+    (project / "outputs/06_comms_strategy.md").write_text(
+        "# Коммуникационная стратегия\n\n## Главное\n"
+        "Обещания сверены с [макетом](../sources/mockup.md).\n",
+        encoding="utf-8",
+    )
+    (project / "outputs/07_validation_plan.md").write_text(
+        "# План проверки\n\n## Главное\nПроверка по плану.\n",
+        encoding="utf-8",
+    )
+
+    ext_out = tmp_path / "external_dir" / "report.html"
+    default_out = project / "outputs/report.html"
+    assert report.main([str(project)]) == 0
+    assert report.main([str(project), "--check"]) == 0
+    assert report.main([str(project), "--out", str(ext_out)]) == 0
+    assert report.main([str(project), "--out", str(ext_out), "--check"]) == 0
+
+    for out_path, is_external in ((default_out, False), (ext_out, True)):
+        html = out_path.read_text(encoding="utf-8")
+        hrefs, ids = _hrefs_and_ids(html)
+
+        # Все встроенные документы без фрагмента/query ведут на реальные #doc-NN.
+        for doc_id in ("doc-00", "doc-01", "doc-05", "doc-06"):
+            assert doc_id in ids
+            assert f"#{doc_id}" in hrefs
+        for bare_md in ("00_brief_response.md", "01_brief.md", "./05_product_strategy.md", "06_comms_strategy.md"):
+            assert bare_md not in hrefs
+
+        # Несуществующий документ не получает фиктивный якорь #doc-02.
+        assert "#doc-02" not in hrefs
+        assert "02_research_plan.md" in hrefs
+
+        # Содержательные #fragment, ?query и относительные материалы сохранены и пересчитаны от out.parent.
+        prefix = "../example/outputs/" if is_external else ""
+        state_prefix = "../example/state/" if is_external else "../state/"
+        sources_prefix = "../example/sources/" if is_external else "../sources/"
+        expected_rel = [
+            f"{prefix}07_validation_plan.md#критерии-остановки",
+            f"{prefix}01_brief.md?mode=raw",
+            f"{prefix}01_brief.md?mode=raw#sec",
+            f"{state_prefix}verification.md",
+            f"{state_prefix}verification.md#L5",
+            f"{sources_prefix}mockup.md",
+        ]
+        for expected in expected_rel:
+            assert expected in hrefs
+            assert (out_path.parent / urlsplit(expected).path).resolve().exists()
+
+        # Внешние, якорные, protocol-relative и root-absolute URL сохранены; небезопасные заблокированы.
+        for preserved in (
+            "https://example.com/01_brief.md",
+            "mailto:lead@example.com",
+            "#local-anchor",
+            "//example.com/01_brief.md",
+            "/docs/01_brief.md",
+        ):
+            assert preserved in hrefs
+        assert not any(h.lower().startswith(("javascript:", "data:")) for h in hrefs)
+
+        # В сводке C3 на первом экране ссылки из «Главного» также перенаправлены и пересчитаны.
+        c3_block = html.split('<div id="c3-executive-summary">', 1)[1].split("</div>", 1)[0]
+        c3_hrefs, _ = _hrefs_and_ids(c3_block)
+        assert "#doc-00" in c3_hrefs
+        assert f"{sources_prefix}mockup.md" in c3_hrefs
+
+
+def test_relative_links_respect_each_source_file_base_in_default_and_custom_out(project, tmp_path):
+    (project / "state/verification.md").write_text("# Сверка\n", encoding="utf-8")
+    (project / "state/run_log.md").write_text("# Лог\n", encoding="utf-8")
+    (project / "outputs/00_brief_response.md").write_text("# Стратегия\n", encoding="utf-8")
+    (project / "state/progress.md").write_text(
+        "# Прогресс: [Сверка](verification.md) и [Стратегия](../outputs/00_brief_response.md)\n"
+        "Текущий шаг: 8 — сопровождение, [фрагмент](../outputs/00_brief_response.md#резюме)\n",
+        encoding="utf-8",
+    )
+    (project / "state/cost_report.md").write_text(
+        "## Стоимость: 2026-11-20\n"
+        "**Итого: $1.50** — см. [журнал](run_log.md#L3) и [бриф](../outputs/01_brief.md).\n",
+        encoding="utf-8",
+    )
+    (project / "state/ledger/decisions.yaml").write_text(
+        "- id: DEC-001\n"
+        "  state: decided\n"
+        "  chosen: ALT-001\n"
+        "  options: [ALT-001, ALT-002]\n"
+        "  rationale: 'См. [таблицу](sources/retention_2026.csv) и [бриф](outputs/01_brief.md).'\n",
+        encoding="utf-8",
+    )
+
+    default_out = project / "outputs/report.html"
+    ext_out = tmp_path / "outside" / "nested" / "report.html"
+    assert report.main([str(project)]) == 0
+    assert report.main([str(project), "--check"]) == 0
+    assert report.main([str(project), "--out", str(ext_out)]) == 0
+    assert report.main([str(project), "--out", str(ext_out), "--check"]) == 0
+
+    for out_path, state_prefix, outputs_prefix, sources_prefix in (
+        (default_out, "../state/", "", "../sources/"),
+        (ext_out, "../../example/state/", "../../example/outputs/", "../../example/sources/"),
+    ):
+        html = out_path.read_text(encoding="utf-8")
+        hrefs, ids = _hrefs_and_ids(html)
+
+        assert "#doc-00" in hrefs and "doc-00" in ids
+        assert "#doc-01" in hrefs and "doc-01" in ids
+        assert f"{state_prefix}verification.md" in hrefs
+        assert f"{outputs_prefix}00_brief_response.md#резюме" in hrefs
+        assert f"{state_prefix}run_log.md#L3" in hrefs
+        assert f"{sources_prefix}retention_2026.csv" in hrefs
+        assert "verification.md" not in hrefs
+        assert "run_log.md#L3" not in hrefs
+
+        for rel in _relative_hrefs(hrefs):
+            assert (out_path.parent / urlsplit(rel).path).resolve().exists(), f"broken {rel} in {out_path}"
+
+
+@pytest.mark.parametrize("slug", ["esim-travel", "ryadom", "rehearsal-mobile-spend"])
+def test_existing_cases_relative_links_valid_with_custom_out(slug, tmp_path):
+    project_dir = ROOT / "projects" / slug
+    out = tmp_path / "external" / f"{slug}.html"
+    assert report.main([str(project_dir), "--out", str(out)]) == 0
+    assert report.main([str(project_dir), "--out", str(out), "--check"]) == 0
+
+    html = out.read_text(encoding="utf-8")
+    hrefs, ids = _hrefs_and_ids(html)
+
+    for href in hrefs:
+        if href.startswith("#"):
+            assert href[1:] in ids, f"broken anchor {href} in {slug}"
+
+    for rel in _relative_hrefs(hrefs):
+        assert (out.parent / urlsplit(rel).path).resolve().exists(), f"broken relative link {rel} in {slug}"
+
+    if slug == "esim-travel":
+        assert "#doc-06" in hrefs
+        assert "06_comms_strategy.md" not in hrefs
+        assert any(h.endswith("outputs/07_validation_plan.md#ограничения-критериев-и-решения-требующие-согласования") for h in hrefs)
+        assert any(h.endswith("outputs/06_comms_strategy.md#ключевое-сообщение-и-его-подтверждение") for h in hrefs)
+    elif slug == "ryadom":
+        assert "#doc-08" in hrefs
+        assert "08_decision_log.md" not in hrefs
+    elif slug == "rehearsal-mobile-spend":
+        for anchor in ("#doc-01", "#doc-07", "#doc-08"):
+            assert anchor in hrefs
+        assert any(h.endswith("state/run_log.md#L7") for h in hrefs)
+        assert any(h.endswith("state/run_log.md#L19") for h in hrefs)
+
+
+def _c1_brief_block(screen: str) -> str:
+    assert '<div id="c1-brief">' in screen
+    return screen.split('<div id="c1-brief">', 1)[1].split("</div>", 1)[0]
+
+
+def test_open_c1_first_screen_brief_links_and_no_checkpoint_duplication(project, tmp_path):
+    (project / "state/ledger/decisions.yaml").write_text("[]\n", encoding="utf-8")
+    (project / "state/progress.md").write_text(
+        "# Прогресс: Контроль связи\n\n"
+        "Текущий шаг: 1 — бриф ожидает подтверждения C1\n\n"
+        "## Шаги\n- [ ] 1. Постановка задачи → C1 (outputs/01_brief.md)\n\n"
+        "## Что дальше\n- После подтверждения C1 составить план исследования.\n\n"
+        "## Открытые вопросы к человеку\n"
+        "- Роль: руководитель направления\n"
+        "- Ожидаемый ответ: подтвердить рамку пилота и критерии выбора.\n",
+        encoding="utf-8",
+    )
+    (project / "outputs/01_brief.md").write_text(
+        "# Бриф\n\n"
+        "## Главное\n"
+        "Проверить отток [CLM-001] и [выгрузку](../sources/retention_2026.csv); масштаб эффекта неизвестен.\n\n"
+        "## Какое решение предстоит принять\n"
+        "Пилотировать решение А или оставить текущий процесс [CLM-999] <тест> [xss](javascript:alert(1))?\n\n"
+        "| Поле | Значение |\n|---|---|\n| Цель | Табличная строка не для первого экрана |\n\n"
+        "## История\n"
+        "## Какое решение предстоит принять\n"
+        "Устаревший вопрос из истории.\n",
+        encoding="utf-8",
+    )
+
+    default_out = project / "outputs/report.html"
+    ext_out = tmp_path / "external" / "c1.html"
+    assert report.main([str(project)]) == 0
+    assert check_without_writes(project, tmp_path) == 0
+    assert report.main([str(project), "--out", str(ext_out)]) == 0
+    assert check_without_writes(project, tmp_path, "--out", str(ext_out)) == 0
+
+    for out_path, sources_prefix in ((default_out, "../sources/"), (ext_out, "../example/sources/")):
+        html = out_path.read_text(encoding="utf-8")
+        screen = current_screen(html)
+        brief = _c1_brief_block(screen)
+        plain = unescape(re.sub("<[^>]*>", " ", screen))
+
+        assert screen.index("Текущий шаг:") < screen.index('id="c1-brief"') < screen.index('id="checkpoint-approval"')
+        assert html.index('id="c1-brief"') < html.index('<nav aria-label="Оглавление">')
+        assert "Пилотировать решение А или оставить текущий процесс" in brief
+        assert "масштаб эффекта неизвестен" in brief
+        assert "Табличная строка не для первого экрана" not in brief
+        assert "Устаревший вопрос из истории" not in brief
+        assert "<тест>" not in brief and "&lt;тест&gt;" in brief
+        assert not any(h.strip().lower().startswith("javascript:") for h in _hrefs_and_ids(html)[0])
+
+        # Роль и ожидаемый ответ не дублируются между #c1-brief и #checkpoint-approval.
+        assert plain.count("руководитель направления") == 1
+        assert plain.count("подтвердить рамку пилота и критерии выбора.") == 1
+
+        hrefs, ids = _hrefs_and_ids(html)
+        brief_hrefs, _ = _hrefs_and_ids(brief)
+        assert "#doc-01" in brief_hrefs and "doc-01" in ids
+        assert "#ref-CLM-001" in brief_hrefs and "ref-CLM-001" in ids
+        assert f"{sources_prefix}retention_2026.csv" in brief_hrefs
+        assert (out_path.parent / f"{sources_prefix}retention_2026.csv").resolve().exists()
+        refs = {a.get("data-id"): a for tag, a in Tags(brief).tags if tag == "a" and "data-id" in a}
+        assert refs["CLM-001"]["class"] == "ref"
+        assert refs["CLM-999"]["class"] == "ref missing"
+
+
+def test_open_c1_numeric_step_and_legacy_or_incomplete_briefs(project, tmp_path):
+    (project / "state/ledger/decisions.yaml").write_text("[]\n", encoding="utf-8")
+    progress = project / "state/progress.md"
+    open_numeric = (
+        "# Прогресс: Кейс\nТекущий шаг: 1\n\n## Шаги\n"
+        "- [ ] 1. Постановка задачи → C1\n\n"
+        "## Что дальше\n- awaiting_human\n\n"
+        "## Открытые вопросы к человеку\n- awaiting_human\n"
+        "- Роль: владелец\n- Ожидаемый ответ: подтвердить рамку.\n"
+    )
+    progress.write_text(open_numeric, encoding="utf-8")
+
+    # Старый Markdown без «Главного», но с разделом «Допущения, принятые без вопросов».
+    (project / "outputs/01_brief.md").write_text(
+        "# Старый бриф\n\n## Какое решение предстоит принять\nЗапускать ли пилот X?\n\n"
+        "## Допущения, принятые без вопросов\n- A1: частота проблемы неизвестна.\n",
+        encoding="utf-8",
+    )
+    html = render(project, tmp_path)
+    brief = _c1_brief_block(current_screen(html))
+    assert "Запускать ли пилот X?" in brief
+    assert "A1: частота проблемы неизвестна." in brief
+
+    # Минимальный старый бриф без «Главного» и без «Допущений» честно показывает пробел.
+    (project / "outputs/01_brief.md").write_text(
+        "# Старый бриф\n\n## Какое решение предстоит принять\nЗапускать ли пилот Y?\n",
+        encoding="utf-8",
+    )
+    brief = _c1_brief_block(current_screen(render(project, tmp_path)))
+    assert "Запускать ли пилот Y?" in brief and "Пробел:" in brief
+
+    # Раздел с одной таблицей и пустой бриф не подменяют формулировку решения таблицей.
+    (project / "outputs/01_brief.md").write_text(
+        "# Бриф\n\n## Какое решение предстоит принять\n| Поле | Значение |\n|---|---|\n| Цель | Текст |\n",
+        encoding="utf-8",
+    )
+    brief = _c1_brief_block(current_screen(render(project, tmp_path)))
+    assert "Пробел:" in brief and "| Поле |" not in brief and "Текст" not in brief
+
+    (project / "outputs/01_brief.md").write_text("   \n", encoding="utf-8")
+    assert "пуст" in _c1_brief_block(current_screen(render(project, tmp_path)))
+
+    # Отсутствующий 01_brief.md не создаёт фиктивный якорь #doc-01.
+    (project / "outputs/01_brief.md").unlink()
+    brief = _c1_brief_block(current_screen(render(project, tmp_path)))
+    assert "отсутствует" in brief and "#doc-01" not in brief
+
+    # Закрытый шаг 1 выключает и #c1-brief, и #checkpoint-approval, и C1 CSS.
+    progress.write_text(open_numeric.replace("- [ ] 1.", "- [x] 1."), encoding="utf-8")
+    closed_html = render(project, tmp_path)
+    assert 'id="c1-brief"' not in closed_html
+    assert 'id="checkpoint-approval"' not in closed_html
+    assert "#c1-brief" not in closed_html.split("</style>", 1)[0]
+
+
+@pytest.mark.parametrize("progress_body", [
+    "Текущий шаг: 1 — C1 закрыт\n",
+    "Текущий шаг: 1 — C1 не открыт\n",
+    "Текущий шаг: 1 — C1 открыт?\n",
+    "Текущий шаг: 2 — план исследования\n",
+    "Текущий шаг: 5 — варианты ждут выбора на C2\n",
+    "Текущий шаг: 7 — пакет ожидает утверждения на C3\n",
+    "Текущий шаг: 8 — сопровождение\n",
+    "## История\nТекущий шаг: 1 — C1 открыт\n",
+])
+def test_c1_brief_not_rendered_for_closed_or_other_stages(project, tmp_path, progress_body):
+    (project / "state/ledger/decisions.yaml").write_text("[]\n", encoding="utf-8")
+    (project / "state/progress.md").write_text("# Прогресс: Кейс\n\n" + progress_body, encoding="utf-8")
+    html = render(project, tmp_path)
+    assert 'id="c1-brief"' not in html
+    assert "#c1-brief" not in html.split("</style>", 1)[0]
+
+
+def test_c3_and_accepted_cases_keep_existing_html_without_c1_css(tmp_path):
+    for slug in ("esim-travel", "ryadom", "rehearsal-mobile-spend"):
+        out = tmp_path / f"{slug}.html"
+        assert report.main([str(ROOT / "projects" / slug), "--out", str(out)]) == 0
+        assert report.main([str(ROOT / "projects" / slug), "--out", str(out), "--check"]) == 0
+        html = out.read_text(encoding="utf-8")
+        assert 'id="c1-brief"' not in html
+        assert "#c1-brief" not in html.split("</style>", 1)[0]
+        if slug == "esim-travel":
+            assert 'id="c3-executive-summary"' in html
+            assert "Согласование C3" in current_screen(html)

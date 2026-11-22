@@ -1,0 +1,199 @@
+# Закрытый ключ проверки A/B UX-теста (только для модератора и автоматической сверки)
+# Не показывать участникам до завершения обоих блоков.
+version: 1
+passing_criteria:
+  min_correct_tasks: 8
+  total_tasks: 10
+  max_scope_errors: 0
+  scope_critical_tasks: [T01, T06, T07]
+
+tasks:
+  - id: T01
+    case: family-connect
+    scope_critical: true
+    scope_rule: "Утверждение плана C3 != допуск к пилоту"
+    question: "Даёт ли текущее утверждение C3 по family-connect право сразу запускать причинный пилот EXP-003?"
+    expected_answer: >
+      Нет. Утверждение C3 относится только к плану диагностики (последовательность и критерии перехода).
+      Доступ к разрешённым агрегатам и тестовому контуру, выделение ресурса, смета и допуск к пилоту (EXP-003)
+      требуют отдельных решений.
+    scope_error_condition: "Ответ утверждает, что пилот EXP-003 уже допущен/разрешён утверждением C3 или может стартовать без отдельного решения."
+    verifiable_refs:
+      - "projects/family-connect/outputs/08_decision_log.md#L21 (DEC-001, EXP-002, EXP-003)"
+      - "projects/family-connect/outputs/07_validation_plan.md#L34 (DEC-001, EXP-002, EXP-003)"
+      - "projects/family-connect/state/progress.md#L32"
+      - "projects/family-connect/outputs/report.html (раздел 08_decision_log.md: «Доступ, выделение ресурса и допуск к пилоту требуют отдельных решений»)"
+      - "cards/family-connect-card.html (блок «Граница утверждения C3»)"
+    required_needles_both:
+      - "допуск к пилоту"
+      - "отдельных решений"
+      - "EXP-003"
+
+  - id: T02
+    case: family-connect
+    scope_critical: false
+    question: "Каков статус версии пакета C3 и какой SHA-256 привязан к утверждению?"
+    expected_answer: >
+      Пакет утверждён, версия пакета совпадает с последней записью C3 (c3_approval.py check -> current).
+      SHA-256 утверждённого пакета: b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483
+      (засчитывается точный префикс от 8 символов: b1473fbf).
+    verifiable_refs:
+      - "projects/family-connect/state/c3_approvals.json#L68 (sha256)"
+      - "projects/family-connect/outputs/08_decision_log.md#L15"
+      - "projects/family-connect/outputs/report.html (Текущее состояние: «Версия пакета совпадает с последней записью C3.» + 08_decision_log.md)"
+      - "cards/family-connect-card.html (блок «Решение C2 и квитанция C3»)"
+    required_needles_both:
+      - "Версия пакета совпадает с последней записью C3"
+      - "b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483"
+
+  - id: T03
+    case: family-connect
+    scope_critical: false
+    question: "Какая ближайшая работа по плану сейчас к выполнению и какая роль за неё отвечает?"
+    expected_answer: >
+      Сухая проверка макета F1 на вымышленных сценариях по EXP-001 (в согласованном окне диагностики Q1).
+      Ответственная роль — дизайнер (в EXP-001 также указан владелец биллинга для проверки тестового контура).
+    verifiable_refs:
+      - "projects/family-connect/outputs/08_decision_log.md#L6,L19 (EXP-001)"
+      - "projects/family-connect/state/progress.md#L30"
+      - "projects/family-connect/outputs/report.html (Текущее состояние: «Ближайшее действие»)"
+      - "cards/family-connect-card.html (блок «Ближайшее действие и открытые вопросы»)"
+    required_needles_both:
+      - "сухая проверка макета F1"
+      - "EXP-001"
+      - "дизайнер"
+
+  - id: T04
+    case: family-connect
+    scope_critical: false
+    question: "Какие два численных условия указаны для перехода к решению о пилоте по EXP-002?"
+    expected_answer: >
+      (а) Доля неизвестных исходов — не выше 2% в пригодной выборке;
+      (б) требуемый темп набора для первичного исхода — 298 или 364 семьи в неделю
+      (дополнительно для семейной безопасности в пределах квартала — 468 или 656; фактический темп неизвестен).
+    verifiable_refs:
+      - "projects/family-connect/outputs/07_validation_plan.md#L6,L14,L21 (EXP-002, CLM-026, CLM-027)"
+      - "projects/family-connect/state/ledger/experiments.yaml#L21"
+      - "projects/family-connect/outputs/report.html (раздел 07_validation_plan.md)"
+      - "cards/family-connect-card.html (блок «Пороги перехода и стоп-условия»)"
+    required_needles_both:
+      - "не выше 2%"
+      - "298"
+      - "364"
+
+  - id: T05
+    case: family-connect
+    scope_critical: false
+    question: "Какой вариант выбран на C2, какая роль приняла DEC-001 и какой крайний срок пересмотра?"
+    expected_answer: >
+      Выбран ALT-003 (ограниченная диагностика / «Диагностика причин перед пилотом»).
+      Решение DEC-001 принял руководитель направления (2026-11-21).
+      Крайний срок пересмотра — 31 марта 2027 года (или раньше при срабатывании условий пересмотра).
+    verifiable_refs:
+      - "projects/family-connect/state/ledger/decisions.yaml#L14-L53 (DEC-001)"
+      - "projects/family-connect/outputs/08_decision_log.md#L13"
+      - "projects/family-connect/outputs/report.html (Текущее состояние + 08_decision_log.md)"
+      - "cards/family-connect-card.html (блок «Решение C2 и квитанция C3»)"
+    required_needles_both:
+      - "ALT-003"
+      - "руководитель направления"
+      - "31 марта 2027"
+
+  - id: T06
+    case: esim-travel
+    scope_critical: true
+    scope_rule: "eSIM повторно ждёт C3 — запуск пилота и новых экспериментов не разрешён"
+    question: "Утверждён ли сейчас обновлённый пакет esim-travel на C3 и разрешён ли немедленный запуск пилота EXP-002 или новых экспериментов?"
+    expected_answer: >
+      Нет. Повторное C3 открыто, изменённый пакет ожидает согласования.
+      Запуск новых экспериментов (EXP-003, EXP-001) этим исправлением не разрешён (только после применимого согласования),
+      а пилот EXP-002 возможен только после согласования его уточнённых условий на C3 и go по EXP-003.
+    scope_error_condition: "Ответ утверждает, что пакет утверждён на C3 или что пилот EXP-002 / новые эксперименты можно запускать сразу без повторного C3."
+    verifiable_refs:
+      - "projects/esim-travel/state/progress.md#L3,L22-L23,L34"
+      - "projects/esim-travel/outputs/08_decision_log.md#L8-L10"
+      - "projects/esim-travel/outputs/report.html (Текущее состояние + 08_decision_log.md)"
+      - "cards/esim-travel-card.html (блок «Запуск не разрешён до повторного C3»)"
+    required_needles_both:
+      - "повторное C3 открыто"
+      - "ожидает согласования"
+      - "EXP-002"
+      - "EXP-003"
+
+  - id: T07
+    case: esim-travel
+    scope_critical: true
+    scope_rule: "unrecorded / повторное C3 != отсутствие прошлого утверждения и не отменяет выбор ALT-001"
+    question: "Означает ли текущий статус повторного C3, что пакет esim-travel никогда ранее не утверждался, а выбор ALT-001 отменён?"
+    expected_answer: >
+      Нет. Историческое утверждение C3 сохранено и не переписано (отсутствие файла-квитанции / статус unrecorded
+      в c3_approval.py не означает отсутствия прошлого утверждения). Выбор ALT-001 (DEC-001) на C2 сохранён;
+      повторное C3 требуется из-за изменённой коммуникации и уточнения условий EXP-002.
+    scope_error_condition: "Ответ утверждает, что пакет никогда не утверждался на C3, либо что выбор ALT-001 на C2 отменён."
+    verifiable_refs:
+      - "projects/esim-travel/outputs/07_validation_plan.md#L37"
+      - "projects/esim-travel/outputs/08_decision_log.md#L13,L22"
+      - "projects/esim-travel/state/progress.md#L16-L17,L29"
+      - "projects/esim-travel/outputs/report.html (07_validation_plan.md и 08_decision_log.md: «историческое утверждение пакета сохранено», «историческое согласование не переписано»)"
+      - "cards/esim-travel-card.html (блок «Историческое C3 сохранено»)"
+      - "tools/c3_approval.py#L115 (unrecorded = «Для C3 нет записи с версией предъявленного пакета.»)"
+    required_needles_both:
+      - "историческое согласование не переписано"
+      - "ALT-001"
+      - "сохранён"
+
+  - id: T08
+    case: esim-travel
+    scope_critical: false
+    question: "Что произошло с прежними коммуникационными обещаниями PRM-001..003 и что требуется перед использованием новых сообщений?"
+    expected_answer: >
+      Прежние обещания PRM-001, PRM-002 и PRM-003 отозваны (retracted; новых утверждённых нет),
+      поскольку их proof (EXP-002) не проверял заявленные свойства. Требуются прямые проверки свойств
+      и согласование новых коммуникационных сообщений на C3.
+    verifiable_refs:
+      - "projects/esim-travel/state/ledger/promises.yaml#L3,L14,L25"
+      - "projects/esim-travel/outputs/08_decision_log.md#L13"
+      - "projects/esim-travel/outputs/report.html (Текущее состояние: «прежние обещания отозваны, новых утверждённых нет» + 08_decision_log.md)"
+      - "cards/esim-travel-card.html (блок «Что вынесено на повторное C3»)"
+    required_needles_both:
+      - "отозваны"
+      - "новых утверждённых нет"
+      - "PRM-001"
+
+  - id: T09
+    case: esim-travel
+    scope_critical: false
+    question: "Какое ближайшее действие открыто по CHG-001 и какие три вопроса по критериям EXP-002 вынесены на повторное C3?"
+    expected_answer: >
+      По CHG-001: сверить датированные полные цены eSIM и дневного роуминга (599 ₽/день за 2 ГБ, CLM-015)
+      по направлениям пилота при сопоставимых объёме, сроке и сценарии пользования.
+      По EXP-002 на повторное C3 вынесены: (1) приоритет stop/go при конфликте условий (предложение: stop имеет приоритет),
+      (2) окно и минимальный полезный эффект удержания, (3) роль повторных покупок (≥50% не включено в go).
+    verifiable_refs:
+      - "projects/esim-travel/state/progress.md#L21,L27"
+      - "projects/esim-travel/outputs/07_validation_plan.md#L31-L34"
+      - "projects/esim-travel/outputs/report.html (Текущее состояние: «Ближайшее действие» и «Ожидаемый ответ»)"
+      - "cards/esim-travel-card.html (блоки «Ближайшее действие по открытому CHG-001» и «Что вынесено на повторное C3»)"
+    required_needles_both:
+      - "CHG-001"
+      - "приоритет stop/go"
+      - "минимальный полезный эффект удержания"
+      - "роль повторных покупок"
+
+  - id: T10
+    case: esim-travel
+    scope_critical: false
+    question: "Какая роль указана в блоке «Согласование C3» как согласующий, и что означает дата 2027-03-10 в DEC-001?"
+    expected_answer: >
+      В блоке «Согласование C3» указано «Роль не указана» (додумывать согласующего нельзя;
+      в DEC-001 указано, что C2 решил руководитель продукта, ответственный — руководитель цифрового продукта).
+      Дата 2027-03-10 остаётся исторически назначенной точкой пересмотра, а не подтверждением состоявшегося запуска
+      (разбор пилота — через 3 месяца после фактического старта).
+    verifiable_refs:
+      - "projects/esim-travel/outputs/report.html (Текущее состояние: «Согласующий: Роль не указана»)"
+      - "projects/esim-travel/outputs/08_decision_log.md#L10"
+      - "cards/esim-travel-card.html (блок «Решение C2 и статус согласования C3»)"
+    required_needles_both:
+      - "Роль не указана"
+      - "2027-03-10"
+      - "исторически назначенной точкой пересмотра"

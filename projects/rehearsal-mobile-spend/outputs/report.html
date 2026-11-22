@@ -10,6 +10,7 @@ section,nav { background:var(--paper); padding:28px; margin:24px 0; border:1px s
 .meta,.document-label { color:var(--muted); font-size:.9rem; } .summary-card { border-top:1px solid var(--line); padding:12px 0; } .summary-card:last-child { padding-bottom:0; }
 .current-links { display:flex; flex-wrap:wrap; column-gap:20px; row-gap:6px; padding:0; list-style:none; } .next-action { border-inline-start:3px solid var(--accent); padding-inline-start:12px; }
 summary { cursor:pointer; } summary:focus-visible { outline:3px solid var(--accent); outline-offset:3px; } summary h2,summary h3 { display:inline; }
+#checkpoint-approval { border-left:4px solid var(--accent); padding:4px 0 4px 16px; margin:14px 0; } .decision-options ul { margin:6px 0 12px; padding-left:22px; }
 .ref { font-size:.9em; white-space:nowrap; } .missing { color:#c34f37; text-decoration-style:wavy; } .obsolete,.obsolete .ref { text-decoration:line-through; }
 .table-scroll { max-width:100%; overflow-x:auto; margin:18px 0; } table { border-collapse:collapse; width:100%; font-size:.9rem; } th,td { padding:10px 12px; border:1px solid var(--line); text-align:left; vertical-align:top; min-width:100px; } th { background:var(--bg); }
 pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(--line); } code { font-size:.9em; } p { white-space:pre-line; } .registry-row { padding:18px 0; border-top:1px solid var(--line); } .registry-row p { margin:6px 0; } :target { outline:2px solid var(--accent); outline-offset:4px; }
@@ -17,12 +18,14 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 @media print { :root { --bg:white; --paper:white; --ink:black; --muted:#333; --line:#aaa; } body { font-size:10pt; } main { max-width:none; padding:0; } section,nav { border:0; padding:0; border-radius:0; } #current-state { break-after:page; } a { color:black !important; } .table-scroll,pre { overflow:visible; } table { page-break-inside:auto; table-layout:fixed; } tr { page-break-inside:avoid; } th,td { min-width:0; overflow-wrap:anywhere; } pre { white-space:pre-wrap; } h1,h2,h3,h4 { page-break-after:avoid; } }
 </style></head><body><main>
 <header><h1>Репетиция — контроль расходов на мобильную связь для малого бизнеса</h1>
-<p class="meta">Сформировано: 2026-11-18T17:49:32+03:00</p>
+<p class="meta">Сформировано: 2026-11-21T22:21:24+03:00</p>
 </header><section id="current-state"><h2>Текущее состояние</h2>
 <p><strong>Текущий шаг:</strong> 8 — учебная репетиция завершена на <a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>, порог преимущества не достигнут</p>
-<p class="next-action"><strong>Ближайшее действие</strong><br>Кейс сохранён как учебный пример. Для возобновления потребуется новое решение о проверке предупреждения. Итог и доказательства</p>
-<p><strong>Выбранный вариант:</strong> <a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a> — Прототип предупреждений ответственному за связь (<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>)</p>
-<p><strong>Основание (из решения):</strong> Ответ человека на C2 — «<a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a> — предупреждения». Дополнительная причина выбора не указана. …</p>
+<p class="next-action"><strong>Ближайшее действие</strong><br>В 6 сценариях предупреждение помогло вовремя выбрать действие 5 раз, отчёт — 4. Для продолжения требовалось преимущество в два сценария. Руководитель продукта решает, выделить ли аналитику до часа на разбор или заморозить работу. Для возобновления испытаний нужны новое основание и согласованный план. Итог и доказательства</p>
+<p><strong>Выбранный вариант:</strong> Прототип предупреждений ответственному за связь (<a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a>) — решение <a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a> (Руководитель репетиции · 2026-11-17)</p>
+<p><strong>Вопрос решения:</strong> Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса?</p>
+<p><strong>Основание (из решения):</strong> Ответ человека на C2 — «<a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a> (Прототип предупреждений ответственному за связь) — предупреждения». Дополнительная причина выбора не указана. …</p>
+<div class="decision-options"><p><strong>Рассмотренные варианты:</strong></p><ul><li><strong>Прототип предупреждений ответственному за связь</strong> [инвестиция] — выбран (Руководитель репетиции) (<a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a>)</li><li><strong>Прототип отчёта о потреблении</strong> [изменение] — рекомендован агентом, не выбран (<a class="ref" data-id="ALT-002" href="#ref-ALT-002" title="Прототип отчёта о потреблении">ALT-002</a>)</li><li><strong>Сохранить текущий подход</strong> [статус-кво] — не выбран (<a class="ref" data-id="ALT-003" href="#ref-ALT-003" title="Сохранить текущий подход">ALT-003</a>)</li><li><strong>Заморозить работу над отдельной функцией</strong> [закрытие / отказ] — не выбран (<a class="ref" data-id="ALT-004" href="#ref-ALT-004" title="Заморозить работу над отдельной функцией">ALT-004</a>)</li></ul></div>
 <ul class="current-links"><li><a href="#doc-08">Журнал решения</a></li><li><a href="#doc-05">Продуктовая стратегия</a></li><li><a href="#doc-06">Коммуникационная стратегия</a></li><li><a href="#doc-07">План проверки</a></li></ul>
 <details id="cost-summary"><summary><h3>Стоимость прогона</h3></summary><p>Стоимость: …/night-orchestrator (2026-11-17T21:46:00+03:00 — 2026-11-17T22:05:05+03:00)</p>
 <p>Статус расчёта: нет записей токенов для выбранного окна.</p>
@@ -58,9 +61,9 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 <article class="summary-card"><h3><a href="#doc-07">07_validation_plan.md — План проверки предупреждений</a></h3><p>Сначала проверить корректность адресата, актуальность и возможность действия на учебных событиях [<a class="ref" data-id="EXP-001" href="#ref-EXP-001" title="В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.">EXP-001</a>].
 Если отрицательные контроли проходят, сравнить предупреждение с отчётом и оценить данные, нужные для расчёта экономики [<a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>, <a class="ref" data-id="EXP-003" href="#ref-EXP-003" title="Установлены диапазоны предотвратимых событий, операционной стоимости и пользы, чтобы оценить оправданность технического пилота.">EXP-003</a>].
 Разведочная проверка даёт основания для следующего исследования. Для решения о масштабе потребуются фактические события и отдельный причинный протокол [<a class="ref" data-id="HYP-005" href="#ref-HYP-005" title="Протокол разведки для согласования: 6 сценариев с доступным действием, 3 отрицательных сценария, 4 из 6 своевременных действий и преимущество 2 сценария над отчётом. Разбор через 10 рабочих дней, целевой срок 2026-12-01.">HYP-005</a>].</p></article>
-<article class="summary-card"><h3><a href="#doc-08">08_decision_log.md — Журнал решения — предупреждения о расходе связи</a></h3><p>Для учебной проверки выбран макет предупреждений <a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a>. Стратегии и протокол утверждены [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>].
-Первая задача — проверить правильную роль, доступное действие и запас времени в контролируемых сценариях [<a class="ref" data-id="EXP-001" href="#ref-EXP-001" title="В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.">EXP-001</a>].
-При равной своевременности с отчётом возвращаемся к варианту отчёта. Фактический эффект пока неизвестен [<a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>, <a class="ref" data-id="EXP-003" href="#ref-EXP-003" title="Установлены диапазоны предотвратимых событий, операционной стоимости и пользы, чтобы оценить оправданность технического пилота.">EXP-003</a>].</p></article>
+<article class="summary-card"><h3><a href="#doc-08">08_decision_log.md — Журнал решения — предупреждения о расходе связи</a></h3><p>Руководитель утвердил учебную проверку предупреждений [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>]. Она завершена. Один участник вовремя выбрал действие с предупреждением в 5 из 6 сценариев, с отчётом в 4 из 6 [<a class="ref" data-id="CLM-009" href="#ref-CLM-009" title="fact · medium · В учебном проходе EXP-002 с одним участником зарегистрировано 5 своевременных правильных выборов с предупреждением и 4 с отчётом на тех же событиях. · «&quot;timely_correct&quot;: 5» (SRC-007) · «&quot;timely_correct&quot;: 4» (SRC-007) · «&quot;outcome&quot;: &quot;below_margin&quot;» (SRC-007)">CLM-009</a>].
+Для продолжения требовалось преимущество хотя бы в два сценария. Получили один, поэтому проверку предупреждений остановили [<a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>]. Полевой эффект неизвестен.
+Руководитель продукта связи для малого бизнеса решает, выделить ли до часа аналитику на разбор первой ошибки и затрат или заморозить работу. Это предложение к следующему обсуждению. <a href="../../../evals/score9/jury/decision-next-round.md">Записка директору</a></p></article>
 <article class="summary-card"><h3><a href="#doc-09">09_run_report.md — Отчёт о прогоне — учебная репетиция M27</a></h3><p>В Codex пройден путь от нового брифа до согласованного пакета предупреждений. Ответы C1–C3 сохранены.
 Прогон проверяет процесс подготовки решения. Эффективность самих предупреждений остаётся открытой.
 Состояние кейса считывается из чистой локальной копии. Живое продолжение в новом чате и перенос в другую IDE требуют отдельной проверки.</p></article>
@@ -269,17 +272,17 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 Выборочно сверены строки с основаниями, расчёты весов и ограничения вывода. <a href="../state/verification.md">Журнал проверки</a>
 Поле и подсказка подтверждены текстовым макетом [<a class="ref" data-id="CLM-007" href="#ref-CLM-007" title="fact · high · Текстовый макет F1 показывает рабочий номер, риск исчерпания пакета интернета и подсказку открыть карточку номера для проверки остатка. · «| Рабочий номер | Линия А |» (SRC-005) · «| Тип риска | Скоро исчерпается пакет мобильного интернета |» (SRC-005) · «| Доступное действие | Откройте карточку номера, чтобы проверить остаток |» (SRC-005)">CLM-007</a>]. Доставка, понимание и эффект остаются предметом EXP.
 Утверждены учебный протокол, роли и разбор 2026-12-01 [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>].</p>
-<p><strong>C3 подтверждён.</strong> Дословный ответ и границы согласования зафиксированы в <a href="08_decision_log.md">журнале решения</a> [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>].</p></section>
+<p><strong>C3 подтверждён.</strong> Дословный ответ и границы согласования зафиксированы в <a href="#doc-08">журнале решения</a> [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>].</p></section>
 <section id="doc-08"><p class="document-label">08_decision_log.md</p><h1>Журнал решения — предупреждения о расходе связи</h1>
 <h2>Главное</h2>
-<p>Для учебной проверки выбран макет предупреждений <a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a>. Стратегии и протокол утверждены [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>].
-Первая задача — проверить правильную роль, доступное действие и запас времени в контролируемых сценариях [<a class="ref" data-id="EXP-001" href="#ref-EXP-001" title="В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.">EXP-001</a>].
-При равной своевременности с отчётом возвращаемся к варианту отчёта. Фактический эффект пока неизвестен [<a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>, <a class="ref" data-id="EXP-003" href="#ref-EXP-003" title="Установлены диапазоны предотвратимых событий, операционной стоимости и пользы, чтобы оценить оправданность технического пилота.">EXP-003</a>].</p>
+<p>Руководитель утвердил учебную проверку предупреждений [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>]. Она завершена. Один участник вовремя выбрал действие с предупреждением в 5 из 6 сценариев, с отчётом в 4 из 6 [<a class="ref" data-id="CLM-009" href="#ref-CLM-009" title="fact · medium · В учебном проходе EXP-002 с одним участником зарегистрировано 5 своевременных правильных выборов с предупреждением и 4 с отчётом на тех же событиях. · «&quot;timely_correct&quot;: 5» (SRC-007) · «&quot;timely_correct&quot;: 4» (SRC-007) · «&quot;outcome&quot;: &quot;below_margin&quot;» (SRC-007)">CLM-009</a>].
+Для продолжения требовалось преимущество хотя бы в два сценария. Получили один, поэтому проверку предупреждений остановили [<a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>]. Полевой эффект неизвестен.
+Руководитель продукта связи для малого бизнеса решает, выделить ли до часа аналитику на разбор первой ошибки и затрат или заморозить работу. Это предложение к следующему обсуждению. <a href="../../../evals/score9/jury/decision-next-round.md">Записка директору</a></p>
 <h2>Решение человека</h2>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Таблица"><table><thead><tr><th>Точка</th><th>Дословный ответ</th><th>Что фиксирует</th></tr></thead><tbody>
-<tr><td>C1</td><td>«Подтверждаю бриф»</td><td>Рамка <a href="01_brief.md">учебного брифа</a></td></tr>
+<tr><td>C1</td><td>«Подтверждаю бриф»</td><td>Рамка <a href="#doc-01">учебного брифа</a></td></tr>
 <tr><td>C2</td><td>«<a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Прототип предупреждений ответственному за связь">ALT-001</a> — предупреждения»</td><td>Выбор направления для проектирования. Рекомендация агента <a class="ref" data-id="ALT-002" href="#ref-ALT-002" title="Прототип отчёта о потреблении">ALT-002</a> сохранена в <a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a></td></tr>
-<tr><td>C3</td><td>«Утверждаю пакет C3»</td><td>Обе стратегии, <a href="07_validation_plan.md">план учебной проверки</a>, роли и дата разбора [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>]</td></tr>
+<tr><td>C3</td><td>«Утверждаю пакет C3»</td><td>Обе стратегии, <a href="#doc-07">план учебной проверки</a>, роли и дата разбора [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>]</td></tr>
 </tbody></table></div>
 <p>Дополнительная причина выбора на C2 не указана. Открытие реальных данных, внешняя рассылка,
 полевой запуск и расходы требуют отдельного решения [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>].</p>
@@ -297,7 +300,8 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 <li>Если предотвратимых событий недостаточно или затраты выше пользы, отложить внешний пилот. При неполных данных оставить вывод открытым [<a class="ref" data-id="EXP-003" href="#ref-EXP-003" title="Установлены диапазоны предотвратимых событий, операционной стоимости и пользы, чтобы оценить оправданность технического пилота.">EXP-003</a>].</li>
 </ul>
 <h2>Следующий шаг</h2>
-<p>Подготовить одинаковые искусственные временные линии для <a class="ref" data-id="EXP-001" href="#ref-EXP-001" title="В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.">EXP-001</a> и <a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a> и проверить отрицательные случаи. Результаты добавить в реестр после фактической проверки. На этапе согласования эксперименты не проводились [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>, <a class="ref" data-id="EXP-001" href="#ref-EXP-001" title="В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.">EXP-001</a>–003].</p></section>
+<p>Уже выполнены проверка предупреждения и сравнение с отчётом. <a href="../sources/06_exp001_participant.json">Квитанция первого прохода</a> · <a href="../sources/07_exp002_participant.json">Квитанция сравнения</a></p>
+<p>Владелец решения — руководитель продукта связи для малого бизнеса. Для возобновления работы над предупреждениями нужны новое основание и согласованный план проверки. Переход к полевому пилоту потребует отдельного решения [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided">DEC-001</a>, <a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>, <a class="ref" data-id="EXP-003" href="#ref-EXP-003" title="Установлены диапазоны предотвратимых событий, операционной стоимости и пользы, чтобы оценить оправданность технического пилота.">EXP-003</a>].</p></section>
 <section id="doc-09"><p class="document-label">09_run_report.md</p><h1>Отчёт о прогоне — учебная репетиция M27</h1>
 <h2>Главное</h2>
 <p>В Codex пройден путь от нового брифа до согласованного пакета предупреждений. Ответы C1–C3 сохранены.
@@ -307,7 +311,7 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 <p>Окно журнала до согласования C3 за 2026-11-17 (МСК) — с 21:46:27 до 22:04:14 (<a href="../state/run_log.md#L7">начало, строка 7</a>, <a href="../state/run_log.md#L19">ответ C3, строка 19</a>).
 Календарное окно с паузами составило 17 минут 47 секунд, включая ожидание ответов и параллельную техническую проверку. Активное время работы неизвестно.
 Активные минуты человека по шагам не измерялись. Получены три ответа на обязательных точках согласования.
-<a href="../state/run_log.md">Журнал действий</a> · <a href="08_decision_log.md">Журнал решения</a></p>
+<a href="../state/run_log.md">Журнал действий</a> · <a href="#doc-08">Журнал решения</a></p>
 <h2>Модели, инструменты и стоимость</h2>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Таблица"><table><thead><tr><th>Работа</th><th>Фактическое исполнение</th><th>Объём</th></tr></thead><tbody>
 <tr><td>T0</td><td>ledger, verify, consistency, расчёт экономики, сборка отчёта</td><td>Локальные команды без отдельного вызова модели</td></tr>
@@ -329,109 +333,109 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 Денежный итог по этому окну неизвестен.</p>
 <p>_Сформировано 2026-11-17T22:06:28+03:00: python tools/cost.py --cwd …/night-orchestrator --since 2026-11-17T21:46:00+03:00 --until 2026-11-17T22:05:05+03:00 --write projects/rehearsal-mobile-spend_</p></section>
 <section id="registry"><h2>Приложение: Реестр</h2>
-<article class="registry-row" id="ref-ALT-001"><h3>ALT-001</h3>
+<article class="registry-row" id="ref-ALT-001"><h3>Прототип предупреждений ответственному за связь (ALT-001)</h3>
 <p>Прототип предупреждений ответственному за связь</p>
 </article>
-<article class="registry-row" id="ref-ALT-002"><h3>ALT-002</h3>
+<article class="registry-row" id="ref-ALT-002"><h3>Прототип отчёта о потреблении (ALT-002)</h3>
 <p>Прототип отчёта о потреблении</p>
 </article>
-<article class="registry-row" id="ref-ALT-003"><h3>ALT-003</h3>
+<article class="registry-row" id="ref-ALT-003"><h3>Сохранить текущий подход (ALT-003)</h3>
 <p>Сохранить текущий подход</p>
 </article>
-<article class="registry-row" id="ref-ALT-004"><h3>ALT-004</h3>
+<article class="registry-row" id="ref-ALT-004"><h3>Заморозить работу над отдельной функцией (ALT-004)</h3>
 <p>Заморозить работу над отдельной функцией</p>
 </article>
-<article class="registry-row" id="ref-CLM-001"><h3>CLM-001</h3>
+<article class="registry-row" id="ref-CLM-001"><h3>При включённом автоинформировании МТС описывает уведомления сотруднику на 20%, 50%, 80% и … (CLM-001)</h3>
 <p>fact · high · При включённом автоинформировании МТС описывает уведомления сотруднику на 20%, 50%, 80% и 100% корпоративного денежного лимита связи. · «включена бесплатная услуга «Автоинформирование о балансе»» (<a class="ref" data-id="SRC-001" href="#ref-SRC-001" title="МТС Бизнес: как контролировать расходы сотрудников · website · https://support.mts.ru/mobilnaya-svyaz-b2b/kak-upravlyat-korporativnimi-nomerami/kak-kontrolirovat-rashodi-sotrudnikov">SRC-001</a>) · «ему поступят уведомления, что он израсходовал 20%, 50%, 80% и 100% от установленного корпоративного лимита на связь.» (<a class="ref" data-id="SRC-001" href="#ref-SRC-001" title="МТС Бизнес: как контролировать расходы сотрудников · website · https://support.mts.ru/mobilnaya-svyaz-b2b/kak-upravlyat-korporativnimi-nomerami/kak-kontrolirovat-rashodi-sotrudnikov">SRC-001</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-002"><h3>CLM-002</h3>
+<article class="registry-row" id="ref-CLM-002"><h3>билайн бизнес описывает настройку индивидуальных лимитов и детализацию расходов по … (CLM-002)</h3>
 <p>fact · high · билайн бизнес описывает настройку индивидуальных лимитов и детализацию расходов по каждому корпоративному номеру. · «устанавливать лимиты расходов и блокировать платные подписки для каждого сотрудника индивидуально.» (<a class="ref" data-id="SRC-002" href="#ref-SRC-002" title="билайн бизнес Москва: мобильная связь для бизнеса · website · https://moskva.beeline.ru/business/mobile-and-internet/mobile/">SRC-002</a>) · «детализация звонков и расходов доступна по каждому номеру.» (<a class="ref" data-id="SRC-002" href="#ref-SRC-002" title="билайн бизнес Москва: мобильная связь для бизнеса · website · https://moskva.beeline.ru/business/mobile-and-internet/mobile/">SRC-002</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-003"><h3>CLM-003</h3>
+<article class="registry-row" id="ref-CLM-003"><h3>В описании «Гибкого интернета» билайн для устройств передачи данных указана ручная … (CLM-003)</h3>
 <p>fact · high · В описании «Гибкого интернета» билайн для устройств передачи данных указана ручная проверка остатка в личном кабинете. · «Проверить остаток интернет-трафика можно несколькими способами: в личном кабинете» (<a class="ref" data-id="SRC-003" href="#ref-SRC-003" title="билайн бизнес Москва: «Гибкий интернет» · website · https://moskva.beeline.ru/business/mobile-and-internet/mobile-internet/">SRC-003</a>) · «Тарифные планы предназначены для использования только в Data-устройствах» (<a class="ref" data-id="SRC-003" href="#ref-SRC-003" title="билайн бизнес Москва: «Гибкий интернет» · website · https://moskva.beeline.ru/business/mobile-and-internet/mobile-internet/">SRC-003</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-004"><h3>CLM-004</h3>
+<article class="registry-row" id="ref-CLM-004"><h3>В условиях тарифа МегаФона «Управляй! Директор» исчерпание доступных пакетов интернета … (CLM-004)</h3>
 <p>fact · high · В условиях тарифа МегаФона «Управляй! Директор» исчерпание доступных пакетов интернета приводит к ограничению скорости 64 кб/с. · «После исчерпания пакета интернет трафика» (<a class="ref" data-id="SRC-004" href="#ref-SRC-004" title="МегаФон: описание тарифа «Управляй! Директор» · document · https://ceph.megafon.ru/htdocs-pk-ceph/ai/tariff_attrs/ac3834e1-31c5-4ccf-8258-bcfb3eb64577/e3566818-7b1a-4667-8fdc-5de27ed0880e/pdf/tariff_4949_spb_8a977.pdf">SRC-004</a>) · «ограничение скорости 64 кб/с» (<a class="ref" data-id="SRC-004" href="#ref-SRC-004" title="МегаФон: описание тарифа «Управляй! Директор» · document · https://ceph.megafon.ru/htdocs-pk-ceph/ai/tariff_attrs/ac3834e1-31c5-4ccf-8258-bcfb3eb64577/e3566818-7b1a-4667-8fdc-5de27ed0880e/pdf/tariff_4949_spb_8a977.pdf">SRC-004</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-005"><h3>CLM-005</h3>
+<article class="registry-row" id="ref-CLM-005"><h3>Граница пакета трафика, денежный лимит и доступность связи представляют разные события. … (CLM-005)</h3>
 <p>interpretation · high · Граница пакета трафика, денежный лимит и доступность связи представляют разные события. Их следует измерять отдельно при сравнении вариантов.</p>
 </article>
-<article class="registry-row" id="ref-CLM-006"><h3>CLM-006</h3>
+<article class="registry-row" id="ref-CLM-006"><h3>Учебная модель предупреждений даёт базовый чистый эффект -450 ₽/мес на условном портфеле, … (CLM-006)</h3>
 <p>forecast · low · Учебная модель предупреждений даёт базовый чистый эффект -450 ₽/мес на условном портфеле, сценарный диапазон от -6700 до 22700 ₽/мес. При прочих базовых входах безубыточность требует долю своевременных действий 0.50.</p>
 </article>
-<article class="registry-row" id="ref-CLM-007"><h3>CLM-007</h3>
+<article class="registry-row" id="ref-CLM-007"><h3>Текстовый макет F1 показывает рабочий номер, риск исчерпания пакета интернета и подсказку … (CLM-007)</h3>
 <p>fact · high · Текстовый макет F1 показывает рабочий номер, риск исчерпания пакета интернета и подсказку открыть карточку номера для проверки остатка. · «| Рабочий номер | Линия А |» (<a class="ref" data-id="SRC-005" href="#ref-SRC-005" title="Текстовый макет F1 для учебной проверки · document · sources/05_f1_mockup.md">SRC-005</a>) · «| Тип риска | Скоро исчерпается пакет мобильного интернета |» (<a class="ref" data-id="SRC-005" href="#ref-SRC-005" title="Текстовый макет F1 для учебной проверки · document · sources/05_f1_mockup.md">SRC-005</a>) · «| Доступное действие | Откройте карточку номера, чтобы проверить остаток |» (<a class="ref" data-id="SRC-005" href="#ref-SRC-005" title="Текстовый макет F1 для учебной проверки · document · sources/05_f1_mockup.md">SRC-005</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-008"><h3>CLM-008</h3>
+<article class="registry-row" id="ref-CLM-008"><h3>В учебном терминальном проходе M27 EXP-001 с одним участником зарегистрировано 5 … (CLM-008)</h3>
 <p>fact · medium · В учебном терминальном проходе M27 <a class="ref" data-id="EXP-001" href="#ref-EXP-001" title="В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.">EXP-001</a> с одним участником зарегистрировано 5 своевременных правильных выборов. · «&quot;timely_correct&quot;: 5» (<a class="ref" data-id="SRC-006" href="#ref-SRC-006" title="M27 — терминальный проход EXP-001 с участником · dataset · sources/06_exp001_participant.json">SRC-006</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-009"><h3>CLM-009</h3>
+<article class="registry-row" id="ref-CLM-009"><h3>В учебном проходе EXP-002 с одним участником зарегистрировано 5 своевременных правильных … (CLM-009)</h3>
 <p>fact · medium · В учебном проходе <a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a> с одним участником зарегистрировано 5 своевременных правильных выборов с предупреждением и 4 с отчётом на тех же событиях. · «&quot;timely_correct&quot;: 5» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="M27 — сравнение предупреждения и отчёта с участником (EXP-002) · dataset · sources/07_exp002_participant.json">SRC-007</a>) · «&quot;timely_correct&quot;: 4» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="M27 — сравнение предупреждения и отчёта с участником (EXP-002) · dataset · sources/07_exp002_participant.json">SRC-007</a>) · «&quot;outcome&quot;: &quot;below_margin&quot;» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="M27 — сравнение предупреждения и отчёта с участником (EXP-002) · dataset · sources/07_exp002_participant.json">SRC-007</a>)</p>
 </article>
-<article class="registry-row" id="ref-DEC-001"><h3>DEC-001</h3>
+<article class="registry-row" id="ref-DEC-001"><h3>Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета … (DEC-001)</h3>
 <p>Что проверить в ближайший квартал для контроля расходов и пакетов мобильного интернета малого бизнеса? · decided</p>
 </article>
-<article class="registry-row" id="ref-EXP-001"><h3>EXP-001</h3>
+<article class="registry-row" id="ref-EXP-001"><h3>В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до … (EXP-001)</h3>
 <p>В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.</p>
 </article>
-<article class="registry-row" id="ref-EXP-002"><h3>EXP-002</h3>
+<article class="registry-row" id="ref-EXP-002"><h3>Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно … (EXP-002)</h3>
 <p>Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.</p>
 </article>
-<article class="registry-row" id="ref-EXP-003"><h3>EXP-003</h3>
+<article class="registry-row" id="ref-EXP-003"><h3>Установлены диапазоны предотвратимых событий, операционной стоимости и пользы, чтобы … (EXP-003)</h3>
 <p>Установлены диапазоны предотвратимых событий, операционной стоимости и пользы, чтобы оценить оправданность технического пилота.</p>
 </article>
-<article class="registry-row" id="ref-HYP-001"><h3>HYP-001</h3>
+<article class="registry-row" id="ref-HYP-001"><h3>Сигнал об исчерпании пакета будет полезен, если уполномоченный сотрудник получает его до … (HYP-001)</h3>
 <p>Сигнал об исчерпании пакета будет полезен, если уполномоченный сотрудник получает его до последствий и успевает выполнить доступное действие.</p>
 </article>
-<article class="registry-row" id="ref-HYP-002"><h3>HYP-002</h3>
+<article class="registry-row" id="ref-HYP-002"><h3>Отчёт по номерам с раздельными показателями расхода и трафика достаточно полезен, если … (HYP-002)</h3>
 <p>Отчёт по номерам с раздельными показателями расхода и трафика достаточно полезен, если компании принимают решение периодически и могут планировать пакеты заранее.</p>
 </article>
-<article class="registry-row" id="ref-HYP-003"><h3>HYP-003</h3>
+<article class="registry-row" id="ref-HYP-003"><h3>В рассматриваемом сегменте есть предотвратимые события, а их ожидаемая ценность … (HYP-003)</h3>
 <p>В рассматриваемом сегменте есть предотвратимые события, а их ожидаемая ценность оправдывает разработку и обработку сигналов.</p>
 </article>
-<article class="registry-row" id="ref-HYP-004"><h3>HYP-004</h3>
+<article class="registry-row" id="ref-HYP-004"><h3>Учебная модель в расчёте на условный портфель за месяц: 10 / 30 / 60 подходящих событий, … (HYP-004)</h3>
 <p>Учебная модель в расчёте на условный портфель за месяц: 10 / 30 / 60 подходящих событий, 0.20 / 0.45 / 0.70 доля своевременных действий, 150 / 300 / 600 ₽ потенциальной пользы за действие, 2500 / 4500 / 7000 ₽ общих затрат.</p>
 </article>
-<article class="registry-row" id="ref-HYP-005"><h3>HYP-005</h3>
+<article class="registry-row" id="ref-HYP-005"><h3>Протокол разведки для согласования: 6 сценариев с доступным действием, 3 отрицательных … (HYP-005)</h3>
 <p>Протокол разведки для согласования: 6 сценариев с доступным действием, 3 отрицательных сценария, 4 из 6 своевременных действий и преимущество 2 сценария над отчётом. Разбор через 10 рабочих дней, целевой срок 2026-12-01.</p>
 </article>
-<article class="registry-row" id="ref-PAIN-001"><h3>PAIN-001</h3>
+<article class="registry-row" id="ref-PAIN-001"><h3>Возможная боль — о риске исчерпания пакета узнают слишком поздно, чтобы предупредить … (PAIN-001)</h3>
 <p>Возможная боль — о риске исчерпания пакета узнают слишком поздно, чтобы предупредить значимые расходы или снижение скорости.</p>
 </article>
-<article class="registry-row" id="ref-PRM-001"><h3>PRM-001</h3>
+<article class="registry-row" id="ref-PRM-001"><h3>В тестовом макете посмотрите, по какому номеру заканчивается пакет и какое действие … (PRM-001)</h3>
 <p>В тестовом макете посмотрите, по какому номеру заканчивается пакет и какое действие доступно. · active</p>
 </article>
-<article class="registry-row" id="ref-SRC-001"><h3>SRC-001</h3>
+<article class="registry-row" id="ref-SRC-001"><h3>МТС Бизнес: как контролировать расходы сотрудников (SRC-001)</h3>
 <p>МТС Бизнес: как контролировать расходы сотрудников · website · https://support.mts.ru/mobilnaya-svyaz-b2b/kak-upravlyat-korporativnimi-nomerami/kak-kontrolirovat-rashodi-sotrudnikov</p>
 <p>Источник: <a href="https://support.mts.ru/mobilnaya-svyaz-b2b/kak-upravlyat-korporativnimi-nomerami/kak-kontrolirovat-rashodi-sotrudnikov">https://support.mts.ru/mobilnaya-svyaz-b2b/kak-upravlyat-korporativnimi-nomerami/kak-kontrolirovat-rashodi-sotrudnikov</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-17</p>
 </article>
-<article class="registry-row" id="ref-SRC-002"><h3>SRC-002</h3>
+<article class="registry-row" id="ref-SRC-002"><h3>билайн бизнес Москва: мобильная связь для бизнеса (SRC-002)</h3>
 <p>билайн бизнес Москва: мобильная связь для бизнеса · website · https://moskva.beeline.ru/business/mobile-and-internet/mobile/</p>
 <p>Источник: <a href="https://moskva.beeline.ru/business/mobile-and-internet/mobile/">https://moskva.beeline.ru/business/mobile-and-internet/mobile/</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-17</p>
 </article>
-<article class="registry-row" id="ref-SRC-003"><h3>SRC-003</h3>
+<article class="registry-row" id="ref-SRC-003"><h3>билайн бизнес Москва: «Гибкий интернет» (SRC-003)</h3>
 <p>билайн бизнес Москва: «Гибкий интернет» · website · https://moskva.beeline.ru/business/mobile-and-internet/mobile-internet/</p>
 <p>Источник: <a href="https://moskva.beeline.ru/business/mobile-and-internet/mobile-internet/">https://moskva.beeline.ru/business/mobile-and-internet/mobile-internet/</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-17</p>
 </article>
-<article class="registry-row" id="ref-SRC-004"><h3>SRC-004</h3>
+<article class="registry-row" id="ref-SRC-004"><h3>МегаФон: описание тарифа «Управляй! Директор» (SRC-004)</h3>
 <p>МегаФон: описание тарифа «Управляй! Директор» · document · https://ceph.megafon.ru/htdocs-pk-ceph/ai/tariff_attrs/ac3834e1-31c5-4ccf-8258-bcfb3eb64577/e3566818-7b1a-4667-8fdc-5de27ed0880e/pdf/tariff_4949_spb_8a977.pdf</p>
 <p>Источник: <a href="https://ceph.megafon.ru/htdocs-pk-ceph/ai/tariff_attrs/ac3834e1-31c5-4ccf-8258-bcfb3eb64577/e3566818-7b1a-4667-8fdc-5de27ed0880e/pdf/tariff_4949_spb_8a977.pdf">https://ceph.megafon.ru/htdocs-pk-ceph/ai/tariff_attrs/ac3834e1-31c5-4ccf-8258-bcfb3eb64577/e3566818-7b1a-4667-8fdc-5de27ed0880e/pdf/tariff_4949_spb_8a977.pdf</a></p>
 <p>kind: document · access: open · retrieved: 2026-11-17</p>
 </article>
-<article class="registry-row" id="ref-SRC-005"><h3>SRC-005</h3>
+<article class="registry-row" id="ref-SRC-005"><h3>Текстовый макет F1 для учебной проверки (SRC-005)</h3>
 <p>Текстовый макет F1 для учебной проверки · document · sources/05_f1_mockup.md</p>
 <p>Источник: <a href="../sources/05_f1_mockup.md">../sources/05_f1_mockup.md</a></p>
 <p>kind: document · access: own · retrieved: 2026-11-17</p>
 </article>
-<article class="registry-row" id="ref-SRC-006"><h3>SRC-006</h3>
+<article class="registry-row" id="ref-SRC-006"><h3>M27 — терминальный проход EXP-001 с участником (SRC-006)</h3>
 <p>M27 — терминальный проход <a class="ref" data-id="EXP-001" href="#ref-EXP-001" title="В тестовых ситуациях предупреждение приходит уполномоченной роли и объясняет действие до возможного последствия.">EXP-001</a> с участником · dataset · sources/06_exp001_participant.json</p>
 <p>Источник: <a href="../sources/06_exp001_participant.json">../sources/06_exp001_participant.json</a></p>
 <p>kind: dataset · access: own · retrieved: 2026-11-18</p>
 </article>
-<article class="registry-row" id="ref-SRC-007"><h3>SRC-007</h3>
+<article class="registry-row" id="ref-SRC-007"><h3>M27 — сравнение предупреждения и отчёта с участником (EXP-002) (SRC-007)</h3>
 <p>M27 — сравнение предупреждения и отчёта с участником (<a class="ref" data-id="EXP-002" href="#ref-EXP-002" title="Сравнение показывает, даёт ли предупреждение добавочное время для действия относительно проверки отчёта.">EXP-002</a>) · dataset · sources/07_exp002_participant.json</p>
 <p>Источник: <a href="../sources/07_exp002_participant.json">../sources/07_exp002_participant.json</a></p>
 <p>kind: dataset · access: own · retrieved: 2026-11-18</p>

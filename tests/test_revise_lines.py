@@ -141,3 +141,20 @@ def test_valid_table_rewrite_closes_current_change(tmp_path, monkeypatch):
         {"key": "03:1", "action": "rewrite", "text": "| HYP-001 | синхронизация | low |"}]), {}))
     assert R.main([str(proj), "--change", "CHG-001"]) == 0
     assert doc.read_text(encoding="utf-8") == "| HYP-001 | синхронизация | low (пересмотрено по CHG-001) |\n"
+
+
+@pytest.mark.parametrize("extra", ["CLM-999", "DEC-001"])
+def test_cannot_add_unrelated_reference(tmp_path, monkeypatch, extra):
+    proj, doc = setup(tmp_path)
+    original = "Исходное основание [HYP-001].\n"
+    doc.write_text(original, encoding="utf-8")
+    monkeypatch.setattr(D, "main", fake(json.dumps([
+        {"key": "03:1", "action": "rewrite", "text": f"Уточнение [HYP-001, {extra}]."}]), {}))
+    assert R.main([str(proj), "--change", "CHG-001"]) == 1
+    assert doc.read_text(encoding="utf-8") == original
+
+
+def test_already_marked_wrong_reference_is_reported(tmp_path):
+    proj, doc = setup(tmp_path)
+    doc.write_text("Уточнение [HYP-001, CLM-999] (пересмотрено по CHG-001).\n", encoding="utf-8")
+    assert R.main([str(proj), "--change", "CHG-001"]) == 1

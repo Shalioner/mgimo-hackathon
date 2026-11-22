@@ -1,0 +1,83 @@
+{
+  "solo": {
+    "requested_at": "2026-11-21T21:50:12.050Z",
+    "started_at": "2026-11-21T21:50:12.543Z",
+    "completed_at": "2026-11-21T21:50:26.210Z",
+    "execution_seconds": 13.667,
+    "wall_seconds": 14.16,
+    "tokens": {
+      "input": 371,
+      "cached": 39808,
+      "output": 695,
+      "calls": 1
+    },
+    "configured_model": "gpt-6.2-sol",
+    "executed_model": "gpt-6.2-sol"
+  },
+  "mts": {
+    "requested_at": "2026-11-21T21:50:17.512Z",
+    "started_at": "2026-11-21T21:50:20.102Z",
+    "completed_at": "2026-11-21T21:50:36.969Z",
+    "execution_seconds": 16.867,
+    "wall_seconds": 19.457,
+    "tokens": null,
+    "configured_model": "gemini-4-neon",
+    "executed_model": null
+  },
+  "bt": {
+    "requested_at": "2026-11-21T21:50:23.279Z",
+    "started_at": "2026-11-21T21:50:25.130Z",
+    "completed_at": "2026-11-21T21:50:42.350Z",
+    "execution_seconds": 17.22,
+    "wall_seconds": 19.071,
+    "tokens": null,
+    "configured_model": "gemini-4-neon",
+    "executed_model": null
+  },
+  "team": {
+    "requested_at": "2026-11-21T21:50:53.869Z",
+    "started_at": "2026-11-21T21:50:54.137Z",
+    "completed_at": "2026-11-21T21:51:10.241Z",
+    "execution_seconds": 16.104,
+    "wall_seconds": 16.372,
+    "tokens": {
+      "input": 497,
+      "cached": 39808,
+      "output": 706,
+      "calls": 1
+    },
+    "configured_model": "gpt-6.2-sol",
+    "executed_model": "gpt-6.2-sol"
+  },
+  "base": {
+    "requested_at": "2026-11-21T21:51:39.823Z",
+    "started_at": "2026-11-21T21:51:40.144Z",
+    "completed_at": "2026-11-21T21:51:48.915Z",
+    "execution_seconds": 8.771,
+    "wall_seconds": 9.092,
+    "tokens": {
+      "input": 444,
+      "cached": 39808,
+      "output": 320,
+      "calls": 1
+    },
+    "configured_model": "gpt-6.2-sol",
+    "executed_model": "gpt-6.2-sol"
+  },
+  "candidate": {
+    "requested_at": "2026-11-21T21:51:49.643Z",
+    "started_at": "2026-11-21T21:51:50.083Z",
+    "completed_at": "2026-11-21T21:51:59.268Z",
+    "execution_seconds": 9.185,
+    "wall_seconds": 9.625,
+    "tokens": {
+      "input": 10985,
+      "cached": 29312,
+      "output": 383,
+      "calls": 1
+    },
+    "configured_model": "gpt-6.2-sol",
+    "executed_model": "gpt-6.2-sol"
+  },
+  "team_complete_wall_seconds": 52.729
+}

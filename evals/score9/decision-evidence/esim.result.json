@@ -1,0 +1,116 @@
+{
+  "recommended": [
+    "TODAY-02"
+  ],
+  "options": [
+    {
+      "id": "TODAY-01",
+      "kind": "invest",
+      "priority": 0,
+      "action": "Предложить безусловную совместимость для всех iPhone без проверки оператора.",
+      "requires": {
+        "unlock_required": false
+      },
+      "objection": "Заблокированные устройства могут не подключиться",
+      "status": "excluded",
+      "failed": [
+        "unlock_required"
+      ],
+      "unknown": []
+    },
+    {
+      "id": "TODAY-02",
+      "kind": "change",
+      "priority": 1,
+      "action": "Добавить проверку разблокировки в прототип входа, снять универсальное обещание. Стоп до закупки/интеграции; Android требует другого источника.",
+      "requires": {
+        "unlock_required": true
+      },
+      "objection": "Неизвестно, какая доля нашей базы пройдёт проверку",
+      "status": "eligible",
+      "failed": [],
+      "unknown": []
+    },
+    {
+      "id": "TODAY-03",
+      "kind": "status_quo",
+      "priority": 2,
+      "action": "Сохранить текущий роуминг без новой функции.",
+      "requires": {},
+      "objection": "Можно упустить полезный сегмент",
+      "status": "eligible",
+      "failed": [],
+      "unknown": []
+    },
+    {
+      "id": "TODAY-04",
+      "kind": "kill",
+      "priority": 3,
+      "action": "Предложить закрытие инвестиций travel eSIM.",
+      "requires": {},
+      "objection": "Неизвестный эффект нельзя считать нулевым",
+      "status": "eligible",
+      "failed": [],
+      "unknown": []
+    },
+    {
+      "id": "TODAY-05",
+      "kind": "invest",
+      "priority": 0,
+      "action": "Предложить ограниченный коммерческий пилот только на совместимых устройствах после проверки эффекта, затрат, условий поставщика и лимита.",
+      "requires": {
+        "unlock_required": true,
+        "retention": true
+      },
+      "objection": "Документация Apple не даёт оснований для коммерческого пилота",
+      "status": "conditional",
+      "failed": [],
+      "unknown": [
+        "retention"
+      ]
+    }
+  ],
+  "conditions": {
+    "unlock_required": {
+      "value": true,
+      "conflict": false,
+      "refs": [
+        "CLM-D03"
+      ]
+    },
+    "retention": {
+      "value": null,
+      "conflict": false,
+      "refs": []
+    }
+  },
+  "evidence_effects": [
+    {
+      "id": "CLM-D03",
+      "changes_admissibility": [
+        "TODAY-01",
+        "TODAY-02"
+      ],
+      "changes_recommendation": true
+    }
+  ],
+  "next_questions": [
+    {
+      "condition": "retention",
+      "question": "Подтверждены ли собственным пилотом удержание, приемлемые наши затраты и лимит коммерческого пилота, а предложением поставщика — условия интеграции?",
+      "unblocks": [
+        "TODAY-05"
+      ],
+      "if_answer": {
+        "false": [
+          "TODAY-02"
+        ],
+        "true": [
+          "TODAY-05"
+        ]
+      },
+      "changes_today": true,
+      "conflict": false
+    }
+  ]
+}

@@ -38,7 +38,8 @@ TASK = """Ты правишь строки документов стратеги
 Ниже строки документов, которые ссылаются на эти объекты и ещё не обновлены. Для каждой реши:
 - "mark" — смысл строки по-прежнему верен (она не противоречит актуальным формулировкам);
 - "rewrite" — строка теперь неточна: перепиши её коротко, сохранив стиль, разметку (таблица — те же ячейки,
-  список — тот же маркер) и все ID в квадратных скобках; не добавляй сведений, которых нет в объектах выше.
+  список — тот же маркер) и все активные ID в квадратных скобках; если объект в статусе superseded → NEW-ID,
+  замени [OLD-ID] на [NEW-ID]; не добавляй сведений, которых нет в объектах выше.
 Ответ — только JSON-массив, по одному элементу на строку:
 [{{"key": "<key>", "action": "mark" | "rewrite", "text": "<новая строка целиком, только для rewrite>"}}]
 
@@ -47,9 +48,29 @@ TASK = """Ты правишь строки документов стратеги
 """
 
 
+def _superseded_target(ledger: L.Ledger, oid: str) -> Optional[str]:
+    """Конечный активный ID замены для superseded-объекта (или None при обрыве/цикле)."""
+    cur, seen = oid, {oid}
+    while True:
+        o = ledger.objects.get(cur)
+        if not o:
+            return None
+        if cur != oid and o.get("status", "active") == "active":
+            return cur
+        nxt = o.get("superseded_by")
+        if not nxt or nxt in seen:
+            return None
+        seen.add(nxt)
+        cur = nxt
+
+
 def object_summary(o: dict) -> str:
     conf = o.get("confidence") or {}
-    parts = [o.get("statement") or o.get("title") or o.get("summary") or "",
+    st = o.get("status", "active")
+    text = (o.get("statement") or o.get("title") or o.get("summary")
+            or o.get("question") or o.get("message") or o.get("expected_change") or "")
+    parts = [text,
+             (f"статус: {st} → {o['superseded_by']}" if o.get("superseded_by") else f"статус: {st}") if st != "active" else "",
              f"уверенность: {conf.get('level', '')} — {conf.get('rationale', '')}" if conf else "",
              f"вердикт: {o.get('verdict')}" if o.get("verdict") else "",
              f"заметка: {o.get('status_note')}" if o.get("status_note") else ""]
@@ -60,9 +81,20 @@ def object_summary(o: dict) -> str:
 
 
 def build_task(ledger: L.Ledger, change: str, stale: List[dict]) -> Tuple[str, Dict[str, dict]]:
-    refs = sorted({r for i in stale for r in i["refs"]})
-    objs = "\n".join(f"- {r}: {object_summary(ledger.objects[r])}" for r in refs if r in ledger.objects)
-    keyed = {f"{i['file'][:2]}:{i['line']}": i for i in stale}
+    refs = {r for i in stale for r in i["refs"]}
+    for r in list(refs):
+        if r in ledger.objects and ledger.objects[r].get("status", "active") == "superseded":
+            tgt = _superseded_target(ledger, r)
+            if tgt:
+                refs.add(tgt)
+    objs = "\n".join(f"- {r}: {object_summary(ledger.objects[r])}" for r in sorted(refs) if r in ledger.objects)
+    files_by_pfx: Dict[str, set] = {}
+    for i in stale:
+        files_by_pfx.setdefault(i["file"][:2], set()).add(i["file"])
+    keyed = {
+        f"{(i['file'][:2] if len(files_by_pfx.get(i['file'][:2], ())) <= 1 else i['file'])}:{i['line']}": i
+        for i in stale
+    }
     lines = "\n".join(f"[{k}] {i['raw_text']}" for k, i in keyed.items())
     chg = ledger.objects.get(change, {})
     return TASK.format(change=change, summary=chg.get("summary", ""), objects=objs, lines=lines), keyed
@@ -90,8 +122,34 @@ def _with_mark(line: str, mark: str) -> str:
     return f"{s} {mark}"
 
 
-def apply(project: Path, change: str, keyed: Dict[str, dict], proposals: List[dict]) -> Dict[str, int]:
+def _ids_valid_after_rewrite(old: str, cand: str, ledger: Optional[L.Ledger]) -> bool:
+    keep_ids = set(V.expand_refs(V.normalize_short_lists(old)))
+    cand_ids = set(V.expand_refs(V.normalize_short_lists(cand)))
+    if ledger is None:
+        return keep_ids == cand_ids
+    allowed = set()
+    for oid in keep_ids:
+        obj = ledger.objects.get(oid)
+        if obj is None:
+            return False
+        status = obj.get("status", "active")
+        if status == "active":
+            allowed.add(oid)
+        elif status == "superseded":
+            replacement = _superseded_target(ledger, oid)
+            if replacement is None:
+                return False
+            allowed.add(replacement)
+        else:
+            return False
+    return cand_ids == allowed
+
+
+def apply(project: Path, change: str, keyed: Dict[str, dict], proposals: List[dict],
+          ledger: Optional[L.Ledger] = None) -> Dict[str, int]:
     stats = {"rewrite": 0, "mark": 0, "skipped": 0}
+    if ledger is None and (project / "state" / "ledger").is_dir():
+        ledger = L.Ledger(project)
     by_file: Dict[str, Dict[int, dict]] = {}
     for p in proposals:
         item = keyed.get(p["key"])
@@ -111,18 +169,29 @@ def apply(project: Path, change: str, keyed: Dict[str, dict], proposals: List[di
             new = None
             if p["action"] == "rewrite" and isinstance(p.get("text"), str):
                 cand = p["text"].strip()
-                keep_ids = set(V.expand_refs(V.normalize_short_lists(old)))
-                ok_ids = keep_ids <= set(V.expand_refs(V.normalize_short_lists(cand)))
+                # A delegate may already include the receipt for the current change.
+                evidence = V.REVISION_MARK.sub(
+                    lambda m: "" if m.group(1) == change else m.group(0), cand)
+                original = V.REVISION_MARK.sub(
+                    lambda m: "" if m.group(1) == change else m.group(0), old)
+                ok_ids = _ids_valid_after_rewrite(original, evidence, ledger)
                 ok_table = (not old.strip().startswith("|")) or (
                     cand.startswith("|") and cand.endswith("|")
                     and cand.count("|") == old.strip().count("|"))
                 if cand and len(cand.splitlines()) == 1 and ok_ids and ok_table:
                     indent = old[:len(old) - len(old.lstrip())]
-                    new = _with_mark(indent + cand, f"(пересмотрено по {change})")
+                    line_txt = indent + cand
+                    new = line_txt if V.marked_for_change(line_txt, change) else _with_mark(
+                        line_txt, f"(пересмотрено по {change})")
                     stats["rewrite"] += 1
-            if p["action"] == "mark":
-                new = _with_mark(old, f"(проверено по {change})")
-                stats["mark"] += 1
+            elif p["action"] == "mark":
+                old_ids = set(V.expand_refs(V.normalize_short_lists(old)))
+                has_nonactive = ledger is not None and any(
+                    oid not in ledger.objects or ledger.objects[oid].get("status", "active") != "active"
+                    for oid in old_ids)
+                if not has_nonactive:
+                    new = old if V.marked_for_change(old, change) else _with_mark(old, f"(проверено по {change})")
+                    stats["mark"] += 1
             if new is None:
                 stats["skipped"] += 1
                 continue
@@ -145,7 +214,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     if args.change not in ledger.objects:
         print(f"Нет события {args.change}", file=sys.stderr)
         return 2
-    stale = [i for i in V.verify(project, args.files, args.change)["items"] if i["verdict"] == "stale?"]
+    items = V.verify(project, args.files, args.change)["items"]
+    broken = [i for i in items if i["verdict"] == "wrong-ref"]
+    if broken:
+        for item in broken:
+            print(f"{item['file']}:{item['line']} — {item['note']}", file=sys.stderr)
+        return 1
+    stale = [i for i in items if i["verdict"] == "stale?"]
     if not stale:
         print(f"Необновлённых строк по {args.change} нет.")
         return 0
@@ -175,8 +250,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     if args.no_apply:
         print(f"Предложений: {len(proposals)} (не применены, --no-apply).")
         return 0
-    stats = apply(project, args.change, keyed, proposals)
-    left = [i for i in V.verify(project, args.files, args.change)["items"] if i["verdict"] == "stale?"]
+    stats = apply(project, args.change, keyed, proposals, ledger=ledger)
+    left = [i for i in V.verify(project, args.files, args.change)["items"]
+            if i["verdict"] in ("stale?", "wrong-ref")]
     L.log_or_defer(project, args.step, f"правка строк по {args.change}", "T2", "revise_lines.py",
                    f"переписано {stats['rewrite']}, помечено {stats['mark']}, пропущено {stats['skipped']}, осталось {len(left)}",
                    "см. строку делегирования выше")

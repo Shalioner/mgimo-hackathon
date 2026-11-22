@@ -1,0 +1,59 @@
+- id: SRC-001
+  title: 'Lone Star College: заявка на швейную машину требует подтверждения'
+  kind: website
+  access: open
+  path: sources/lsc-confirmation.md
+  sha256: 80fffd76dfa34ffcf2a61ce6c902b0948c57fe9938aa2b8efe39765d63888a47
+  retrieved: '2026-11-19'
+  reliability: high
+  url: https://libguides.lonestar.edu/cf/services/maker/sewing
+  notes: Короткая выдержка первичного публичного правила; область только LSC-CyFair,
+    не «Стежок».
+- id: SRC-002
+  title: 'MakerSpace FAQ: возможность освобождения машины при опоздании'
+  kind: website
+  access: open
+  path: sources/makerspace-release.md
+  sha256: b031046b3b22eebd1f603794b164c7206e876a48fe65d33f1f60194e0ced1ad1
+  retrieved: '2026-11-19'
+  reliability: high
+  url: https://www.maker-space.de/en/opening-hours-faqs-2/
+  notes: Правило, не измерение неявок; только участники названного оператора.
+- id: SRC-003
+  title: 'Springvale Library: инструктаж перед использованием швейной машины'
+  kind: website
+  access: open
+  path: sources/springvale-induction.md
+  sha256: 0adaa356fedc58dbaa31bdecd1ed183de4f47c79bf370c809d4440520fac9c1f
+  retrieved: '2026-11-19'
+  reliability: high
+  url: https://libraries.greaterdandenong.vic.gov.au/services/makerspace
+  notes: Только правило Springvale Library; не универсальное требование и не ресурс
+    «Стежка».
+- id: SRC-004
+  title: 'Лаборатория: описание функции и условные бюджетные вводные'
+  kind: document
+  access: own
+  path: sources/lab-audit/README.md
+  sha256: 03a6becfeb6daeadff733b3d1c0b229c38e0397207ea872a660e9c207a63c21f
+  retrieved: '2026-11-19'
+  reliability: medium
+  notes: Синтетическая лаборатория, не респонденты и не полевой продукт.
+- id: SRC-005
+  title: 'Лаборатория: реализация локального форматирования карточек'
+  kind: document
+  access: own
+  path: sources/lab-audit/audit.py
+  sha256: 4efbe6c4b89e6cc8a84d2462104b7fe07ee821a9d2df814bbf50ffa3347bf677
+  retrieved: '2026-11-19'
+  reliability: medium
+  notes: Синтетическая лаборатория, не респонденты и не полевой продукт.
+- id: SRC-006
+  title: 'Живой повтор: форматирование, отказ и ложная заполненная карточка'
+  kind: document
+  access: own
+  path: sources/lab-audit/live-observation.md
+  sha256: 71684413aa89f0b3fe49d3bec2202b7b7f6d74d651ec2b63103043251a78c50e
+  retrieved: '2026-11-19'
+  reliability: medium
+  notes: Синтетическая лаборатория, не респонденты и не полевой продукт.

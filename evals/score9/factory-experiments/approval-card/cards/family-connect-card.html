@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Карточка C3 — Связь для близких и собственных устройств</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --ink: #14181f;
+      --muted: #526071;
+      --border: #d9e0e8;
+      --ok-bg: #e7f6ec;
+      --ok-ink: #115e32;
+      --ok-border: #9bd6b0;
+      --warn-bg: #fff5e6;
+      --warn-ink: #8a4b00;
+      --warn-border: #f0c27b;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.42;
+      font-size: 14px;
+    }
+    .card {
+      max-width: 920px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 10px rgba(20, 24, 31, 0.05);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 4px 0;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 12px;
+      white-space: nowrap;
+      background: var(--ok-bg);
+      color: var(--ok-ink);
+      border: 1px solid var(--ok-border);
+    }
+    .scope-banner {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      color: var(--warn-ink);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-size: 13.5px;
+    }
+    .scope-banner strong { color: #5c3100; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .box h2 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+    dl { margin: 0; }
+    dt { font-weight: 600; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+    dt:first-child { margin-top: 0; }
+    dd { margin: 2px 0 0 0; }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin-bottom: 4px; }
+    li:last-child { margin-bottom: 0; }
+    code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: #f0f3f7;
+      padding: 1px 5px;
+      border-radius: 4px;
+      word-break: break-all;
+    }
+    .footer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" data-case="family-connect" data-format="compact-card">
+    <header class="header">
+      <div>
+        <h1>Связь для близких и собственных устройств</h1>
+        <div class="subtitle">Шаг 8 — сопровождение утверждённого плана диагностики · Кейс <code>family-connect</code></div>
+      </div>
+      <span class="badge">C3 утверждён · версия совпадает (current)</span>
+    </header>
+
+    <section class="scope-banner" aria-label="Граница полномочий">
+      <strong>Граница утверждения C3:</strong> утверждён <strong>только план диагностики</strong> (последовательность и критерии перехода), а <strong>не допуск к пилоту</strong>. Доступ к разрешённым агрегатам и тестовому контуру, выделение ресурса, смета и допуск к причинному пилоту (<code>EXP-003</code>) требуют <strong>отдельных решений</strong>.
+    </section>
+
+    <div class="grid">
+      <section class="box">
+        <h2>Решение C2 и квитанция C3</h2>
+        <dl>
+          <dt>Выбранный вариант (C2)</dt>
+          <dd><code>ALT-003</code> — Диагностика причин перед пилотом (ограниченная диагностика одного тарифа), решение <code>DEC-001</code> от <strong>2026-11-21</strong>.</dd>
+          <dt>Кто решил и отвечает за DEC-001</dt>
+          <dd><strong>Руководитель направления</strong> (основание C2: «окей делай»).</dd>
+          <dt>Статус и квитанция C3</dt>
+          <dd>Версия пакета совпадает с последней записью C3 (<code>state/c3_approvals.json</code>). Ответ: «Утверждаю обновлённый пакет C3».</dd>
+          <dt>SHA-256 утверждённого пакета C3</dt>
+          <dd><code>b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483</code></dd>
+          <dt>Срок пересмотра DEC-001</dt>
+          <dd><strong>31 марта 2027 года</strong> (или раньше, если условия проверки недостижимы).</dd>
+        </dl>
+      </section>
+
+      <section class="box">
+        <h2>Ближайшее действие и открытые вопросы</h2>
+        <dl>
+          <dt>Ближайшая работа к выполнению (EXP-001)</dt>
+          <dd>Сухая проверка макета F1 на вымышленных сценариях в согласованном окне диагностики Q1 (сравнение макета, ссылки на действующий путь и текущего процесса).</dd>
+          <dt>Ответственная роль</dt>
+          <dd><strong>Дизайнер</strong> — для сухой проверки макета F1; в <code>EXP-001</code> также указан <strong>владелец биллинга</strong> для проверки контрактов в тестовом контуре (если тестовый контур недоступен, остаётся проверка макета/интерфейса).</dd>
+          <dt>Открытый вопрос руководителю</dt>
+          <dd>Кто подтвердит доступ к разрешённым агрегатам и тестовому контуру и подготовит смету диагностики?</dd>
+          <dt>Открытые изменения (CHG)</dt>
+          <dd>Очередь пересмотра пуста, открытых <code>CHG</code> в реестре нет.</dd>
+        </dl>
+      </section>
+    </div>
+
+    <section class="box">
+      <h2>Пороги перехода и стоп-условия (07_validation_plan.md)</h2>
+      <ul>
+        <li><strong>EXP-001 (макет и тестовый биллинг):</strong> стоп при нарушении роли, повторах, неверной квитанции или потере доступа другого участника. К допуску нужны чистые контроли макета и тестового биллинга.</li>
+        <li><strong>EXP-002 (поток и смета; аналитик и владелец биллинга):</strong> для перехода к решению о пилоте нужны подтверждённые права, смета, доля неизвестных исходов <strong>не выше 2%</strong> в пригодной выборке и достаточный темп набора — <strong>298 или 364 семьи в неделю</strong> для первичного исхода (11 или 9 недель набора) и <strong>468 или 656 семей в неделю</strong> для семейной безопасности в пределах квартала (7 или 5 недель). Фактический темп, база и смета пока <strong>неизвестны</strong>.</li>
+        <li><strong>EXP-003 (причинный пилот; руководитель продукта и продуктовый аналитик):</strong> только после отдельного допуска пилота. Стоп при подтверждённом инциденте или росте семейного риска с интервалом выше нуля; порог безубыточности M08 — <strong>120 месяцев</strong> в основном сценарии.</li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <span>Локальный тестовый материал (A/B UX-тест) · только факты из замороженного пакета</span>
+      <span>Основания: DEC-001 · ALT-003 · EXP-001..003 · CLM-018, CLM-020, CLM-026, CLM-027, CLM-029</span>
+    </footer>
+  </main>
+</body>
+</html>

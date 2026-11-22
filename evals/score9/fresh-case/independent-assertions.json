@@ -1,0 +1,54 @@
+{
+  "synthetic": true,
+  "checks": [
+    {
+      "assertion": "negative control has no economics or approval receipt",
+      "passed": true
+    },
+    {
+      "assertion": "negative prepare rejected on substantive gaps",
+      "passed": true
+    },
+    {
+      "assertion": "first-C3-presented readiness passes, approval remains absent",
+      "passed": true
+    },
+    {
+      "assertion": "revised-C3-unapproved readiness passes, approval remains absent",
+      "passed": true
+    },
+    {
+      "assertion": "refusal snapshot retains no approval",
+      "passed": true
+    },
+    {
+      "assertion": "refusal is explicitly synthetic",
+      "passed": true
+    },
+    {
+      "assertion": "exactly revised SHA approved, not refused SHA",
+      "passed": true
+    },
+    {
+      "assertion": "receipt preserves synthetic label and exact answer",
+      "passed": true
+    },
+    {
+      "assertion": "all post-approval gates pass and current",
+      "passed": true
+    },
+    {
+      "assertion": "restart did not mutate case",
+      "passed": true
+    },
+    {
+      "assertion": "frozen baseline unchanged",
+      "passed": true
+    },
+    {
+      "assertion": "source outside synthetic case unchanged",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

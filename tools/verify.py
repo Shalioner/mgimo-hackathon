@@ -252,14 +252,25 @@ def is_request_constraint(line: str, quote: str) -> bool:
     return re.search(r"(?:^|[.!?]\s+)" + re.escape(cells[1]) + end, quote) is not None
 
 
-def verify(project: Path, file_filter: List[str], change: str = "") -> dict:
+def blocking_verdicts(*, strict: bool = False) -> set[str]:
+    verdicts = {"wrong-ref", "stale-ref", "dup-main", "stale?"}
+    if strict:
+        verdicts.add("unsupported")
+    return verdicts
+
+
+def verify(project: Path, file_filter: List[str], change: str = "", *, exact_files: bool = False) -> dict:
     ledger = L.Ledger(project)
     out_dir = project / "outputs"
+    files = sorted(out_dir.glob("*.md"))
+    if exact_files:
+        names = set(file_filter)
+        files = [file for file in files if file.name in names]
+    elif file_filter:
+        files = [file for file in files if any(file.name.startswith(prefix) for prefix in file_filter)]
     items = []
     revised = revised_objects(ledger, change) if change else set()
-    for f in sorted(out_dir.glob("*.md")):
-        if file_filter and not any(f.name.startswith(p) for p in file_filter):
-            continue
+    for f in files:
         historical = False
         decision_history = False
         text = f.read_text(encoding="utf-8")
@@ -320,8 +331,6 @@ def verify(project: Path, file_filter: List[str], change: str = "") -> dict:
                     verdict, note = "check", f"единица числа не совпадает с утверждением: {units[0]} вместо {units[1]}"
             items.append({"file": f.name, "line": ln, "verdict": verdict, "note": note,
                           "refs": refs, "text": line[:300]})
-    files = [f for f in sorted(out_dir.glob("*.md"))
-             if not file_filter or any(f.name.startswith(p) for p in file_filter)]
     items += duplicate_mains(files)
     counts: Dict[str, int] = {}
     for it in items:
@@ -369,8 +378,7 @@ def main(argv=None) -> int:
             print("\nНа проверку модели (только эти строки, не весь пакет):")
             for i in todo:
                 print(f"- [{i['verdict']}] {i['file']}:{i['line']} — {i['note']}\n    {i['text'][:220]}")
-    hard_keys = ("wrong-ref", "stale-ref", "dup-main", "stale?") + (("unsupported",) if args.strict else ())
-    hard = sum(res["counts"].get(k, 0) for k in hard_keys)
+    hard = sum(res["counts"].get(k, 0) for k in blocking_verdicts(strict=args.strict))
     return 1 if hard else 0
 
 

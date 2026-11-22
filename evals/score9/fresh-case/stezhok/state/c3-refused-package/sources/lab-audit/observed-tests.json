@@ -1,0 +1,28 @@
+[
+  {
+    "cmd": [
+      "/Users/shalioner/orca/workspaces/МегаФон-Стратег/jury-candidate-34/.venv/bin/python",
+      "/tmp/strategist-c3-paired-20261119/live/projects/stezhok/sources/lab-audit/audit.py",
+      "--input",
+      "/tmp/strategist-c3-paired-20261119/live/projects/stezhok/sources/lab-audit/example.json",
+      "--output",
+      "/tmp/strategist-c3-paired-20261119/live/projects/stezhok/sources/lab-audit/example-result.md"
+    ],
+    "exit": 0,
+    "stdout": "{\"written\": 1, \"output\": \"/tmp/strategist-c3-paired-20261119/live/projects/stezhok/sources/lab-audit/example-result.md\"}\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/Users/shalioner/orca/workspaces/МегаФон-Стратег/jury-candidate-34/.venv/bin/python",
+      "/tmp/strategist-c3-paired-20261119/live/projects/stezhok/sources/lab-audit/audit.py",
+      "--input",
+      "/tmp/strategist-c3-paired-20261119/live/projects/stezhok/sources/lab-audit/invalid.json",
+      "--output",
+      "/tmp/strategist-c3-paired-20261119/live/projects/stezhok/sources/lab-audit/invalid-result.md"
+    ],
+    "exit": 2,
+    "stdout": "",
+    "stderr": "usage: audit.py [-h] --input INPUT --output OUTPUT\naudit.py: error: four nonempty text fields required\n"
+  }
+]

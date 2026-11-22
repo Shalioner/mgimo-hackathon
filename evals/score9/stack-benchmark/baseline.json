@@ -1,0 +1,280 @@
+{
+  "actions": {
+    "ledger_status": {
+      "seconds": [
+        1.25835775,
+        1.32620825,
+        1.1461396660000003,
+        1.32687125,
+        1.1177935420000003
+      ],
+      "median_s": 1.25835775,
+      "stdout_bytes": 1819
+    },
+    "ledger_validate": {
+      "seconds": [
+        0.7925431669999998,
+        0.7637327499999991,
+        0.746309458999999,
+        0.7727974579999994,
+        0.74616975
+      ],
+      "median_s": 0.7637327499999991,
+      "stdout_bytes": 79
+    },
+    "verify_claims": {
+      "seconds": [
+        0.7152634580000008,
+        0.7910259999999987,
+        0.7500739169999999,
+        0.7137194999999998,
+        0.7095930419999998
+      ],
+      "median_s": 0.7152634580000008,
+      "stdout_bytes": 55455
+    },
+    "consistency": {
+      "seconds": [
+        0.8644064999999976,
+        0.8533835419999996,
+        0.8676075409999982,
+        0.877851500000002,
+        0.8502062089999995
+      ],
+      "median_s": 0.8644064999999976,
+      "stdout_bytes": 10128
+    },
+    "trace": {
+      "seconds": [
+        0.7065460409999993,
+        0.6820771249999993,
+        0.6443042080000012,
+        0.6660273750000023,
+        0.6361180409999996
+      ],
+      "median_s": 0.6660273750000023,
+      "stdout_bytes": 12105
+    },
+    "impact": {
+      "seconds": [
+        0.7288312909999988,
+        0.6454312910000013,
+        0.6695141250000027,
+        0.6631175409999983,
+        0.6596245419999995
+      ],
+      "median_s": 0.6631175409999983,
+      "stdout_bytes": 772
+    },
+    "c3_prepare": {
+      "seconds": [
+        1.1812905839999992,
+        1.173788082999998,
+        1.3026622909999972,
+        1.2566487080000002,
+        1.3155097499999968
+      ],
+      "median_s": 1.2566487080000002,
+      "stdout_bytes": 65
+    },
+    "datacheck": {
+      "seconds": [
+        0.29170475000000096,
+        0.2983338749999973,
+        0.2835839590000049,
+        0.28396950000000487,
+        0.29741545799999614
+      ],
+      "median_s": 0.29170475000000096,
+      "stdout_bytes": 211
+    },
+    "report_generate": {
+      "seconds": [
+        0.6928470410000003,
+        1.065984708000002,
+        1.0005816250000024,
+        0.7070955000000012,
+        0.7084017079999967
+      ],
+      "median_s": 0.7084017079999967,
+      "stdout_bytes": 99,
+      "artifact_bytes": 337067
+    },
+    "route_t0": {
+      "seconds": [
+        0.6304110000000023,
+        0.5846730000000022,
+        0.6091426659999968,
+        0.5877259589999966,
+        0.5885230409999949
+      ],
+      "median_s": 0.5885230409999949,
+      "stdout_bytes": 212
+    },
+    "documents_preflight": {
+      "seconds": [
+        0.7618614169999987,
+        0.6611067910000017,
+        0.6751847079999962,
+        0.6651091250000007,
+        0.6654447499999989
+      ],
+      "median_s": 0.6654447499999989,
+      "stdout_bytes": 2318
+    },
+    "mcp_list": {
+      "seconds": [
+        0.12790083299999822,
+        0.1279490830000043,
+        0.12906533299999978,
+        0.12745112500000033,
+        0.12763020799999936
+      ],
+      "median_s": 0.12790083299999822,
+      "stdout_bytes": 3850
+    }
+  },
+  "juried_replay": [
+    {
+      "timing_seconds": {
+        "hooks": 3.008,
+        "commands": 18.641,
+        "wall": 21.853,
+        "human_active": null,
+        "model": null
+      },
+      "model_calls": 0,
+      "commands_executed": 27,
+      "unchanged_sha256_files": {
+        "projects/family-connect": 34,
+        "projects/esim-travel": 30,
+        "projects/rehearsal-mobile-spend": 34
+      }
+    },
+    {
+      "timing_seconds": {
+        "hooks": 3.367,
+        "commands": 23.581,
+        "wall": 27.181,
+        "human_active": null,
+        "model": null
+      },
+      "model_calls": 0,
+      "commands_executed": 27,
+      "unchanged_sha256_files": {
+        "projects/family-connect": 34,
+        "projects/esim-travel": 30,
+        "projects/rehearsal-mobile-spend": 34
+      }
+    }
+  ],
+  "resume": {
+    "projects/family-connect": {
+      "pairs_s": [
+        {
+          "separate": 2.9772093330000047,
+          "batch": 1.3835713330000061
+        },
+        {
+          "batch": 1.3704685840000081,
+          "separate": 3.855753415999999
+        },
+        {
+          "separate": 3.755736457999987,
+          "batch": 1.4051284999999893
+        },
+        {
+          "batch": 1.4009940419999936,
+          "separate": 3.2380227080000026
+        },
+        {
+          "separate": 2.9352692499999904,
+          "batch": 1.6475185410000108
+        }
+      ],
+      "separate_processes": 4,
+      "batch_processes": 1,
+      "identical_outputs": true,
+      "c3_status": "current",
+      "payload_bytes": 2397
+    },
+    "projects/esim-travel": {
+      "pairs_s": [
+        {
+          "separate": 3.0637716250000153,
+          "batch": 1.4363950410000257
+        },
+        {
+          "batch": 1.4191142090000142,
+          "separate": 3.2387179589999846
+        },
+        {
+          "separate": 3.156159625000015,
+          "batch": 1.399160333000026
+        },
+        {
+          "batch": 1.4058077919999903,
+          "separate": 3.272959667000009
+        },
+        {
+          "separate": 3.243116250000014,
+          "batch": 1.3815674580000064
+        }
+      ],
+      "separate_processes": 4,
+      "batch_processes": 1,
+      "identical_outputs": true,
+      "c3_status": "unrecorded",
+      "payload_bytes": 3398
+    }
+  },
+  "mcp_catalog": {
+    "tools": [
+      "strategist_datacheck",
+      "strategist_report",
+      "strategist_status",
+      "strategist_trace",
+      "strategist_impact",
+      "strategist_validate",
+      "strategist_route",
+      "strategist_verify",
+      "strategist_gate",
+      "strategist_cost",
+      "strategist_models"
+    ],
+    "definition_bytes": 3604
+  },
+  "rtk": {
+    "version": "rtk 0.42.3",
+    "samples": {
+      "git_status": {
+        "plain_bytes": 747,
+        "rtk_bytes": 746,
+        "identical": false
+      },
+      "git_diff": {
+        "plain_bytes": 22837,
+        "rtk_bytes": 18176,
+        "identical": false
+      }
+    }
+  },
+  "repeats": 5,
+  "platform": "macOS-15.7.9-arm64-arm-64bit",
+  "python": "3.9.6",
+  "logical_cpus": 8,
+  "load_avg_before": [
+    7.62939453125,
+    9.01416015625,
+    6.912109375
+  ],
+  "load_avg_after": [
+    3.837890625,
+    6.734375,
+    6.318359375
+  ],
+  "git_head": "e89f77599f8fd5a40f3cadb01ece8c21122d3900",
+  "snapshot_sha256": "c752dc5f925c85195c75cd57b099473ca9f34051dbbe52eb193861c7b0fdf340",
+  "snapshot_files": 289,
+  "requires_model_calls": false
+}

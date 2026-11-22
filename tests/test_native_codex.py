@@ -82,8 +82,9 @@ def test_plan_is_pure_and_refuses_unapproved(cfg, monkeypatch):
 def test_success_usage_after_completion_and_native_params(cfg, server):
     binary, log = server()
     selected = N.plan('T1', cfg)
-    receipt, text = N.execute(binary, 'text', selected, load_config=lambda: cfg, timeout=3)
-    assert receipt['status'] == 'succeeded' and text == 'answer'
+    # This verifies the protocol, including late usage. Allow time for cold process startup.
+    receipt, text = N.execute(binary, 'text', selected, load_config=lambda: cfg, timeout=15)
+    assert receipt['status'] == 'succeeded' and text == 'answer', receipt
     assert receipt['usage_events'][0]['params']['tokenUsage']['last']['totalTokens'] == 17
     assert receipt['observed_model'] is None
     assert receipt['transmitted_model'] == selected['model']
