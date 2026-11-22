@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 import shlex
 import sys
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from c3_approval import status as approval_status
 from ledger import Ledger
@@ -25,8 +25,8 @@ MD_LINK = r"\[([^\]\n]+)\]\(([^\s)]+)\)"
 INLINE = re.compile(r"(`+)(.+?)\1|" + MD_LINK + r"|\*\*(.+?)\*\*|\*([^*\n]+)\*")
 CHECKPOINT_DOCS = {"C1": "01", "C2": "04", "C3": "07"}
 CHECKPOINT_MATERIAL = re.compile(
-    r"(?<![\w./:-])(?:outputs/)?((?:01|04|05|06|07)_[\w-]+\.md)(?![\w/])"
-    r"|\((?:предложения в )?(01|04|05|06|07)\)"
+    r"(?<![\w./:-])(?:outputs/)?((?:00|01|04|05|06|07)_[\w-]+\.md)(?![\w/])"
+    r"|\((?:предложения в )?(00|01|04|05|06|07)\)"
 )
 OPEN_CHECKPOINT = re.compile(
     r"(?:повторное\s+)?(C[123])\s*:?[ \t]+(?:сейчас )?(?:открыт[оа]?|"
@@ -50,7 +50,7 @@ RESPONSE_ACTION = re.compile(
     r"^(?:подтвердить|выбрать|утвердить|согласовать|уточнить)\b", re.IGNORECASE,
 )
 DOC_TITLES = {
-    "01": "Бриф", "02": "План исследования", "03": "Картина ситуации",
+    "00": "Стратегия в пяти частях", "01": "Бриф", "02": "План исследования", "03": "Картина ситуации",
     "04": "Варианты", "05": "Продуктовая стратегия", "06": "Коммуникационная стратегия",
     "07": "План проверки", "08": "Журнал решения", "09": "Отчёт о прогоне",
 }
@@ -60,10 +60,29 @@ C3_SUMMARY_DOCS = (
     ("07", "Когда продолжать или останавливать пилот", "Согласовать сроки и условия остановки и продолжения."),
 )
 GENERATED_AT_PREFIX = '<p class="meta">Сформировано: '
+ALT_KINDS = {
+    "invest": "инвестиция",
+    "change": "изменение",
+    "status_quo": "статус-кво",
+    "kill": "закрытие / отказ",
+    "other": "другое",
+}
 
 
 def text(value) -> str:
     return "" if value is None else str(value)
+
+
+def object_label(obj: dict, limit: int = 90) -> str:
+    """Короткая человекочитаемая подпись объекта для расшифровки ID."""
+    raw = next(
+        (text(obj[k]) for k in ("title", "summary", "statement", "question", "message", "expected_change") if obj.get(k)),
+        "",
+    )
+    raw = " ".join(raw.split())
+    if len(raw) <= limit:
+        return raw
+    return raw[:limit].rsplit(" ", 1)[0] + " …"
 
 
 def tooltip(obj: dict) -> str:
@@ -95,10 +114,50 @@ def safe_url(url: str) -> bool:
 
 
 class Renderer:
-    def __init__(self, objects: dict):
+    def __init__(
+        self,
+        objects: dict,
+        *,
+        out_dir: Path | None = None,
+        source_dir: Path | None = None,
+        doc_anchors: dict[Path, str] | None = None,
+    ):
         self.objects = objects
+        self.out_dir = out_dir.resolve() if out_dir is not None else None
+        self.source_dir = source_dir.resolve() if source_dir is not None else None
+        self.doc_anchors = doc_anchors or {}
 
-    def plain(self, value: str) -> str:
+    def for_source(self, source_dir: Path | None) -> Renderer:
+        return Renderer(
+            self.objects,
+            out_dir=self.out_dir,
+            source_dir=source_dir,
+            doc_anchors=self.doc_anchors,
+        )
+
+    def resolve_url(self, url: str) -> str:
+        if self.out_dir is None or self.source_dir is None:
+            return url
+        parts = urlsplit(url)
+        if parts.scheme or parts.netloc or not parts.path or parts.path.startswith("/"):
+            return url
+        target_path = Path(parts.path)
+        if target_path.is_absolute():
+            return url
+        target = (self.source_dir / target_path).resolve()
+        anchor = self.doc_anchors.get(target)
+        if anchor and not parts.query and not parts.fragment:
+            return f"#{anchor}"
+        if self.source_dir == self.out_dir or not target.exists():
+            return url
+        try:
+            rebased = Path(os.path.relpath(target, self.out_dir)).as_posix()
+        except ValueError:
+            return url
+        resolved = urlunsplit(("", "", rebased, parts.query, parts.fragment))
+        return resolved if safe_url(resolved) else url
+
+    def plain(self, value: str, *, expand_ids: bool = False) -> str:
         chunks, pos = [], 0
         for match in ID.finditer(value):
             chunks.append(escape(value[pos:match.start()]))
@@ -109,12 +168,16 @@ class Renderer:
                 cls += " obsolete"
             hint = tooltip(obj) if obj else "нет в реестре"
             chunks.append(f'<a class="{cls}" data-id="{oid}" href="#ref-{oid}" title="{escape(hint, quote=True)}">{oid}</a>')
+            if expand_ids and obj:
+                label = object_label(obj)
+                if label:
+                    chunks.append(f" ({escape(label)})")
             pos = match.end()
         chunks.append(escape(value[pos:]))
         return "".join(chunks)
 
-    def inline(self, value: str, *, links: bool = True, references: bool = True) -> str:
-        plain = self.plain if references else escape
+    def inline(self, value: str, *, links: bool = True, references: bool = True, expand_ids: bool = False) -> str:
+        plain = (lambda s: self.plain(s, expand_ids=expand_ids)) if references else escape
         chunks, pos = [], 0
         for match in INLINE.finditer(value):
             chunks.append(plain(value[pos:match.start()]))
@@ -125,16 +188,20 @@ class Renderer:
                 if not links:
                     chunks.append(plain(label))
                 elif safe_url(url):
+                    resolved = self.resolve_url(url)
                     # Ссылки на ID остаются самостоятельными якорями, без вложенных <a>.
                     if ID.search(label):
-                        chunks.append(self.inline(label) + f' <a href="{escape(url, quote=True)}">↗</a>')
+                        chunks.append(
+                            self.inline(label, links=links, references=references, expand_ids=expand_ids)
+                            + f' <a href="{escape(resolved, quote=True)}">↗</a>'
+                        )
                     else:
-                        chunks.append(f'<a href="{escape(url, quote=True)}">{escape(label)}</a>')
+                        chunks.append(f'<a href="{escape(resolved, quote=True)}">{escape(label)}</a>')
                 else:
-                    chunks.append(self.plain(match.group()))
+                    chunks.append(plain(match.group()))
             else:
                 tag, content = ("strong", bold) if bold is not None else ("em", italic)
-                chunks.append(f"<{tag}>" + self.inline(content, links=links, references=references) + f"</{tag}>")
+                chunks.append(f"<{tag}>" + self.inline(content, links=links, references=references, expand_ids=expand_ids) + f"</{tag}>")
             pos = match.end()
         chunks.append(plain(value[pos:]))
         return "".join(chunks)
@@ -351,8 +418,33 @@ def checkpoint_questions(progress: str, gate: str) -> list[str]:
     return questions
 
 
-def checkpoint_block(progress: str, step: str, docs: list, renderer: Renderer) -> list[str]:
+def first_brief_awaits_user(progress: str) -> bool:
+    section = "preamble"
+    open_steps = []
+    waiting = set()
+    for _, line in prose_lines(progress):
+        heading = HEADING.match(line)
+        if heading:
+            if len(heading[1]) == 1 and section == "preamble":
+                continue
+            section = heading[2].strip().casefold() if len(heading[1]) == 2 else None
+            continue
+        if section in ("шаги", "preamble") and re.match(r"^- \[[ xX]\] 1\.", line):
+            open_steps.append(bool(re.match(r"^- \[ \] 1\..*\bC1\b", line)))
+        if re.match(r"^\s*[-*]\s+`?awaiting_human\b", line):
+            waiting.add(section)
+    return open_steps == [True] and {"что дальше", "открытые вопросы к человеку"} <= waiting
+
+
+def open_checkpoint(progress: str, step: str) -> str | None:
     gate = active_checkpoint(step)
+    if gate is None and step == "1" and first_brief_awaits_user(progress):
+        return "C1"
+    return gate
+
+
+def checkpoint_block(progress: str, step: str, docs: list, renderer: Renderer) -> list[str]:
+    gate = open_checkpoint(progress, step)
     if not gate:
         return []
     roles, responses = [], []
@@ -402,6 +494,61 @@ def checkpoint_block(progress: str, step: str, docs: list, renderer: Renderer) -
     if links:
         block.append(f'<p><strong>Материалы {gate}:</strong> ' + " · ".join(links) + '</p>')
     return block + ['</div>']
+
+
+def brief_section(value: str, prefixes: tuple[str, ...]) -> str:
+    """Проза первого подходящего раздела брифа до следующего заголовка или таблицы."""
+    lines, found = value.splitlines(), list(headings(value))
+    prose_idx = {index for index, _ in prose_lines(value)}
+    for pos, (index, level, title) in enumerate(found):
+        norm = title.strip().strip("*").strip().casefold()
+        if level <= 2 and re.match(r"^(?:истори|архив)", norm):
+            break
+        if any(norm == p or norm.startswith(p) for p in prefixes):
+            end = found[pos + 1][0] if pos + 1 < len(found) else len(lines)
+            body = []
+            for i in range(index + 1, end):
+                if i in prose_idx and i + 1 in prose_idx and "|" in lines[i] and table_separator(lines[i + 1]):
+                    break
+                body.append(lines[i])
+            return "\n".join(body).strip()
+    return ""
+
+
+def c1_brief_summary(gate: str | None, docs: list, renderer: Renderer) -> list[str]:
+    """Краткая формулировка решения и актуальный пробел брифа на первом экране C1."""
+    if gate != "C1":
+        return []
+    brief = next(((anchor, value, name) for anchor, _, value, name in docs if name.startswith("01")), None)
+    if brief is None:
+        return ['<div id="c1-brief"><h3>Какое решение предстоит принять</h3>',
+                '<p><strong>Пробел:</strong> отсутствует документ «Бриф» (<code>01_brief.md</code>).</p></div>']
+    anchor, value, name = brief
+    heading = f'<h3><a href="#{anchor}">Какое решение предстоит принять</a></h3>'
+    if not value.strip():
+        return [f'<div id="c1-brief">{heading}',
+                f'<p><strong>Пробел:</strong> документ <code>{escape(name)}</code> пуст.</p></div>']
+    question = brief_section(value, ("какое решение предстоит принять",))
+    question_html = (renderer.markdown(question) if question else
+                     f'<p><strong>Пробел:</strong> в <code>{escape(name)}</code> не заполнен раздел «Какое решение предстоит принять».</p>')
+    mains = [block.strip() for block in main_blocks(value) if block.strip()]
+    if mains:
+        gap_title = "Главное"
+        main = mains[0]
+        gap = next((line for line in main.splitlines()
+                    if re.search(r"\bнеизвест(?:но|ен|на|ны)\b|ещ[её] предстоит проверить", line, re.I)), "")
+        if gap and gap != main:
+            gap_html = renderer.markdown(gap) + (
+                f'<details><summary>Всё главное из брифа</summary>{renderer.markdown(main)}</details>'
+            )
+        else:
+            gap_html = renderer.markdown(main)
+    else:
+        fallback = brief_section(value, ("неизвестное", "что неизвестно")) or brief_section(value, ("допущения",))
+        gap_title = "Открытые пробелы и допущения"
+        gap_html = (renderer.markdown(fallback) if fallback else
+                    f'<p><strong>Пробел:</strong> в <code>{escape(name)}</code> не заполнен раздел «Главное».</p>')
+    return [f'<div id="c1-brief">{heading}', question_html, f'<h4>{gap_title}</h4>', gap_html, '</div>']
 
 
 def c3_doc_actions(progress: str) -> dict[str, list[str]]:
@@ -516,6 +663,64 @@ def selected_decisions(objects: dict) -> list:
                   key=lambda obj: (text(obj.get("decided_at")), obj["id"]), reverse=True)
 
 
+def pending_decisions(objects: dict) -> list:
+    """Открытые или требующие пересмотра решения без подтверждённого финального выбора."""
+    return sorted(
+        (obj for oid, obj in objects.items()
+         if oid.startswith("DEC-")
+         and obj.get("state") in ("proposed", "needs_review")
+         and obj.get("status") not in ("superseded", "retracted")),
+        key=lambda obj: (0 if obj.get("state") == "needs_review" else 1, text(obj.get("decided_at")), obj["id"]),
+    )
+
+
+def option_kind_label(opt: dict) -> str:
+    kind = text(opt.get("kind")).strip()
+    if not kind:
+        return ""
+    return f" [{escape(ALT_KINDS.get(kind, kind))}]"
+
+
+def decision_option_items(decision: dict, objects: dict, renderer: Renderer, *, decided: bool) -> list[str]:
+    chosen = text(decision.get("chosen")) if decided else ""
+    recommended = text(decision.get("recommended"))
+    rejected_map = {}
+    for entry in decision.get("rejected") or []:
+        if isinstance(entry, dict) and entry.get("option"):
+            rejected_map[text(entry["option"])] = text(entry.get("reason"))
+
+    ordered_ids = []
+    for oid in list(decision.get("options") or []) + list(rejected_map.keys()):
+        oid = text(oid)
+        if oid and oid not in ordered_ids:
+            ordered_ids.append(oid)
+
+    items = []
+    for oid in ordered_ids:
+        opt = objects.get(oid, {})
+        title = text(opt.get("title")).strip() or "Название не записано"
+        kind = option_kind_label(opt)
+        if decided and oid == chosen:
+            by = text(decision.get("decided_by")).strip()
+            status = "выбран" + (f" ({escape(by)})" if by else "")
+        elif decided:
+            prefix = "рекомендован агентом, не выбран" if oid == recommended else "не выбран"
+            reason = rejected_map.get(oid, "").strip()
+            status = prefix + (f" — {renderer.inline(reason, expand_ids=True)}" if reason else "")
+        else:
+            tags = []
+            if decision.get("state") == "needs_review" and oid == text(decision.get("chosen")):
+                tags.append("прежний выбор, требует пересмотра")
+            if oid == recommended:
+                tags.append("рекомендован агентом, не выбор человека")
+            desc = text(opt.get("description")).strip()
+            status = "; ".join(tags) if tags else "ожидает решения"
+            if desc:
+                status += f" — {renderer.inline(short_rationale(desc), expand_ids=True)}"
+        items.append(f"<li><strong>{escape(title)}</strong>{kind} — {status} ({renderer.plain(oid)})</li>")
+    return items
+
+
 def short_rationale(value: str) -> str:
     """Дословный начальный фрагмент основания, без генерации объяснения."""
     value = " ".join(value.split())
@@ -577,12 +782,22 @@ section,nav { background:var(--paper); padding:28px; margin:24px 0; border:1px s
 .meta,.document-label { color:var(--muted); font-size:.9rem; } .summary-card { border-top:1px solid var(--line); padding:12px 0; } .summary-card:last-child { padding-bottom:0; }
 .current-links { display:flex; flex-wrap:wrap; column-gap:20px; row-gap:6px; padding:0; list-style:none; } .next-action { border-inline-start:3px solid var(--accent); padding-inline-start:12px; }
 summary { cursor:pointer; } summary:focus-visible { outline:3px solid var(--accent); outline-offset:3px; } summary h2,summary h3 { display:inline; }
+#checkpoint-approval { border-left:4px solid var(--accent); padding:4px 0 4px 16px; margin:14px 0; } .decision-options ul { margin:6px 0 12px; padding-left:22px; }
 .ref { font-size:.9em; white-space:nowrap; } .missing { color:#c34f37; text-decoration-style:wavy; } .obsolete,.obsolete .ref { text-decoration:line-through; }
 .table-scroll { max-width:100%; overflow-x:auto; margin:18px 0; } table { border-collapse:collapse; width:100%; font-size:.9rem; } th,td { padding:10px 12px; border:1px solid var(--line); text-align:left; vertical-align:top; min-width:100px; } th { background:var(--bg); }
 pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(--line); } code { font-size:.9em; } p { white-space:pre-line; } .registry-row { padding:18px 0; border-top:1px solid var(--line); } .registry-row p { margin:6px 0; } :target { outline:2px solid var(--accent); outline-offset:4px; }
 @media (max-width:600px) { main { padding:18px 10px; } section,nav { padding:18px 14px; } body { font-size:16px; } h1 { font-size:1.5rem; } }
 @media print { :root { --bg:white; --paper:white; --ink:black; --muted:#333; --line:#aaa; } body { font-size:10pt; } main { max-width:none; padding:0; } section,nav { border:0; padding:0; border-radius:0; } #current-state { break-after:page; } a { color:black !important; } .table-scroll,pre { overflow:visible; } table { page-break-inside:auto; table-layout:fixed; } tr { page-break-inside:avoid; } th,td { min-width:0; overflow-wrap:anywhere; } pre { white-space:pre-wrap; } h1,h2,h3,h4 { page-break-after:avoid; } }
 """
+
+C1_CSS = (
+    "#c1-brief { border-left:4px solid var(--accent); padding:4px 0 4px 16px; margin:12px 0; min-width:0; }\n"
+    "#c1-brief h3,#c1-brief h4,#checkpoint-approval h3 { margin:6px 0; }\n"
+    "#c1-brief p,#c1-brief ul,#c1-brief ol,#checkpoint-approval p { margin:6px 0; }\n"
+    "@media (max-width:600px) { header { margin-bottom:14px; } header h1 { margin:6px 0; }"
+    " header .meta { margin:4px 0; } #current-state { margin:12px 0; padding:14px; }"
+    " #current-state { line-height:1.4; } #current-state h2 { margin:0 0 6px; font-size:1.25rem; } #c1-brief,#checkpoint-approval { padding-left:12px; } #c1-brief h3,#checkpoint-approval h3 { font-size:1.05rem; } }\n"
+)
 
 
 def render(project: Path, out: Path) -> str:
@@ -591,56 +806,109 @@ def render(project: Path, out: Path) -> str:
     ledger = Ledger(project)
     if ledger.load_problems:
         raise ValueError("реестр не читается: " + "; ".join(f"{p}: {m}" for p, m in ledger.load_problems))
-    renderer = Renderer(ledger.objects)
     docs = []
+    doc_anchors = {}
     for path in sorted((project / "outputs").glob("0*.md")):
         value = path.read_text(encoding="utf-8")
         number = path.name[:2]
         title = next((t for _, _, t in headings(value)), path.stem)
         if title.strip().strip("*").strip() == "Главное":
             title = DOC_TITLES.get(number, path.stem)
-        docs.append(("doc-" + number, title, value, path.name))
+        anchor = "doc-" + number
+        docs.append((anchor, title, value, path.name))
+        doc_anchors[path.resolve()] = anchor
+    out_dir = out.parent.resolve()
+    renderer = Renderer(ledger.objects, out_dir=out_dir, source_dir=project / "outputs", doc_anchors=doc_anchors)
+    state_renderer = renderer.for_source(project / "state")
+    project_renderer = renderer.for_source(project)
     progress = project / "state/progress.md"
     title = ""
+    title_renderer = state_renderer
     progress_text = progress.read_text(encoding="utf-8") if progress.is_file() else ""
     if progress_text:
         title = next((t for _, _, t in headings(progress_text)), "")
         title = re.sub(r"^Прогресс:\s*", "", title)
     if not title:
         title = next((t for _, t, _, name in docs if name.startswith("01")), project.name)
+        title_renderer = renderer
+    step = current_step(progress_text)
+    gate = open_checkpoint(progress_text, step)
+    c1_summary = c1_brief_summary(gate, docs, renderer)
+    style = CSS + (C1_CSS if c1_summary else "")
     page = ['<!doctype html><html lang="ru"><head><meta charset="utf-8">',
             '<meta name="viewport" content="width=device-width, initial-scale=1">',
-            "<title>" + escape(title) + "</title><style>" + CSS + "</style></head><body><main>",
-            "<header><h1>" + renderer.inline(title) + "</h1>",
+            "<title>" + escape(title) + "</title><style>" + style + "</style></head><body><main>",
+            "<header><h1>" + title_renderer.inline(title) + "</h1>",
             GENERATED_AT_PREFIX + datetime.now().astimezone().isoformat(timespec="seconds") + "</p>"]
     page.append('</header><section id="current-state"><h2>Текущее состояние</h2>')
-    step = current_step(progress_text)
-    page.append('<p><strong>Текущий шаг:</strong> ' + renderer.inline(step) + '</p>')
+    page.append('<p><strong>Текущий шаг:</strong> ' + state_renderer.inline(step) + '</p>')
     approval, message, changed = approval_status(ledger)
     if approval != "unrecorded":
         page.append('<p><strong>Версия C3:</strong> ' + escape(message) + '</p>')
     if changed:
         page.append('<p><strong>Согласованные основания изменились:</strong> ' +
-                    renderer.plain(", ".join(changed)) + '</p>')
+                    project_renderer.plain(", ".join(changed)) + '</p>')
     action = next_action(progress_text)
-    if approval in ("stale", "invalid") and active_checkpoint(step) not in ("C1", "C2"):
+    if approval in ("stale", "invalid") and gate not in ("C1", "C2"):
         action = "Проверить актуальный пакет и получить явное утверждение руководителя на повторном C3."
+    checkpoint = checkpoint_block(progress_text, step, docs, state_renderer)
+    if c1_summary:
+        page.extend(c1_summary)
+        page.extend(checkpoint)
     if action:
         page.append('<p class="next-action"><strong>Ближайшее действие</strong><br>' +
-                    renderer.inline(action, links=False) + '</p>')
-    page.extend(checkpoint_block(progress_text, step, docs, renderer))
+                    state_renderer.inline(action, links=False) + '</p>')
+    if not c1_summary:
+        page.extend(checkpoint)
     decisions = selected_decisions(ledger.objects)
     if not decisions:
         page.append('<p>Выбранный вариант неизвестен: действующее решение с chosen не записано.</p>')
+    for decision in pending_decisions(ledger.objects):
+        state = decision.get("state")
+        header = ("Решение требует пересмотра (окончательно не утверждено)"
+                  if state == "needs_review" else "Открытое решение (ожидает выбора человека)")
+        page.append('<div class="decision-options">')
+        page.append(f'<p><strong>{header}:</strong> {project_renderer.plain(decision["id"])}</p>')
+        if decision.get("question"):
+            page.append('<p><strong>Вопрос решения:</strong> ' +
+                        project_renderer.inline(text(decision["question"]), expand_ids=True) + '</p>')
+        if state == "needs_review" and decision.get("chosen"):
+            prev_id = text(decision["chosen"])
+            prev_title = text(ledger.objects.get(prev_id, {}).get("title"))
+            prev_html = (f"{escape(prev_title)} ({project_renderer.plain(prev_id)})"
+                         if prev_title else project_renderer.plain(prev_id))
+            page.append('<p><strong>Прежний выбор (требует пересмотра, не подтверждён):</strong> ' + prev_html + '</p>')
+        if decision.get("recommended"):
+            rec_id = text(decision["recommended"])
+            rec_title = text(ledger.objects.get(rec_id, {}).get("title"))
+            rec_html = (f"{escape(rec_title)} ({project_renderer.plain(rec_id)})"
+                        if rec_title else project_renderer.plain(rec_id))
+            page.append('<p><strong>Рекомендация агента (не выбор человека):</strong> ' + rec_html + '</p>')
+        if decision.get("rationale"):
+            page.append('<p><strong>Основание (из проекта решения):</strong> ' +
+                        project_renderer.inline(short_rationale(text(decision["rationale"])), expand_ids=True) + '</p>')
+        items = decision_option_items(decision, ledger.objects, project_renderer, decided=False)
+        if items:
+            page.append('<p><strong>Варианты на выбор:</strong></p><ul>' + "".join(items) + '</ul>')
+        page.append('</div>')
     for decision in decisions:
         chosen = text(decision["chosen"])
         alternative = ledger.objects.get(chosen, {})
-        label = chosen + (" — " + text(alternative["title"]) if alternative.get("title") else "")
-        page.append('<p><strong>Выбранный вариант:</strong> ' + renderer.inline(label) +
-                    ' (' + renderer.plain(decision["id"]) + ')</p>')
+        alt_title = text(alternative.get("title")).strip()
+        chosen_html = f"{escape(alt_title)} ({project_renderer.plain(chosen)})" if alt_title else project_renderer.plain(chosen)
+        who = " · ".join(p for p in (text(decision.get("decided_by")), text(decision.get("decided_at"))) if p)
+        meta_html = f" — решение {project_renderer.plain(decision['id'])}" + (f" ({escape(who)})" if who else "")
+        page.append(f'<p><strong>Выбранный вариант:</strong> {chosen_html}{meta_html}</p>')
+        if decision.get("question"):
+            page.append('<p><strong>Вопрос решения:</strong> ' +
+                        project_renderer.inline(text(decision["question"]), expand_ids=True) + '</p>')
         rationale = short_rationale(text(decision.get("rationale")))
         page.append('<p><strong>Основание (из решения):</strong> ' +
-                    renderer.inline(rationale or "Неизвестно: основание не записано.") + '</p>')
+                    project_renderer.inline(rationale or "Неизвестно: основание не записано.", expand_ids=True) + '</p>')
+        items = decision_option_items(decision, ledger.objects, project_renderer, decided=True)
+        if items:
+            page.append('<div class="decision-options"><p><strong>Рассмотренные варианты:</strong></p><ul>' +
+                        "".join(items) + '</ul></div>')
     page.extend(c3_executive_summary(progress_text, step, approval, docs, renderer))
     present_docs = {name[:2]: anchor for anchor, _, _, name in docs}
     links = [f'<li><a href="#{present_docs[number]}">{DOC_TITLES[number]}</a></li>'
@@ -650,8 +918,8 @@ def render(project: Path, out: Path) -> str:
     cost = project / "state/cost_report.md"
     cost_text = latest_cost(cost.read_text(encoding="utf-8")) if cost.is_file() else ""
     page.append('<details id="cost-summary"><summary><h3>Стоимость прогона</h3></summary>' +
-                renderer.markdown(cost_summary(cost_text) if cost_text else
-                                  "Денежный итог неизвестен: state/cost_report.md отсутствует или пуст.") + '</details>')
+                state_renderer.markdown(cost_summary(cost_text) if cost_text else
+                                        "Денежный итог неизвестен: state/cost_report.md отсутствует или пуст.") + '</details>')
     page.append('</section><section id="main-points"><details><summary><h2>Главное по документам</h2></summary>')
     for anchor, label, value, name in docs:
         for block in main_blocks(value):
@@ -665,18 +933,20 @@ def render(project: Path, out: Path) -> str:
         page.append(f'<section id="{anchor}"><p class="document-label">{escape(name)}</p>' + renderer.markdown(value) + "</section>")
     if cost_text:
         page.append('<section id="cost-details"><h2>Расчёт стоимости выбранного периода</h2>' +
-                    renderer.markdown(cost_text) + '</section>')
+                    state_renderer.markdown(cost_text) + '</section>')
     page.append('<section id="registry"><h2>Приложение: Реестр</h2>')
     for oid, obj in sorted(ledger.objects.items()):
         cls = "registry-row obsolete" if obj.get("status") in ("superseded", "retracted") else "registry-row"
-        page.append(f'<article class="{cls}" id="ref-{escape(oid, quote=True)}"><h3>{escape(oid)}</h3>')
-        page.append("<p>" + renderer.plain(tooltip(obj)) + "</p>")
+        label = object_label(obj)
+        heading_text = f"{label} ({oid})" if label else oid
+        page.append(f'<article class="{cls}" id="ref-{escape(oid, quote=True)}"><h3>{escape(heading_text)}</h3>')
+        page.append("<p>" + project_renderer.plain(tooltip(obj)) + "</p>")
         if oid.startswith("SRC-"):
             url = text(obj.get("url") or obj.get("path"))
             if url:
                 # Локальные материалы считаются относительно проекта, а не outputs/.
                 if not urlsplit(url).scheme and obj.get("path") == url:
-                    url = Path(os.path.relpath(project / url, out.parent)).as_posix()
+                    url = Path(os.path.relpath((project / url).resolve(), out_dir)).as_posix()
                 page.append("<p>Источник: " + (f'<a href="{escape(url, quote=True)}">{escape(url)}</a>' if safe_url(url) else escape(url)) + "</p>")
             page.append("<p>" + escape(" · ".join(f"{k}: {text(obj.get(k))}" for k in ("kind", "access", "retrieved"))) + "</p>")
         page.append("</article>")

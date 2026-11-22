@@ -1,0 +1,150 @@
+{
+  "recommended": [],
+  "options": [
+    {
+      "id": "TODAY-01",
+      "kind": "invest",
+      "priority": 0,
+      "action": "Предложить адресную проверку исправления подтверждённого барьера; стоп до массового внедрения.",
+      "requires": {
+        "fix_viable": true
+      },
+      "objection": "Нужны собственные основания и подтверждение владельца",
+      "status": "conditional",
+      "failed": [],
+      "unknown": [
+        "fix_viable"
+      ]
+    },
+    {
+      "id": "TODAY-02",
+      "kind": "change",
+      "priority": 1,
+      "action": "Предложить ограниченную проверку адресного сообщения.",
+      "requires": {
+        "message_viable": true
+      },
+      "objection": "Нужны собственные основания и подтверждение владельца",
+      "status": "conditional",
+      "failed": [],
+      "unknown": [
+        "message_viable"
+      ]
+    },
+    {
+      "id": "TODAY-03",
+      "kind": "status_quo",
+      "priority": 2,
+      "action": "Предложить сохранить текущий курс до назначенного пересмотра.",
+      "requires": {
+        "current_sufficient": true
+      },
+      "objection": "Нужны собственные основания и подтверждение владельца",
+      "status": "conditional",
+      "failed": [],
+      "unknown": [
+        "current_sufficient"
+      ]
+    },
+    {
+      "id": "TODAY-04",
+      "kind": "kill",
+      "priority": 3,
+      "action": "Предложить закрытие только после проверки последствий владельцем.",
+      "requires": {
+        "exit_justified": true
+      },
+      "objection": "Нужны собственные основания и подтверждение владельца",
+      "status": "conditional",
+      "failed": [],
+      "unknown": [
+        "exit_justified"
+      ]
+    }
+  ],
+  "conditions": {
+    "fix_viable": {
+      "value": null,
+      "conflict": false,
+      "refs": []
+    },
+    "message_viable": {
+      "value": null,
+      "conflict": false,
+      "refs": []
+    },
+    "current_sufficient": {
+      "value": null,
+      "conflict": false,
+      "refs": []
+    },
+    "exit_justified": {
+      "value": null,
+      "conflict": false,
+      "refs": []
+    }
+  },
+  "evidence_effects": [],
+  "next_questions": [
+    {
+      "condition": "fix_viable",
+      "question": "Подтверждены ли собственными наблюдениями конкретный продуктовый барьер, адресное исправление и допустимый ресурс?",
+      "unblocks": [
+        "TODAY-01"
+      ],
+      "if_answer": {
+        "false": [],
+        "true": [
+          "TODAY-01"
+        ]
+      },
+      "changes_today": true,
+      "conflict": false
+    },
+    {
+      "condition": "message_viable",
+      "question": "Подтверждены ли собственными наблюдениями ошибка ожиданий, адресное сообщение и ресурс проверки?",
+      "unblocks": [
+        "TODAY-02"
+      ],
+      "if_answer": {
+        "false": [],
+        "true": [
+          "TODAY-02"
+        ]
+      },
+      "changes_today": true,
+      "conflict": false
+    },
+    {
+      "condition": "current_sufficient",
+      "question": "Подтверждено ли, что текущий продукт выполняет задачу в целевом сценарии и изменение сейчас не оправдано?",
+      "unblocks": [
+        "TODAY-03"
+      ],
+      "if_answer": {
+        "false": [],
+        "true": [
+          "TODAY-03"
+        ]
+      },
+      "changes_today": true,
+      "conflict": false
+    },
+    {
+      "condition": "exit_justified",
+      "question": "Подтверждены ли отсутствие достижимой пользы и приемлемость последствий закрытия владельцем?",
+      "unblocks": [
+        "TODAY-04"
+      ],
+      "if_answer": {
+        "false": [],
+        "true": [
+          "TODAY-04"
+        ]
+      },
+      "changes_today": true,
+      "conflict": false
+    }
+  ]
+}

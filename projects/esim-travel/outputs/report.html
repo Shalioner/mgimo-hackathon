@@ -10,6 +10,7 @@ section,nav { background:var(--paper); padding:28px; margin:24px 0; border:1px s
 .meta,.document-label { color:var(--muted); font-size:.9rem; } .summary-card { border-top:1px solid var(--line); padding:12px 0; } .summary-card:last-child { padding-bottom:0; }
 .current-links { display:flex; flex-wrap:wrap; column-gap:20px; row-gap:6px; padding:0; list-style:none; } .next-action { border-inline-start:3px solid var(--accent); padding-inline-start:12px; }
 summary { cursor:pointer; } summary:focus-visible { outline:3px solid var(--accent); outline-offset:3px; } summary h2,summary h3 { display:inline; }
+#checkpoint-approval { border-left:4px solid var(--accent); padding:4px 0 4px 16px; margin:14px 0; } .decision-options ul { margin:6px 0 12px; padding-left:22px; }
 .ref { font-size:.9em; white-space:nowrap; } .missing { color:#c34f37; text-decoration-style:wavy; } .obsolete,.obsolete .ref { text-decoration:line-through; }
 .table-scroll { max-width:100%; overflow-x:auto; margin:18px 0; } table { border-collapse:collapse; width:100%; font-size:.9rem; } th,td { padding:10px 12px; border:1px solid var(--line); text-align:left; vertical-align:top; min-width:100px; } th { background:var(--bg); }
 pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(--line); } code { font-size:.9em; } p { white-space:pre-line; } .registry-row { padding:18px 0; border-top:1px solid var(--line); } .registry-row p { margin:6px 0; } :target { outline:2px solid var(--accent); outline-offset:4px; }
@@ -17,7 +18,7 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 @media print { :root { --bg:white; --paper:white; --ink:black; --muted:#333; --line:#aaa; } body { font-size:10pt; } main { max-width:none; padding:0; } section,nav { border:0; padding:0; border-radius:0; } #current-state { break-after:page; } a { color:black !important; } .table-scroll,pre { overflow:visible; } table { page-break-inside:auto; table-layout:fixed; } tr { page-break-inside:avoid; } th,td { min-width:0; overflow-wrap:anywhere; } pre { white-space:pre-wrap; } h1,h2,h3,h4 { page-break-after:avoid; } }
 </style></head><body><main>
 <header><h1>Запуск eSIM для путешественников: стоит ли и кому продавать</h1>
-<p class="meta">Сформировано: 2026-11-18T21:19:30+03:00</p>
+<p class="meta">Сформировано: 2026-11-21T22:21:23+03:00</p>
 </header><section id="current-state"><h2>Текущее состояние</h2>
 <p><strong>Текущий шаг:</strong> 8 — сопровождение; повторное C3 открыто, изменённый пакет ожидает согласования</p>
 <p class="next-action"><strong>Ближайшее действие</strong><br>Продолжаем выбранный на C2 вариант <a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Свой travel eSIM МегаФона на white-label/CaaS-платформе">ALT-001</a> [<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Запускать ли МегаФону travel eSIM для россиян за рубежом, и если да — в какой модели? · decided">DEC-001</a>]. Следующее действие по открытому <a class="ref" data-id="CHG-001" href="#ref-CHG-001" title="Повторная сверка рекламной выдержки сузила ценовой ориентир до общего диапазона для Турции и ОАЭ (CLM-016).">CHG-001</a> — сверить датированные полные цены eSIM и дневного роуминга по направлениям пилота при сопоставимых объёме, сроке и сценарии пользования. Если конечных цен или подтверждения оплаты нет, перечислить недостающие проверки.</p>
@@ -26,8 +27,10 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 <p><strong>Ожидаемый ответ:</strong> Уточнить приоритет stop/go при конфликте условий, окно и минимальный полезный эффект удержания, роль повторных покупок (предложения в 07).<br>Согласовать проверки свойств и новые коммуникационные сообщения после получения доказательств (06); прежние обещания отозваны, новых утверждённых нет.</p>
 <p><strong>Материалы C3:</strong> <a href="#doc-06">Коммуникационная стратегия</a> · <a href="#doc-07">План проверки</a></p>
 </div>
-<p><strong>Выбранный вариант:</strong> <a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Свой travel eSIM МегаФона на white-label/CaaS-платформе">ALT-001</a> — Свой travel eSIM МегаФона на white-label/CaaS-платформе (<a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Запускать ли МегаФону travel eSIM для россиян за рубежом, и если да — в какой модели? · decided">DEC-001</a>)</p>
+<p><strong>Выбранный вариант:</strong> Свой travel eSIM МегаФона на white-label/CaaS-платформе (<a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Свой travel eSIM МегаФона на white-label/CaaS-платформе">ALT-001</a>) — решение <a class="ref" data-id="DEC-001" href="#ref-DEC-001" title="Запускать ли МегаФону travel eSIM для россиян за рубежом, и если да — в какой модели? · decided">DEC-001</a> (руководитель продукта · 2026-11-10)</p>
+<p><strong>Вопрос решения:</strong> Запускать ли МегаФону travel eSIM для россиян за рубежом, и если да — в какой модели?</p>
 <p><strong>Основание (из решения):</strong> Решение руководителя: запуск с пилотом (Турция/СНГ/ЮВА). Вариант прямо работает на цель удержания абонентов и строит собственную компетенцию; пилот ограничивает риск при неподтверждённом эффекте удержания (пробел Q4). …</p>
+<div class="decision-options"><p><strong>Рассмотренные варианты:</strong></p><ul><li><strong>Свой travel eSIM МегаФона на white-label/CaaS-платформе</strong> [инвестиция] — выбран (руководитель продукта) (<a class="ref" data-id="ALT-001" href="#ref-ALT-001" title="Свой travel eSIM МегаФона на white-label/CaaS-платформе">ALT-001</a>)</li><li><strong>Партнёрство/дистрибуция агрегатора в приложении МегаФона</strong> [изменение] — не выбран — Усиливает агрегаторов стратегически; клиентские отношения и данные уходят партнёру, компетенция не появляется (<a class="ref" data-id="ALT-002" href="#ref-ALT-002" title="Партнёрство/дистрибуция агрегатора в приложении МегаФона">ALT-002</a>)</li><li><strong>Не запускать — оставить как есть (текущий роуминг + промо-меры)</strong> [статус-кво] — не выбран — Утечка продолжается при рынке +85%; промо сжигает маржу и не устраняет причину [<a class="ref" data-id="CLM-001" href="#ref-CLM-001" title="fact · high · Глобальная выручка от travel eSIM-пакетов достигнет $1,8 млрд к концу 2025 года, рост на 85% с $989 млн в 2024-м (прогноз Juniper Research). · «revenue from travel embedded SIM (eSIM) packages will reach $1.8 billion by the end of 2025; growing 85% from $989 million in 2024» (SRC-001)">CLM-001</a> (Глобальная выручка от travel eSIM-пакетов достигнет $1,8 млрд к концу 2025 года, рост на …), <a class="ref" data-id="CLM-008" href="#ref-CLM-008" title="fact · medium · Рост проникновения eSIM сжимает роуминговую выручку российских операторов (оценка отраслевого СМИ). · «Рост проникновения смартфонов с eSIM оборачивается серьезной проблемой для операторов, выручка от роуминговых услуг и так в последние годы не очень-то радует глаз финансистов, а теперь и вовсе начинает сжиматься.» (SRC-004)">CLM-008</a> (Рост проникновения eSIM сжимает роуминговую выручку российских операторов (оценка …)] (<a class="ref" data-id="ALT-003" href="#ref-ALT-003" title="Не запускать — оставить как есть (текущий роуминг + промо-меры)">ALT-003</a>)</li><li><strong>Осознанный отказ от сегмента travel-интернета</strong> [закрытие / отказ] — не выбран — Противоречит выбранной цели удержания абонентов (<a class="ref" data-id="ALT-004" href="#ref-ALT-004" title="Осознанный отказ от сегмента travel-интернета">ALT-004</a>)</li></ul></div>
 <div id="c3-executive-summary"><h3>Сводка для решения на C3</h3>
 <article class="summary-card c3-answer" data-doc="05"><h4><a href="#doc-05">Что делать</a></h4><ul>
 <li>Вывод: строим собственный travel eSIM МегаФона на white-label/CaaS-платформе — дешёвый вход в растущий рынок и прямой ответ на утечку абонентов к агрегаторам; стартуем пилотом по трём направлениям (уверенность: средняя — эффект удержания не подтверждён, пилот обязателен).</li>
@@ -244,7 +247,7 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 <li value="4">Местная SIM по прилёте, публичный Wi-Fi, «ничего не делать».</li>
 </ol>
 <h2>Выбранное направление</h2>
-<p><strong>Продукт:</strong> выбранный вариант пилота travel eSIM под брендом МегаФона внутри приложения предусматривает пакеты данных по странам и оплату рублями. Условия покупки и активации предстоит подтвердить на платформе по <a class="ref" data-id="EXP-003" href="#ref-EXP-003" title="Среди ≥3 white-label/CaaS-платформ есть предложение со сроком запуска ≤6 месяцев и интеграционными затратами в рамках малого бюджета (порог задаёт руководитель; ориентир — не дороже бюджета пилота направления роуминга).">EXP-003</a>. Новые обещания ожидают повторного C3, см. <a href="06_comms_strategy.md">коммуникационную стратегию</a>. Цель по цене — уровень агрегаторов. Для проверки нужен датированный срез сопоставимых пакетов по странам, объёму, сроку и сборам [<a class="ref" data-id="CHG-001" href="#ref-CHG-001" title="Повторная сверка рекламной выдержки сузила ценовой ориентир до общего диапазона для Турции и ОАЭ (CLM-016).">CHG-001</a>]. Тарифы МТС и Билайна дают отдельные примеры цен операторов [<a class="ref" data-id="CLM-005" href="#ref-CLM-005" title="fact · high · Цены МТС travel eSIM: 1 ГБ в Турции — 100 ₽, пакет 20 ГБ — 1200 ₽. · «1 ГБ трафика в Турции стоит 100 рублей, а пакет из 20 ГБ — всего 1200 рублей» (SRC-002)">CLM-005</a>, <a class="ref" data-id="CLM-006" href="#ref-CLM-006" title="fact · medium · Билайн запустил Travel eSIM: 164 страны, пакеты от 3 дней до 1 месяца, до 30 ГБ; 30 ГБ в Европе — от 1050 ₽, в СНГ — от 1450 ₽. · «Она уже доступна в 164 странах, включая самые популярные направления, среди которых Турция, Таиланд, Вьетнам и страны СНГ.» (SRC-003) · «30 ГБ при поездке в Европу обойдутся в сумму от 1050 рублей, а в страны СНГ — уже от 1450 рублей.» (SRC-003) · «Минимальный срок работы eSIM — 3 дня, максимальный — 1 месяц.» (SRC-003)">CLM-006</a>].
+<p><strong>Продукт:</strong> выбранный вариант пилота travel eSIM под брендом МегаФона внутри приложения предусматривает пакеты данных по странам и оплату рублями. Условия покупки и активации предстоит подтвердить на платформе по <a class="ref" data-id="EXP-003" href="#ref-EXP-003" title="Среди ≥3 white-label/CaaS-платформ есть предложение со сроком запуска ≤6 месяцев и интеграционными затратами в рамках малого бюджета (порог задаёт руководитель; ориентир — не дороже бюджета пилота направления роуминга).">EXP-003</a>. Новые обещания ожидают повторного C3, см. <a href="#doc-06">коммуникационную стратегию</a>. Цель по цене — уровень агрегаторов. Для проверки нужен датированный срез сопоставимых пакетов по странам, объёму, сроку и сборам [<a class="ref" data-id="CHG-001" href="#ref-CHG-001" title="Повторная сверка рекламной выдержки сузила ценовой ориентир до общего диапазона для Турции и ОАЭ (CLM-016).">CHG-001</a>]. Тарифы МТС и Билайна дают отдельные примеры цен операторов [<a class="ref" data-id="CLM-005" href="#ref-CLM-005" title="fact · high · Цены МТС travel eSIM: 1 ГБ в Турции — 100 ₽, пакет 20 ГБ — 1200 ₽. · «1 ГБ трафика в Турции стоит 100 рублей, а пакет из 20 ГБ — всего 1200 рублей» (SRC-002)">CLM-005</a>, <a class="ref" data-id="CLM-006" href="#ref-CLM-006" title="fact · medium · Билайн запустил Travel eSIM: 164 страны, пакеты от 3 дней до 1 месяца, до 30 ГБ; 30 ГБ в Европе — от 1050 ₽, в СНГ — от 1450 ₽. · «Она уже доступна в 164 странах, включая самые популярные направления, среди которых Турция, Таиланд, Вьетнам и страны СНГ.» (SRC-003) · «30 ГБ при поездке в Европу обойдутся в сумму от 1050 рублей, а в страны СНГ — уже от 1450 рублей.» (SRC-003) · «Минимальный срок работы eSIM — 3 дня, максимальный — 1 месяц.» (SRC-003)">CLM-006</a>].
 <strong>Технология:</strong> white-label/CaaS-платформа — барьеры входа снижены, запуск на готовой платформе быстрый [<a class="ref" data-id="CLM-003" href="#ref-CLM-003" title="fact · high · Барьеры входа на рынок travel eSIM снижены: Connectivity-as-a-Service платформы упрощают инфраструктуру и позволяют быстро запускать travel eSIM. · «This competition has been driven by diminished entry barriers, and enabled by Connectivity-as-a-Service platforms which simplify infrastructure and service management; allowing businesses to quickly launch travel eSIM offerings» (SRC-001)">CLM-003</a>]; собственную SM-DP+-инфраструктуру не строим.
 <strong>Этапы (горизонт года):</strong></p>
 <ol start="1">
@@ -401,148 +404,148 @@ pre { overflow-x:auto; padding:16px; background:var(--bg); border:1px solid var(
 Цены: knowledge/prices.yaml (официальные страницы вендоров). Подписка — не цена API.</p>
 <p>_Сформировано 2026-11-10T20:39:02+03:00: python tools/cost.py --zcode --match esim --since 2026-11-10T17:30 --until 2026-11-10T19:00 --write projects/esim-travel_</p></section>
 <section id="registry"><h2>Приложение: Реестр</h2>
-<article class="registry-row" id="ref-ALT-001"><h3>ALT-001</h3>
+<article class="registry-row" id="ref-ALT-001"><h3>Свой travel eSIM МегаФона на white-label/CaaS-платформе (ALT-001)</h3>
 <p>Свой travel eSIM МегаФона на white-label/CaaS-платформе</p>
 </article>
-<article class="registry-row" id="ref-ALT-002"><h3>ALT-002</h3>
+<article class="registry-row" id="ref-ALT-002"><h3>Партнёрство/дистрибуция агрегатора в приложении МегаФона (ALT-002)</h3>
 <p>Партнёрство/дистрибуция агрегатора в приложении МегаФона</p>
 </article>
-<article class="registry-row" id="ref-ALT-003"><h3>ALT-003</h3>
+<article class="registry-row" id="ref-ALT-003"><h3>Не запускать — оставить как есть (текущий роуминг + промо-меры) (ALT-003)</h3>
 <p>Не запускать — оставить как есть (текущий роуминг + промо-меры)</p>
 </article>
-<article class="registry-row" id="ref-ALT-004"><h3>ALT-004</h3>
+<article class="registry-row" id="ref-ALT-004"><h3>Осознанный отказ от сегмента travel-интернета (ALT-004)</h3>
 <p>Осознанный отказ от сегмента travel-интернета</p>
 </article>
-<article class="registry-row" id="ref-CHG-001"><h3>CHG-001</h3>
+<article class="registry-row" id="ref-CHG-001"><h3>Повторная сверка рекламной выдержки сузила ценовой ориентир до общего диапазона для … (CHG-001)</h3>
 <p>Повторная сверка рекламной выдержки сузила ценовой ориентир до общего диапазона для Турции и ОАЭ (<a class="ref" data-id="CLM-016" href="#ref-CLM-016" title="fact · low · Нативная реклама Yesim на vc.ru приводит для Турции и ОАЭ один ориентировочный диапазон цен travel eSIM — от 7 до 15 долларов. · «Турция и ОАЭ — «от 7 до 15 $»» (SRC-006)">CLM-016</a>).</p>
 </article>
-<article class="registry-row" id="ref-CLM-001"><h3>CLM-001</h3>
+<article class="registry-row" id="ref-CLM-001"><h3>Глобальная выручка от travel eSIM-пакетов достигнет $1,8 млрд к концу 2025 года, рост на … (CLM-001)</h3>
 <p>fact · high · Глобальная выручка от travel eSIM-пакетов достигнет $1,8 млрд к концу 2025 года, рост на 85% с $989 млн в 2024-м (прогноз Juniper Research). · «revenue from travel embedded SIM (eSIM) packages will reach $1.8 billion by the end of 2025; growing 85% from $989 million in 2024» (<a class="ref" data-id="SRC-001" href="#ref-SRC-001" title="Juniper Research: travel eSIM +85% в 2025 (пресс-релиз) · website · sources/juniper_travel_esim_2025.md">SRC-001</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-002"><h3>CLM-002</h3>
+<article class="registry-row" id="ref-CLM-002"><h3>Juniper Research считает, что в 2026 запуск собственных travel eSIM станет для мобильных … (CLM-002)</h3>
 <p>fact · high · Juniper Research считает, что в 2026 запуск собственных travel eSIM станет для мобильных операторов критичным для удержания роуминговой выручки и доли рынка против сторонних провайдеров. · «launching their own travel eSIMs will become critical for mobile operators to retain roaming revenue and avoid losing market share to third-party providers» (<a class="ref" data-id="SRC-001" href="#ref-SRC-001" title="Juniper Research: travel eSIM +85% в 2025 (пресс-релиз) · website · sources/juniper_travel_esim_2025.md">SRC-001</a>) · «it will be pivotal in 2026 that operators launch their own travel eSIM services» (<a class="ref" data-id="SRC-001" href="#ref-SRC-001" title="Juniper Research: travel eSIM +85% в 2025 (пресс-релиз) · website · sources/juniper_travel_esim_2025.md">SRC-001</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-003"><h3>CLM-003</h3>
+<article class="registry-row" id="ref-CLM-003"><h3>Барьеры входа на рынок travel eSIM снижены: Connectivity-as-a-Service платформы упрощают … (CLM-003)</h3>
 <p>fact · high · Барьеры входа на рынок travel eSIM снижены: Connectivity-as-a-Service платформы упрощают инфраструктуру и позволяют быстро запускать travel eSIM. · «This competition has been driven by diminished entry barriers, and enabled by Connectivity-as-a-Service platforms which simplify infrastructure and service management; allowing businesses to quickly launch travel eSIM offerings» (<a class="ref" data-id="SRC-001" href="#ref-SRC-001" title="Juniper Research: travel eSIM +85% в 2025 (пресс-релиз) · website · sources/juniper_travel_esim_2025.md">SRC-001</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-004"><h3>CLM-004</h3>
+<article class="registry-row" id="ref-CLM-004"><h3>МТС в ноябре 2024 запустила продажу travel eSIM в сервисе «МТС Оплата»: пакеты от местных … (CLM-004)</h3>
 <p>fact · high · МТС в ноябре 2024 запустила продажу travel eSIM в сервисе «МТС Оплата»: пакеты от местных операторов 200+ стран, оплата картами РФ/СБП, сервисом могут пользоваться абоненты любого оператора. · «сервиса продаж виртуальных SIM-карт для путешественников с предоплаченным пакетом интернета от местных операторов более 200 стран и регионов мира» (<a class="ref" data-id="SRC-002" href="#ref-SRC-002" title="МТС запустила eSIM для зарубежных поездок (пресс-релиз) · website · sources/mts_travel_esim_2024-11-28.md">SRC-002</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-005"><h3>CLM-005</h3>
+<article class="registry-row" id="ref-CLM-005"><h3>Цены МТС travel eSIM: 1 ГБ в Турции — 100 ₽, пакет 20 ГБ — 1200 ₽. (CLM-005)</h3>
 <p>fact · high · Цены МТС travel eSIM: 1 ГБ в Турции — 100 ₽, пакет 20 ГБ — 1200 ₽. · «1 ГБ трафика в Турции стоит 100 рублей, а пакет из 20 ГБ — всего 1200 рублей» (<a class="ref" data-id="SRC-002" href="#ref-SRC-002" title="МТС запустила eSIM для зарубежных поездок (пресс-релиз) · website · sources/mts_travel_esim_2024-11-28.md">SRC-002</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-006"><h3>CLM-006</h3>
+<article class="registry-row" id="ref-CLM-006"><h3>Билайн запустил Travel eSIM: 164 страны, пакеты от 3 дней до 1 месяца, до 30 ГБ; 30 ГБ в … (CLM-006)</h3>
 <p>fact · medium · Билайн запустил Travel eSIM: 164 страны, пакеты от 3 дней до 1 месяца, до 30 ГБ; 30 ГБ в Европе — от 1050 ₽, в СНГ — от 1450 ₽. · «Она уже доступна в 164 странах, включая самые популярные направления, среди которых Турция, Таиланд, Вьетнам и страны СНГ.» (<a class="ref" data-id="SRC-003" href="#ref-SRC-003" title="Билайн Travel eSIM: 164 страны (Вокруг света) · website · sources/beeline_travel_esim_164.md">SRC-003</a>) · «30 ГБ при поездке в Европу обойдутся в сумму от 1050 рублей, а в страны СНГ — уже от 1450 рублей.» (<a class="ref" data-id="SRC-003" href="#ref-SRC-003" title="Билайн Travel eSIM: 164 страны (Вокруг света) · website · sources/beeline_travel_esim_164.md">SRC-003</a>) · «Минимальный срок работы eSIM — 3 дня, максимальный — 1 месяц.» (<a class="ref" data-id="SRC-003" href="#ref-SRC-003" title="Билайн Travel eSIM: 164 страны (Вокруг света) · website · sources/beeline_travel_esim_164.md">SRC-003</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-007"><h3>CLM-007</h3>
+<article class="registry-row" id="ref-CLM-007"><h3>В 2024 году туристы по всему миру активировали 70 млн туристических eSIM, чтобы не … (CLM-007)</h3>
 <p>fact · medium · В 2024 году туристы по всему миру активировали 70 млн туристических eSIM, чтобы не платить за роуминг. · «только в 2024 году туристы по всему миру активировали 70 миллионов карт, чтобы не платить за роуминг» (<a class="ref" data-id="SRC-004" href="#ref-SRC-004" title="Content-Review: сводка «Роуминг» (70 млн eSIM за 2024) · website · sources/content_review_roaming_2024.md">SRC-004</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-008"><h3>CLM-008</h3>
+<article class="registry-row" id="ref-CLM-008"><h3>Рост проникновения eSIM сжимает роуминговую выручку российских операторов (оценка … (CLM-008)</h3>
 <p>fact · medium · Рост проникновения eSIM сжимает роуминговую выручку российских операторов (оценка отраслевого СМИ). · «Рост проникновения смартфонов с eSIM оборачивается серьезной проблемой для операторов, выручка от роуминговых услуг и так в последние годы не очень-то радует глаз финансистов, а теперь и вовсе начинает сжиматься.» (<a class="ref" data-id="SRC-004" href="#ref-SRC-004" title="Content-Review: сводка «Роуминг» (70 млн eSIM за 2024) · website · sources/content_review_roaming_2024.md">SRC-004</a>)</p>
 </article>
-<article class="registry-row obsolete" id="ref-CLM-009"><h3>CLM-009</h3>
+<article class="registry-row obsolete" id="ref-CLM-009"><h3>Роуминг-предложения МегаФона по данным источника-конкурента: «Roam at home» 399 ₽/день с … (CLM-009)</h3>
 <p>fact · low · Роуминг-предложения МегаФона по данным источника-конкурента: «Roam at home» 399 ₽/день с лимитом 1 ГБ/день; отдельные пакеты 1 ГБ на 14 дней за 999 ₽, 3 ГБ на 14 дней за 1999 ₽. · ««Roam at home» – 399 ₽ в день, даёт доступ к вашему домашнему пакету (минуты, интернет) с ограничением 1 ГБ в день.» (<a class="ref" data-id="SRC-005" href="#ref-SRC-005" title="Roami: сравнение с МегаФоном (блог вендора) · website · sources/roami_megafon_comparison.md">SRC-005</a>) · «Отдельные роуминг-пакеты – 1 ГБ на 14 дней за 999 ₽; 3 ГБ на 14 дней за 1999 ₽.» (<a class="ref" data-id="SRC-005" href="#ref-SRC-005" title="Roami: сравнение с МегаФоном (блог вендора) · website · sources/roami_megafon_comparison.md">SRC-005</a>) · superseded · superseded_by: <a class="ref" data-id="CLM-015" href="#ref-CLM-015" title="fact · high · По официальному сайту МегаФона (на 2026-11-10): «Интернет L в роуминге на день» — 599 ₽ в день пользования (2 ГБ в популярных странах, 1 ГБ в остальных); комбинации с мессенджерами/минутами — 788/799/988 ₽ в день. · «Плата в дни пользования 599 ₽» (SRC-007) · «2 ГБ Интернет в популярных странах» (SRC-007) · «1 ГБ Интернет в остальных странах» (SRC-007) · «Включает плату за мессенджеры и интернет. 788 ₽» (SRC-007) · «Включает плату за оба пакета — интернета и минут. 799 ₽» (SRC-007) · «Включает плату за все 3 пакета — интернета, мессенджеров и минут. 988 ₽» (SRC-007)">CLM-015</a></p>
 </article>
-<article class="registry-row" id="ref-CLM-010"><h3>CLM-010</h3>
+<article class="registry-row" id="ref-CLM-010"><h3>Агрегатор Roami заявляет, что его продукт в России работает через партнёрство с МТС и … (CLM-010)</h3>
 <p>fact · low · Агрегатор Roami заявляет, что его продукт в России работает через партнёрство с МТС и МегаФон на их физических сетях. · «Россия eSIM от Roami работает в России через партнёрство с МТС и МегаФон, используя их физические сети.» (<a class="ref" data-id="SRC-005" href="#ref-SRC-005" title="Roami: сравнение с МегаФоном (блог вендора) · website · sources/roami_megafon_comparison.md">SRC-005</a>)</p>
 </article>
-<article class="registry-row obsolete" id="ref-CLM-011"><h3>CLM-011</h3>
+<article class="registry-row obsolete" id="ref-CLM-011"><h3>По оценке статьи (нативная реклама Yesim): роуминг крупных операторов в 5–15 раз дороже … (CLM-011)</h3>
 <p>fact · low · По оценке статьи (нативная реклама Yesim): роуминг крупных операторов в 5–15 раз дороже туристической eSIM за тот же объём трафика; типичные цены travel eSIM 2026: Европа 5–10 ГБ/7–15 дней $9–18, Турция $7–15, ЮВА $6–14. · «Роуминг у крупных операторов в 5–15 раз дороже туристической eSIM за тот же объём трафика» (<a class="ref" data-id="SRC-006" href="#ref-SRC-006" title="vc.ru: eSIM для путешествий (нативная реклама) · website · sources/vc_ru_esim_prices.md">SRC-006</a>) · superseded · superseded_by: <a class="ref" data-id="CLM-016" href="#ref-CLM-016" title="fact · low · Нативная реклама Yesim на vc.ru приводит для Турции и ОАЭ один ориентировочный диапазон цен travel eSIM — от 7 до 15 долларов. · «Турция и ОАЭ — «от 7 до 15 $»» (SRC-006)">CLM-016</a></p>
 </article>
-<article class="registry-row" id="ref-CLM-012"><h3>CLM-012</h3>
+<article class="registry-row" id="ref-CLM-012"><h3>Мотивы выбора путешественниками travel eSIM (по статье): заранее известная цена, … (CLM-012)</h3>
 <p>fact · low · Мотивы выбора путешественниками travel eSIM (по статье): заранее известная цена, активация за минуты без визита в салон, покупка нескольких тарифов без замены физической карты; претензия к роумингу — непрозрачные списания блоками. · «Списания часто идут не по факту использованных гигабайт, а по округлённым блокам» (<a class="ref" data-id="SRC-006" href="#ref-SRC-006" title="vc.ru: eSIM для путешествий (нативная реклама) · website · sources/vc_ru_esim_prices.md">SRC-006</a>) · «Три аргумента за eSIM по статье: известная заранее цена, активация за минуты без визита в салон, покупка нескольких тарифов без замены физической карты.» (<a class="ref" data-id="SRC-006" href="#ref-SRC-006" title="vc.ru: eSIM для путешествий (нативная реклама) · website · sources/vc_ru_esim_prices.md">SRC-006</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-013"><h3>CLM-013</h3>
+<article class="registry-row" id="ref-CLM-013"><h3>Выездной турпоток россиян растёт: в новогодние праздники за рубеж выехало на 11% больше, … (CLM-013)</h3>
 <p>fact · medium · Выездной турпоток россиян растёт: в новогодние праздники за рубеж выехало на 11% больше, чем годом ранее; поездки в Китай выросли в 10 раз, в Европу — на 8,5% (данные аналитиков МегаФона по обезличенным данным абонентов). · «В минувшие новогодние праздники за рубеж выехало на 11% больше россиян в сравнении с прошлогодними зимними каникулами. Наряду с ростом поездок в Китай (в 10 раз) и другие азиатские государства, увеличилось количество посетивших европейские страны – на 8,5%. Такие выводы сделали аналитики МегаФона на основе обезличенных данных абонентов в роуминге.» (<a class="ref" data-id="SRC-004" href="#ref-SRC-004" title="Content-Review: сводка «Роуминг» (70 млн eSIM за 2024) · website · sources/content_review_roaming_2024.md">SRC-004</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-014"><h3>CLM-014</h3>
+<article class="registry-row" id="ref-CLM-014"><h3>Российские операторы (МТС, Билайн) уже отвечают на eSIM-угрозу собственными travel … (CLM-014)</h3>
 <p>interpretation · medium · Российские операторы (МТС, Билайн) уже отвечают на eSIM-угрозу собственными travel eSIM-продуктами, доступными абонентам всех операторов; МегаФон в выборке источников такого продукта не показал.</p>
 </article>
-<article class="registry-row" id="ref-CLM-015"><h3>CLM-015</h3>
+<article class="registry-row" id="ref-CLM-015"><h3>По официальному сайту МегаФона (на 2026-11-10): «Интернет L в роуминге на день» — 599 ₽ в … (CLM-015)</h3>
 <p>fact · high · По официальному сайту МегаФона (на 2026-11-10): «Интернет L в роуминге на день» — 599 ₽ в день пользования (2 ГБ в популярных странах, 1 ГБ в остальных); комбинации с мессенджерами/минутами — 788/799/988 ₽ в день. · «Плата в дни пользования 599 ₽» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) · website · https://moscow.megafon.ru/roaming/world/internet_l_na_den.html">SRC-007</a>) · «2 ГБ Интернет в популярных странах» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) · website · https://moscow.megafon.ru/roaming/world/internet_l_na_den.html">SRC-007</a>) · «1 ГБ Интернет в остальных странах» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) · website · https://moscow.megafon.ru/roaming/world/internet_l_na_den.html">SRC-007</a>) · «Включает плату за мессенджеры и интернет. 788 ₽» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) · website · https://moscow.megafon.ru/roaming/world/internet_l_na_den.html">SRC-007</a>) · «Включает плату за оба пакета — интернета и минут. 799 ₽» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) · website · https://moscow.megafon.ru/roaming/world/internet_l_na_den.html">SRC-007</a>) · «Включает плату за все 3 пакета — интернета, мессенджеров и минут. 988 ₽» (<a class="ref" data-id="SRC-007" href="#ref-SRC-007" title="МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) · website · https://moscow.megafon.ru/roaming/world/internet_l_na_den.html">SRC-007</a>)</p>
 </article>
-<article class="registry-row" id="ref-CLM-016"><h3>CLM-016</h3>
+<article class="registry-row" id="ref-CLM-016"><h3>Нативная реклама Yesim на vc.ru приводит для Турции и ОАЭ один ориентировочный диапазон … (CLM-016)</h3>
 <p>fact · low · Нативная реклама Yesim на vc.ru приводит для Турции и ОАЭ один ориентировочный диапазон цен travel eSIM — от 7 до 15 долларов. · «Турция и ОАЭ — «от 7 до 15 $»» (<a class="ref" data-id="SRC-006" href="#ref-SRC-006" title="vc.ru: eSIM для путешествий (нативная реклама) · website · sources/vc_ru_esim_prices.md">SRC-006</a>)</p>
 </article>
-<article class="registry-row" id="ref-DEC-001"><h3>DEC-001</h3>
+<article class="registry-row" id="ref-DEC-001"><h3>Запускать ли МегаФону travel eSIM для россиян за рубежом, и если да — в какой модели? (DEC-001)</h3>
 <p>Запускать ли МегаФону travel eSIM для россиян за рубежом, и если да — в какой модели? · decided</p>
 </article>
-<article class="registry-row" id="ref-EXP-001"><h3>EXP-001</h3>
+<article class="registry-row" id="ref-EXP-001"><h3>Доля выезжающих абонентов, пользующихся travel eSIM агрегаторов, ≥10% (если ≥15% — утечка … (EXP-001)</h3>
 <p>Доля выезжающих абонентов, пользующихся travel eSIM агрегаторов, ≥10% (если ≥15% — утечка срочная).</p>
 </article>
-<article class="registry-row" id="ref-EXP-002"><h3>EXP-002</h3>
+<article class="registry-row" id="ref-EXP-002"><h3>Конверсия выезжающих из пилотной группы в покупку travel eSIM МегаФона ≥3%, у покупателей … (EXP-002)</h3>
 <p>Конверсия выезжающих из пилотной группы в покупку travel eSIM МегаФона ≥3%, у покупателей повторная покупка в следующей поездке ≥50%, отток после поездки не выше контрольной группы.</p>
 </article>
-<article class="registry-row" id="ref-EXP-003"><h3>EXP-003</h3>
+<article class="registry-row" id="ref-EXP-003"><h3>Среди ≥3 white-label/CaaS-платформ есть предложение со сроком запуска ≤6 месяцев и … (EXP-003)</h3>
 <p>Среди ≥3 white-label/CaaS-платформ есть предложение со сроком запуска ≤6 месяцев и интеграционными затратами в рамках малого бюджета (порог задаёт руководитель; ориентир — не дороже бюджета пилота направления роуминга).</p>
 </article>
-<article class="registry-row" id="ref-HYP-001"><h3>HYP-001</h3>
+<article class="registry-row" id="ref-HYP-001"><h3>Существенная доля выезжающих за рубеж абонентов МегаФона уже пользуется travel eSIM … (HYP-001)</h3>
 <p>Существенная доля выезжающих за рубеж абонентов МегаФона уже пользуется travel eSIM агрегаторов вместо роуминга оператора, и эта доля растёт.</p>
 </article>
-<article class="registry-row" id="ref-HYP-002"><h3>HYP-002</h3>
+<article class="registry-row" id="ref-HYP-002"><h3>Travel eSIM от МегаФона по ценам уровня агрегаторов, с покупкой в приложении и оплатой в … (HYP-002)</h3>
 <p>Travel eSIM от МегаФона по ценам уровня агрегаторов, с покупкой в приложении и оплатой в рублях, удержит большинство абонентов, которые иначе ушли бы к агрегаторам (интеграция с номером и приложением — преимущество против Airalo и подобных).</p>
 </article>
-<article class="registry-row" id="ref-HYP-003"><h3>HYP-003</h3>
+<article class="registry-row" id="ref-HYP-003"><h3>При выборе интернета в поездке для российских туристов цена важнее удобства активации; … (HYP-003)</h3>
 <p>При выборе интернета в поездке для российских туристов цена важнее удобства активации; оплата российскими картами/рублями — значимый, но не главный фактор.</p>
 </article>
-<article class="registry-row" id="ref-HYP-004"><h3>HYP-004</h3>
+<article class="registry-row" id="ref-HYP-004"><h3>МегаФон может запустить travel eSIM на white-label/CaaS-платформе за ~6 месяцев при … (HYP-004)</h3>
 <p>МегаФон может запустить travel eSIM на white-label/CaaS-платформе за ~6 месяцев при небольшом бюджете.</p>
 </article>
-<article class="registry-row" id="ref-HYP-005"><h3>HYP-005</h3>
+<article class="registry-row" id="ref-HYP-005"><h3>Экономический эффект удержанных абонентов от запуска travel eSIM превышает затраты на … (HYP-005)</h3>
 <p>Экономический эффект удержанных абонентов от запуска travel eSIM превышает затраты на запуск уже на горизонте года.</p>
 </article>
-<article class="registry-row" id="ref-HYP-006"><h3>HYP-006</h3>
+<article class="registry-row" id="ref-HYP-006"><h3>У оператора может быть доступный для пилота канал пуш/СМС по сигналу предстоящей поездки; … (HYP-006)</h3>
 <p>У оператора может быть доступный для пилота канал пуш/СМС по сигналу предстоящей поездки; наличие такого сигнала, доступность канала и затраты не проверены.</p>
 </article>
-<article class="registry-row obsolete" id="ref-PAIN-001"><h3>PAIN-001</h3>
+<article class="registry-row obsolete" id="ref-PAIN-001"><h3>Интернет в роуминге дорогой и с непрозрачными списаниями; за тот же трафик агрегаторы … (PAIN-001)</h3>
 <p>Интернет в роуминге дорогой и с непрозрачными списаниями; за тот же трафик агрегаторы берут в несколько раз меньше. · superseded · superseded_by: <a class="ref" data-id="PAIN-003" href="#ref-PAIN-003" title="В поездке абоненты могут сталкиваться с заметными расходами на роуминг и непонятными списаниями за трафик.">PAIN-003</a></p>
 </article>
-<article class="registry-row" id="ref-PAIN-002"><h3>PAIN-002</h3>
+<article class="registry-row" id="ref-PAIN-002"><h3>Настройка интернета за границей запутана: два SIM-слота, приоритеты данных, риск … (PAIN-002)</h3>
 <p>Настройка интернета за границей запутана: два SIM-слота, приоритеты данных, риск неожиданного счёта за роуминг.</p>
 </article>
-<article class="registry-row" id="ref-PAIN-003"><h3>PAIN-003</h3>
+<article class="registry-row" id="ref-PAIN-003"><h3>В поездке абоненты могут сталкиваться с заметными расходами на роуминг и непонятными … (PAIN-003)</h3>
 <p>В поездке абоненты могут сталкиваться с заметными расходами на роуминг и непонятными списаниями за трафик.</p>
 </article>
-<article class="registry-row obsolete" id="ref-PRM-001"><h3>PRM-001</h3>
+<article class="registry-row obsolete" id="ref-PRM-001"><h3>Интернет за границей по цене агрегаторов — прямо в приложении МегаФона. (PRM-001)</h3>
 <p>Интернет за границей по цене агрегаторов — прямо в приложении МегаФона. · retracted</p>
 </article>
-<article class="registry-row obsolete" id="ref-PRM-002"><h3>PRM-002</h3>
+<article class="registry-row obsolete" id="ref-PRM-002"><h3>Купите за минуты до вылета — само включится по прилёте. (PRM-002)</h3>
 <p>Купите за минуты до вылета — само включится по прилёте. · retracted</p>
 </article>
-<article class="registry-row obsolete" id="ref-PRM-003"><h3>PRM-003</h3>
+<article class="registry-row obsolete" id="ref-PRM-003"><h3>Цена известна заранее — пакет за фиксированную цену, без дневных списаний. (PRM-003)</h3>
 <p>Цена известна заранее — пакет за фиксированную цену, без дневных списаний. · retracted</p>
 </article>
-<article class="registry-row" id="ref-SRC-001"><h3>SRC-001</h3>
+<article class="registry-row" id="ref-SRC-001"><h3>Juniper Research: travel eSIM +85% в 2025 (пресс-релиз) (SRC-001)</h3>
 <p>Juniper Research: travel eSIM +85% в 2025 (пресс-релиз) · website · sources/juniper_travel_esim_2025.md</p>
 <p>Источник: <a href="../sources/juniper_travel_esim_2025.md">../sources/juniper_travel_esim_2025.md</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-10</p>
 </article>
-<article class="registry-row" id="ref-SRC-002"><h3>SRC-002</h3>
+<article class="registry-row" id="ref-SRC-002"><h3>МТС запустила eSIM для зарубежных поездок (пресс-релиз) (SRC-002)</h3>
 <p>МТС запустила eSIM для зарубежных поездок (пресс-релиз) · website · sources/mts_travel_esim_2024-11-28.md</p>
 <p>Источник: <a href="../sources/mts_travel_esim_2024-11-28.md">../sources/mts_travel_esim_2024-11-28.md</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-10</p>
 </article>
-<article class="registry-row" id="ref-SRC-003"><h3>SRC-003</h3>
+<article class="registry-row" id="ref-SRC-003"><h3>Билайн Travel eSIM: 164 страны (Вокруг света) (SRC-003)</h3>
 <p>Билайн Travel eSIM: 164 страны (Вокруг света) · website · sources/beeline_travel_esim_164.md</p>
 <p>Источник: <a href="../sources/beeline_travel_esim_164.md">../sources/beeline_travel_esim_164.md</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-10</p>
 </article>
-<article class="registry-row" id="ref-SRC-004"><h3>SRC-004</h3>
+<article class="registry-row" id="ref-SRC-004"><h3>Content-Review: сводка «Роуминг» (70 млн eSIM за 2024) (SRC-004)</h3>
 <p>Content-Review: сводка «Роуминг» (70 млн eSIM за 2024) · website · sources/content_review_roaming_2024.md</p>
 <p>Источник: <a href="../sources/content_review_roaming_2024.md">../sources/content_review_roaming_2024.md</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-10</p>
 </article>
-<article class="registry-row" id="ref-SRC-005"><h3>SRC-005</h3>
+<article class="registry-row" id="ref-SRC-005"><h3>Roami: сравнение с МегаФоном (блог вендора) (SRC-005)</h3>
 <p>Roami: сравнение с МегаФоном (блог вендора) · website · sources/roami_megafon_comparison.md</p>
 <p>Источник: <a href="../sources/roami_megafon_comparison.md">../sources/roami_megafon_comparison.md</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-10</p>
 </article>
-<article class="registry-row" id="ref-SRC-006"><h3>SRC-006</h3>
+<article class="registry-row" id="ref-SRC-006"><h3>vc.ru: eSIM для путешествий (нативная реклама) (SRC-006)</h3>
 <p>vc.ru: eSIM для путешествий (нативная реклама) · website · sources/vc_ru_esim_prices.md</p>
 <p>Источник: <a href="../sources/vc_ru_esim_prices.md">../sources/vc_ru_esim_prices.md</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-10</p>
 </article>
-<article class="registry-row" id="ref-SRC-007"><h3>SRC-007</h3>
+<article class="registry-row" id="ref-SRC-007"><h3>МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) (SRC-007)</h3>
 <p>МегаФон, официальный сайт: роуминг-опции «на день» (первоисточник цен) · website · https://moscow.megafon.ru/roaming/world/internet_l_na_den.html</p>
 <p>Источник: <a href="https://moscow.megafon.ru/roaming/world/internet_l_na_den.html">https://moscow.megafon.ru/roaming/world/internet_l_na_den.html</a></p>
 <p>kind: website · access: open · retrieved: 2026-11-10</p>

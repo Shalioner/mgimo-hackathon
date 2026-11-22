@@ -5,6 +5,7 @@ python tools/next.py projects/example --on 2026-11-12 --json
 Дата включительна для review_by; date: null означает отсутствие даты в реестре.
 Порядок — известная дата, затем ID; это не оценка бизнес-приоритета.
 Эксперименты без однозначного срока в эту версию очереди не входят.
+Флаг --resume добавляет сохранённый шаг и ожидаемое согласование.
 """
 from __future__ import annotations
 
@@ -67,7 +68,10 @@ def stale_reasons(ledger: Ledger, oid: str) -> list[dict]:
 
 
 def build_queue(project: Path, on: date) -> dict:
-    ledger = Ledger(project)
+    return queue_from_ledger(Ledger(project), on)
+
+
+def queue_from_ledger(ledger: Ledger, on: date) -> dict:
     if ledger.load_problems:
         raise ValueError("; ".join(f"{where}: {problem}" for where, problem in ledger.load_problems))
     items = []
@@ -89,7 +93,7 @@ def build_queue(project: Path, on: date) -> dict:
                 continue
             reasons.append({"code": "unprocessed_change", "date": field_date(obj, "date")})
             action = (f"Руководителю продукта: уточнить влияние новых сведений; агенту выполнить "
-                      f"ledger.py impact {project} {oid}; изменение выбора подтвердить человеку на C2.")
+                      f"ledger.py impact {ledger.project} {oid}; изменение выбора подтвердить человеку на C2.")
         if reasons:
             reasons.sort(key=lambda r: (r["code"], r.get("reference", ""), r["date"] or ""))
             dates = [r["date"] for r in reasons if r["date"] is not None]
@@ -99,15 +103,59 @@ def build_queue(project: Path, on: date) -> dict:
     return {"on": on.isoformat(), "items": items}
 
 
+def build_resume(project: Path, on: date) -> dict:
+    from c3_approval import status as approval_status
+    from report import checkpoint_questions, current_step, next_action, open_checkpoint, selected_decisions
+
+    ledger = Ledger(project)
+    result = queue_from_ledger(ledger, on)
+    progress_file = project / "state/progress.md"
+    progress = progress_file.read_text(encoding="utf-8") if progress_file.is_file() else ""
+    step = current_step(progress)
+    gate = open_checkpoint(progress, step)
+    action = next_action(progress)
+    approval, message, changed = approval_status(ledger)
+    if approval in ("stale", "invalid") and gate not in ("C1", "C2"):
+        gate = "C3"
+        action = "Проверить актуальный пакет и получить явное утверждение руководителя на повторном C3."
+    result["resume"] = {
+        "step": step,
+        "choices": [
+            {"decision": decision["id"], "chosen": decision["chosen"]}
+            for decision in selected_decisions(ledger.objects)
+        ],
+        "next_action": action or None,
+        "open_checkpoint": gate,
+        "questions": checkpoint_questions(progress, gate or ""),
+        "c3": {"status": approval, "message": message, "changed": changed},
+    }
+    return result
+
+
+def print_resume(resume: dict) -> None:
+    print(f"Текущий шаг: {resume['step']}")
+    for choice in resume["choices"]:
+        print(f"Сохранённый выбор: {choice['chosen']} [{choice['decision']}]")
+    if resume["next_action"]:
+        print(f"Ближайшее действие: {resume['next_action']}")
+    if resume["open_checkpoint"]:
+        print(f"Открытое согласование: {resume['open_checkpoint']}")
+    print(f"Версия C3: {resume['c3']['message']}")
+    for question in resume["questions"]:
+        print(question)
+    print()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path, help="локальная папка проекта")
     parser.add_argument("--on", type=iso_date, default=None, help="дата YYYY-MM-DD, по умолчанию сегодня")
     parser.add_argument("--json", action="store_true", help="машиночитаемый JSON")
+    parser.add_argument("--resume", action="store_true", help="сохранённый шаг, выбор и открытое согласование")
     args = parser.parse_args(argv)
     on = args.on if args.on is not None else date.today()
     try:
-        result = build_queue(args.project, on)
+        result = (build_resume if args.resume else build_queue)(args.project, on)
     except (OSError, UnicodeError, ValueError, TypeError, AttributeError, yaml.YAMLError) as exc:
         if args.json:
             print(json.dumps({"on": on.isoformat(), "items": [], "errors": [str(exc)]}, ensure_ascii=False))
@@ -117,6 +165,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
+        if args.resume:
+            print_resume(result["resume"])
         print(f"Что решать на {result['on']} (дата, затем ID; без бизнес-приоритета)")
         if not result["items"]:
             print("По проверяемым полям действий нет; эксперименты здесь не учитываются.")

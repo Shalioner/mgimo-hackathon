@@ -1,0 +1,264 @@
+{
+  "candidate": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked",
+  "expected_c3_sha": "b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483",
+  "actual_c3_sha": "b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483",
+  "c3_sha_matches_expected": true,
+  "candidate_receipt_file_sha_before": "aaf09a1bd70983fb59f3896d3c68fcd714759662b2054852da7771321e7875eb",
+  "scenarios": {
+    "baseline": {
+      "c3_check": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py check /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/baseline --json",
+        "returncode": 0,
+        "stdout": "{\"status\": \"current\", \"message\": \"Версия пакета совпадает с последней записью C3.\", \"changed\": []}",
+        "stderr": "",
+        "parsed": {
+          "status": "current",
+          "message": "Версия пакета совпадает с последней записью C3.",
+          "changed": []
+        }
+      },
+      "validate": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/ledger.py validate /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/baseline",
+        "returncode": 0,
+        "stdout": "Итог: ошибок 0, предупреждений 0, объектов 55",
+        "stderr": ""
+      },
+      "consistency": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/consistency.py /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/baseline",
+        "returncode": 0,
+        "stdout": "[ok] rebuild.ok (outputs/05_product_strategy.md:3): outputs/05_product_strategy.md: актуальная структура соответствует шаблону, один блок «Главное».\n[ok] rebuild.ok (outputs/06_comms_strategy.md:3): outputs/06_comms_strategy.md: актуальная структура соответствует шаблону, один блок «Главное».\n[ok] econ.ok (outputs/05_product_strategy.md:42): outputs/05_product_strategy.md: экономическая модель заполнена корректно (4 драйверов).\n[ok] options.ok (outputs/04_options.md:21): outputs/04_options.md: варианты, оси различия, веса, возражения и возражение к постановке корректны.\n[ok] comms.ok (outputs/06_comms_strategy.md:1): Сегменты, таблица воронки, обещания и запреты 05/06 согласованы.\n[ok] validation.discovery_ok (outputs/07_validation_plan.md:13): EXP-001 (discovery, n=Набор сценариев, включая отрицательные контроли): разведочный эксперимент допустим; не основание для масштабирования.\n[ok] validation.discovery_ok (outputs/07_validation_plan.md:14): EXP-002 (discovery, n=Все разрешённые агрегаты в сопоставимом окне): разведочный эксперимент допустим; не основание для масштабирования.\n[ok] validation.causal_ok (outputs/07_validation_plan.md:15): EXP-003 (causal): числитель/знаменатель, база, MDE, n, окно и порог stop корректны.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:45): CLM-005: текстовая проверка quote не применима (100 000, 40 000 — SRC-001 (document, locator: «стр. 3 PDF, Рынок и исходные показатели»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:65): CLM-007: текстовая проверка quote не применима (14 — SRC-001 (document, locator: «стр. 3 PDF, Активация»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:75): CLM-008: текстовая проверка quote не применима (500 — SRC-001 (document, locator: «стр. 9 PDF, Как рассчитать прибыль и окупаемость»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:85): CLM-009: текстовая проверка quote не применима (12, 9 — SRC-001 (document, locator: «стр. 7 PDF, Как проверить пользу»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:132): CLM-013: текстовая проверка quote не применима (0.35, 0.25, 0.15 — SRC-001 (document, locator: «стр. 1 PDF, цели решения; веса предлагает агент для C2»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:142): CLM-014: текстовая проверка quote не применима (005, 3.20, 2.90, 4.05, 3.10, 54.4 — SRC-001 (document, locator: «стр. 1 PDF, цели решения; расчёт по таблице 04_options»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:210): CLM-019: текстовая проверка quote не применима (3, 2, 1 — SRC-001 (document, locator: «стр. 11 PDF, таблица ресурсов»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[not_assessed] evidence_quote_not_assessed (state/ledger/claims.yaml:282): CLM-024: текстовая проверка quote не применима (2 — SRC-001 (document, locator: «стр. 3 PDF, определения подключения и активности»)). Что проверить: сверить числа вручную в указанном нетекстовом/табличном источнике или добавить текстовую выдержку.\n[warn] evidence_single_source (state/ledger/decisions.yaml:1): DEC-001: вся опора сведена к одному источнику SRC-001 (document). Что добрать: при повышении критичности для решения добавить второй независимый источник другого типа.\n[ok] evidence_single_source (state/ledger/claims.yaml:13): CLM-002: узкий факт опирается на один источник SRC-001 (document). Смысл и контекст подтверждаются отдельной сверкой цитаты.\n[ok] evidence_single_source (state/ledger/claims.yaml:23): CLM-003: узкий факт опирается на один источник SRC-001 (document). Смысл и контекст подтверждаются отдельной сверкой цитаты.\n[warn] evidence_single_source (state/ledger/claims.yaml:33): CLM-004: вся опора сведена к одному источнику SRC-001 (document). Что добрать: при повышении критичности для решения добавить второй независимый источник другого типа.\n[warn] evidence_single_source (state/ledger/claims.yaml:105): CLM-011: вся опора сведена к одному источнику SRC-001 (document). Что добрать: при повышении критичности для решения добавить второй независимый источник другого типа.\n[warn] evidence_single_source (state/ledger/claims.yaml:118): CLM-012: вся опора сведена к одному источнику SRC-001 (document). Что добрать: при повышении критичности для решения добавить второй независимый источник другого типа.",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "scenario_a_negative_control": {
+      "add_source": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/ledger.py add-source /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a /Users/shalioner/orca/workspaces/МегаФон-Стратег/jury-candidate-37/evals/score9/factory-experiments/post-c3/inputs/A_synthetic_billing_telemetry.md --title Синтетическая сводка телеметрии биллинга (post-c3 A) --kind document --access own --reliability high",
+        "returncode": 0,
+        "stdout": "SRC-008 зарегистрирован: sources/A_synthetic_billing_telemetry.md (sha256 64455e432dd8…)",
+        "stderr": ""
+      },
+      "stage_1_hypotheses_refuted_before_c2_reset": {
+        "validate": {
+          "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/ledger.py validate /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a",
+          "returncode": 0,
+          "stdout": "[ВНИМАНИЕ] CHG-001: новые сведения не обработаны — запустите: ledger.py impact /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a CHG-001\n\nИтог: ошибок 0, предупреждений 1, объектов 59",
+          "stderr": ""
+        },
+        "impact_summary": {
+          "returncode": 0,
+          "affected_objects": {
+            "HYP-001": {
+              "depth": 0,
+              "path": [
+                "HYP-001"
+              ]
+            },
+            "HYP-003": {
+              "depth": 0,
+              "path": [
+                "HYP-003"
+              ]
+            },
+            "PAIN-001": {
+              "depth": 1,
+              "path": [
+                "HYP-001",
+                "PAIN-001"
+              ]
+            },
+            "ALT-001": {
+              "depth": 1,
+              "path": [
+                "HYP-001",
+                "ALT-001"
+              ]
+            },
+            "ALT-004": {
+              "depth": 1,
+              "path": [
+                "HYP-001",
+                "ALT-004"
+              ]
+            },
+            "DEC-001": {
+              "depth": 1,
+              "path": [
+                "HYP-001",
+                "DEC-001"
+              ]
+            },
+            "EXP-001": {
+              "depth": 1,
+              "path": [
+                "HYP-001",
+                "EXP-001"
+              ]
+            },
+            "EXP-003": {
+              "depth": 1,
+              "path": [
+                "HYP-001",
+                "EXP-003"
+              ]
+            },
+            "ALT-003": {
+              "depth": 1,
+              "path": [
+                "HYP-003",
+                "ALT-003"
+              ]
+            },
+            "ALT-005": {
+              "depth": 1,
+              "path": [
+                "HYP-003",
+                "ALT-005"
+              ]
+            },
+            "EXP-002": {
+              "depth": 1,
+              "path": [
+                "HYP-003",
+                "EXP-002"
+              ]
+            },
+            "PRM-001": {
+              "depth": 2,
+              "path": [
+                "HYP-001",
+                "DEC-001",
+                "PRM-001"
+              ]
+            }
+          }
+        },
+        "verify_change": {
+          "returncode": 0,
+          "counts": {
+            "ok": 162,
+            "check": 2,
+            "unsupported": 6
+          },
+          "checked": 170
+        },
+        "c3_check": {
+          "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py check /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a --json",
+          "returncode": 1,
+          "stdout": "{\"status\": \"stale\", \"message\": \"Пакет изменился после последнего согласования C3. Требуется повторное C3.\", \"changed\": [\"HYP-001\", \"HYP-003\"]}",
+          "stderr": "",
+          "parsed": {
+            "status": "stale",
+            "message": "Пакет изменился после последнего согласования C3. Требуется повторное C3.",
+            "changed": [
+              "HYP-001",
+              "HYP-003"
+            ]
+          }
+        },
+        "consistency_error_codes": [
+          "consistency.c3_approval_stale"
+        ],
+        "consistency_returncode": 1
+      },
+      "stage_2_dec_needs_review_blocks_c3": {
+        "validate": {
+          "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/ledger.py validate /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a",
+          "returncode": 0,
+          "stdout": "[ВНИМАНИЕ] PRM-001: обещание привязано к решению DEC-001, которое ещё не принято\n[ВНИМАНИЕ] CHG-001: новые сведения не обработаны — запустите: ledger.py impact /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a CHG-001\n\nИтог: ошибок 0, предупреждений 2, объектов 59",
+          "stderr": ""
+        },
+        "c3_check": {
+          "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py check /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a --json",
+          "returncode": 2,
+          "stdout": "{\"status\": \"invalid\", \"message\": \"Версию C3 не удалось проверить. Требуется проверка перед согласованием. для C3 требуется действующий выбор руководителя на C2\", \"changed\": []}",
+          "stderr": "",
+          "parsed": {
+            "status": "invalid",
+            "message": "Версию C3 не удалось проверить. Требуется проверка перед согласованием. для C3 требуется действующий выбор руководителя на C2",
+            "changed": []
+          }
+        },
+        "c3_prepare": {
+          "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py prepare /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_a",
+          "returncode": 2,
+          "stdout": "",
+          "stderr": "C3: для C3 требуется действующий выбор руководителя на C2"
+        },
+        "consistency_error_codes": [
+          "consistency.c3_approval_invalid"
+        ],
+        "consistency_returncode": 1
+      },
+      "pass": true
+    },
+    "scenario_b_package_wording": {
+      "edited_file": "outputs/06_comms_strategy.md",
+      "change": "Этот текст применим и к старой ссылке -> Тот же текст показывается при открытии старой ссылки",
+      "validate": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/ledger.py validate /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_b",
+        "returncode": 0,
+        "stdout": "Итог: ошибок 0, предупреждений 0, объектов 55",
+        "stderr": ""
+      },
+      "c3_check": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py check /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_b --json",
+        "returncode": 1,
+        "stdout": "{\"status\": \"stale\", \"message\": \"Пакет изменился после последнего согласования C3. Требуется повторное C3.\", \"changed\": [\"outputs/06_comms_strategy.md\"]}",
+        "stderr": "",
+        "parsed": {
+          "status": "stale",
+          "message": "Пакет изменился после последнего согласования C3. Требуется повторное C3.",
+          "changed": [
+            "outputs/06_comms_strategy.md"
+          ]
+        }
+      },
+      "consistency_returncode": 1,
+      "consistency_error_codes": [
+        "consistency.c3_approval_stale"
+      ],
+      "c3_prepare": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py prepare /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_b",
+        "returncode": 0,
+        "stdout": "edaeb9fc6d3e2121f471f8479062742675d485fd3690ba97996a1004e123ec6d",
+        "stderr": ""
+      },
+      "pass": true
+    },
+    "scenario_b_ext_neutral": {
+      "edited_file": "outputs/10_market_comparison.md",
+      "change": "Локальная редакционная правка заголовка во внешнем справочном документе",
+      "validate": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/ledger.py validate /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_b_ext",
+        "returncode": 0,
+        "stdout": "Итог: ошибок 0, предупреждений 0, объектов 55",
+        "stderr": ""
+      },
+      "c3_check": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py check /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_b_ext --json",
+        "returncode": 0,
+        "stdout": "{\"status\": \"current\", \"message\": \"Версия пакета совпадает с последней записью C3.\", \"changed\": []}",
+        "stderr": "",
+        "parsed": {
+          "status": "current",
+          "message": "Версия пакета совпадает с последней записью C3.",
+          "changed": []
+        }
+      },
+      "consistency_returncode": 0,
+      "consistency_error_codes": [],
+      "c3_prepare": {
+        "command": "/private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/.venv/bin/python /private/var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/strategist-candidate-c3-43zkm4xk/jury-final/unpacked/tools/c3_approval.py prepare /var/folders/ss/4g0fyyvx3hgczmghb26lyfhh0000gn/T/post-c3-cli-wmb8vmh2/scenario_b_ext",
+        "returncode": 0,
+        "stdout": "b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483",
+        "stderr": ""
+      },
+      "pass": true
+    }
+  },
+  "candidate_receipt_file_sha_after": "aaf09a1bd70983fb59f3896d3c68fcd714759662b2054852da7771321e7875eb",
+  "candidate_files_checked": 33,
+  "candidate_untouched": true,
+  "all_pass": true
+}

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Карточка C3 — Запуск eSIM для путешественников</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --ink: #14181f;
+      --muted: #526071;
+      --border: #d9e0e8;
+      --reopen-bg: #fdecec;
+      --reopen-ink: #8f1d1d;
+      --reopen-border: #efb4b4;
+      --info-bg: #eef4fc;
+      --info-ink: #18457a;
+      --info-border: #b6d0f2;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.42;
+      font-size: 14px;
+    }
+    .card {
+      max-width: 920px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 10px rgba(20, 24, 31, 0.05);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 4px 0;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 12px;
+      white-space: nowrap;
+      background: var(--reopen-bg);
+      color: var(--reopen-ink);
+      border: 1px solid var(--reopen-border);
+    }
+    .scope-banner {
+      background: var(--reopen-bg);
+      border: 1px solid var(--reopen-border);
+      color: var(--reopen-ink);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+    }
+    .history-banner {
+      background: var(--info-bg);
+      border: 1px solid var(--info-border);
+      color: var(--info-ink);
+      border-radius: 8px;
+      padding: 9px 14px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .box h2 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+    dl { margin: 0; }
+    dt { font-weight: 600; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+    dt:first-child { margin-top: 0; }
+    dd { margin: 2px 0 0 0; }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin-bottom: 4px; }
+    li:last-child { margin-bottom: 0; }
+    code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: #f0f3f7;
+      padding: 1px 5px;
+      border-radius: 4px;
+      word-break: break-all;
+    }
+    .footer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" data-case="esim-travel" data-format="compact-card">
+    <header class="header">
+      <div>
+        <h1>Запуск eSIM для путешественников: стоит ли и кому продавать</h1>
+        <div class="subtitle">Шаг 8 — сопровождение; повторное C3 открыто, изменённый пакет ожидает согласования · Кейс <code>esim-travel</code></div>
+      </div>
+      <span class="badge">Повторное C3 открыто · ждёт согласования</span>
+    </header>
+
+    <section class="scope-banner" aria-label="Ограничение запуска">
+      <strong>Запуск не разрешён до повторного C3:</strong> аудит качества <strong>2026-11-15</strong> не запускает эксперименты. Запуск новых экспериментов (<code>EXP-003</code> RFP 6 нед., <code>EXP-001</code> опрос 4 нед.) возможен только после применимого согласования; пилот <code>EXP-002</code> — только после согласования его уточнённых условий на повторном C3 и <code>go</code> по <code>EXP-003</code>.
+    </section>
+
+    <section class="history-banner" aria-label="Историческое согласование">
+      <strong>Историческое C3 сохранено:</strong> пакет ранее был утверждён до аудита качества; историческое согласование не переписано, а выбор <code>ALT-001</code> (<code>DEC-001</code>) на C2 сохранён. Отсутствие файла-квитанции с хэшем (статус проверки C3: <code>unrecorded</code>) <strong>не означает отсутствия прошлого утверждения</strong> — повторное C3 требуется именно из-за изменённой коммуникации и уточнений <code>EXP-002</code>.
+    </section>
+
+    <div class="grid">
+      <section class="box">
+        <h2>Решение C2 и статус согласования C3</h2>
+        <dl>
+          <dt>Выбранный вариант (C2)</dt>
+          <dd><code>ALT-001</code> — свой travel eSIM МегаФона на white-label/CaaS-платформе, старт пилотом (Турция/СНГ/ЮВА), <code>DEC-001</code> от <strong>2026-11-10</strong>.</dd>
+          <dt>Роли по DEC-001 и блоку «Согласование C3»</dt>
+          <dd>C2 решил: <strong>руководитель продукта</strong>; ответственный в <code>DEC-001</code> / <code>EXP-002</code> / <code>EXP-003</code>: <strong>руководитель цифрового продукта</strong> (в <code>EXP-001</code> — <strong>продуктовый аналитик</strong>). В блоке «Согласование C3» указано: <strong>Роль не указана</strong>.</dd>
+          <dt>Дата пересмотра 2027-03-10</dt>
+          <dd><code>2027-03-10</code> из <code>DEC-001</code> остаётся <strong>исторически назначенной точкой пересмотра, а не подтверждением состоявшегося запуска</strong> (разбор пилота — через 3 месяца после фактического старта).</dd>
+          <dt>Ближайшее действие по открытому CHG-001</dt>
+          <dd>Сверить датированные полные цены eSIM и дневного роуминга (599 ₽/день за 2 ГБ по <code>CLM-015</code>) по направлениям пилота при сопоставимых объёме, сроке и сценарии пользования; при отсутствии конечных цен или подтверждения оплаты — перечислить недостающие проверки.</dd>
+        </dl>
+      </section>
+
+      <section class="box">
+        <h2>Что вынесено на повторное C3</h2>
+        <ul>
+          <li><strong>Коммуникация (06_comms_strategy.md):</strong> прежние обещания <code>PRM-001</code>, <code>PRM-002</code>, <code>PRM-003</code> <strong>отозваны</strong> (<code>status: retracted</code>, 0 активных PRM, новых утверждённых нет), т.к. <code>EXP-002</code> не проверял заявленные свойства. Нужны прямые проверки свойств и согласование новых сообщений.</li>
+          <li><strong>Приоритет stop/go при конфликте условий (EXP-002):</strong> сейчас в реестре не задан (например, конверсия ≥3% и каннибализация &gt;50% одновременно дают go и stop). Предложение на согласование: <strong>stop имеет приоритет</strong>.</li>
+          <li><strong>Удержание (HYP-002 / EXP-002):</strong> согласовать определение оттока, окно наблюдения и минимальный полезный эффект удержания.</li>
+          <li><strong>Повторные покупки (EXP-002):</strong> порог ≥50% указан как ожидаемое изменение, но не включён в <code>go</code> — нужно определить роль повторных покупок.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="box">
+      <h2>Текущие пороги EXP-001..003 (07_validation_plan.md)</h2>
+      <ul>
+        <li><strong>EXP-003 (RFP к 3–4 платформам, 6 нед.):</strong> go — ≥1 предложение со сроком ≤6 мес. и бюджетом в рамках пилота; stop — все дороже/дольше → пересмотр в пользу <code>ALT-002</code>.</li>
+        <li><strong>EXP-001 (опрос об утечке, 4 нед.):</strong> go — доля пользователей агрегаторов ≥10%; stop/пересмотр к <code>ALT-003</code> при &lt;5%.</li>
+        <li><strong>EXP-002 (пилот Турция/СНГ/ЮВА; промежуточные через 6 нед., разбор через 3 мес. после старта):</strong> go — конверсия ≥3% и отток ≤ контроля; stop — конверсия &lt;1% <strong>или</strong> отток выше контроля <strong>или</strong> каннибализация &gt;50% выручки пакетов «на день».</li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <span>Локальный тестовый материал (A/B UX-тест) · только факты из замороженного пакета</span>
+      <span>Основания: DEC-001 · ALT-001 · CHG-001 · PRM-001..003 (retracted) · EXP-001..003 · CLM-015</span>
+    </footer>
+  </main>
+</body>
+</html>

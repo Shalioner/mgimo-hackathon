@@ -225,7 +225,7 @@ def test_stale_c3_at_step_8_points_to_reapproval_without_faking_consent(tmp_path
     prep = run_tool("c3_approval", "prepare", copy)
     assert prep.returncode == 0, prep.stderr
     ans = tmp_path / "answer.txt"
-    ans.write_text("Утверждаю учебный пакет.", encoding="utf-8")
+    ans.write_text("Утверждаю пакет C3", encoding="utf-8")
     rec = run_tool("c3_approval", "record", copy, "--sha256", prep.stdout.strip(), "--response-file", ans)
     assert rec.returncode == 0, rec.stderr
 

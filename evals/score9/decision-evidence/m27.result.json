@@ -1,0 +1,100 @@
+{
+  "recommended": [
+    "TODAY-02"
+  ],
+  "options": [
+    {
+      "id": "TODAY-01",
+      "kind": "invest",
+      "priority": 0,
+      "action": "Предложить ограниченный интеграционный пилот только после собственной проверки своевременности, пользы, затрат и лимита.",
+      "requires": {
+        "speed_limited": true,
+        "timely": true
+      },
+      "objection": "Документация не подтверждает своевременное действие",
+      "status": "conditional",
+      "failed": [],
+      "unknown": [
+        "timely"
+      ]
+    },
+    {
+      "id": "TODAY-02",
+      "kind": "change",
+      "priority": 1,
+      "action": "Исправить макет: проверять риск потери скорости вместо обещания экономии. Стоп до интеграции и расходов; затем EXP-001.",
+      "requires": {
+        "speed_limited": true
+      },
+      "objection": "Может повторять кабинет, полезность не наблюдалась",
+      "status": "eligible",
+      "failed": [],
+      "unknown": []
+    },
+    {
+      "id": "TODAY-03",
+      "kind": "status_quo",
+      "priority": 2,
+      "action": "Использовать текущие кабинеты без новой функции.",
+      "requires": {},
+      "objection": "Риск скорости может остаться незамеченным",
+      "status": "eligible",
+      "failed": [],
+      "unknown": []
+    },
+    {
+      "id": "TODAY-04",
+      "kind": "kill",
+      "priority": 3,
+      "action": "Предложить заморозку интеграции; пересмотр при появлении собственной проверки эффекта и затрат.",
+      "requires": {},
+      "objection": "Неизвестное не доказывает бесполезность",
+      "status": "eligible",
+      "failed": [],
+      "unknown": []
+    }
+  ],
+  "conditions": {
+    "speed_limited": {
+      "value": true,
+      "conflict": false,
+      "refs": [
+        "CLM-D01"
+      ]
+    },
+    "timely": {
+      "value": null,
+      "conflict": false,
+      "refs": []
+    }
+  },
+  "evidence_effects": [
+    {
+      "id": "CLM-D01",
+      "changes_admissibility": [
+        "TODAY-02"
+      ],
+      "changes_recommendation": true
+    }
+  ],
+  "next_questions": [
+    {
+      "condition": "timely",
+      "question": "Подтверждены ли своевременное полезное действие (EXP-001/003), приемлемые наши затраты и лимит интеграционного пилота? Нужны собственные наблюдения и оценка владельца, не чужая цена.",
+      "unblocks": [
+        "TODAY-01"
+      ],
+      "if_answer": {
+        "false": [
+          "TODAY-02"
+        ],
+        "true": [
+          "TODAY-01"
+        ]
+      },
+      "changes_today": true,
+      "conflict": false
+    }
+  ]
+}

@@ -11,7 +11,7 @@ import re
 import c3_approval
 import evidence
 from ledger import Ledger, prefix
-from strategy_checks import comms, econ, options, rebuild, validation
+from strategy_checks import brief_coverage, comms, econ, options, rebuild, validation
 
 
 def check(project: Path, *, include_approval: bool = True) -> list[dict]:
@@ -30,7 +30,7 @@ def check(project: Path, *, include_approval: bool = True) -> list[dict]:
         ]
 
     findings = []
-    for module in (rebuild, econ, options, comms, validation, evidence):
+    for module in (rebuild, econ, options, comms, validation, evidence, brief_coverage):
         findings.extend(module.check(project))
 
     if include_approval:

@@ -22,6 +22,19 @@ CLI выполняет только классификацию. Это библ�
 неуверенности; разрешения и общий deadline сохраняются.
 Подробнее: [контракт каскада](CLASSIFIER_CASCADE.md#классификация-инструментов).
 
+## Пример из видео
+
+На локальном D1 Стратег проверил реестр `family-connect`. Первый запрос выбрал `validate` с уверенностью 97,6%, команда вернула ноль ошибок. Второй запрос выбрал `stats` с уверенностью 88,4%, команда вернула числа объектов. Оба входа дают выбор из одного набора `brief`, `stats`, `validate` и отказа. [Видео и таймкоды](JURY_EVIDENCE.md#таймкоды)
+
+Для повтора из корня репозитория запустите D1 и включите `automatic_routing.classifier: local-d1` в локальной настройке.
+
+```sh
+.venv/bin/python tools/route_tools.py --execute --project projects/family-connect --request-file evals/score9/demonstration/d1-check-ledger.txt
+.venv/bin/python tools/route_tools.py --execute --project projects/family-connect --request-file evals/score9/demonstration/d1-count-objects.txt
+```
+
+В ответе `selection.selected` — ID, предложенный D1. `execution.selected`, `execution.status` и `execution.result.exit_code` показывают, какое действие реально выполнено. Этот маршрут выбирает команду для реестра. У модели субагента свой [маршрут](NATIVE_HOST_ROUTING.md).
+
 ## Общий интерфейс моделей
 
 `infer_questions(state, questions, *, execute=False, load_config=..., timeout=240)`

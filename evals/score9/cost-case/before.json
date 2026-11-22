@@ -1,0 +1,27 @@
+{
+  "baseline": "0888a8e5d92c2e62593bf5dccf9ee1da65ea1fe1",
+  "coverage": {
+    "## Граница результата": false,
+    "## Где расходуются ресурсы": false,
+    "## Что решает руководитель": false,
+    "## Ограничения": false,
+    "## Воспроизведение": false
+  },
+  "errors": [
+    "missing evidence.json",
+    "missing memo section: ## Граница результата",
+    "missing memo section: ## Где расходуются ресурсы",
+    "missing memo section: ## Что решает руководитель",
+    "missing memo section: ## Ограничения",
+    "missing memo section: ## Воспроизведение",
+    "missing visible boundary/value: $3.0331",
+    "missing visible boundary/value: $3.2351",
+    "missing visible boundary/value: 127 мин 23 с",
+    "missing visible boundary/value: 24",
+    "missing visible boundary/value: активное время",
+    "missing visible boundary/value: API-эквивалент",
+    "missing visible boundary/value: EXP-001",
+    "missing visible boundary/value: 16:27:58"
+  ],
+  "passed": false
+}

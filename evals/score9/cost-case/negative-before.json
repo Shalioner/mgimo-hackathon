@@ -1,0 +1,40 @@
+{
+  "payment_as_api": {
+    "rejected": true,
+    "errors": [
+      "cash_payment_usd must remain unknown",
+      "evidence differs from extracted source: cash_payment_usd"
+    ]
+  },
+  "elapsed_as_active": {
+    "rejected": true,
+    "errors": [
+      "active_seconds must remain unknown",
+      "evidence differs from extracted source: active_seconds"
+    ]
+  },
+  "budget_as_actual": {
+    "rejected": true,
+    "errors": [
+      "evidence differs from extracted source: plan"
+    ]
+  },
+  "omit_revision_help": {
+    "rejected": true,
+    "errors": [
+      "evidence differs from extracted source: human"
+    ]
+  },
+  "invent_search_free": {
+    "rejected": true,
+    "errors": [
+      "evidence differs from extracted source: search"
+    ]
+  },
+  "omit_cached_tokens": {
+    "rejected": true,
+    "errors": [
+      "evidence differs from extracted source: models"
+    ]
+  }
+}

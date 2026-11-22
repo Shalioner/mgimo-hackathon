@@ -1,0 +1,34 @@
+name: Валовой вклад семейного сигнала в плановом году
+decision: DEC-001
+unit: ₽ за плановый год
+formula: paid_months * rate + other_contribution - direct_cost
+breakeven_var: paid_months
+drivers:
+- id: paid_months
+  label: Добавочные оплаченные номеро-месяцы
+  low: 0
+  base: 72
+  high: 240
+  type: assumption
+  ref: CLM-017
+- id: rate
+  label: Валовой вклад номеро-месяца
+  low: 500
+  base: 500
+  high: 500
+  type: fact
+  ref: CLM-008
+- id: other_contribution
+  label: Иной подтверждённый вклад
+  low: 0
+  base: 0
+  high: 0
+  type: assumption
+  ref: CLM-018
+- id: direct_cost
+  label: Прямые расходы пилота
+  low: 60000
+  base: 60000
+  high: 120000
+  type: assumption
+  ref: CLM-017

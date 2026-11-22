@@ -89,6 +89,17 @@ automatic_routing:
       claude-code: [haiku, sonnet, opus, fable]
 ```
 
+Если локальный каталог обновился, сверяйте `.venv/bin/python tools/models.py resolve` со списком `automatic_routing.host_routing.models.codex`. Хук пропускает переопределение, когда найденная модель отсутствует в списке или уверенность классификатора ниже порога. В новом ролике обычный чат продолжил сверку через субагента с исходными параметрами вызова. Отдельный прямой тест обоих скриптов на синтетических событиях вернул `gpt-6.2-sol / xhigh` для маршрута T3. [Таймкоды](JURY_EVIDENCE.md#таймкоды)
+
+Повторить проверку из ролика из корня репозитория с запущенным D1 и настроенным списком моделей:
+
+```sh
+.venv/bin/python tools/hooks/host_prompt.py < evals/score9/demonstration/host-prompt.json
+.venv/bin/python tools/hooks/codex_routing.py < evals/score9/demonstration/before-spawn.json
+```
+
+В первом ответе читайте `hookSpecificOutput.additionalContext`, во втором — `hookSpecificOutput.updatedInput.model` и `reasoning_effort`. Пример использует один синтетический запрос. При неуверенном результате или запрете модели ответ сохранит причину для продолжения в текущей модели.
+
 Настоящий Codex app-server, JSONL stdin/stdout:
 
 ```bash

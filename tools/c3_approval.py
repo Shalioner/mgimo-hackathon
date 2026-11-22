@@ -16,6 +16,12 @@ from ledger import Ledger, _project_write_lock, atomic_write_text, prefix, valid
 
 RECEIPT = "state/c3_approvals.json"
 STALE_MESSAGE = "Пакет изменился после последнего согласования C3. Требуется повторное C3."
+STALE_PRESENTED_MESSAGE = "предъявленная версия отличается от текущей. Покажите пакет заново и получите новое C3."
+CANONICAL_APPROVAL = "Утверждаю пакет C3"
+EXPLICIT_APPROVAL = re.compile(
+    r"утверждаю[ \t]+(?:обновл[её]нный[ \t]+)?пакет[ \t]+[cс]3\.?",
+    re.IGNORECASE,
+)
 DOCUMENTS = (
     "outputs/01_brief.md",
     "outputs/03_situation.md",
@@ -24,8 +30,16 @@ DOCUMENTS = (
     "outputs/06_comms_strategy.md",
     "outputs/07_validation_plan.md",
 )
+BRIEF_RESPONSE = "outputs/00_brief_response.md"
 REFERENCE = re.compile(r"\b(?:SRC|CLM|HYP|PAIN|ALT|DEC|PRM|EXP)-\d+\b")
 SHA256 = re.compile(r"[0-9a-f]{64}")
+
+
+def package_documents(project: Path) -> list[str]:
+    paths = list(DOCUMENTS)
+    if (project / BRIEF_RESPONSE).exists():
+        paths.append(BRIEF_RESPONSE)
+    return paths
 
 
 def digest(value: object) -> str:
@@ -56,7 +70,7 @@ def snapshot(ledger: Ledger) -> dict[str, str]:
         oid for oid, obj in objects.items()
         if prefix(oid) in ("DEC", "PRM", "EXP") and obj.get("status", "active") == "active"
     }
-    paths = list(DOCUMENTS)
+    paths = package_documents(ledger.project)
     if (ledger.project / "state/economics.yaml").exists():
         paths.append("state/economics.yaml")
     for relative in paths:
@@ -120,6 +134,18 @@ def status(ledger: Ledger) -> tuple[str, str, list[str]]:
     return "current", "Версия пакета совпадает с последней записью C3.", []
 
 
+def verify_package(project: Path) -> list[str]:
+    from verify import blocking_verdicts, verify
+
+    files = [Path(relative).name for relative in package_documents(project)]
+    blocked = blocking_verdicts(strict=True)
+    return [
+        f"[{item['verdict']}] outputs/{item['file']}:{item['line']} — {item['note']}"
+        for item in verify(project, files, exact_files=True)["items"]
+        if item["verdict"] in blocked
+    ]
+
+
 def prepare(project: Path) -> dict[str, str]:
     from consistency import check
 
@@ -131,27 +157,40 @@ def prepare(project: Path) -> dict[str, str]:
     errors = [item["message"] for item in check(project, include_approval=False) if item["status"] == "error"]
     if errors:
         raise ValueError("\n".join(errors))
+    verify_errors = verify_package(project)
+    if verify_errors:
+        raise ValueError("\n".join(verify_errors))
     if snapshot(Ledger(project)) != inputs:
         raise ValueError("пакет менялся во время проверки. Повторите подготовку C3.")
     return inputs
 
 
+def parse_approval_response(response: str) -> str:
+    text = response.strip() if isinstance(response, str) else ""
+    if not EXPLICIT_APPROVAL.fullmatch(text):
+        raise ValueError(
+            f"нужно явное утверждение предъявленного пакета без оговорок: «{CANONICAL_APPROVAL}»"
+        )
+    return text
+
+
 def record(project: Path, presented: str, response: str) -> None:
-    if not response.strip():
-        raise ValueError("нужен явный ответ человека об утверждении предъявленного пакета")
+    text = parse_approval_response(response)
+    if digest(snapshot(Ledger(project))) != presented:
+        raise ValueError(STALE_PRESENTED_MESSAGE)
     with _project_write_lock(project) as locked:
         if not locked:
             raise ValueError("запись C3 не выполнена")
         entries = history(project)
         inputs = prepare(project)
         if digest(inputs) != presented:
-            raise ValueError("предъявленная версия отличается от текущей. Покажите пакет заново и получите новое C3.")
+            raise ValueError(STALE_PRESENTED_MESSAGE)
         if entries and entries[-1]["sha256"] == presented:
             return
         entries.append({
             "sha256": presented,
             "recorded_at": datetime.now().astimezone().isoformat(timespec="seconds"),
-            "response": response.strip(),
+            "response": text,
             "inputs": inputs,
         })
         payload = json.dumps({"version": 1, "approvals": entries}, ensure_ascii=False, indent=2, sort_keys=True)

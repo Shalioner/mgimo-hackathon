@@ -1,0 +1,89 @@
+{
+  "question": "eSIM-travel: что предложить сегодня вместо обещания работы на всех iPhone?",
+  "scope": "iPhone Dual SIM, два разных оператора",
+  "as_of": "2026-11-19",
+  "priority_basis": "Допущение сценария: широкий доступ предпочтителен при технической допустимости; иначе ограничить прототип проверкой совместимости. Коммерческий запуск не оценивается.",
+  "conditions": [
+    {
+      "id": "unlock_required",
+      "scope": "iPhone Dual SIM, два разных оператора",
+      "question": "Нужна ли разблокировка для двух разных операторов?",
+      "type": "documented_property"
+    },
+    {
+      "id": "retention",
+      "scope": "Наша база eSIM",
+      "question": "Подтверждены ли собственным пилотом удержание, приемлемые наши затраты и лимит коммерческого пилота, а предложением поставщика — условия интеграции?",
+      "type": "own_outcome"
+    }
+  ],
+  "observations": [
+    {
+      "id": "CLM-D03",
+      "type": "fact",
+      "access": "open",
+      "primary": true,
+      "url": "https://support.apple.com/en-us/109317",
+      "snapshot": "sources/apple.txt",
+      "sha256": "d639374dacb877c8d1791c4030ad99e9e58b8f1a53ffb9147fc1f4bc4bc4abb3",
+      "quote": "To use two carriers, your carrier must unlock your iPhone, or both plans must be from the same carrier.",
+      "scope": "iPhone Dual SIM, два разных оператора",
+      "condition": "unlock_required",
+      "value": true,
+      "mapping_reason": "Apple требует разблокировку для двух разных операторов; безусловная совместимость исключена.",
+      "locator": "What you need",
+      "limitations": "Не показывает состав нашей базы, спрос, удержание или стоимость white-label.",
+      "observed_at": "2026-11-19",
+      "review_by": "2026-11-19"
+    }
+  ],
+  "options": [
+    {
+      "id": "TODAY-01",
+      "kind": "invest",
+      "priority": 0,
+      "action": "Предложить безусловную совместимость для всех iPhone без проверки оператора.",
+      "requires": {
+        "unlock_required": false
+      },
+      "objection": "Заблокированные устройства могут не подключиться"
+    },
+    {
+      "id": "TODAY-02",
+      "kind": "change",
+      "priority": 1,
+      "action": "Добавить проверку разблокировки в прототип входа, снять универсальное обещание. Стоп до закупки/интеграции; Android требует другого источника.",
+      "requires": {
+        "unlock_required": true
+      },
+      "objection": "Неизвестно, какая доля нашей базы пройдёт проверку"
+    },
+    {
+      "id": "TODAY-03",
+      "kind": "status_quo",
+      "priority": 2,
+      "action": "Сохранить текущий роуминг без новой функции.",
+      "requires": {},
+      "objection": "Можно упустить полезный сегмент"
+    },
+    {
+      "id": "TODAY-04",
+      "kind": "kill",
+      "priority": 3,
+      "action": "Предложить закрытие инвестиций travel eSIM.",
+      "requires": {},
+      "objection": "Неизвестный эффект нельзя считать нулевым"
+    },
+    {
+      "id": "TODAY-05",
+      "kind": "invest",
+      "priority": 0,
+      "action": "Предложить ограниченный коммерческий пилот только на совместимых устройствах после проверки эффекта, затрат, условий поставщика и лимита.",
+      "requires": {
+        "unlock_required": true,
+        "retention": true
+      },
+      "objection": "Документация Apple не даёт оснований для коммерческого пилота"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+name: Сценарный предел труда внутреннего кабинетного разбора, не коммерческий прогноз
+decision: DEC-001
+unit: рублей/разбор
+formula: income - hours * rate
+breakeven_var: hours
+breakeven_target: 0
+drivers:
+- id: hours
+  label: 'Сценарное активное время: нижняя граница без работы, base/high полный лимит'
+  low: 0
+  base: 2
+  high: 2
+  type: assumption
+  ref: HYP-004
+- id: rate
+  label: Условная оценка труда, не рыночная цена
+  low: 1000
+  base: 1000
+  high: 1000
+  type: assumption
+  ref: HYP-004
+- id: income
+  label: Прямой доход, не оценка немонетарной полезности
+  low: 0
+  base: 0
+  high: 0
+  type: assumption
+  ref: HYP-004

@@ -1,0 +1,62 @@
+{
+  "guided": {
+    "changed_files": [
+      "outputs/06_comms_strategy.md",
+      "state/progress.md",
+      "state/run_log.md"
+    ],
+    "c3": {
+      "status": "stale",
+      "message": "Пакет изменился после последнего согласования C3. Требуется повторное C3.",
+      "changed": [
+        "outputs/06_comms_strategy.md"
+      ]
+    },
+    "new_package_sha256": "72825afe86eaab81a2ad6539db5b55fdca6c21a236ed13c9096d86fed72aa4af",
+    "receipt_sha256": "aaf09a1bd70983fb59f3896d3c68fcd714759662b2054852da7771321e7875eb",
+    "strategy_sha256": "f9b3329d8c6aa30f702c5c46e542eddc5c6d0293685b6daa53a7a5c0a5b00aed",
+    "ledger_unchanged": true
+  },
+  "plain": {
+    "changed_files": [
+      "outputs/06_comms_strategy.md",
+      "outputs/08_decision_log.md",
+      "state/progress.md",
+      "state/run_log.md"
+    ],
+    "c3": {
+      "status": "stale",
+      "message": "Пакет изменился после последнего согласования C3. Требуется повторное C3.",
+      "changed": [
+        "outputs/06_comms_strategy.md"
+      ]
+    },
+    "new_package_sha256": "72825afe86eaab81a2ad6539db5b55fdca6c21a236ed13c9096d86fed72aa4af",
+    "receipt_sha256": "aaf09a1bd70983fb59f3896d3c68fcd714759662b2054852da7771321e7875eb",
+    "strategy_sha256": "f9b3329d8c6aa30f702c5c46e542eddc5c6d0293685b6daa53a7a5c0a5b00aed",
+    "ledger_unchanged": true
+  },
+  "session_wall_time": {
+    "source": "T3 run metadata (startedAt to completedAt); excludes queue",
+    "guided": {
+      "started_at_utc": "2026-11-22T09:20:39.149Z",
+      "completed_at_utc": "2026-11-22T09:23:04.099Z",
+      "elapsed_seconds": 144.95
+    },
+    "plain": {
+      "started_at_utc": "2026-11-22T09:20:48.916Z",
+      "completed_at_utc": "2026-11-22T09:24:24.287Z",
+      "elapsed_seconds": 215.371
+    },
+    "resume": {
+      "started_at_utc": "2026-11-22T09:23:25.041Z",
+      "completed_at_utc": "2026-11-22T09:24:48.795Z",
+      "elapsed_seconds": 83.754
+    },
+    "threshold_check": {
+      "started_at_utc": "2026-11-22T09:28:48.646Z",
+      "completed_at_utc": "2026-11-22T09:30:21.610Z",
+      "elapsed_seconds": 92.964
+    }
+  }
+}

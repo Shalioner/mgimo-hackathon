@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Когда предупреждение выгоднее отчёта?</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f7f2;color:#162b24;font:17px/1.55 Inter,system-ui,sans-serif}main{width:min(100% - 36px,740px);margin:36px auto}h1{font-size:clamp(30px,5vw,46px);line-height:1.08;max-width:650px}h2{font-size:22px;line-height:1.3}section{background:white;border:1px solid #ccd8ce;border-radius:12px;padding:clamp(16px,4vw,30px);margin:20px 0}label{display:block;font-weight:650;margin-top:16px}input{accent-color:#006647;font:inherit;max-width:100%}input[type=number]{display:block;padding:7px;width:15em}input[type=range]{width:100%;display:block}button{margin-top:12px;border:1px solid #42765f;color:#064c32;background:#f4faf5;border-radius:5px;padding:8px 12px;font:inherit;cursor:pointer}a{color:#006045}output{font-variant-numeric:tabular-nums}aside{border-left:4px solid #b47424;padding-left:14px}p{margin:.55em 0}details{margin:18px 0}
+</style>
+<main>
+<a href="decision-next-round.md">← К записке директору</a>
+<h1>Когда предупреждение выгоднее отчёта?</h1>
+<p>Проверьте два варианта для одного портфеля за месяц. Все входные значения учебные.</p>
+<section>
+<label for="report">Чистый эффект текущего отчёта, ₽/мес.</label>
+<input id="report" type="number" step="1" placeholder="Пока неизвестен">
+<button id="example" type="button">Подставить пример · 450 ₽</button>
+<label for="share">Доля своевременных действий с предупреждением · <output id="percent" for="share">45%</output></label>
+<input id="share" type="range" min="0" max="100" step="1" value="45">
+<div aria-live="polite"><h2 id="verdict">Для сравнения нужен эффект отчёта</h2><p id="values"></p></div>
+<noscript>Для пересчёта откройте таблицу в записке директору по ссылке выше.</noscript>
+</section>
+<aside><strong>Решение по пилоту: остановлен.</strong> На учебной проверке предупреждение дало 5 своевременных действий, отчёт — 4. Требовалось преимущество в два сценария. Даже при положительной экономике для продолжения нужны новое основание и решение руководителя. <a href="../../../projects/rehearsal-mobile-spend/sources/07_exp002_participant.json">Квитанция проверки</a></aside>
+<details><summary>Из чего складывается расчёт</summary><p>30 подходящих событий в месяц × 300 ₽ избегаемых издержек × доля своевременных действий − 4 500 ₽ совокупных затрат. Оба варианта сравниваются после затрат на одном портфеле. Полевые значения пока неизвестны. <a href="../../../projects/rehearsal-mobile-spend/state/economics.yaml">Исходные допущения</a></p></details>
+</main>
+<script>
+const report = document.querySelector('#report'), share = document.querySelector('#share');
+const money = value => value.toLocaleString('ru-RU') + ' ₽';
+function update() {
+  const fraction = share.valueAsNumber;
+  const warning = 90 * fraction - 4500;
+  const current = report.valueAsNumber;
+  let verdict = 'Для сравнения нужен эффект отчёта';
+  let details = 'Расчётный эффект предупреждения: ' + money(warning) + ' в месяц.';
+  if (Number.isSafeInteger(current) && report.validity.valid) {
+    const gap = warning - current;
+    verdict = gap === 0 ? 'Оба варианта равны' : (gap > 0 ? 'Предупреждение выгоднее' : 'Отчёт выгоднее') + ' на ' + money(Math.abs(gap));
+    details += ' Эффект отчёта: ' + money(current) + ' в месяц.';
+  } else if (report.value || report.validity.badInput) {
+    verdict = 'Введите эффект отчёта целым числом рублей';
+  }
+  document.querySelector('#percent').textContent = fraction + '%';
+  document.querySelector('#values').textContent = details;
+  document.querySelector('#verdict').textContent = verdict;
+}
+share.addEventListener('input', update);
+report.addEventListener('input', update);
+document.querySelector('#example').addEventListener('click', () => { report.value = '450'; update(); });
+update();
+</script></html>

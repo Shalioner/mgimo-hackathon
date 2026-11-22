@@ -19,6 +19,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 FRESH = Path("projects/jury-library")
+FAMILY = Path("projects/family-connect")
 M27 = Path("projects/rehearsal-mobile-spend")
 ESIM = Path("projects/esim-travel")
 REPEAT_C3 = "повторное C3 открыто"
@@ -46,7 +47,7 @@ def decisions(root, case):
 
 def command_runner(root, env, commands):
     def run(script, *args, code=0, kind="commands", payload=None):
-        argv = [".venv/bin/python", f"tools/{script}.py", *map(str, args)]
+        argv = [sys.executable, f"tools/{script}.py", *map(str, args)]
         start = perf_counter()
         process = subprocess.run(
             argv, cwd=root, env=env, input=payload or "", capture_output=True,
@@ -152,9 +153,59 @@ def resume_esim(root, run):
     chosen, = decisions(root, ESIM)
     require(chosen["state"] == "decided" and chosen["chosen"] == "ALT-001",
             "Исторический выбор eSIM изменился")
+    resume = json.loads(run("next", ESIM, "--resume", "--json"))
+    saved = resume["resume"]
+    require(saved["open_checkpoint"] == "C3" and saved["c3"]["status"] == "unrecorded"
+            and {"decision": "DEC-001", "chosen": "ALT-001"} in saved["choices"]
+            and "CHG-001" in {item["id"] for item in resume["items"]},
+            "Возврат к eSIM должен показать выбор, изменение и открытое C3")
     return {"state": line, "chosen": chosen["chosen"], "impact_count": len(impact),
             "verify": verified["counts"], "blockers": blockers,
-            "approval_role_recorded_in_report": "Роль не указана" not in checkpoint}
+            "approval_role_recorded_in_report": "Роль не указана" not in checkpoint,
+            "resume": saved}
+
+
+def official_family(root, run):
+    run("ledger", "validate", FAMILY)
+    verified = json.loads(run("verify", FAMILY, "--files", "00", "01", "02", "03", "04",
+                              "05", "06", "07", "--strict", "--json"))
+    findings = json.loads(run("consistency", FAMILY, "--json"))
+    package_sha = run("c3_approval", "prepare", FAMILY).strip()
+    progress = read(root / FAMILY / "state/progress.md")
+    reader = root / FAMILY / "outputs/00_brief_response.md"
+    reader_sha = hashlib.sha256(reader.read_bytes()).hexdigest()
+    require(f"SHA-256 пакета C3: `{package_sha}`" in progress
+            and f"SHA-256 пятичастного документа: `{reader_sha}`" in progress,
+            "Версии предъявленных материалов family-connect не совпадают с progress.md")
+    recorded = (root / FAMILY / "state/c3_approvals.json").is_file()
+    approval = json.loads(run("c3_approval", "check", FAMILY, "--json", code=0 if recorded else 1))
+    require(approval["status"] == ("current" if recorded else "unrecorded"),
+            "Квитанция C3 отсутствует либо не соответствует пакету family-connect")
+    run("report", FAMILY, "--check")
+    continuation = None
+    resume = json.loads(run("next", FAMILY, "--resume", "--json"))["resume"]
+    if recorded:
+        status = run("ledger", "status")
+        continuation = next((line for line in status.splitlines() if "family-connect:" in line), "")
+        journal = read(root / FAMILY / "outputs/08_decision_log.md")
+        require("шаг 8" in continuation and all(token in journal for token in (
+            "DEC-001", "ALT-003", "EXP-001", package_sha,
+        )), "Согласование family-connect должно открывать сопровождение с сохранённым решением")
+        require((root / FAMILY / "outputs/09_run_report.md").is_file(),
+                "В поставке отсутствуют замеры и отчёт о прогоне family-connect")
+        require(resume["open_checkpoint"] is None and resume["c3"]["status"] == "current"
+                and {"decision": "DEC-001", "chosen": "ALT-003"} in resume["choices"]
+                and all(token in (resume["next_action"] or "") for token in ("EXP-001", "дизайнер")),
+                "Возврат к family-connect должен показать утверждённый пакет и сухую проверку макета")
+    else:
+        html = read(root / FAMILY / "outputs/report.html")
+        checkpoint = html.partition('id="checkpoint-approval"')[2].split("</div>", 1)[0]
+        require(all(token in checkpoint for token in (
+            "Согласование C3", "руководитель цифрового продукта", 'href="#doc-00"',
+        )), "В отчёте family-connect отсутствует согласующий или ссылка на пятичастную стратегию")
+    return {"verify": verified["counts"], "consistency": dict(Counter(f["status"] for f in findings)),
+            "package_sha256": package_sha, "reader_sha256": reader_sha, "approval": approval["status"],
+            "continuation": continuation, "resume": resume}
 
 
 def negative_controls(root, run):
@@ -171,6 +222,36 @@ def negative_controls(root, run):
     return {"verify": "CLM-999 → wrong-ref / 1", "impact": "CHG-999 → выход 2"}
 
 
+def c3_record_controls(root, run, package_sha):
+    case = Path("c3-record-control")
+    copy = shutil.copytree(root / FAMILY, root / case)
+    receipt = copy / "state/c3_approvals.json"
+    receipt.unlink(missing_ok=True)
+    (copy / "state/.ledger-write.lock").unlink(missing_ok=True)
+    answer = root / "c3-response.txt"
+    before = snapshot(copy)
+    explicit = "Утверждаю пакет C3"
+
+    def record(text, presented=package_sha, *, code=0):
+        answer.write_text(text, encoding="utf-8")
+        run("c3_approval", "record", case, "--sha256", presented,
+            "--response-file", answer.name, code=code)
+
+    for text in ("Не утверждаю пакет C3", "Утверждаю пакет C3, если внесёте правки", "Прочитал", ""):
+        record(text, code=2)
+        require(snapshot(copy) == before, "Отклонённая реплика изменила проект C3")
+    record(explicit, "0" * 64, code=2)
+    require(snapshot(copy) == before, "Устаревшая предъявленная версия изменила проект C3")
+    record(explicit)
+    approved = snapshot(copy)
+    entries = json.loads(read(receipt))["approvals"]
+    require(len(entries) == 1 and entries[0]["sha256"] == package_sha and entries[0]["response"] == explicit,
+            "Явное согласие должно записать одну квитанцию предъявленного пакета")
+    record(explicit)
+    require(snapshot(copy) == approved, "Повторная запись C3 изменила квитанцию")
+    return {"rejected_without_changes": 5, "recorded": len(entries), "retry_unchanged": True}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json", action="store_true", help="включить команды и полные выводы")
@@ -183,21 +264,33 @@ def main():
         root = Path(directory)
         home = root / "home"
         home.mkdir()
-        (root / ".venv").symlink_to(sys.prefix, target_is_directory=True)
         env = {"PATH": os.defpath, "HOME": str(home), "USERPROFILE": str(home),
                "CODEX_THREAD_ID": "jury-local", "PYTHONDONTWRITEBYTECODE": "1", "PYTHONUTF8": "1"}
-        for path in ("tools", "schemas", "knowledge", "skills", M27, ESIM):
+        hook_venv = root / ".venv"
+        # SessionStart checks for a project-local environment before running ledger.
+        if os.name == "nt":
+            windows = Path(os.environ["SystemRoot"])
+            temp = root / "tmp"
+            temp.mkdir()
+            env.update(SystemRoot=str(windows), PATH=str(windows / "System32"),
+                       TEMP=str(temp), TMP=str(temp))
+            shutil.copytree(sys.prefix, hook_venv)
+        else:
+            hook_venv.symlink_to(sys.prefix, target_is_directory=True)
+        for path in ("tools", "schemas", "knowledge", "skills", FAMILY, M27, ESIM):
             shutil.copytree(source / path, root / path, ignore=shutil.ignore_patterns(
                 "__pycache__", "*.pyc", "models.inventory.yaml", "*.local.yaml", "*.local.json", ".env*"))
         (root / ".codex").mkdir()
         shutil.copyfile(source / ".codex/hooks.json", root / ".codex/hooks.json")
-        before = {case: snapshot(source / case) for case in (ESIM, M27)}
-        require(len(before[ESIM]) == 30, "Ожидалось 30 файлов eSIM в поставке K")
+        before = {case: snapshot(source / case) for case in (FAMILY, ESIM, M27)}
         run = command_runner(root, env, commands)
         try:
-            results = {"fresh_c1": fresh_c1(root, run), "saved_m27": saved_m27(root, run),
+            family = official_family(root, run)
+            results = {"official_family": family,
+                       "fresh_c1": fresh_c1(root, run), "saved_m27": saved_m27(root, run),
                        "esim_repeat_c3": resume_esim(root, run),
-                       "negative_controls": negative_controls(root, run)}
+                       "negative_controls": negative_controls(root, run),
+                       "c3_record_controls": c3_record_controls(root, run, family["package_sha256"])}
             for case, files in before.items():
                 require(snapshot(root / case) == snapshot(source / case) == files,
                         f"Содержимое {case} отличается от входного снимка")
