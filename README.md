@@ -47,12 +47,17 @@ python3 -m venv .venv
 
 - [Официальный кейс «Связь для близких»](projects/family-connect/outputs/00_brief_response.md) · [HTML-отчёт](projects/family-connect/outputs/report.html) · [Текущее согласование](projects/family-connect/state/progress.md).
 - [Решение о допуске пилота](docs/FAMILY_PILOT_DECISION.md) · условия допуска, порог набора и границы сценарной экономики.
-- [Запись официального кейса в Codex](evals/score9/demonstration/family-connect-live.mp4) · [Продолжение после утверждения](projects/family-connect/outputs/08_decision_log.md) · [Время и расходы](projects/family-connect/outputs/09_run_report.md).
+- [Видео для заявки, Google Диск](https://drive.google.com/file/d/1HzNEIgj0FCr6wvlLkIPJNxDx9ODHWL7o/view) · [Копия MP4](evals/score9/demonstration/family-connect-live.mp4) · [Продолжение после утверждения](projects/family-connect/outputs/08_decision_log.md) · [Время и расходы](projects/family-connect/outputs/09_run_report.md).
 - [Описание работы со скриншотами, PDF](output/pdf/strategist.pdf) · [Архитектура, инструменты и замеры](docs/DESCRIPTION.md) · [Карта доказательств и таймкоды](docs/JURY_EVIDENCE.md).
 - Проверка комплекта офлайн — `.venv/bin/python evals/score9/jury/run.py`. Она проверяет официальный пакет, учебные сценарии и отрицательные контроли на временных копиях.
+- [Пересмотр выбора и проверка порога пропусков](docs/DECISION_RECHECK.md) · команды для сравнения до и после.
 
 ### Дополнительные доказательства
 
+- [Пять реплик на новом кейсе и сравнение с обычным чатом](evals/score9/paired-workshop/README.md).
+- [Парная проверка продолжения четырёх кейсов](evals/score9/paired-resume-queue/README.md).
+- [Возврат к выбору после исправления данных](evals/score9/paired-full-cycle/repeat-c2/README.md) · два парных замера и проверяемый архив прежнего C3.
+- [Полный цикл на задаче складских возвратов](evals/score9/paired-full-cycle/README.md).
 - [Отказ руководителя и продолжение в новом чате на примере «Стежка»](evals/score9/fresh-case/README.md).
 - [Состояние eSIM после новых данных](projects/esim-travel/state/progress.md).
 - [Ответ Стратега и обычного чата на одинаковых материалах](evals/score9/paired-handoff/README.md).

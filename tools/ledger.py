@@ -1238,6 +1238,8 @@ def cmd_add_source(project: Path, file: Path, title: str, kind: str, access: str
 
 def cmd_status(projects_root: Path) -> int:
     from c3_approval import status as approval_status
+    from next import review_checkpoint
+    from report import current_step, open_checkpoint
 
     if not projects_root.is_dir():
         print("Проектов пока нет. Начните: python tools/ledger.py init projects/<slug> --title \"…\"")
@@ -1255,7 +1257,11 @@ def cmd_status(projects_root: Path) -> int:
         ledger = Ledger(proj)
         todo = []
         approval, message, _ = approval_status(ledger)
-        if approval in ("stale", "invalid"):
+        saved_gate = open_checkpoint(text, current_step(text))
+        gate, action = review_checkpoint(ledger, saved_gate, approval)
+        if gate == "C2" and action:
+            todo.append(action)
+        elif approval in ("stale", "invalid") and gate != "C2":
             todo.append(message)
         for oid, o in ledger.objects.items():
             if prefix(oid) == "CHG" and not o.get("processed"):

@@ -12,7 +12,7 @@
 - Независимо от v2-таблиц, если присутствуют 05/06/promises.yaml:
   * перекрёстная сверка «Выбранное направление» (05) ↔ запреты/ограничения обещаний в 06
     (напр. eSIM 05:22 ↔ 06:25);
-  * 0 активных PRM в promises.yaml → флаг «коммуникация не готова» (блокирует C3).
+  * 0 активных PRM допустимы для явно выбранной внутренней диагностики с отметкой в 06.
 """
 from __future__ import annotations
 
@@ -28,6 +28,9 @@ import yaml
 _TOOLS_DIR = pathlib.Path(__file__).resolve().parent.parent
 if str(_TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(_TOOLS_DIR))
+
+from c3_approval import DIAGNOSTIC_NOTICE, active_decisions, diagnostic_only
+from ledger import Ledger
 
 _HISTORY_RE = re.compile(
     r"^##\s+(?:Исторический\s+снимок|История\s+до|Архив\s+до)\b",
@@ -705,7 +708,9 @@ def _check_05_06_contradiction(
     return findings
 
 
-def _check_promises_active(project: pathlib.Path, has_06: bool) -> Tuple[List[dict], bool]:
+def _check_promises_active(
+    project: pathlib.Path, has_06: bool, lines_06: List[Tuple[int, str]], has_funnel: bool
+) -> Tuple[List[dict], bool]:
     rel = "state/ledger/promises.yaml"
     path = project / rel
     if not has_06:
@@ -736,6 +741,34 @@ def _check_promises_active(project: pathlib.Path, has_06: bool) -> Tuple[List[di
         p for p in items
         if isinstance(p, dict) and str(p.get("status", "active")).lower() == "active"
     ]
+    ledger = Ledger(project)
+    if diagnostic_only(active_decisions(ledger)):
+        if active:
+            return [{
+                "code": "comms.diagnostic_has_promises", "status": "error", "file": rel,
+                "line": 1, "ids": [str(p.get("id")) for p in active],
+                "message": "Внутренний план диагностики содержит активные клиентские обещания."
+            }], True
+        if not any(line.strip() == DIAGNOSTIC_NOTICE for _, line in lines_06):
+            return [{
+                "code": "comms.diagnostic_scope_hidden", "status": "error",
+                "file": "outputs/06_comms_strategy.md", "line": 1, "ids": [],
+                "message": f"В 06 требуется видимая строка «{DIAGNOSTIC_NOTICE}»."
+            }], True
+        if not has_funnel or not any(
+            oid.startswith("EXP-") and obj.get("status", "active") == "active"
+            for oid, obj in ledger.objects.items()
+        ):
+            return [{
+                "code": "comms.diagnostic_plan_missing", "status": "error",
+                "file": "outputs/06_comms_strategy.md", "line": 1, "ids": [],
+                "message": "Для внутреннего пакета нужны таблица воронки и действующий план проверки EXP."
+            }], True
+        return [{
+            "code": "comms.diagnostic_only", "status": "ok", "file": rel,
+            "line": 1, "ids": [],
+            "message": "Внутренний план. Клиентские обещания удержаны до проверки."
+        }], True
     if len(active) == 0:
         return [
             {
@@ -823,7 +856,7 @@ def check(project: pathlib.Path) -> List[dict]:
     if lines_05 and lines_06:
         findings.extend(_check_05_06_contradiction(lines_05, lines_06))
 
-    prm_findings, _ = _check_promises_active(project, has_06=p06.is_file())
+    prm_findings, _ = _check_promises_active(project, p06.is_file(), lines_06, has_fun)
     findings.extend(prm_findings)
 
     errors_or_warns = [f for f in findings if f["status"] in ("error", "warn")]

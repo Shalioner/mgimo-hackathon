@@ -259,7 +259,8 @@ def blocking_verdicts(*, strict: bool = False) -> set[str]:
     return verdicts
 
 
-def verify(project: Path, file_filter: List[str], change: str = "", *, exact_files: bool = False) -> dict:
+def verify(project: Path, file_filter: List[str], change: str = "", *, exact_files: bool = False,
+           require_change_targets: bool = False) -> dict:
     ledger = L.Ledger(project)
     out_dir = project / "outputs"
     files = sorted(out_dir.glob("*.md"))
@@ -270,6 +271,9 @@ def verify(project: Path, file_filter: List[str], change: str = "", *, exact_fil
         files = [file for file in files if any(file.name.startswith(prefix) for prefix in file_filter)]
     items = []
     revised = revised_objects(ledger, change) if change else set()
+    if change and require_change_targets:
+        revised.update(effect["target"] for effect in ledger.objects[change].get("effects", [])
+                       if effect["effect"] in ("contradicts", "retracts"))
     for f in files:
         historical = False
         decision_history = False

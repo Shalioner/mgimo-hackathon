@@ -11,12 +11,12 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
 
-EXPECTED_C3_SHA = "b1473fbfb235891c6e552b00df8dd244fab8a06e2ccb1c32b72523f97e853483"
 HERE = Path(__file__).resolve().parent
 DEFAULT_CANDIDATE = HERE.parents[3]
 
@@ -63,12 +63,17 @@ def run_all(candidate: Path) -> dict:
     before = {path: sha256_file(path) for path in original.rglob("*") if path.is_file()}
     receipt_data = json.loads(orig_receipt.read_text(encoding="utf-8"))
     actual_c3_sha = receipt_data["approvals"][-1]["sha256"]
+    progress = (original / "state/progress.md").read_text(encoding="utf-8")
+    expected = re.search(r"^\s*- SHA-256 пакета C3: `([0-9a-f]{64})`", progress, re.MULTILINE)
+    if expected is None:
+        raise ValueError("В progress.md отсутствует отпечаток предъявленного пакета C3")
+    expected_c3_sha = expected[1]
 
     results: dict = {
         "candidate": str(candidate),
-        "expected_c3_sha": EXPECTED_C3_SHA,
+        "expected_c3_sha": expected_c3_sha,
         "actual_c3_sha": actual_c3_sha,
-        "c3_sha_matches_expected": actual_c3_sha == EXPECTED_C3_SHA,
+        "c3_sha_matches_expected": actual_c3_sha == expected_c3_sha,
         "candidate_receipt_file_sha_before": before[orig_receipt],
         "scenarios": {},
     }
@@ -89,7 +94,7 @@ def run_all(candidate: Path) -> dict:
                 base_c3["returncode"] == 0
                 and base_val["returncode"] == 0
                 and base_cons["returncode"] == 0
-                and actual_c3_sha == EXPECTED_C3_SHA
+                and actual_c3_sha == expected_c3_sha
             ),
         }
 
@@ -278,7 +283,7 @@ def run_all(candidate: Path) -> dict:
                 and b_cons_errors == ["consistency.c3_approval_stale"]
                 and b_prep["returncode"] == 0
                 and len(b_prep["stdout"]) == 64
-                and b_prep["stdout"] != EXPECTED_C3_SHA
+                and b_prep["stdout"] != expected_c3_sha
             ),
         }
 
@@ -316,7 +321,7 @@ def run_all(candidate: Path) -> dict:
                 and bext_cons["returncode"] == 0
                 and bext_cons_errors == []
                 and bext_prep["returncode"] == 0
-                and bext_prep["stdout"] == EXPECTED_C3_SHA
+                and bext_prep["stdout"] == expected_c3_sha
             ),
         }
 

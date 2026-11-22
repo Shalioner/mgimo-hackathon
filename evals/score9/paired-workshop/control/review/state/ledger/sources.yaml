@@ -1,0 +1,51 @@
+- id: SRC-001
+  title: Вводные учебного кейса
+  kind: document
+  access: own
+  path: sources/brief.md
+  sha256: c4f02635337d6d9da00c15dc4bfd1da2e8e028061537fb41d31e0bba6021e80e
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Условия вымышленного кейса, описание выгрузки и критерии решения
+- id: SRC-002
+  title: Итоговая сводка учебного пилота
+  kind: table
+  access: own
+  path: sources/pilot.csv
+  sha256: 68ad499f5b58e7a66c8c92006cb4d41621f7816e66be73c30d09611a0a2ac2b1
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Агрегаты по веткам, заявленная рандомизация требует проверки
+  status: superseded
+  superseded_by: SRC-005
+  updated: '2026-11-22'
+  status_note: Заменено по CHG-002. Прежняя формулировка остается в истории.
+- id: SRC-003
+  title: Учебный протокол проверки кабинета
+  kind: document
+  access: own
+  path: sources/test-receipt.md
+  sha256: e10a4f914dfe74081695c1205c87a12ac9c271bddfa7d7f8d818f64fb33472f7
+  retrieved: '2026-11-22'
+  reliability: low
+  published: '2026-11-22'
+  notes: Синтетический учебный протокол. Описывает отдельные прогоны в тестовом кабинете.
+- id: SRC-004
+  title: Поправка владельца учебной выгрузки
+  kind: document
+  access: own
+  path: sources/correction.md
+  sha256: 6b90d8469559400a8eb1f5522835fd638c7db201984b492f7bea0e040a092a9b
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Описание ошибки объединения и области замены в той же когорте
+- id: SRC-005
+  title: Исправленная сводка учебного пилота
+  kind: table
+  access: own
+  path: sources/pilot-corrected.csv
+  sha256: 2f3a2e328f02d84fbebf3dafdd420bf7dbb31df54e640d10d7716fd6bae1de84
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Тот же пилот и окно, исправлены completed и support_contacts для reminder.
+    Данные уровня подписчика отсутствуют.

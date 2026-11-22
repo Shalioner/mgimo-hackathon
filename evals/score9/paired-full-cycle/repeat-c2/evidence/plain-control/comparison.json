@@ -1,0 +1,209 @@
+{
+  "plain": {
+    "metrics": {
+      "seconds": 246.516,
+      "exit": 0,
+      "human_active_seconds": null,
+      "charges_usd": null,
+      "usage": [
+        {
+          "input_tokens": 414059,
+          "cached_input_tokens": 370432,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 11178,
+          "reasoning_output_tokens": 252
+        }
+      ],
+      "api_equivalent_usd": 0.236077,
+      "commands": 16,
+      "failed_commands": 3,
+      "output_chars": 88484
+    },
+    "verification": {
+      "checks": {
+        "old_receipt_unchanged": true,
+        "old_archive_verified": true
+      },
+      "resume": {
+        "step": "8 — пересмотр после поправки, решение DEC-002 ожидается",
+        "choices": [
+          {
+            "decision": "DEC-001",
+            "chosen": "ALT-001"
+          }
+        ],
+        "next_action": "Проверить актуальный пакет и получить явное утверждение руководителя на повторном C3.",
+        "open_checkpoint": "C3",
+        "questions": [],
+        "c3": {
+          "status": "invalid",
+          "message": "Версию C3 не удалось проверить. Требуется проверка перед согласованием. для C3 требуется действующий выбор руководителя на C2",
+          "changed": []
+        }
+      },
+      "same_output_bytes": {
+        "outputs/01_brief.md": true,
+        "outputs/02_research_plan.md": true,
+        "outputs/03_situation.md": true,
+        "outputs/04_options.md": true,
+        "outputs/05_product_strategy.md": true,
+        "outputs/06_comms_strategy.md": true,
+        "outputs/07_validation_plan.md": true,
+        "outputs/08_decision_log.md": false,
+        "outputs/09_run_report.md": true
+      },
+      "validated_archive": "00b8846b6aeb18731de314a30baf89cd66a4cc1c056b7524f9caa3f6078f9ef7",
+      "changes": [
+        {
+          "id": "CHG-001",
+          "date": "2026-11-22",
+          "summary": "Служебная поправка и исправленная сводка меняют основание выбора экранной подсказки.",
+          "sources": [
+            "SRC-004",
+            "SRC-005"
+          ],
+          "superseded_source": "SRC-002",
+          "superseded_claims": [
+            "CLM-008",
+            "CLM-009",
+            "CLM-010",
+            "CLM-011"
+          ],
+          "current_claims": [
+            "CLM-015",
+            "CLM-016",
+            "CLM-017",
+            "CLM-018"
+          ],
+          "historical_decision": "DEC-001",
+          "open_decision": "DEC-002",
+          "impact": [
+            "Числа контроля, контрольная база 72% и арифметический потолок +28 п.п. совпадают. Для текущих данных используется CLM-016.",
+            "Варианты ALT-001–ALT-004 переоценены. Рекомендация изменилась с ALT-001 на ALT-003 и ожидает решения.",
+            "Сигнал вреда приостанавливает продвижение к запуску и расширению. EXP-001 остаётся историческим планом и требует пересмотра перед возобновлением.",
+            "PRM-001 опирается на прямое стендовое наблюдение CLM-012."
+          ],
+          "c3_sha256": "00b8846b6aeb18731de314a30baf89cd66a4cc1c056b7524f9caa3f6078f9ef7",
+          "approval_impact": "Квитанция относится к исторической версии. Для обновлённого пакета требуется отдельное согласование. Реальные смены требуют отдельного допуска.",
+          "output": "outputs/10_evidence_update.md"
+        }
+      ],
+      "registry_check_stderr": "",
+      "new_case_files": [
+        "outputs/10_evidence_update.md",
+        "sources/correction.md",
+        "sources/pilot-corrected.csv",
+        "state/.ledger-write.lock"
+      ]
+    }
+  },
+  "after": {
+    "metrics": {
+      "seconds": 206.312,
+      "exit": 0,
+      "human_active_seconds": null,
+      "charges_usd": null,
+      "usage": [
+        {
+          "input_tokens": 1002912,
+          "cached_input_tokens": 921984,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7867,
+          "reasoning_output_tokens": 562
+        }
+      ],
+      "api_equivalent_usd": 0.332724,
+      "commands": 25,
+      "failed_commands": 1,
+      "output_chars": 194644
+    },
+    "verification": {
+      "checks": {
+        "old_receipt_unchanged": true,
+        "old_archive_verified": true,
+        "open_c2": true,
+        "old_choice_preserved": true,
+        "new_recommendation_separate": true,
+        "c3_blocked_without_human_choice": true,
+        "corrected_source_saved": true,
+        "change_pending": true,
+        "registry_valid": true
+      },
+      "resume": {
+        "step": "8 — сопровождение решения, повторный C2 открыт",
+        "choices": [],
+        "next_action": "Запуск по прежнему выбору приостановлен. Согласовать вариант по CHG-001 на C2, затем обновить стратегии и предъявить C3.",
+        "open_checkpoint": "C2",
+        "questions": [
+          "- awaiting_human — какой вариант выбираете на ближайшую учебную неделю: ALT-001 (подготовить проверку подсказки), ALT-002 (подготовить изменение этикетки), ALT-003 (оставить текущий экран и сохранить инициативу открытой, рекомендуется) или ALT-004 (остановить инициативу и вернуть ресурс)?"
+        ],
+        "c3": {
+          "status": "stale",
+          "message": "Прежний пакет C3 сохранён. Новый пакет готовится после выбора на C2.",
+          "changed": [
+            "DEC-001"
+          ]
+        },
+        "previous_choices": [
+          {
+            "decision": "DEC-001",
+            "chosen": "ALT-001"
+          }
+        ],
+        "pending_review": [
+          {
+            "change": "CHG-001",
+            "recommended": "ALT-003",
+            "memo": "Рекомендую оставить текущий экран и сохранить инициативу открытой [ALT-003]. Ранее выбранную подготовку подсказки [ALT-001] поддерживали +8 п.п. пользы и 3% обращений [CLM-010] [CLM-011]. После исправления тех же данных прирост +2 п.п. ниже требуемых +5 п.п., а 7% обращений в тесте превышают порог 5% [CLM-016] [CLM-019] [CLM-020] [CLM-003]. Приостановить подготовку и расширение подсказки до решения руководителя. Компромисс ALT-003 — отложить проверку улучшений и сохранить текущие ошибки сортировки. Выбор на учебную неделю за руководителем. Разбор оснований и вариантов в outputs/10_repeat_c2.md."
+          }
+        ]
+      },
+      "same_output_bytes": {
+        "outputs/01_brief.md": true,
+        "outputs/02_research_plan.md": true,
+        "outputs/03_situation.md": true,
+        "outputs/04_options.md": true,
+        "outputs/05_product_strategy.md": true,
+        "outputs/06_comms_strategy.md": true,
+        "outputs/07_validation_plan.md": true,
+        "outputs/08_decision_log.md": true,
+        "outputs/09_run_report.md": true
+      },
+      "validated_archive": "00b8846b6aeb18731de314a30baf89cd66a4cc1c056b7524f9caa3f6078f9ef7",
+      "changes": [
+        {
+          "id": "CHG-001",
+          "date": "2026-11-22",
+          "source": "SRC-005",
+          "summary": "Исправленная сводка заменяет SRC-002 для обеих метрик по служебной поправке SRC-004. Контроль и знаменатели совпадают. Изменились числители ветки подсказки и выводы по обоим порогам.",
+          "effects": [
+            {
+              "target": "CLM-009",
+              "effect": "contradicts",
+              "note": "В той же тестовой ветке 222 правильных приёмки и 21 обращение вместо 240 и 9 при тех же 300 операторах [CLM-018]."
+            },
+            {
+              "target": "CLM-010",
+              "effect": "contradicts",
+              "note": "Прирост +2 п.п. ниже порога +5 п.п. [CLM-019]."
+            },
+            {
+              "target": "CLM-011",
+              "effect": "contradicts",
+              "note": "7% обращений в тесте выше порога 5% [CLM-020]."
+            }
+          ],
+          "processed": false
+        }
+      ],
+      "registry_check_stderr": "",
+      "new_case_files": [
+        "outputs/10_repeat_c2.md",
+        "sources/correction.md",
+        "sources/pilot-corrected.csv",
+        "state/.ledger-write.lock",
+        "state/review_memo_CHG-001.md"
+      ]
+    }
+  }
+}

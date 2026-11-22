@@ -1,0 +1,65 @@
+{
+  "versions": {
+    "plain": null,
+    "after": "8cffbb02c1fca94d8c868181021f9fd69fb67b98"
+  },
+  "model": "gpt-6.2-sol",
+  "effort": "medium",
+  "fresh_chats": 2,
+  "codex_version": "codex-cli 0.171.0",
+  "inputs_sha256": {
+    "brief.md": "9ec13f20a3ded1e55ac87ecc4bbd06b4169436847dd66b3156ecef2bb1d2a973",
+    "pilot.csv": "af94195df75265c8dc0c96771474548575b4c6d0e8925f76a50e69891c18d334",
+    "screen-check.md": "0c62abcd57fe8a6c37ac3c27f9676eb4feea2cdca46c9bc9db2fc38898d40006",
+    "correction.md": "14476a76a4eb2254e9df2498fd73e0371d7faed32222ecf493eb2e222caf87ea",
+    "pilot-corrected.csv": "ac946f058153cd51cf74b54281e9376a5e41cbca0b8cfdfb533f8d83d7aa8c9a"
+  },
+  "case_sha256": {
+    "outputs/01_brief.md": "78a1931258b79e6b24190e66604bc454884a3e654518baf16866e892e748d3df",
+    "outputs/02_research_plan.md": "a249f6d00cb3cd9ac9a23fe5f1b42fc124de7803cf92534fe5e8727ba08b55b9",
+    "outputs/03_situation.md": "dd16fd00df9c044907eefc68bfd016dcaad81dc55e0c2e2a8f61bc65b615f8b4",
+    "outputs/04_options.md": "8a80e1aa5944de9f814182d786bc2614ab426fd0c161077f367a9385755cfef7",
+    "outputs/05_product_strategy.md": "35478332c7bc7b5ab2f53b723cd82a25ce98559f19632fba6405fa36bd14c65c",
+    "outputs/06_comms_strategy.md": "dd475f6748c44480e08a1b20a88e34f032df00fef21675bfcd9069b09eb4f9f8",
+    "outputs/07_validation_plan.md": "1c4788eee9d4e2b88d3202accc24581f8a02e3b149f4e80c3a1f293c846bca25",
+    "outputs/08_decision_log.md": "bfe1db5b124f4c142da0bf1f7efe1bf8d3fdfa7756396f403cdeef0e83161664",
+    "outputs/09_run_report.md": "14d509dec33a143353f2c05b36d3bd9b624c3a4caed3d0d2cbff4e26d338eb76",
+    "sources/brief.md": "9ec13f20a3ded1e55ac87ecc4bbd06b4169436847dd66b3156ecef2bb1d2a973",
+    "sources/pilot.csv": "af94195df75265c8dc0c96771474548575b4c6d0e8925f76a50e69891c18d334",
+    "sources/screen-check.md": "0c62abcd57fe8a6c37ac3c27f9676eb4feea2cdca46c9bc9db2fc38898d40006",
+    "state/brief_coverage.md": "8dd4612ab17db69de079359e26e2fb01b620f83e580ee84cfcbb04d3c2416b05",
+    "state/c3_approvals.json": "3dda6d5f68b48228b9488164afa2245f1d96e4a6bed3c7662906e2aa62c72411",
+    "state/c3_response.txt": "099d5564c151703227209ff8f037b157f895c78584cbd9b68c420a971efc03ca",
+    "state/cost_report.md": "78aa76bf2d609cb50500267041a51998806a2d9c036a39c88edf253b931a0ba4",
+    "state/ledger/alternatives.yaml": "e3d655b0390a48a7151242441293c6f391a781d64fe69181f59b5f63165e8a3b",
+    "state/ledger/changes.yaml": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "state/ledger/claims.yaml": "e7ca12f7cde772c7289bd501471c665e0043696381481f981cc6c29fe5a314f9",
+    "state/ledger/decisions.yaml": "0e5f199b966364d04f61887395765ac4321282662fb483cb00ea0aa164846410",
+    "state/ledger/experiments.yaml": "67bafabd294119953bc7d9757b129432d3bbccb5c225a5b43f66d7ab07e3bc00",
+    "state/ledger/hypotheses.yaml": "24badadb39a14ecfe77024968e836c5f592aac070872ffc6a23428817fe18181",
+    "state/ledger/pains.yaml": "5bb78dc4e88fc0e51bf120e50fdbf5016a2515eb26e26ce98fc0e8a0b7b1ac0a",
+    "state/ledger/promises.yaml": "6fb3f7ee710abe91035325137d4c24d6a79275e7d771b361f39a6194a2e7c05e",
+    "state/ledger/sources.yaml": "f950684fc367838a0b4e4cbb3145a2467ac34b4825cb45ed65e449211ba8a5c3",
+    "state/progress.md": "28d74b9665cf8c679df6ccf008f5afe980660644968a16c2410f3e68345c4c20",
+    "state/run_log.md": "97eed2e5fe00c129f12f5e003451b8c36ded2fff77d7b7bf172654494c3c3944",
+    "state/verification.md": "64b0e93deb2851e5b310a481096efa73338ada922b438b8b235c4ed34818cb25"
+  },
+  "prompt": "Продолжи кейс «Сортировка возвратов на складе» после перерыва. В lab-input появились поправка и обновлённая сводка. Восстанови прежнее решение и основание, обработай новые материалы, покажи что меняется и что нужно решить сейчас. Сохрани результат. Используй текущую модель и локальный терминал только в своей папке, без сети, MCP, API, дополнительных моделей или субагентов.",
+  "omitted": [
+    "evals/score9/paired-full-cycle",
+    "tests/test_repeat_c2.py"
+  ],
+  "success": [
+    "74% vs 72%, +2 pp below +5 pp, 7% above 5%; same scope and window.",
+    "Hold real shifts; retain the allowed training-stand activity and human C2 choice.",
+    "Present prior ALT-001 and recommend ALT-003; leave exact prior C3 receipt and archive verifiable.",
+    "Support the revision with the corrected source; no new approved strategy or selection.",
+    "Leave a durable note or state from which a fresh chat can recover the pending decision."
+  ],
+  "efficiency_target": "At least 25% less wall time or API-equivalent cost if all quality checks pass.",
+  "price_usd_per_million": {
+    "input": 2,
+    "cached_input": 0.1,
+    "output": 10
+  }
+}

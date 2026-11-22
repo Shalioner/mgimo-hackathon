@@ -1,0 +1,83 @@
+{
+  "turns": [
+    {
+      "turn": 1,
+      "start_epoch": 1795365868,
+      "end_epoch": 1795366084,
+      "seconds": 216,
+      "usage": {
+        "input_tokens": 1190062,
+        "cached_input_tokens": 1109760,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 8489,
+        "reasoning_output_tokens": 487
+      },
+      "api_equivalent_usd": "0.35647",
+      "session": "initial",
+      "usage_delta": {
+        "input_tokens": 1190062,
+        "cached_input_tokens": 1109760,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 8489,
+        "reasoning_output_tokens": 487
+      }
+    },
+    {
+      "turn": 2,
+      "start_epoch": 1795366085,
+      "end_epoch": 1795366142,
+      "seconds": 57,
+      "usage": {
+        "input_tokens": 1642726,
+        "cached_input_tokens": 1554304,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 10455,
+        "reasoning_output_tokens": 631
+      },
+      "api_equivalent_usd": "0.0803544",
+      "session": "initial",
+      "usage_delta": {
+        "input_tokens": 452664,
+        "cached_input_tokens": 444544,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1966,
+        "reasoning_output_tokens": 144
+      }
+    },
+    {
+      "turn": 3,
+      "start_epoch": 1795366142,
+      "end_epoch": 1795366670,
+      "seconds": 528,
+      "usage": {
+        "input_tokens": 2642441,
+        "cached_input_tokens": 2533888,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 21898,
+        "reasoning_output_tokens": 1998
+      },
+      "api_equivalent_usd": "0.6894748",
+      "session": "fresh",
+      "usage_delta": {
+        "input_tokens": 2642441,
+        "cached_input_tokens": 2533888,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 21898,
+        "reasoning_output_tokens": 1998
+      }
+    }
+  ],
+  "human_active_seconds": null,
+  "runtime_base": "d1a0d035654fdfc491b6197302f1e5cac47c5eca",
+  "runtime_overlays_sha256": {
+    "AGENTS.md": "c03badb1337b9e58f1772b6cf4a2d379c403a80b45896c20c3faab94a387cad0",
+    "tools/next.py": "42f05ec648a51a757a959423aa054d0b3196ef22fcb4404fc83550fe477f8a45",
+    "tools/report.py": "0793b6bf905fb8ed8bd3077c5f9d2bbd1641266df466dfc9573d4c7d681bff01",
+    "tools/strategy_checks/options.py": "49c08f0663d1e522c3d6c523988ee40e2c4d63b90c63e81128790649f20919cb",
+    "tools/power.py": "bad2e609d0818d76377e5d48974c533cfa6c43b6594036d1595c3eac94b44a3f",
+    "skills/alternatives/SKILL.md": "8c026a82717eb3add7f484e78b08a1141338b5dc5225976287599dbd1fe83491",
+    "skills/decision-support/SKILL.md": "daf933830e8a8ed325ebab489f3aebdacc6a7ca9913dc9a727fee61c7533d466"
+  },
+  "usage_basis": "Codex CLI 0.171.0: cumulative turn.completed.usage by session; cost is turn delta",
+  "api_equivalent_usd": "1.1262992"
+}

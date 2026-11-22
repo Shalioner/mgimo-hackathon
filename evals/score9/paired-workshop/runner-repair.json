@@ -1,0 +1,5 @@
+{
+  "original_sha256": "2edac0c47bcde6ea224c89c2819f17a0527e83dd0ec9b050d9945f367487b967",
+  "repaired_sha256": "8120637fdc59bbe37939cdac92fb8fc93d9a2a96c83b08508592fa27d867c958",
+  "change": "Remove unsupported color flag from resume. Keep successful first turns and archive rejected launches."
+}

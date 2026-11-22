@@ -1,0 +1,296 @@
+{
+  "plain": {
+    "status": 0,
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 41.129,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 136951,
+            "cached_input_tokens": 107008,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1411,
+            "reasoning_output_tokens": 49
+          }
+        ],
+        "tool_or_turn_errors": 1,
+        "commands": 4,
+        "command_output_chars": 13460
+      },
+      {
+        "turn": 2,
+        "seconds": 55.985,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 266515,
+            "cached_input_tokens": 230656,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3534,
+            "reasoning_output_tokens": 114
+          }
+        ],
+        "tool_or_turn_errors": 0,
+        "commands": 3,
+        "command_output_chars": 9948
+      },
+      {
+        "turn": 3,
+        "seconds": 80.866,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 422056,
+            "cached_input_tokens": 379392,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6840,
+            "reasoning_output_tokens": 282
+          }
+        ],
+        "tool_or_turn_errors": 0,
+        "commands": 3,
+        "command_output_chars": 9089
+      },
+      {
+        "turn": 4,
+        "seconds": 19.219,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 549411,
+            "cached_input_tokens": 504704,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 7311,
+            "reasoning_output_tokens": 335
+          }
+        ],
+        "tool_or_turn_errors": 0,
+        "commands": 2,
+        "command_output_chars": 2004
+      },
+      {
+        "turn": 5,
+        "seconds": 77.804,
+        "exit": 0,
+        "session": "fresh",
+        "usage": [
+          {
+            "input_tokens": 185413,
+            "cached_input_tokens": 149888,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2876,
+            "reasoning_output_tokens": 61
+          }
+        ],
+        "tool_or_turn_errors": 0,
+        "commands": 5,
+        "command_output_chars": 26796
+      }
+    ],
+    "total": {
+      "seconds": 275.003,
+      "uncached_input": 80232,
+      "cached_input": 654592,
+      "output": 10187,
+      "api_equivalent_usd": "0.3278",
+      "tool_or_turn_errors": 1
+    }
+  },
+  "original": {
+    "status": 0,
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 142.985,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 458174,
+            "cached_input_tokens": 417536,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 5631,
+            "reasoning_output_tokens": 73
+          }
+        ],
+        "tool_or_turn_errors": 1,
+        "commands": 14,
+        "command_output_chars": 80765
+      },
+      {
+        "turn": 2,
+        "seconds": 318.628,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 1919632,
+            "cached_input_tokens": 1846144,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 16785,
+            "reasoning_output_tokens": 455
+          }
+        ],
+        "tool_or_turn_errors": 4,
+        "commands": 21,
+        "command_output_chars": 71207
+      },
+      {
+        "turn": 3,
+        "seconds": 370.629,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 3392125,
+            "cached_input_tokens": 3268864,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 30998,
+            "reasoning_output_tokens": 1674
+          }
+        ],
+        "tool_or_turn_errors": 3,
+        "commands": 18,
+        "command_output_chars": 123369
+      },
+      {
+        "turn": 4,
+        "seconds": 54.743,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 4077496,
+            "cached_input_tokens": 3947904,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 32817,
+            "reasoning_output_tokens": 1748
+          }
+        ],
+        "tool_or_turn_errors": 2,
+        "commands": 5,
+        "command_output_chars": 11116
+      },
+      {
+        "turn": 5,
+        "seconds": 387.435,
+        "exit": 0,
+        "session": "fresh",
+        "usage": [
+          {
+            "input_tokens": 1755413,
+            "cached_input_tokens": 1653888,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 15354,
+            "reasoning_output_tokens": 1206
+          }
+        ],
+        "tool_or_turn_errors": 3,
+        "commands": 30,
+        "command_output_chars": 237112
+      }
+    ],
+    "total": {
+      "seconds": 1274.42,
+      "uncached_input": 231117,
+      "cached_input": 5601792,
+      "output": 48171,
+      "api_equivalent_usd": "1.5041",
+      "tool_or_turn_errors": 13
+    }
+  },
+  "compact": {
+    "status": 1,
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 118.309,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 426741,
+            "cached_input_tokens": 355840,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 4614,
+            "reasoning_output_tokens": 68
+          }
+        ],
+        "tool_or_turn_errors": 1,
+        "commands": 13,
+        "command_output_chars": 67854
+      },
+      {
+        "turn": 2,
+        "seconds": 254.567,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 1423572,
+            "cached_input_tokens": 1322496,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 15135,
+            "reasoning_output_tokens": 667
+          }
+        ],
+        "tool_or_turn_errors": 0,
+        "commands": 17,
+        "command_output_chars": 53065
+      },
+      {
+        "turn": 3,
+        "seconds": 402.51,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 3881195,
+            "cached_input_tokens": 3715968,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 29004,
+            "reasoning_output_tokens": 2128
+          }
+        ],
+        "tool_or_turn_errors": 2,
+        "commands": 27,
+        "command_output_chars": 155233
+      },
+      {
+        "turn": 4,
+        "seconds": 86.658,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 4919074,
+            "cached_input_tokens": 4742656,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 31907,
+            "reasoning_output_tokens": 2663
+          }
+        ],
+        "tool_or_turn_errors": 1,
+        "commands": 7,
+        "command_output_chars": 23379
+      },
+      {
+        "turn": 5,
+        "seconds": 37.765,
+        "exit": -15,
+        "session": "fresh",
+        "usage": [],
+        "tool_or_turn_errors": 0,
+        "commands": 6,
+        "command_output_chars": 120539
+      }
+    ],
+    "total": null
+  }
+}

@@ -14,6 +14,7 @@ from urllib.parse import urlsplit, urlunsplit
 
 from c3_approval import status as approval_status
 from ledger import Ledger
+from next import review_checkpoint
 
 
 ID = re.compile(r"\b(?:SRC|CLM|HYP|PAIN|ALT|DEC|PRM|EXP|CHG)-[0-9]{3}\b")
@@ -443,8 +444,8 @@ def open_checkpoint(progress: str, step: str) -> str | None:
     return gate
 
 
-def checkpoint_block(progress: str, step: str, docs: list, renderer: Renderer) -> list[str]:
-    gate = open_checkpoint(progress, step)
+def checkpoint_block(progress: str, step: str, docs: list, renderer: Renderer, *, gate: str | None = None) -> list[str]:
+    gate = gate or open_checkpoint(progress, step)
     if not gate:
         return []
     roles, responses = [], []
@@ -848,10 +849,9 @@ def render(project: Path, out: Path) -> str:
     if changed:
         page.append('<p><strong>Согласованные основания изменились:</strong> ' +
                     project_renderer.plain(", ".join(changed)) + '</p>')
-    action = next_action(progress_text)
-    if approval in ("stale", "invalid") and gate not in ("C1", "C2"):
-        action = "Проверить актуальный пакет и получить явное утверждение руководителя на повторном C3."
-    checkpoint = checkpoint_block(progress_text, step, docs, state_renderer)
+    gate, review_action = review_checkpoint(ledger, gate, approval)
+    action = review_action or next_action(progress_text)
+    checkpoint = checkpoint_block(progress_text, step, docs, state_renderer, gate=gate)
     if c1_summary:
         page.extend(c1_summary)
         page.extend(checkpoint)
@@ -865,6 +865,9 @@ def render(project: Path, out: Path) -> str:
         page.append('<p>Выбранный вариант неизвестен: действующее решение с chosen не записано.</p>')
     for decision in pending_decisions(ledger.objects):
         state = decision.get("state")
+        if state == "needs_review" and decision.get("review_change"):
+            page.append('<p><strong>Запуск приостановлен.</strong> Стратегии и план ниже относятся к '
+                        'прежнему согласованному пакету. Новый пакет готовится после выбора на C2.</p>')
         header = ("Решение требует пересмотра (окончательно не утверждено)"
                   if state == "needs_review" else "Открытое решение (ожидает выбора человека)")
         page.append('<div class="decision-options">')
@@ -909,7 +912,8 @@ def render(project: Path, out: Path) -> str:
         if items:
             page.append('<div class="decision-options"><p><strong>Рассмотренные варианты:</strong></p><ul>' +
                         "".join(items) + '</ul></div>')
-    page.extend(c3_executive_summary(progress_text, step, approval, docs, renderer))
+    if gate == "C3":
+        page.extend(c3_executive_summary(progress_text, step, approval, docs, renderer))
     present_docs = {name[:2]: anchor for anchor, _, _, name in docs}
     links = [f'<li><a href="#{present_docs[number]}">{DOC_TITLES[number]}</a></li>'
              for number in ("08", "05", "06", "07") if number in present_docs]

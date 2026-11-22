@@ -1,0 +1,14 @@
+{
+  "archive_before_exit": 2,
+  "archive_after_exit": 0,
+  "package_sha256": "00b8846b6aeb18731de314a30baf89cd66a4cc1c056b7524f9caa3f6078f9ef7",
+  "old_plan_sha256": "1c4788eee9d4e2b88d3202accc24581f8a02e3b149f4e80c3a1f293c846bca25",
+  "receipt_unchanged_after_edits": true,
+  "next_step": "C2",
+  "historical_choice": [
+    {
+      "decision": "DEC-001",
+      "chosen": "ALT-001"
+    }
+  ]
+}

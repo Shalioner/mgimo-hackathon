@@ -1,0 +1,105 @@
+{
+  "compact": {
+    "status": 0,
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 130.217,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 567511,
+            "cached_input_tokens": 522880,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 4771,
+            "reasoning_output_tokens": 47
+          }
+        ],
+        "tool_or_turn_errors": 3,
+        "commands": 23,
+        "command_output_chars": 62859
+      },
+      {
+        "turn": 2,
+        "seconds": 238.81,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 1324927,
+            "cached_input_tokens": 1252096,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 14641,
+            "reasoning_output_tokens": 304
+          }
+        ],
+        "tool_or_turn_errors": 2,
+        "commands": 17,
+        "command_output_chars": 73213
+      },
+      {
+        "turn": 3,
+        "seconds": 308.755,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 2700686,
+            "cached_input_tokens": 2584192,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 26187,
+            "reasoning_output_tokens": 1197
+          }
+        ],
+        "tool_or_turn_errors": 3,
+        "commands": 24,
+        "command_output_chars": 101745
+      },
+      {
+        "turn": 4,
+        "seconds": 92.147,
+        "exit": 0,
+        "session": "initial",
+        "usage": [
+          {
+            "input_tokens": 3577997,
+            "cached_input_tokens": 3451776,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 28752,
+            "reasoning_output_tokens": 1350
+          }
+        ],
+        "tool_or_turn_errors": 2,
+        "commands": 9,
+        "command_output_chars": 14569
+      },
+      {
+        "turn": 5,
+        "seconds": 462.785,
+        "exit": 0,
+        "session": "fresh",
+        "usage": [
+          {
+            "input_tokens": 1613482,
+            "cached_input_tokens": 1520512,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 18834,
+            "reasoning_output_tokens": 792
+          }
+        ],
+        "tool_or_turn_errors": 2,
+        "commands": 33,
+        "command_output_chars": 202145
+      }
+    ],
+    "total": {
+      "seconds": 1232.714,
+      "uncached_input": 219191,
+      "cached_input": 4972288,
+      "output": 47586,
+      "api_equivalent_usd": "1.4115",
+      "tool_or_turn_errors": 12
+    }
+  }
+}

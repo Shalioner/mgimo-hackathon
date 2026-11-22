@@ -25,6 +25,7 @@ import argparse
 import json
 import math
 import sys
+from fractions import Fraction
 from typing import Dict, List
 
 
@@ -207,7 +208,41 @@ def main(argv: List[str] | None = None) -> int:
     p_w.add_argument("--alpha", type=float, default=0.05)
     p_w.add_argument("--json", action="store_true")
 
+    p_missing = sub.add_parser("missing", help="Доля наблюдений с неизвестным исходом")
+    p_missing.add_argument("--eligible", type=int, required=True, help="Пригодные наблюдения")
+    p_missing.add_argument("--known", type=int, required=True, help="Пригодные наблюдения с известным исходом")
+    p_missing.add_argument("--limit-percent", type=float, required=True, help="Допустимая доля пропусков в процентах")
+    p_missing.add_argument("--json", action="store_true")
+
     args = parser.parse_args(argv)
+    if args.cmd == "missing":
+        if not 0 <= args.known <= args.eligible:
+            p_missing.error("нужно 0 ≤ известные исходы ≤ пригодные наблюдения")
+        if not 0 <= args.limit_percent <= 100:
+            p_missing.error("порог должен быть в [0, 100] процентах")
+
+        unknown = args.eligible - args.known
+        percent = Fraction(100 * unknown, args.eligible) if args.eligible else None
+        threshold = Fraction(str(args.limit_percent))
+        status = "unknown" if percent is None else "pass" if percent <= threshold else "hold"
+        result = {
+            "eligible": args.eligible,
+            "known": args.known,
+            "unknown": unknown,
+            "missing_percent": float(percent) if percent is not None else None,
+            "limit_percent": args.limit_percent,
+            "missingness_gate": status,
+        }
+        if args.json:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        elif percent is None:
+            print("Доля пропусков неизвестна: нет пригодных наблюдений.")
+        else:
+            outcome = "соблюдён" if status == "pass" else "превышен"
+            print(f"Пропуски: {unknown}/{args.eligible} = {float(percent):.6g}%. "
+                  f"Порог пропусков {args.limit_percent:g}% {outcome}.")
+        return 0
+
     if args.cmd == "n":
         res = sample_size_two_proportions(
             args.p, args.mde, alpha=args.alpha, power=args.power, alternative=args.alternative

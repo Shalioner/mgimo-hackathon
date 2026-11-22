@@ -103,9 +103,35 @@ def queue_from_ledger(ledger: Ledger, on: date) -> dict:
     return {"on": on.isoformat(), "items": items}
 
 
+def review_checkpoint(ledger: Ledger, gate: str | None, approval: str) -> tuple[str | None, str | None]:
+    if gate == "C1":
+        return gate, None
+    for oid, decision in ledger.objects.items():
+        if prefix(oid) != "DEC" or decision.get("status", "active") != "active":
+            continue
+        review = decision.get("state") == "needs_review"
+        if review and decision.get("review_change"):
+            return "C2", (f"Запуск по прежнему выбору приостановлен. Согласовать вариант по "
+                          f"{decision['review_change']} на C2, затем обновить стратегии и предъявить C3.")
+        if not review:
+            try:
+                review = bool(stale_reasons(ledger, oid))
+            except ValueError:
+                continue
+        if review and gate != "C2":
+            return "C2", ("Пересмотреть затронутые основания и варианты. Получить выбор руководителя "
+                          "на повторном C2, затем обновить пакет для C3.")
+    if gate == "C2":
+        return gate, None
+    if approval in ("stale", "invalid"):
+        return "C3", "Проверить актуальный пакет и получить явное утверждение руководителя на повторном C3."
+    return gate, None
+
+
 def build_resume(project: Path, on: date) -> dict:
     from c3_approval import status as approval_status
-    from report import checkpoint_questions, current_step, next_action, open_checkpoint, selected_decisions
+    from report import (checkpoint_questions, current_step, next_action, open_checkpoint, pending_decisions,
+                        selected_decisions)
 
     ledger = Ledger(project)
     result = queue_from_ledger(ledger, on)
@@ -115,20 +141,33 @@ def build_resume(project: Path, on: date) -> dict:
     gate = open_checkpoint(progress, step)
     action = next_action(progress)
     approval, message, changed = approval_status(ledger)
-    if approval in ("stale", "invalid") and gate not in ("C1", "C2"):
-        gate = "C3"
-        action = "Проверить актуальный пакет и получить явное утверждение руководителя на повторном C3."
+    gate, review_action = review_checkpoint(ledger, gate, approval)
     result["resume"] = {
         "step": step,
         "choices": [
             {"decision": decision["id"], "chosen": decision["chosen"]}
             for decision in selected_decisions(ledger.objects)
         ],
-        "next_action": action or None,
+        "next_action": review_action or action or None,
         "open_checkpoint": gate,
         "questions": checkpoint_questions(progress, gate or ""),
         "c3": {"status": approval, "message": message, "changed": changed},
     }
+    previous = [
+        {"decision": decision["id"], "chosen": decision["chosen"]}
+        for decision in pending_decisions(ledger.objects)
+        if decision.get("state") == "needs_review" and decision.get("chosen")
+    ]
+    if previous:
+        result["resume"]["previous_choices"] = previous
+    staged = [
+        {"change": decision["review_change"], "recommended": decision["recommended"],
+         "memo": decision["rationale"]}
+        for decision in pending_decisions(ledger.objects)
+        if decision.get("review_change") and decision.get("recommended") and decision.get("rationale")
+    ]
+    if staged:
+        result["resume"]["pending_review"] = staged
     return result
 
 
@@ -136,6 +175,10 @@ def print_resume(resume: dict) -> None:
     print(f"Текущий шаг: {resume['step']}")
     for choice in resume["choices"]:
         print(f"Сохранённый выбор: {choice['chosen']} [{choice['decision']}]")
+    for choice in resume.get("previous_choices", []):
+        print(f"Прежний выбор на пересмотре: {choice['chosen']} [{choice['decision']}]")
+    for review in resume.get("pending_review", []):
+        print(f"Предложение на C2: {review['recommended']} [{review['change']}] — {review['memo']}")
     if resume["next_action"]:
         print(f"Ближайшее действие: {resume['next_action']}")
     if resume["open_checkpoint"]:

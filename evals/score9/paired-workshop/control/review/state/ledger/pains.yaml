@@ -1,0 +1,9 @@
+- id: PAIN-001
+  segment: Подписчики школы с забронированным практикумом
+  statement: Возможная боль — выбранное время становится неудобным, и подписчик не успевает перенести бронь.
+  criteria:
+    frequency: {level: unknown, basis: [HYP-003]}
+    cost: {level: unknown, basis: [HYP-003]}
+    workarounds: {level: unknown, basis: [CLM-004, HYP-003]}
+    gap: {level: unknown, basis: [CLM-006, HYP-003]}
+    measurability: {level: medium, basis: [CLM-001, HYP-003], note: Можно проверить по событиям переноса и обезличенным причинам пропуска.}

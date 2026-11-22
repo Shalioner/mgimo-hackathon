@@ -1,0 +1,47 @@
+- id: PAIN-001
+  segment: Организатор семьи с общим пакетом
+  statement: Возможная потеря времени и связи, если организатор узнаёт об исчерпании
+    лишь из просьбы близкого.
+  criteria:
+    frequency:
+      level: unknown
+      basis: &id001
+      - CLM-002
+      - HYP-001
+    cost:
+      level: unknown
+      basis: *id001
+    workarounds:
+      level: unknown
+      basis: *id001
+    gap:
+      level: unknown
+      basis: *id001
+    measurability:
+      level: medium
+      basis: *id001
+      note: Сопоставить сигналы, ограничения, доступный остаток, согласия и квитанцию
+        результата.
+- id: PAIN-002
+  segment: Владелец нескольких номеров
+  statement: Возможный простой оплаченного устройства из-за незамеченного исчерпания,
+    неоплаты или отключения самого устройства.
+  criteria:
+    frequency:
+      level: unknown
+      basis: &id002
+      - CLM-006
+      - HYP-002
+    cost:
+      level: unknown
+      basis: *id002
+    workarounds:
+      level: unknown
+      basis: *id002
+    gap:
+      level: unknown
+      basis: *id002
+    measurability:
+      level: medium
+      basis: *id002
+      note: Классифицировать причины события и восстановить время вмешательства.

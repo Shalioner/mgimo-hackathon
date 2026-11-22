@@ -1,0 +1,142 @@
+{
+  "compact": {
+    "1": {
+      "project": "warehouse-returns",
+      "checkpoint_check": {
+        "exit": 0,
+        "stdout": "C1: кодовые проверки пройдены. Сверь смысл с источниками и предъяви пакет руководителю.",
+        "stderr": ""
+      },
+      "outputs": [
+        "01_brief.md"
+      ],
+      "open_checkpoint": "C1",
+      "choices": [],
+      "previous_choices": [],
+      "c3": {
+        "status": "unrecorded",
+        "message": "Для C3 нет записи с версией предъявленного пакета.",
+        "changed": []
+      },
+      "receipt_sha256": null,
+      "next_action": "awaiting_human"
+    },
+    "2": {
+      "project": "warehouse-returns",
+      "checkpoint_check": {
+        "exit": 0,
+        "stdout": "C2: кодовые проверки пройдены. Сверь смысл с источниками и предъяви пакет руководителю.",
+        "stderr": ""
+      },
+      "outputs": [
+        "01_brief.md",
+        "02_research_plan.md",
+        "03_situation.md",
+        "04_options.md"
+      ],
+      "open_checkpoint": "C2",
+      "choices": [],
+      "previous_choices": [],
+      "c3": {
+        "status": "unrecorded",
+        "message": "Для C3 нет записи с версией предъявленного пакета.",
+        "changed": []
+      },
+      "receipt_sha256": null,
+      "next_action": "awaiting_human"
+    },
+    "3": {
+      "project": "warehouse-returns",
+      "checkpoint_check": {
+        "exit": 0,
+        "stdout": "SHA-256: 00b8846b6aeb18731de314a30baf89cd66a4cc1c056b7524f9caa3f6078f9ef7\nC3: кодовые проверки пройдены. Сверь смысл с источниками и предъяви пакет руководителю.",
+        "stderr": ""
+      },
+      "outputs": [
+        "01_brief.md",
+        "02_research_plan.md",
+        "03_situation.md",
+        "04_options.md",
+        "05_product_strategy.md",
+        "06_comms_strategy.md",
+        "07_validation_plan.md",
+        "08_decision_log.md"
+      ],
+      "open_checkpoint": "C3",
+      "choices": [
+        {
+          "decision": "DEC-001",
+          "chosen": "ALT-001"
+        }
+      ],
+      "previous_choices": [],
+      "c3": {
+        "status": "unrecorded",
+        "message": "Для C3 нет записи с версией предъявленного пакета.",
+        "changed": []
+      },
+      "receipt_sha256": null,
+      "next_action": "awaiting_human"
+    },
+    "4": {
+      "project": "warehouse-returns",
+      "checkpoint_check": null,
+      "outputs": [
+        "01_brief.md",
+        "02_research_plan.md",
+        "03_situation.md",
+        "04_options.md",
+        "05_product_strategy.md",
+        "06_comms_strategy.md",
+        "07_validation_plan.md",
+        "08_decision_log.md",
+        "09_run_report.md"
+      ],
+      "open_checkpoint": null,
+      "choices": [
+        {
+          "decision": "DEC-001",
+          "chosen": "ALT-001"
+        }
+      ],
+      "previous_choices": [],
+      "c3": {
+        "status": "current",
+        "message": "Версия пакета совпадает с последней записью C3.",
+        "changed": []
+      },
+      "receipt_sha256": "3dda6d5f68b48228b9488164afa2245f1d96e4a6bed3c7662906e2aa62c72411",
+      "next_action": "В следующей сессии открыть `.venv/bin/python tools/next.py projects/warehouse-returns --resume`."
+    },
+    "5": {
+      "project": "warehouse-returns",
+      "checkpoint_check": null,
+      "outputs": [
+        "01_brief.md",
+        "02_research_plan.md",
+        "03_situation.md",
+        "04_options.md",
+        "05_product_strategy.md",
+        "06_comms_strategy.md",
+        "07_validation_plan.md",
+        "08_decision_log.md",
+        "09_run_report.md"
+      ],
+      "open_checkpoint": "C2",
+      "choices": [],
+      "previous_choices": [
+        {
+          "decision": "DEC-001",
+          "chosen": "ALT-001"
+        }
+      ],
+      "c3": {
+        "status": "invalid",
+        "message": "Версию C3 не удалось проверить. Требуется проверка перед согласованием. для C3 требуется действующий выбор руководителя на C2",
+        "changed": []
+      },
+      "receipt_sha256": "3dda6d5f68b48228b9488164afa2245f1d96e4a6bed3c7662906e2aa62c72411",
+      "next_action": "Получить выбор сценарного руководителя на повторном C2. До ответа подготовка подсказки на паузе."
+    }
+  }
+}

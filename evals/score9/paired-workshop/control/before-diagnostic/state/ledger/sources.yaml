@@ -1,0 +1,18 @@
+- id: SRC-001
+  title: Вводные учебного кейса
+  kind: document
+  access: own
+  path: sources/brief.md
+  sha256: c4f02635337d6d9da00c15dc4bfd1da2e8e028061537fb41d31e0bba6021e80e
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Условия вымышленного кейса, описание выгрузки и критерии решения
+- id: SRC-002
+  title: Итоговая сводка учебного пилота
+  kind: table
+  access: own
+  path: sources/pilot.csv
+  sha256: 68ad499f5b58e7a66c8c92006cb4d41621f7816e66be73c30d09611a0a2ac2b1
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Агрегаты по веткам, заявленная рандомизация требует проверки

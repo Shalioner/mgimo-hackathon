@@ -1,0 +1,246 @@
+{
+  "model": "gpt-6.2-sol",
+  "effort": "medium",
+  "human_active_seconds": null,
+  "usage_basis": "Codex CLI 0.171.0: final cumulative turn.completed.usage by session",
+  "modes": {
+    "plain": {
+      "initial": {
+        "seconds": 244.256,
+        "uncached_input": 62454,
+        "cached_input": 528768,
+        "output": 9462,
+        "api_equivalent_usd": "0.2724",
+        "tool_or_turn_errors": 2
+      },
+      "fresh_chat": {
+        "seconds": 89.893,
+        "uncached_input": 29580,
+        "cached_input": 159232,
+        "output": 3614,
+        "api_equivalent_usd": "0.1112",
+        "tool_or_turn_errors": 0
+      },
+      "total": {
+        "seconds": 334.149,
+        "uncached_input": 92034,
+        "cached_input": 688000,
+        "output": 13076,
+        "api_equivalent_usd": "0.3836",
+        "tool_or_turn_errors": 2
+      },
+      "fresh_session_distinct": true,
+      "turns": [
+        {
+          "turn": 1,
+          "started_epoch": 1795364919.02109,
+          "ended_epoch": 1795364967.597682,
+          "seconds": 48.577,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 136589,
+              "cached_input_tokens": 97152,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 1531,
+              "reasoning_output_tokens": 57
+            }
+          ],
+          "tool_or_turn_errors": 2
+        },
+        {
+          "turn": 2,
+          "started_epoch": 1795365132.269536,
+          "ended_epoch": 1795365194.848244,
+          "seconds": 62.579,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 265341,
+              "cached_input_tokens": 213632,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 4032,
+              "reasoning_output_tokens": 119
+            }
+          ],
+          "tool_or_turn_errors": 0
+        },
+        {
+          "turn": 3,
+          "started_epoch": 1795365194.851237,
+          "ended_epoch": 1795365304.619628,
+          "seconds": 109.768,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 460448,
+              "cached_input_tokens": 400384,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 8792,
+              "reasoning_output_tokens": 573
+            }
+          ],
+          "tool_or_turn_errors": 0
+        },
+        {
+          "turn": 4,
+          "started_epoch": 1795365304.62193,
+          "ended_epoch": 1795365327.954356,
+          "seconds": 23.332,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 591222,
+              "cached_input_tokens": 528768,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 9462,
+              "reasoning_output_tokens": 573
+            }
+          ],
+          "tool_or_turn_errors": 0
+        },
+        {
+          "turn": 5,
+          "started_epoch": 1795365327.9570508,
+          "ended_epoch": 1795365417.850385,
+          "seconds": 89.893,
+          "exit": 0,
+          "session": "fresh",
+          "usage": [
+            {
+              "input_tokens": 188812,
+              "cached_input_tokens": 159232,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 3614,
+              "reasoning_output_tokens": 220
+            }
+          ],
+          "tool_or_turn_errors": 0
+        }
+      ]
+    },
+    "strategist": {
+      "initial": {
+        "seconds": 789.072,
+        "uncached_input": 133003,
+        "cached_input": 3888128,
+        "output": 28997,
+        "api_equivalent_usd": "0.9448",
+        "tool_or_turn_errors": 8
+      },
+      "fresh_chat": {
+        "seconds": 383.211,
+        "uncached_input": 96035,
+        "cached_input": 1496832,
+        "output": 15734,
+        "api_equivalent_usd": "0.4991",
+        "tool_or_turn_errors": 6
+      },
+      "total": {
+        "seconds": 1172.283,
+        "uncached_input": 229038,
+        "cached_input": 5384960,
+        "output": 44731,
+        "api_equivalent_usd": "1.4439",
+        "tool_or_turn_errors": 14
+      },
+      "fresh_session_distinct": true,
+      "turns": [
+        {
+          "turn": 1,
+          "started_epoch": 1795364919.021467,
+          "ended_epoch": 1795365064.8440928,
+          "seconds": 145.823,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 543629,
+              "cached_input_tokens": 493568,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 4784,
+              "reasoning_output_tokens": 36
+            }
+          ],
+          "tool_or_turn_errors": 1
+        },
+        {
+          "turn": 2,
+          "started_epoch": 1795365132.2696419,
+          "ended_epoch": 1795365414.483068,
+          "seconds": 282.213,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 1855234,
+              "cached_input_tokens": 1766144,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 15825,
+              "reasoning_output_tokens": 282
+            }
+          ],
+          "tool_or_turn_errors": 2
+        },
+        {
+          "turn": 3,
+          "started_epoch": 1795365414.4868789,
+          "ended_epoch": 1795365739.5716631,
+          "seconds": 325.085,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 3616461,
+              "cached_input_tokens": 3486592,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 28213,
+              "reasoning_output_tokens": 1399
+            }
+          ],
+          "tool_or_turn_errors": 4
+        },
+        {
+          "turn": 4,
+          "started_epoch": 1795365739.578314,
+          "ended_epoch": 1795365775.529398,
+          "seconds": 35.951,
+          "exit": 0,
+          "session": "initial",
+          "usage": [
+            {
+              "input_tokens": 4021131,
+              "cached_input_tokens": 3888128,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 28997,
+              "reasoning_output_tokens": 1483
+            }
+          ],
+          "tool_or_turn_errors": 1
+        },
+        {
+          "turn": 5,
+          "started_epoch": 1795365775.5340889,
+          "ended_epoch": 1795366158.745207,
+          "seconds": 383.211,
+          "exit": 0,
+          "session": "fresh",
+          "usage": [
+            {
+              "input_tokens": 1592867,
+              "cached_input_tokens": 1496832,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 15734,
+              "reasoning_output_tokens": 1142
+            }
+          ],
+          "tool_or_turn_errors": 6
+        }
+      ]
+    }
+  }
+}

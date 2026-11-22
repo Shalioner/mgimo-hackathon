@@ -1,0 +1,47 @@
+- id: SRC-001
+  title: Учебная постановка, дизайн пилота и ограничения
+  kind: document
+  access: own
+  path: sources/brief.md
+  sha256: 9ec13f20a3ded1e55ac87ecc4bbd06b4169436847dd66b3156ecef2bb1d2a973
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Все сведения относятся к вымышленному учебному складу.
+- id: SRC-002
+  title: Сводка учебного пилота по веткам
+  kind: table
+  access: own
+  path: sources/pilot.csv
+  sha256: af94195df75265c8dc0c96771474548575b4c6d0e8925f76a50e69891c18d334
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Агрегаты по веткам. Единица назначения, определения и окно описаны в SRC-001.
+- id: SRC-003
+  title: Протокол проверки подсказки на учебном стенде
+  kind: document
+  access: own
+  path: sources/screen-check.md
+  sha256: 0c62abcd57fe8a6c37ac3c27f9676eb4feea2cdca46c9bc9db2fc38898d40006
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Наблюдение ограничено сценариями появления кода на экране.
+- id: SRC-004
+  title: Служебная поправка к сводке учебного пилота
+  kind: document
+  access: own
+  path: sources/correction.md
+  sha256: 14476a76a4eb2254e9df2498fd73e0371d7faed32222ecf493eb2e222caf87ea
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Сообщение учебного аудита о пересчёте и полноте. Построчный журнал аудита
+    не приложен.
+- id: SRC-005
+  title: Исправленная сводка учебного пилота по веткам
+  kind: table
+  access: own
+  path: sources/pilot-corrected.csv
+  sha256: ac946f058153cd51cf74b54281e9376a5e41cbca0b8cfdfb533f8d83d7aa8c9a
+  retrieved: '2026-11-22'
+  reliability: medium
+  notes: Заменяет SRC-002 для обеих метрик согласно SRC-004. Агрегаты по прежним веткам
+    и операторам, исходные строки недоступны.

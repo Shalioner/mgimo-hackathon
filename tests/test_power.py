@@ -13,6 +13,23 @@ import power
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
+@pytest.mark.parametrize(("eligible", "known", "percent", "status"), [
+    (100, 98, 2.0, "pass"),
+    (100, 95, 5.0, "hold"),
+    (1000, 979, 2.1, "hold"),
+    (0, 0, None, "unknown"),
+])
+def test_missing_outcomes_cli(eligible, known, percent, status):
+    completed = subprocess.run([
+        sys.executable, str(ROOT / "tools" / "power.py"), "missing", "--json",
+        "--eligible", str(eligible), "--known", str(known), "--limit-percent", "2",
+    ], capture_output=True, text=True, check=True)
+    assert json.loads(completed.stdout) == {
+        "eligible": eligible, "known": known, "unknown": eligible - known,
+        "missing_percent": percent, "limit_percent": 2.0, "missingness_gate": status,
+    }
+
+
 def test_benchmark_sample_size_exact_formula():
     # Эталон M11: p=0.265, MDE=3 п.п. (0.03), alpha=0.05 (two-sided), power=0.80.
     # По формуле Fleiss/Kelsey (pooled null + unpooled alt, эквивалент R power.prop.test):

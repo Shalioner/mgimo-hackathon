@@ -1,0 +1,12 @@
+[
+  {
+    "turn": 1,
+    "seconds": 103.027,
+    "exit": -15,
+    "session": "initial",
+    "usage": [],
+    "tool_or_turn_errors": 2,
+    "commands": 11,
+    "command_output_chars": 80820
+  }
+]

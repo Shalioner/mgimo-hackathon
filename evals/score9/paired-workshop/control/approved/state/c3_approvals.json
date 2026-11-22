@@ -1,0 +1,52 @@
+{
+  "approvals": [
+    {
+      "inputs": {
+        "ALT-001": "3060fd2247ee01bb2a6c340f52ccbbad22a7f95726255eaee6d7ae53240fd559",
+        "ALT-002": "a31b0a45e7afc917e4aaf0a221a75bec2057b23a648444e16dbb15552baab856",
+        "ALT-003": "fd7a75dc2ffc3ad9e6bcc9788a45b079a0b112a4bf456bcf00c3bb7f9ea870a0",
+        "ALT-004": "411a7565fbeaebdca7f2022db8926640b2c5abe34255663e844b8c664d893362",
+        "CLM-001": "ed0d1d2593e0c169b26b5e62cf9e38f3b34b75d92a15d2d57b2de0563401b152",
+        "CLM-002": "5b30284b90dbe745595ef1b705cae78e75bf0164a1d233e7f852005c1ad25d44",
+        "CLM-003": "bed896665f7a4cb89d508182659057cf22d4dfba18beffa1ac404551c011b79b",
+        "CLM-004": "893e0fc675066ea067fbc277601a1433946b21e67a47a05fd7ce0ad11a73ccb5",
+        "CLM-005": "adf73892904cf50f4ab6c6db9d53dc6648106648ad2a45bbb37d51d28c965af5",
+        "CLM-006": "fab8a06a91bb06d34119c025beeefa3ac4e7b5dce093608b870c61759f81bfa6",
+        "CLM-007": "309d2caa44f6f5506f1d227c4fd244eb32888208f71d076a303e008a8bde61d1",
+        "CLM-008": "ba587aaaf645b82a7cc82080aebf70c66047e07eb6186198ab958842d17f7bac",
+        "CLM-009": "0fecde851b2a1dc8b21e4b85ecab8e0cc2ae3c74a984624630fc70525435877e",
+        "CLM-010": "efd6cf1ecb2960d26eb0a7382612c42b9cbd4ca822725b13864a0c79454c656b",
+        "CLM-011": "cfaca0b3d4332a205a63d8a85eefe5bd9e1e8954f8ad81cf2fd3a9ca46febd0c",
+        "CLM-012": "a6cc0fd50438c2a8c8542a61ea1656ae6830cfb50d6ddaf75ea7ee71760a4a42",
+        "CLM-013": "611bb94641413d2be4803c8b2c448b4e35e8599576bafc5ec47adc0b2b553519",
+        "CLM-014": "6aeb7629594cb01c075a0dd00fb61cd539e0399f0c7e91c87488115049f51a80",
+        "DEC-001": "fce4b554767bc5488e46f82f80ba45c70f8ddd6b1c874c1df28a7e3da21feb20",
+        "EXP-001": "0373b0527d6ffcfeb538174de6f525dc6f36760f3949206fda70290f638ee278",
+        "EXP-002": "fddf72f6f2ddabe781657ee3a74bd63522ff839be92a42a49aecedd7cc3656a8",
+        "HYP-001": "8d4bc74f813c4c9706040514d1c39c89b46f85b0ccbfed1238e0d5709457a48f",
+        "HYP-002": "2aef9810a99e8d3c10d2e1d3c152f9865a293297baae8332c58aea6020e74f1a",
+        "HYP-003": "55eedd151e80e8291428ab319e0498b5b5603fa67180cc97caba0e4486b4684f",
+        "HYP-004": "ad5f7bfe1378ba766f2e614494825232bb0293fdbc1b0e88184d8ac155393415",
+        "HYP-005": "16e15a2b058feb69604c0425df9a604d401c813c9228cad532dac248a94bea67",
+        "PAIN-001": "3fcf250a82a2ea3f6e186d3dfe92da1db0e8b14c31afbac6901fc54ee6248f36",
+        "PRM-001": "a3edfb7ff52eb2d47fdb94edb713db181437d3d16a60051d7eff106a7ec8b4e3",
+        "SRC-001": "e88298ceaf9638acac2afed78eea011460e43dbc74df16153e67ed44c7385aae",
+        "SRC-002": "cd0a0045cdc3aa98ce03a0403df5c169424088dfb33d4eb86012e932ea74d122",
+        "SRC-003": "099072c69918f71386039ec27dcb017b20ed6d6de4a46111bcd5fc9ba349932a",
+        "outputs/01_brief.md": "b0dbdcada835f10ba894a967056ae8e5d725c154f9b6c8f84032b4f96e4f7cd4",
+        "outputs/03_situation.md": "ba6db77e61edc7b50891a6588b2b3310d9539e6bc005c1bdc175a32fde666075",
+        "outputs/04_options.md": "20b85e14c52f8b260bb60b13696402bb9f49f304c9aab72a62844e0b19976b37",
+        "outputs/05_product_strategy.md": "9c470b1614124748f1e42d289245a2f337f3e3f428bc652309f6115c2dbc1e83",
+        "outputs/06_comms_strategy.md": "c35ac5fef4b799f31d2f15dfc969d9e2d7d774be5a56048327ebac047d398b7f",
+        "outputs/07_validation_plan.md": "42f00d321d435c2d1c67ff19950db0cb070371f805906c071729adf6f730a18b",
+        "источник: sources/brief.md": "c4f02635337d6d9da00c15dc4bfd1da2e8e028061537fb41d31e0bba6021e80e",
+        "источник: sources/pilot.csv": "68ad499f5b58e7a66c8c92006cb4d41621f7816e66be73c30d09611a0a2ac2b1",
+        "источник: sources/test-receipt.md": "e10a4f914dfe74081695c1205c87a12ac9c271bddfa7d7f8d818f64fb33472f7"
+      },
+      "recorded_at": "2026-11-22T19:48:22+03:00",
+      "response": "Утверждаю пакет C3",
+      "sha256": "7a4d07a0d1087dd1e2f080a09329d926e87eb1394acdc7452869b77f0f8adfa7"
+    }
+  ],
+  "version": 1
+}

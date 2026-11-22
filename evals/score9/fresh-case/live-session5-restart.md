@@ -27,7 +27,7 @@ CHG-001 уже `processed: true`, DEC-001 — `decided`, выбран ALT-001. *
 | `rtk proxy git status --short` | 128 | `fatal: not a git repository (or any of the parent directories): .git` |
 | `rtk proxy git rev-parse HEAD` | 128 | Та же точная ошибка; HEAD не установлен. Первоначальный `git branch --show-current` тоже сообщил отсутствие Git. |
 | `rtk proxy cat AGENTS.md CLAUDE.md`; дополнительное чтение частей AGENTS через `sed`; `wc -l` | 0 | AGENTS прочитан, 236 строк; CLAUDE содержит только `@AGENTS.md`. Длинный пакет чтения был усечён выводом, нужная хвостовая часть дочитана отдельно. |
-| `rtk proxy cat /Users/shalioner/.codex/RTK.md` | 0 | Требование запускать shell через rtk прочитано. |
+| `rtk proxy cat ~/.codex/RTK.md` | 0 | Требование запускать shell через rtk прочитано. |
 | `rtk proxy cat ../inputs/05-new-session-restart.txt projects/stezhok/state/progress.md projects/stezhok/state/c3_approvals.json` | 0 | Вход, точка продолжения и сама квитанция прочитаны непосредственно с диска. |
 | `rtk proxy tail -n 35 projects/stezhok/state/run_log.md` | 0 | История отказа, исправления, отдельного синтетического C3 и остановки восстановлена. Это история, не самостоятельное доказательство текущего SHA. |
 | `rtk proxy .venv/bin/python tools/ledger.py env` | 0 | `Среда: codex (переменная CODEX_THREAD_ID)` |

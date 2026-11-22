@@ -78,6 +78,22 @@ def test_c3_rejects_stale_presentation_without_writing_state(project):
     assert state_files(project) == before
 
 
+def test_c3_archive_keeps_the_original_documents_after_update(project):
+    presented = prepare(project)
+    plan = project / "outputs/07_validation_plan.md"
+    original = plan.read_bytes()
+    assert approve(project, presented).returncode == 0
+    archived = project / "state/history/c3" / presented
+    with plan.open("a", encoding="utf-8") as stream:
+        stream.write("\nИзменение после согласования.\n")
+    assert (archived / "outputs/07_validation_plan.md").read_bytes() == original
+    assert run("c3_approval", "check", project).returncode == 1
+    verified = run("c3_approval", "check-archive", project, "--sha256", presented)
+    assert verified.returncode == 0 and presented in verified.stdout
+    (archived / "outputs/07_validation_plan.md").write_text("Подмена\n", encoding="utf-8")
+    assert run("c3_approval", "check-archive", project, "--sha256", presented).returncode == 2
+
+
 @pytest.mark.parametrize("mutation", ["source", "promise", "brief_response"])
 def test_c3_reopens_for_material_changes(project, mutation):
     receipt = project / "state/c3_approvals.json"
@@ -154,6 +170,49 @@ def test_c3_prepare_still_enforces_package_gate():
     result = run("c3_approval", "prepare", ROOT / "projects/esim-travel")
     assert result.returncode == 2
     assert "0 активных PRM" in result.stderr
+
+
+def test_c3_can_approve_only_internal_diagnostics(tmp_path):
+    saved = ROOT / "evals/score9/paired-workshop/control/before-diagnostic"
+    project = shutil.copytree(saved, tmp_path / "workshop")
+    assert "0 активных PRM" in run("c3_approval", "prepare", project).stderr
+    decisions = project / "state/ledger/decisions.yaml"
+    original = decisions.read_text(encoding="utf-8")
+    decisions.write_text(original.replace("  state: decided\n", "  state: decided\n  approval_scope: diagnostic_only\n"),
+                         encoding="utf-8")
+    assert "требуется видимая строка" in run("c3_approval", "prepare", project).stderr
+
+    comms = project / "outputs/06_comms_strategy.md"
+    notice = "Режим: только внутренняя диагностика"
+    comms.write_text(comms.read_text(encoding="utf-8").replace("## Главное\n", f"## Главное\n\n{notice}\n"),
+                     encoding="utf-8")
+    presented = prepare(project)
+    assert approve(project, presented).returncode == 2
+    assert not (project / "state/c3_approvals.json").exists()
+    assert approve(project, presented, "Утверждаю пакет C3 для внутренней диагностики").returncode == 0
+    state = json.loads(run("c3_approval", "check", project, "--json").stdout)
+    assert state["status"] == "current"
+    assert "Пилот и публикация требуют отдельных решений" in state["message"]
+    resumed = json.loads(run("next", project, "--resume", "--json").stdout)["resume"]
+    assert resumed["c3"]["message"] == state["message"]
+    page = project / "outputs/report.html"
+    assert run("report", project).returncode == 0
+    assert state["message"] in page.read_text(encoding="utf-8")
+
+    approved_control = saved.parent / "approved"
+    promises = project / "state/ledger/promises.yaml"
+    example_promise = (approved_control / "state/ledger/promises.yaml").read_text(encoding="utf-8")
+    promises.write_text(example_promise.replace("proof: [CLM-013]", "proof: [EXP-001]"), encoding="utf-8")
+    result = run("strategy_checks/comms", project, "--json")
+    assert result.returncode == 1
+    assert any(item["code"] == "comms.diagnostic_has_promises" for item in json.loads(result.stdout))
+    assert json.loads(run("c3_approval", "check", project, "--json").stdout)["status"] == "stale"
+
+    promises.write_text("[]\n", encoding="utf-8")
+    decisions.write_text(original, encoding="utf-8")
+    result = json.loads(run("c3_approval", "check", project, "--json").stdout)
+    assert result["status"] == "stale" and "DEC-001" in result["changed"]
+    assert "0 активных PRM" in run("c3_approval", "prepare", project).stderr
 
 
 def test_invalid_c3_record_cannot_pass_consistency(project):

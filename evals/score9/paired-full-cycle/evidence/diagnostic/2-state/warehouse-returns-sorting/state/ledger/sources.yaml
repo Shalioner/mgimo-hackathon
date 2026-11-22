@@ -1,0 +1,24 @@
+- id: SRC-001
+  title: Условия учебного кейса и дизайн пилота
+  kind: document
+  access: own
+  path: sources/brief.md
+  sha256: 9ec13f20a3ded1e55ac87ecc4bbd06b4169436847dd66b3156ecef2bb1d2a973
+  retrieved: '2026-11-22'
+  reliability: medium
+- id: SRC-002
+  title: Сводка исходов учебного пилота по веткам
+  kind: table
+  access: own
+  path: sources/pilot.csv
+  sha256: af94195df75265c8dc0c96771474548575b4c6d0e8925f76a50e69891c18d334
+  retrieved: '2026-11-22'
+  reliability: medium
+- id: SRC-003
+  title: Протокол стендовой проверки подсказки
+  kind: document
+  access: own
+  path: sources/screen-check.md
+  sha256: 0c62abcd57fe8a6c37ac3c27f9676eb4feea2cdca46c9bc9db2fc38898d40006
+  retrieved: '2026-11-22'
+  reliability: medium

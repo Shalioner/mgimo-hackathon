@@ -30,6 +30,8 @@ _TOOLS_DIR = pathlib.Path(__file__).resolve().parent.parent
 if str(_TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(_TOOLS_DIR))
 
+from ledger import Ledger
+
 _HISTORY_RE = re.compile(
     r"^##\s+(?:Исторический\s+снимок|История\s+до|Архив\s+до)\b",
     re.IGNORECASE,
@@ -38,6 +40,7 @@ _H2_RE = re.compile(r"^##\s+(.+?)\s*$")
 _SEP_ROW_RE = re.compile(r"^\s*\|(?:\s*:?-+:?\s*\|)+\s*$")
 _HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 _ALT_ID_RE = re.compile(r"\bALT-\d{3}\b")
+_CLAIM_ID_RE = re.compile(r"\bCLM-\d{3}\b")
 _BASIS_ID_RE = re.compile(r"\b(?:CLM|HYP|PAIN|SRC|EXP)-\d{3}\b")
 _ANY_ID_RE = re.compile(r"\b(?:SRC|CLM|HYP|PAIN|ALT|DEC|PRM|EXP|CHG)-\d{3}\b")
 
@@ -207,10 +210,11 @@ def _parse_weight_value(text: str) -> Optional[float]:
 def _parse_weights_from_text(
     active_lines: List[Tuple[int, str]],
     tables: Optional[List[Tuple[int, List[str], List[Tuple[int, List[str]]]]]] = None,
-) -> Dict[str, float]:
+) -> Tuple[Dict[str, float], set[str]]:
     """Ищет явные веса критериев в списке ('1. **Критерий** (вес 0.3 / 30%)')
     и в таблицах критериев ('| Критерий | Вес | ... |')."""
     weights: Dict[str, float] = {}
+    references: set[str] = set()
     for _, raw in active_lines:
         m = re.match(r"^\s*\d+\.\s*\*{0,2}([^(*:\n]+?)\*{0,2}\s*(?:\(([^)]+)\)|—|:|\-)(.*)$", raw)
         if m:
@@ -221,12 +225,14 @@ def _parse_weights_from_text(
                 val = float(wm.group(1).replace(",", ".")) / 100.0
                 if val > 0 and cname and not _is_placeholder(cname):
                     weights[cname] = val
+                    references.update(_CLAIM_ID_RE.findall(tail))
                 continue
             wm2 = re.search(r"вес[:\s=]+(\d+(?:[.,]\d+)?)", tail, re.IGNORECASE)
             if wm2:
                 val = float(wm2.group(1).replace(",", "."))
                 if val > 0 and cname and not _is_placeholder(cname):
                     weights[cname] = val
+                    references.update(_CLAIM_ID_RE.findall(tail))
 
     if tables:
         for _, headers, rows in tables:
@@ -244,7 +250,22 @@ def _parse_weights_from_text(
                 wval = _parse_weight_value(cells[weight_idx])
                 if wval is not None:
                     weights[cname] = wval
-    return weights
+                    references.update(_CLAIM_ID_RE.findall(" ".join(cells)))
+    return weights, references
+
+
+def _unlinked_ranking_refs(project: pathlib.Path, ranking: set[str], weights: set[str], bases: set[str]) -> set[str]:
+    if not ranking:
+        return weights
+    ledger = Ledger(project)
+    visited = set(ranking)
+    pending = list(ranking)
+    while pending:
+        for target, _ in ledger.upstream(pending.pop()):
+            if target not in visited:
+                visited.add(target)
+                pending.append(target)
+    return (ranking - bases) | (weights - visited)
 
 
 def _has_why_against_rationale(
@@ -352,7 +373,7 @@ def check(project: pathlib.Path) -> List[dict]:
     active_lower = active_text.lower()
 
     tables = _find_tables(active_lines)
-    weights = _parse_weights_from_text(active_lines, tables)
+    weights, weight_refs = _parse_weights_from_text(active_lines, tables)
 
     comp_table = None
     for t in tables:
@@ -620,6 +641,15 @@ def check(project: pathlib.Path) -> List[dict]:
                 "message": "Ни один взвешенный критерий не сопоставлен с оценками вариантов.",
                 "file": rel, "line": comp_table[0], "ids": [],
             })
+        if matched_crit and sum_row is not None and dec_recommended:
+            ranking_refs = set(_CLAIM_ID_RE.findall(" ".join(sum_row[1])))
+            unlinked = _unlinked_ranking_refs(project, ranking_refs, weight_refs, dec_based_on)
+            if unlinked:
+                findings.append({
+                    "code": "options.unlinked_ranking_basis", "status": "warn",
+                    "message": "Свяжите веса с расчётом через derived_from, а расчёт с выбором через DEC.based_on.",
+                    "file": rel, "line": sum_row[0], "ids": sorted(unlinked),
+                })
         if matched_crit > 0 and dec_recommended and dec_recommended in crit_scores:
             best_score = max(crit_scores.values())
             if crit_scores[dec_recommended] + 1e-9 < best_score:

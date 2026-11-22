@@ -196,6 +196,8 @@
         "options": {"allOf": [{"$ref": "#/$defs/refs"}], "minItems": 3},
         "criteria": {"type": "array", "items": {"type": "string"}},
         "state": {"enum": ["proposed", "decided", "needs_review"]},
+        "review_change": {"type": "string", "pattern": "^CHG-\\d{3}$"},
+        "approval_scope": {"const": "diagnostic_only", "description": "Явный выбор руководителя: C3 согласует только внутреннюю диагностику."},
         "recommended": {"$ref": "#/$defs/ref"},
         "chosen": {"$ref": "#/$defs/ref"},
         "rationale": {"type": "string"},

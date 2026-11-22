@@ -6,6 +6,7 @@ from pathlib import Path
 import shutil
 import socket
 import subprocess
+import sys
 import urllib.request
 
 from datetime import date
@@ -14,6 +15,7 @@ import pytest
 import yaml
 
 N = importlib.import_module("next")
+ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = Path(__file__).parent / "fixtures" / "next" / "actionable"
 ON = date(2026, 11, 12)
 
@@ -27,6 +29,26 @@ def write(project, filename, objects):
 def hashes(project):
     return {str(path.relative_to(project)): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in project.rglob("*") if path.is_file()}
+
+
+def test_retracted_basis_reopens_c2_before_unrecorded_c3(tmp_path):
+    project = shutil.copytree(ROOT / "projects/esim-travel", tmp_path / "esim")
+    claims = yaml.safe_load((project / "state/ledger/claims.yaml").read_text())
+    next(claim for claim in claims if claim["id"] == "CLM-015")["status"] = "retracted"
+    write(project, "claims.yaml", claims)
+
+    def run(tool, *args):
+        return subprocess.check_output([sys.executable, str(ROOT / "tools" / tool), *map(str, args)], text=True)
+
+    resume = json.loads(run("next.py", project, "--resume", "--json"))["resume"]
+    assert resume["open_checkpoint"] == "C2"
+    assert resume["c3"]["status"] == "unrecorded"
+    assert resume["choices"] == [{"decision": "DEC-001", "chosen": "ALT-001"}]
+    report = tmp_path / "report.html"
+    run("report.py", project, "--out", report)
+    assert "Согласование C2" in report.read_text()
+    assert 'id="c3-executive-summary"' not in report.read_text()
+    assert "на повторном C2" in run("ledger.py", "status", "--root", tmp_path)
 
 
 def test_future_processed_and_dedup():

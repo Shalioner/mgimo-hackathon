@@ -1,0 +1,50 @@
+- id: HYP-001
+  kind: hypothesis
+  statement: Семейный сигнал и переход к действующему выделению будут полезны при
+    своевременном событии, совместимом тарифе, действующем согласии и свободном остатке.
+  based_on:
+  - CLM-002
+  - CLM-009
+  confidence:
+    level: low
+    rationale: Данных о поведении и фактическом исполнении в учебном брифе нет.
+  verdict: open
+  would_change_decision: true
+- id: HYP-002
+  kind: hypothesis
+  statement: У собственных номеров предупреждение имеет больший приоритет, если оплаченный
+    номер регулярно теряет интернет до того, как владелец успевает вмешаться.
+  based_on:
+  - CLM-005
+  - CLM-006
+  confidence:
+    level: low
+    rationale: Данных о поведении и фактическом исполнении в учебном брифе нет.
+  verdict: open
+  would_change_decision: true
+- id: HYP-003
+  kind: hypothesis
+  statement: Поток впервые подходящих семей позволит получить исходы в доступном квартале
+    при реализуемой стоимости.
+  based_on:
+  - CLM-003
+  - CLM-008
+  - CLM-012
+  confidence:
+    level: low
+    rationale: Данных о поведении и фактическом исполнении в учебном брифе нет.
+  verdict: open
+  would_change_decision: true
+- id: HYP-004
+  kind: hypothesis
+  statement: Сокращение числа ограничений может изменить оплаченные месяцы, но величина
+    и знак эффекта неизвестны.
+  based_on:
+  - CLM-008
+  - CLM-009
+  - CLM-011
+  confidence:
+    level: low
+    rationale: Данных о поведении и фактическом исполнении в учебном брифе нет.
+  verdict: open
+  would_change_decision: true

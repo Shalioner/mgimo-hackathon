@@ -1,0 +1,16 @@
+{
+  "exit": 0,
+  "wall_seconds": 42.151,
+  "commands": 18,
+  "errors": 6,
+  "usage": [
+    {
+      "input_tokens": 375650,
+      "cached_input_tokens": 325120,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1116,
+      "reasoning_output_tokens": 62
+    }
+  ],
+  "human_active_seconds": null
+}
